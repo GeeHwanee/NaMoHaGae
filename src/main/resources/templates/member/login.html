@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in example • Pico.css</title>
+  <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
+
+
+  <!-- Pico.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+
+  <!-- Custom styles for this example -->
+
+</head>
+<style>
+  /* Grid */
+
+
+  .no > a {
+    margin-right:6px;
+    list-style: none;
+    text-decoration: none;
+    color: var(--muted-color);
+  }
+  body>main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 7rem);
+    padding: 1rem 0;
+  }
+
+  article {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  article div {
+    padding: 1rem;
+  }
+
+  @media (min-width: 576px) {
+    body>main {
+      padding: 1.25rem 0;
+    }
+
+    article div {
+      padding: 1.25rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    body>main {
+      padding: 1.5rem 0;
+    }
+
+    article div {
+      padding: 1.5rem;
+    }
+
+  }
+
+  @media (min-width: 992px) {
+    body>main {
+      padding: 1.75rem 0;
+    }
+
+    article div {
+      padding: 1.75rem;
+    }
+
+  }
+
+  @media (min-width: 1200px) {
+    body>main {
+      padding: 2rem 0;
+    }
+
+    article div {
+      padding: 2rem;
+    }
+  }
+
+
+
+  /* Hero Image */
+  article div:nth-of-type(2) {
+    display: none;
+    background-color: #374956;
+    background-image: url("img/alessio-soggetti-8jeWeKdygfk-unsplash-1000x1200.jpg");
+    background-position: center;
+    background-size: cover;
+  }
+
+  @media (min-width: 992px) {
+    .grid>div:nth-of-type(2) {
+      display: block;
+
+    }
+
+  }
+
+  /* Footer */
+  body>footer {
+    padding: 1rem 0;
+  }
+</style>
+<body>
+<!-- Nav -->
+
+
+<!-- Main -->
+<main class="container">
+  <article class="grid">
+    <div>
+      <hgroup>
+        <h1>Sign in</h1>
+        <h2>A minimalist layout for Login pages</h2>
+      </hgroup>
+      <form>
+        <input
+                type="email"
+                name="login"
+                placeholder="Login"
+
+        />
+        <input
+                type="password"
+                name="password"
+                placeholder="Password"
+        />
+        <fieldset class="box">
+          <span class="no" id="no1"><a href="#">회원가입</a></span>
+
+          <span class="no"><a href="#">비밀번호 찾기</a></span>
+
+        </fieldset>
+
+        <button type="submit" class="contrast" onclick="event.preventDefault()">Login</button>
+        <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
+             alt="카카오 로그인 버튼" />
+      </form>
+    </div>
+    <div style="color:white">산책하는 사진이나 나 모하개 소개</div>
+  </article>
+</main>
+<!-- ./ Main -->
+
+<!-- Footer -->
+<footer class="container-fluid">
+  <small>
+    <span>박지환</span>
+    <span>김현욱</span>
+    <span>강문채</span>
+    <span>신동훈</span>
+    <span>최준휘</span>
+    <span>여기는 각자맡은파트나 깃허브주소 그런거 올리면될듯요</span>
+  </small>
+</footer>
+
+</body>
+</html>

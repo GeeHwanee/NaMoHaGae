@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>퍼칭메인 리스트</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        .big-box {
+            width: 100%;
+            background-color: gray;
+            height: 100vh;
+            border-top: 1px solid black;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script>
+        var page = 2;
+
+        $(window).scroll(function() {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                console.log(++page);
+                $("body").append('<div class="big-box"><h1>Page ' + page + '</h1></div>');
+
+            }
+        });
+    </script>
+
+</head>
+<body>
+
+<div id="productBeforeList" style="width: 500px;height: 500px"></div><!-- 이전 상위 컨텐츠 목록 -->
+<div id="productScroll"></div>
+</body>
+</html>
