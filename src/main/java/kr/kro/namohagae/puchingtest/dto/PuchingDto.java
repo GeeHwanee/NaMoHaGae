@@ -8,7 +8,7 @@ import lombok.Getter;
 public class PuchingDto {
 
     @Data
-    public static class read{
+    public static class readTown{
         private Integer townNo;
         private String townDong;
         private Double townLatitude;
