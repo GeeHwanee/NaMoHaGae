@@ -10,6 +10,6 @@ import java.util.List;
 public interface Puchingdao {
 
 
-    @Select("select town_no,town_dong,town_latitude,town_longitude from TOWN")
-    public List<PuchingDto.read> findAllTown();
+    @Select("select town_no as townNo,town_dong as townDong,town_latitude as townLatitude,town_longitude as townLongitude from TOWN")
+    public List<PuchingDto.readTown> findAllTown();
 }
