@@ -30,7 +30,10 @@
     min-height: calc(100vh - 7rem);
     padding: 1rem 0;
   }
-
+  .kakao {
+    float:right;
+    width:50%;
+  }
   article {
     padding: 0;
     overflow: hidden;
@@ -43,11 +46,17 @@
   @media (min-width: 576px) {
     body>main {
       padding: 1.25rem 0;
+
     }
+
 
     article div {
       padding: 1.25rem;
     }
+
+  }
+  @media(max-width: 768px) {
+
   }
 
   @media (min-width: 768px) {
@@ -57,15 +66,28 @@
 
     article div {
       padding: 1.5rem;
+
+    }
+
+    span > a {
+      display:inline-block;
+      font-size:16px;
+      line-height:40px;
+
+
     }
 
   }
+
 
   @media (min-width: 992px) {
     body>main {
       padding: 1.75rem 0;
     }
-
+    span > a {
+      display:inline-block;
+      line-height:0;
+    }
     article div {
       padding: 1.75rem;
     }
@@ -131,15 +153,15 @@
                 placeholder="Password"
         />
         <fieldset class="box">
+
           <span class="no" id="no1"><a href="#">회원가입</a></span>
 
           <span class="no"><a href="#">비밀번호 찾기</a></span>
-
+          <a href="#"><img src="ko/kakao_login_large_wide.png" class="kakao"></a>
         </fieldset>
 
         <button type="submit" class="contrast" onclick="event.preventDefault()">Login</button>
-        <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
-             alt="카카오 로그인 버튼" />
+
       </form>
     </div>
     <div style="color:white">산책하는 사진이나 나 모하개 소개</div>
