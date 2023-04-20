@@ -1,4 +1,4 @@
- <!DOGTYPE NaMoHaGae>
+ &lt;!DOGTYPE NaMoHaGae&gt;
 =====================
 인천일보 아카데미의 IoT 3기 과정(2022.12.08~2023.05.24)  
 프로젝트 팀 <!DOGTYPE>의 파이널 프로젝트
