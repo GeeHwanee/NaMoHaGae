@@ -10,7 +10,8 @@
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <style>
         #list {
-            height: 500px;
+            height: 400px;
+            width:500px;
             overflow-y: scroll;
             border: 1px solid black;
             padding: 10px;
@@ -32,12 +33,31 @@
         <aside id="aside" th:replace="~{/fragment/aside.html}">
         </aside>
         <section id="section">
-            <div id="map" style="width:400px;height:400px; float:left;"></div>
-
+            <div id="map" style="width:500px;height:400px; float:left;"></div>
+            <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
             <div id="list"></div>
             <script>
                 function roundLatlong(num,n){
                     return +(Math.round(num + "e+" + n)  + "e-" + n);
+                }
+                function locationLoadSuccess(pos){
+                    // geo로 받은 내위치
+                    var currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+                    map.panTo(currentPos);
+
+                    var marker = new kakao.maps.Marker({
+                       position: currentPos
+                    });
+                    marker.setMap(null);
+                    marker.setMap(map)
+                    map.setCenter(currentPos);
+                }
+                function locationLoadError(pos){
+                    alert('위치 정보를 못가져왔넹')
+                }
+                function getCurrentPosBtn(){
+                    navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
                 }
             </script>
             <script>
@@ -66,8 +86,6 @@
                     lastScrollTop = st;
                 });
             </script>
-
-
             <script>
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
