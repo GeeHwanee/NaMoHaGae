@@ -7,20 +7,31 @@
     </insert>
 
     <select id="count" resultType="int">
-        select count(bno) from alarm
+        select count(alarm_no) from alarm
     </select>
 
-    <select id="findAll" resultType="String">
+    <select id="findAll" resultType="kr.kro.namohagae.member.dto.AlarmDto$FindAll">
         select * from
             (
                 select rownum as rnum, a.* from
                     (
                         select
-                            alarm_no,alarm_content,alarm_rink,alarm_read_enabled
-                        from alarm
+                            alarm_no as alarmNo,alarm_content as alarmContent,alarm_rink as alarmRink,alarm_read_enabled as alarmReadEnabled
+                        from ALARM
                     ) a
                 where rownum&lt;=#{endRownum}
             )
         where rnum&gt;=#{startRownum}
     </select>
+
+    <select id="read" resultType="kr.kro.namohagae.member.dto.AlarmDto$FindAll">
+        select
+            alarm_no as alarmNo,alarm_content as alarmContent,alarm_rink as alarmRink,alarm_read_enabled as alarmReadEnabled
+        from ALARM where alarm_no=#{no}
+    </select>
+
+    <update id="alarmRead" parameterType="int">
+        update alarm set alarm_read_enabled =1 where alarm_no=#{no}
+    </update>
 </mapper>
+
