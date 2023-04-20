@@ -11,4 +11,9 @@ public class GlobalController {
         return "index.html";
     }
 
+    @GetMapping("/puching/puching_main")
+    public void puchingmain() {
+
+    };
+
 }
