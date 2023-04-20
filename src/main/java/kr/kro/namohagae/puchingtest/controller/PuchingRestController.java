@@ -22,5 +22,11 @@ public class PuchingRestController {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping(value="/puching/userlist")
+    public ResponseEntity<List<PuchingDto.readUser>> userlist(Double latitude,Double longitude) {
+        List<PuchingDto.readUser> list;
+            return null;
+    }
+
 
 }

@@ -15,4 +15,9 @@ public class PuchingDto {
         private Double townLongitude;
         private Integer townCnt;
     };
+
+    @Data
+    public static class readUser{
+
+    }
 };

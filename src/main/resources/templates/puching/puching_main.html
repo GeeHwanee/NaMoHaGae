@@ -8,34 +8,21 @@
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=660792846d96851836832221cf48b4f7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.js"
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-<!--    <script>-->
-<!--        $(document).ready(function () {-->
-<!--            var map = new kakao.maps.Map(document.getElementById('map'), { // 지도를 표시할 div-->
-<!--                center: new kakao.maps.LatLng(37.4398411, 126.6640894), // 지도의 중심좌표-->
-<!--                level: 7 // 지도의 확대 레벨-->
-<!--            });-->
-<!--            -->
-<!--            $.get("/api/v1/puching/townlist", function (data) {-->
-<!--                // 데이터에서 좌표 값을 가지고 마커를 표시합니다-->
-<!--                // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다-->
-<!--                var markers = data.map(function (i, position) {-->
-<!--                    return new kakao.maps.Marker({-->
-<!--                        map:map,-->
-<!--                        position: new kakao.maps.LatLng(i.townLatitude, i.townLongitude),-->
-<!--                        title : i.townDong+i.townCnt-->
-<!--                    });-->
-
-<!--                });-->
-<!--                -->
-<!--                -->
-<!--            });-->
-<!--        })-->
-<!--    </script>-->
-
+    <style>
+        #list {
+            height: 500px;
+            overflow-y: scroll;
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .item {
+            margin-bottom: 10px;
+            border: 1px solid gray;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-
-
 <div id="page">
     <header id="header" th:replace="~{/fragment/header.html}">
     </header>
@@ -47,14 +34,50 @@
         <section id="section">
             <div id="map" style="width:400px;height:400px; float:left;"></div>
 
+            <div id="list"></div>
+            <script>
+                function roundLatlong(num,n){
+                    return +(Math.round(num + "e+" + n)  + "e-" + n);
+                }
+            </script>
+            <script>
+                // 초기 아이템 로드
+                var itemList = document.getElementById("list");
+                var items = [];
+                for (var i = 0; i < 10; i++) {
+                    items.push("Item " + (i + 1));
+                    itemList.innerHTML += "<div class='item'>Item " + (i + 1) + "</div>";
+                }
+
+                // 스크롤 이벤트 핸들러 등록
+                var lastScrollTop = 0;
+                itemList.addEventListener("scroll", function() {
+                    var st = this.scrollTop;
+                    if (st > lastScrollTop) {
+                        // 아래로 스크롤됨
+                        if (itemList.scrollTop + itemList.clientHeight >= itemList.scrollHeight) {
+                            // 리스트의 끝까지 도달함
+                            for (var i = 0; i < 10; i++) {
+                                items.push("Item " + (items.length + 1));
+                                itemList.innerHTML += "<div class='item'>Item " + (items.length) + "</div>";
+                            }
+                        }
+                    }
+                    lastScrollTop = st;
+                });
+            </script>
+
+
             <script>
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
-                        center: new kakao.maps.LatLng(37.4398411, 126.6640894), // 지도의 중심좌표
+                        center: new kakao.maps.LatLng(37.4398411, 126.6640894), // 지도의 중심좌표 geo로 값을 변경해주자
                         level: 3 // 지도의 확대 레벨
                     };
                 // 지도를 생성한다
                 var map = new kakao.maps.Map(mapContainer, mapOption);
+                map.setMinLevel(3);
+                map.setMaxLevel(6);
             </script>
             <script>
                 // 다각형에 마우스오버 이벤트가 발생했을 때 변경할 채우기 옵션입니다
@@ -80,9 +103,21 @@
                             strokeOpacity: 0.9, // 선 투명도
                             strokeStyle: 'solid' // 선 스타일
                         });
-                        // 마커에 클릭 이벤트를 등록한다 (우클릭 : rightclick)
+                        var infowindow = new kakao.maps.InfoWindow({
+                            map: map,
+                            position: new kakao.maps.LatLng(i.townLatitude, i.townLongitude),
+                            content: i.townDong+' '+i.townCnt+'명'
+                        });
+
+
+                        // 원클릭시 리스트 초기화 및 조건에 맞는 리스트 출력
                         kakao.maps.event.addListener(circle, 'click', function () {
-                            alert('원을 클릭했습니다');
+                            var circlecenter= circle.getPosition();
+                            var La=roundLatlong(circlecenter.La,7);
+                            var Ma=roundLatlong(circlecenter.Ma,7);
+                            console.log('원을 클릭했습니다');
+                            console.log(Ma,La);
+                            map.setCenter(new kakao.maps.LatLng(Ma,La));
                         });
 
                         // 마커에 mouseover 이벤트를 등록한다
@@ -98,16 +133,16 @@
                         });
                         return circle;
                     })
-                    // 지도 중심 좌표 변화 이벤트를 등록한다
-                    kakao.maps.event.addListener(map, 'center_changed', function () {
-                        console.log('지도의 중심 좌표는 ' + map.getCenter().toString() + ' 입니다.');
-                    });
+
 
                     // 지도 확대 레벨 변화 이벤트를 등록한다
                     kakao.maps.event.addListener(map, 'zoom_changed', function () {
                         console.log('지도의 현재 확대레벨은 ' + map.getLevel() + '레벨 입니다.');
                     });
-
+                    // 드러그 앤드 이벤트 발생시 리스트 초기화하고 중앙 좌표에서 가까운 사람을 리스트로 출력
+                    kakao.maps.event.addListener(map, 'dragend', function() {
+                        console.log('지도의 중심 좌표는 ' + map.getCenter().toString() + ' 입니다.');
+                    });
 
 
 
@@ -115,8 +150,6 @@
 
 
             </script>
-
-
         </section>
     </main>
     <footer id="footer" th:replace="~{/fragment/footer.html}">
