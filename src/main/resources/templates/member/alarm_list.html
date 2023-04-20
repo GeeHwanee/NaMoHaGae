@@ -20,7 +20,7 @@
                 const tpl = `<tr>
 				<td>${a.alarmNo}</td>
 				<td>
-					<a href=# id="read">${a.alarmContent}</a>
+					<a href=# id="read" data-no="${a.alarmNo}">${a.alarmContent}</a>
 				</td>
 				<td>${a.alarmReadEnabled}</td>
 			</tr>`;
@@ -55,7 +55,7 @@
             } catch (err) {
                 console.log(err);
             }
-            $(document).on("click", "#alarm-link", async function () {
+            $(document).on("click", "#read", async function () {
                 const no = $(this).data("no");
                 try {
                     await $.ajax({
