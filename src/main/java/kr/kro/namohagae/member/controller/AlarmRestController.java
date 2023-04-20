@@ -17,11 +17,10 @@ public class AlarmRestController {
         return ResponseEntity.ok(service.findAll(pageno));
     }
 
-    @PutMapping("/read/{no}")
+    @PutMapping("/alarm/read/{no}")
     public ResponseEntity<String> updateAlarmRead(@PathVariable("no") int no) {
         // 알람의 읽음 여부를 업데이트하는 로직 작성
         service.read(no);
-
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
