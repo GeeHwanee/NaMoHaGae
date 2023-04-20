@@ -1,13 +1,15 @@
 package kr.kro.namohagae.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import kr.kro.namohagae.member.dao.AlarmDao;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+//@AllArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class AlarmDto {
     @Data
     public static class FindAll {
@@ -25,7 +27,10 @@ public class AlarmDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private List<FindAll> board;
+        private List<FindAll> alarm;
     }
+
+
+
 
 }

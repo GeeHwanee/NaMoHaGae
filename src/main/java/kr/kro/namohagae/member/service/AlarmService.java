@@ -10,8 +10,8 @@ import java.util.List;
 public class AlarmService {
     @Autowired
     private AlarmDao alarmDao;
-    private final static Integer PAGESIZE=10;
-    private final static Integer BLOCKSIZE=5;
+    private final static Integer PAGESIZE=5;
+    private final static Integer BLOCKSIZE=3;
     public AlarmDto.Pagination findAll(Integer pageno) {
         Integer countOfProduct = alarmDao.count();
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
@@ -22,7 +22,8 @@ public class AlarmService {
 
         Integer startRownum = (pageno-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<AlarmDto.FindAll> board = alarmDao.findAll(startRownum, endRownum);
+        List<AlarmDto.FindAll> alarm = alarmDao.findAll(startRownum, endRownum);
+        // 리스트 log로 찍어
         Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
         Integer end = prev + BLOCKSIZE;
@@ -31,8 +32,13 @@ public class AlarmService {
             end = countOfPage;
             next = 0;
         }
-        return new AlarmDto.Pagination(pageno, prev, start, end, next, board);
+        return new AlarmDto.Pagination(pageno, prev, start, end, next, alarm);
 
     }
+
+    public void read (Integer bno){
+        alarmDao.alarmRead(bno);
+    }
+
 
 }

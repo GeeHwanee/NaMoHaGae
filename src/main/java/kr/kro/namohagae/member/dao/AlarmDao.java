@@ -15,4 +15,7 @@ public interface AlarmDao {
     public List<AlarmDto.FindAll> findAll(Integer startRownum, Integer endRownum);
     public Integer count();
 
+    public AlarmDto.FindAll read(Integer no);
+    public Integer alarmRead(Integer no);
+
 }
