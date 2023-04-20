@@ -14,15 +14,16 @@ public class PuchingService {
 
     public List<PuchingDto.readTown> puchingmap() {
 
-        System.out.println("111111111111111111111111111111111111111111111");
+        System.out.println("퍼칭서비스-puchingmap실행");
         List<PuchingDto.readTown> list = dao.findAllTown();
         for (PuchingDto.readTown town : list) {
             System.out.println(town.getTownNo());
             System.out.println(town.getTownDong());
             System.out.println(town.getTownLatitude());
             System.out.println(town.getTownLongitude());
-            System.out.println("222222222222222222222222222222222222222222");
+            System.out.println(town.getTownCnt());
         }
+        System.out.println("퍼칭서비스-puchingmap완료");
         return list;
     }
 }
