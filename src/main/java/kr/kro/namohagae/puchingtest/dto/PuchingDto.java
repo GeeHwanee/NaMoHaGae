@@ -13,5 +13,6 @@ public class PuchingDto {
         private String townDong;
         private Double townLatitude;
         private Double townLongitude;
+        private Integer townCnt;
     };
 };
