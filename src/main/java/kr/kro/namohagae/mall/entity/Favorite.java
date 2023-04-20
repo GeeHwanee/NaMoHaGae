@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ProductImage {
+public class Favorite {
+    private Integer favoriteNo;
+    private Integer memberNo;
     private Integer productNo;
-    private Integer productImageNo;
-    private String productImageFilename;
 }
