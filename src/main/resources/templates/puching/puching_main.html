@@ -57,20 +57,46 @@
                 var map = new kakao.maps.Map(mapContainer, mapOption);
             </script>
             <script>
+                // 다각형에 마우스오버 이벤트가 발생했을 때 변경할 채우기 옵션입니다
+                var mouseoverOption = {
+                    fillColor: '#02eccd', // 채우기 색깔입니다
+                    fillOpacity: 0.4 // 채우기 불투명도 입니다
+                };
+                // 다각형에 마우스아웃 이벤트가 발생했을 때 변경할 채우기 옵션입니다
+                var mouseoutOption = {
+                    fillColor: '#02eccd', // 채우기 색깔입니다
+                    fillOpacity: 0.7 // 채우기 불투명도 입니다
+                };
                 var gettowndata= $.get("/api/v1/puching/townlist",function (data) {
-
                     var circles = data.map(function (i, position) {
                         var circle = new kakao.maps.Circle({
                             map: map, // 원을 표시할 지도 객체
                             center: new kakao.maps.LatLng(i.townLatitude, i.townLongitude), // 지도의 중심 좌표
                             radius: 100, // 원의 반지름 (단위 : m)
-                            fillColor: '#FF0000', // 채움 색
-                            fillOpacity: 0.5, // 채움 불투명도
+                            fillColor: '#02eccd', // 채움 색
+                            fillOpacity: 0.7, // 채움 불투명도
                             strokeWeight: 3, // 선의 두께
-                            strokeColor: '#FF0000', // 선 색
+                            strokeColor: '#a6e3e3', // 선 색
                             strokeOpacity: 0.9, // 선 투명도
                             strokeStyle: 'solid' // 선 스타일
                         });
+                        // 마커에 클릭 이벤트를 등록한다 (우클릭 : rightclick)
+                        kakao.maps.event.addListener(circle, 'click', function () {
+                            alert('원을 클릭했습니다');
+                        });
+
+                        // 마커에 mouseover 이벤트를 등록한다
+                        kakao.maps.event.addListener(circle, 'mouseover', function () {
+                         circle.setOptions(mouseoverOption);
+                            console.log('원에 mouseover 이벤트가 발생했습니다!');
+                        });
+
+                        // 마커에 mouseout 이벤트 등록
+                        kakao.maps.event.addListener(circle, 'mouseout', function () {
+                            circle.setOptions(mouseoutOption);
+                            console.log('원에 mouseout 이벤트가 발생했습니다!');
+                        });
+                        return circle;
                     })
                     // 지도 중심 좌표 변화 이벤트를 등록한다
                     kakao.maps.event.addListener(map, 'center_changed', function () {
@@ -82,25 +108,9 @@
                         console.log('지도의 현재 확대레벨은 ' + map.getLevel() + '레벨 입니다.');
                     });
 
-                    // 지도 클릭 이벤트를 등록한다 (좌클릭 : click, 우클릭 : rightclick, 더블클릭 : dblclick)
-                    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
-                        console.log('지도에서 클릭한 위치의 좌표는 ' + mouseEvent.latLng.toString() + ' 입니다.');
-                    });
 
-                    // 마커에 클릭 이벤트를 등록한다 (우클릭 : rightclick)
-                    kakao.maps.event.addListener(circles, 'click', function () {
-                        alert('마커를 클릭했습니다!');
-                    });
 
-                    // 마커에 mouseover 이벤트를 등록한다
-                    kakao.maps.event.addListener(circle, 'mouseover', function () {
-                        console.log('마커에 mouseover 이벤트가 발생했습니다!');
-                    });
 
-                    // 마커에 mouseout 이벤트 등록
-                    kakao.maps.event.addListener(circle, 'mouseout', function () {
-                        console.log('마커에 mouseout 이벤트가 발생했습니다!');
-                    })
                 })
 
 
