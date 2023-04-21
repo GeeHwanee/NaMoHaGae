@@ -10,7 +10,8 @@
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <style>
         #list {
-            height: 500px;
+            height: 400px;
+            width:500px;
             overflow-y: scroll;
             border: 1px solid black;
             padding: 10px;
@@ -32,13 +33,45 @@
         <aside id="aside" th:replace="~{/fragment/aside.html}">
         </aside>
         <section id="section">
-            <div id="map" style="width:400px;height:400px; float:left;"></div>
-
+            <div id="map" style="width:500px;height:400px; float:left;"></div>
+            <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
             <div id="list"></div>
             <script>
                 function roundLatlong(num,n){
+                    if(isNaN(num)){
+                        console.log(num+'은 숫자가 아니다!!!')
+                        return ;
+                    }
                     return +(Math.round(num + "e+" + n)  + "e-" + n);
                 }
+                function locationLoadSuccess(pos){
+                    // geo로 받은 내위치
+                    var currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+                    map.panTo(currentPos);
+
+                    var marker = new kakao.maps.Marker({
+                       position: currentPos
+                    });
+                    marker.setMap(null);
+                    marker.setMap(map)
+                    // map.setCenter(currentPos);
+                }
+                function locationLoadError(pos){
+                    var defalut_LatLng = new kakao.maps.LatLng(37.4398411, 126.6640894)
+                    map.panTO(defalut_LatLng)
+
+                    alert('위치 정보를 못가져왔넹')
+                }
+                function getCurrentPosBtn(){
+                    navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
+                }
+
+                var updateList=  async function(now_lat,now_lng){
+                    $.get("/api/v1/puching/userlist?latitude="+now_lat+"&longitude="+now_lng,await function (data){
+                        console.log(data)
+                    })
+                };
             </script>
             <script>
                 // 초기 아이템 로드
@@ -66,8 +99,6 @@
                     lastScrollTop = st;
                 });
             </script>
-
-
             <script>
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
@@ -81,75 +112,86 @@
             </script>
             <script>
                 // 다각형에 마우스오버 이벤트가 발생했을 때 변경할 채우기 옵션입니다
-                var mouseoverOption = {
+                var town_mouseoverOption = {
                     fillColor: '#02eccd', // 채우기 색깔입니다
                     fillOpacity: 0.4 // 채우기 불투명도 입니다
                 };
                 // 다각형에 마우스아웃 이벤트가 발생했을 때 변경할 채우기 옵션입니다
-                var mouseoutOption = {
+                var town_mouseoutOption = {
                     fillColor: '#02eccd', // 채우기 색깔입니다
                     fillOpacity: 0.7 // 채우기 불투명도 입니다
                 };
-                var gettowndata= $.get("/api/v1/puching/townlist",function (data) {
-                    var circles = data.map(function (i, position) {
-                        var circle = new kakao.maps.Circle({
-                            map: map, // 원을 표시할 지도 객체
-                            center: new kakao.maps.LatLng(i.townLatitude, i.townLongitude), // 지도의 중심 좌표
-                            radius: 100, // 원의 반지름 (단위 : m)
-                            fillColor: '#02eccd', // 채움 색
-                            fillOpacity: 0.7, // 채움 불투명도
-                            strokeWeight: 3, // 선의 두께
-                            strokeColor: '#a6e3e3', // 선 색
-                            strokeOpacity: 0.9, // 선 투명도
-                            strokeStyle: 'solid' // 선 스타일
-                        });
-                        var infowindow = new kakao.maps.InfoWindow({
-                            map: map,
-                            position: new kakao.maps.LatLng(i.townLatitude, i.townLongitude),
-                            content: i.townDong+' '+i.townCnt+'명'
-                        });
+                function updatetown() {
+                    $.get("/api/v1/puching/townlist", async function (data) {
+                        var circles = await data.map(function (i, position) {
+                            var circle = new kakao.maps.Circle({
+                                map: map, // 원을 표시할 지도 객체
+                                center: new kakao.maps.LatLng(i.townLatitude, i.townLongitude), // 지도의 중심 좌표
+                                radius: 100, // 원의 반지름 (단위 : m)
+                                fillColor: '#02eccd', // 채움 색
+                                fillOpacity: 0.7, // 채움 불투명도
+                                strokeWeight: 3, // 선의 두께
+                                strokeColor: '#a6e3e3', // 선 색
+                                strokeOpacity: 0.9, // 선 투명도
+                                strokeStyle: 'solid' // 선 스타일
+                            });
+                            var infowindow = new kakao.maps.InfoWindow({
+                                map: map,
+                                position: new kakao.maps.LatLng(i.townLatitude, i.townLongitude),
+                                content: i.townDong + ' ' + i.townCnt + '명'
+                            });
 
 
-                        // 원클릭시 리스트 초기화 및 조건에 맞는 리스트 출력
-                        kakao.maps.event.addListener(circle, 'click', function () {
-                            var circlecenter= circle.getPosition();
-                            var La=roundLatlong(circlecenter.La,7);
-                            var Ma=roundLatlong(circlecenter.Ma,7);
-                            console.log('원을 클릭했습니다');
-                            console.log(Ma,La);
-                            map.setCenter(new kakao.maps.LatLng(Ma,La));
-                        });
+                            // 원클릭시 리스트 초기화 및 조건에 맞는 리스트 출력
+                            kakao.maps.event.addListener(circle, 'click', function () {
+                                var circlecenter = circle.getPosition();
+                                var La = roundLatlong(circlecenter.La, 7);
+                                var Ma = roundLatlong(circlecenter.Ma, 7);
+                                console.log('원을 클릭했습니다');
+                                console.log(Ma, La);
+                                map.panTo(new kakao.maps.LatLng(Ma, La));
+                            });
 
-                        // 마커에 mouseover 이벤트를 등록한다
-                        kakao.maps.event.addListener(circle, 'mouseover', function () {
-                         circle.setOptions(mouseoverOption);
-                            console.log('원에 mouseover 이벤트가 발생했습니다!');
-                        });
+                            // 마커에 mouseover 이벤트를 등록한다
+                            kakao.maps.event.addListener(circle, 'mouseover', function () {
+                                circle.setOptions(town_mouseoverOption);
+                                console.log('원에 mouseover 이벤트가 발생했습니다!');
+                            });
 
-                        // 마커에 mouseout 이벤트 등록
-                        kakao.maps.event.addListener(circle, 'mouseout', function () {
-                            circle.setOptions(mouseoutOption);
-                            console.log('원에 mouseout 이벤트가 발생했습니다!');
-                        });
-                        return circle;
+                            // 마커에 mouseout 이벤트 등록
+                            kakao.maps.event.addListener(circle, 'mouseout', function () {
+                                circle.setOptions(town_mouseoutOption);
+                                console.log('원에 mouseout 이벤트가 발생했습니다!');
+                            });
+                            return circle;
+                        })
+                        await updateList(37.4398411, 126.6640894);
+
                     })
-
-
-                    // 지도 확대 레벨 변화 이벤트를 등록한다
-                    kakao.maps.event.addListener(map, 'zoom_changed', function () {
-                        console.log('지도의 현재 확대레벨은 ' + map.getLevel() + '레벨 입니다.');
-                    });
-                    // 드러그 앤드 이벤트 발생시 리스트 초기화하고 중앙 좌표에서 가까운 사람을 리스트로 출력
-                    kakao.maps.event.addListener(map, 'dragend', function() {
-                        console.log('지도의 중심 좌표는 ' + map.getCenter().toString() + ' 입니다.');
-                    });
-
-
-
-                })
-
+                }
+                // 지도 확대 레벨 변화 이벤트를 등록한다
+                kakao.maps.event.addListener(map, 'zoom_changed', function () {
+                    console.log('지도의 현재 확대레벨은 ' + map.getLevel() + '레벨 입니다.');
+                });
+                // 드러그 앤드 이벤트 발생시 리스트 초기화하고 중앙 좌표에서 가까운 사람을 리스트로 출력
+                kakao.maps.event.addListener(map, 'dragend', function() {
+                    var center=map.getCenter();
+                    var now_Centerlag=roundLatlong(center.Ma,7);
+                    var now_Centerlng=roundLatlong(center.La,7);
+                    console.log(now_Centerlag,now_Centerlng)
+                    updateList(now_Centerlag,now_Centerlng);
+                    console.log('지도의 중심 좌표는 ' + map.getCenter() + ' 입니다.');
+                });
 
             </script>
+            <script>
+                $(document).ready(async function(){
+                    await updatetown();
+
+                });
+
+            </script>
+
         </section>
     </main>
     <footer id="footer" th:replace="~{/fragment/footer.html}">
