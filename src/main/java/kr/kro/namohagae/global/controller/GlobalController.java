@@ -45,6 +45,8 @@ public class GlobalController {
     @GetMapping("/member/find")
     public void find(){}
 
+    @GetMapping("/member/alarm")
+    public void alarm(){}
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
