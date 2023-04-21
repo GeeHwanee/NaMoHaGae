@@ -14,11 +14,8 @@ public class Member {
     private String memberPassword;
     private String memberNickname;
     private String memberPhone;
-    private Integer memberPoint;
     private Integer memberLatitude;
     private Integer memberLongitude;
-    private Integer memberGrade;
-    private String memberIntroduce;
     private Boolean memberDogSignEnabled;
     private Boolean memberEnabled;
     private Integer memberLoginCount;
