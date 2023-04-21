@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>상품 장바구니 페이지</title>
-</head>
-<body>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <title>장바구니</title>
 
+</head>
+<style>
+
+</style>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+</header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+
+    </aside>
+    <section>
+
+        <h1>장바구니 페이지</h1>
+        <article></article>
+    </section>
+</main>
+<footer th:replace="~{/fragment/aside.html}">
+</footer>
 </body>
 </html>

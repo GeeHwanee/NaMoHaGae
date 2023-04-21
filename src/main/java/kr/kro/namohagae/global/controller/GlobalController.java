@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class GlobalController {
 
+    // main 페이지
     @GetMapping(value = {"/", "/main"})
     public String main(){
         return "main.html";
@@ -26,6 +27,14 @@ public class GlobalController {
         return "/board/main.html";
     }
 
+    @GetMapping("/member/main")
+    public String memberMain(){ return "/member/main.html";}
+
+
+    @GetMapping("/mall/cart")
+    public void cart(){
+
+    }
     @GetMapping("/puching/chatroom")
     public void chatroom() {
     };
