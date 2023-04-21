@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.mall.dao.ProductDao">
-    <insert id="save" parameterType="product">
+    <insert id="save">
+        <selectKey keyProperty="product_no" order="BEFORE" resultType="int">
+            select product_seq_product_no.nextval from dual
+        </selectKey>
         insert into PRODUCT(product_no,product_category_no,product_name,product_price,product_stock,product_grade,product_content,product_write_date)
-        values(#{productNo},#{productCategoryNo},#{productName},#{productPrice},#{productStock},#{productGrade},#{productContent},#{productWriteDate})
+        values(#{product_no},#{productCategoryNo},#{productName},#{productPrice},#{productStock},#{productGrade},#{productContent},#{productWriteDate})
     </insert>
 </mapper>
