@@ -11,6 +11,6 @@ public class Alarm {
     private Integer alarmNo;
     private Integer memberNo;
     private String alarmContent;
-    private String alarmRink;
+    private String alarmLink;
     private Boolean alarmReadEnabled;
 }
