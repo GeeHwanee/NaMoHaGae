@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class GlobalController {
 
-    @GetMapping("/")
-    public String index(){
-        return "index.html";
+    @GetMapping(value = {"/", "/main"})
+    public String main(){
+        return "main.html";
     }
 
     @GetMapping("/puching/puching_main")
