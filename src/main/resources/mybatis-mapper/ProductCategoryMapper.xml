@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kro.namohagae.mall.dao.ProductCategoryDao">
+    <!-- 카테고리 저장 -->
+    <insert id="save" parameterType="ProductCategory">
+        insert into PRODUCT_CATEGORY(product_category_no,product_category_name)
+        values(#{productCategoryNo},#{productCategoryName})
+    </insert>
+</mapper>
