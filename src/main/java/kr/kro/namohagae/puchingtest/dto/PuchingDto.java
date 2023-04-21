@@ -18,6 +18,10 @@ public class PuchingDto {
 
     @Data
     public static class readUser{
-
+        private Integer memberNo;
+        private String memberNickName;
+        private Double memberLatitude;
+        private Double memberLongitude;
+        private Double distance;
     }
 };

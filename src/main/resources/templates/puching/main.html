@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.js"
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <style>
-        #list {
+        #itemList{
             height: 400px;
             width:500px;
             overflow-y: scroll;
@@ -32,11 +32,16 @@
     <main>
         <aside id="aside" th:replace="~{/fragment/aside.html}">
         </aside>
+        <!--section  section   section   section-->
         <section id="section">
             <div id="map" style="width:500px;height:400px; float:left;"></div>
             <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
-            <div id="list"></div>
+            <div id="itemList"></div>
+            <!--좌표 자리수 맞추는 함수 geoloaction함수 updatelist함수   -->
             <script>
+                var pageNum = 1; // 현재 페이지
+                var pageSize = 10; // 한 페이지당 아이템 개수
+
                 function roundLatlong(num,n){
                     if(isNaN(num)){
                         console.log(num+'은 숫자가 아니다!!!')
@@ -67,38 +72,63 @@
                     navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
                 }
 
-                var updateList=  async function(now_lat,now_lng){
-                    $.get("/api/v1/puching/userlist?latitude="+now_lat+"&longitude="+now_lng,await function (data){
-                        console.log(data)
-                    })
-                };
-            </script>
-            <script>
-                // 초기 아이템 로드
-                var itemList = document.getElementById("list");
-                var items = [];
-                for (var i = 0; i < 10; i++) {
-                    items.push("Item " + (i + 1));
-                    itemList.innerHTML += "<div class='item'>Item " + (i + 1) + "</div>";
-                }
 
-                // 스크롤 이벤트 핸들러 등록
-                var lastScrollTop = 0;
-                itemList.addEventListener("scroll", function() {
-                    var st = this.scrollTop;
-                    if (st > lastScrollTop) {
-                        // 아래로 스크롤됨
-                        if (itemList.scrollTop + itemList.clientHeight >= itemList.scrollHeight) {
-                            // 리스트의 끝까지 도달함
-                            for (var i = 0; i < 10; i++) {
-                                items.push("Item " + (items.length + 1));
-                                itemList.innerHTML += "<div class='item'>Item " + (items.length) + "</div>";
-                            }
-                        }
-                    }
-                    lastScrollTop = st;
-                });
             </script>
+            <!-- 유저리스트 페이징    -->
+            <script>
+                // 자바스크립트 코드
+
+                    // 초기 데이터 로드
+                    // var pageNum = 1; // 현재 페이지
+                    // var pageSize = 10; // 한 페이지당 아이템 개수
+                    // loadItems(pageNum, pageSize);
+
+                    // 스크롤 이벤트 핸들러 등록
+                    $(window).scroll(function() {
+                        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                            // 리스트의 끝까지 도달함
+                            pageNum++; // 다음 페이지
+                            console.log(pageNum)
+                            var center=map.getCenter();
+                            var now_Centerlag=roundLatlong(center.Ma,7);
+                            var now_Centerlng=roundLatlong(center.La,7);
+
+                            loadItems(pageNum,pageSize,now_Centerlag,now_Centerlng); //
+                        }
+                    });
+
+                    // 아이템 로드 함수
+                     function loadItems(pageNum,pageSize,latitude,longitude) {
+                         $.ajax({
+                            url: "/api/v1/puching/userlist",
+                            type: "GET",
+                            data: {
+                                pageNum: pageNum,
+                                pageSize: pageSize,
+                                latitude:latitude,
+                                longitude:longitude
+                            },
+                            success: function(data) {
+                                var userdata=data;
+                                console.log(userdata);
+
+                                // 데이터 가져오기 성공
+                                var itemList = $("#itemList");
+                                $.each(userdata, function(i, item) {
+                                    itemList.append("<div class='item'>" +item.memberNickName+':'+ item.memberNo+'---'+item.distance + "</div>");
+                                });
+                            },
+                            error:function(err) {
+                                console.log(err)
+                                // 데이터 가져오기 실패
+                                alert("데이터를 가져오는데 실패하였습니다.");
+                            }
+                        });
+                    }
+
+
+            </script>
+            <!-- 지도 생성 -->
             <script>
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                     mapOption = {
@@ -110,6 +140,7 @@
                 map.setMinLevel(3);
                 map.setMaxLevel(6);
             </script>
+           <!-- 동네좌표 생성 및 이벤트 함수들-->
             <script>
                 // 다각형에 마우스오버 이벤트가 발생했을 때 변경할 채우기 옵션입니다
                 var town_mouseoverOption = {
@@ -121,8 +152,8 @@
                     fillColor: '#02eccd', // 채우기 색깔입니다
                     fillOpacity: 0.7 // 채우기 불투명도 입니다
                 };
-                function updatetown() {
-                    $.get("/api/v1/puching/townlist", async function (data) {
+                 function updatetown() {
+                    $.get("/api/v1/puching/townlist",async function (data) {
                         var circles = await data.map(function (i, position) {
                             var circle = new kakao.maps.Circle({
                                 map: map, // 원을 표시할 지도 객체
@@ -138,18 +169,21 @@
                             var infowindow = new kakao.maps.InfoWindow({
                                 map: map,
                                 position: new kakao.maps.LatLng(i.townLatitude, i.townLongitude),
-                                content: i.townDong + ' ' + i.townCnt + '명'
+                                content: i.townDong + '^_^' + i.townCnt + '명'
                             });
 
 
                             // 원클릭시 리스트 초기화 및 조건에 맞는 리스트 출력
                             kakao.maps.event.addListener(circle, 'click', function () {
                                 var circlecenter = circle.getPosition();
-                                var La = roundLatlong(circlecenter.La, 7);
                                 var Ma = roundLatlong(circlecenter.Ma, 7);
+                                var La = roundLatlong(circlecenter.La, 7);
                                 console.log('원을 클릭했습니다');
                                 console.log(Ma, La);
                                 map.panTo(new kakao.maps.LatLng(Ma, La));
+                                $('#itemList').empty();
+                                pageNum=1;
+                                loadItems(pageNum,pageSize,Ma,La);
                             });
 
                             // 마커에 mouseover 이벤트를 등록한다
@@ -165,7 +199,7 @@
                             });
                             return circle;
                         })
-                        await updateList(37.4398411, 126.6640894);
+
 
                     })
                 }
@@ -179,11 +213,14 @@
                     var now_Centerlag=roundLatlong(center.Ma,7);
                     var now_Centerlng=roundLatlong(center.La,7);
                     console.log(now_Centerlag,now_Centerlng)
-                    updateList(now_Centerlag,now_Centerlng);
+                    $('#itemList').empty();
+                    pageNum=1;
+                    loadItems(pageNum,pageSize,now_Centerlag,now_Centerlng);
                     console.log('지도의 중심 좌표는 ' + map.getCenter() + ' 입니다.');
                 });
 
             </script>
+            <!--document ready-->
             <script>
                 $(document).ready(async function(){
                     await updatetown();
