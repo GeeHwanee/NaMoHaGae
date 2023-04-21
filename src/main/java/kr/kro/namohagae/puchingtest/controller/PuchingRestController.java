@@ -18,14 +18,16 @@ public class PuchingRestController {
 
     @GetMapping(value="/puching/townlist")
     public ResponseEntity<List<PuchingDto.readTown>> townlist(){
-        List<PuchingDto.readTown> list = service.puchingmap();
+        List<PuchingDto.readTown> list = service.readTown();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value="/puching/userlist")
-    public ResponseEntity<List<PuchingDto.readUser>> userlist(Double latitude,Double longitude) {
-        List<PuchingDto.readUser> list;
-            return null;
+    public ResponseEntity<?> userlist(Double latitude,Double longitude) {
+        System.out.println(latitude);
+        System.out.println(longitude);
+        List<PuchingDto.readUser> list=service.readUsers();
+        return ResponseEntity.ok().body("ssssssssssssssssssad");
     }
 
 
