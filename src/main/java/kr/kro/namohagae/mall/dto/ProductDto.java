@@ -4,8 +4,8 @@ import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductReview;
 import kr.kro.namohagae.mall.entity.Qna;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,15 +43,19 @@ public class ProductDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Add {
+        @Setter
+        private Integer productNo;
+        private Integer productCategoryNo;
         private String productName;
-        private String productContent;
         private Integer productPrice;
         private Integer productStock;
-        private Integer productCategoryNo;
-        private List<MultipartFile> productImages;
+        private Integer productGrade;
+        private String productContent;
+        private LocalDateTime productWriteDate;
+        //private List<MultipartFile> productImages; //테스트때문에 주석
 
         public Product toEntity() {
-            return Product.builder().productName(productName).productContent(productContent).productPrice(productPrice).productStock(productStock).productCategoryNo(productCategoryNo).build();
+            return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
         }
     }
 
