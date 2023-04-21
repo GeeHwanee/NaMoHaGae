@@ -13,8 +13,8 @@ public class GlobalController {
 
     @GetMapping("/puching/puching_main")
     public void puchingmain() {
-
     };
+
     @GetMapping("/puching/puching_chatroom")
     public void puchingchatroom() {
 
