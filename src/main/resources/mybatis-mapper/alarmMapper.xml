@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.member.dao.AlarmDao">
     <insert id="save" parameterType="alarm">
-    insert into ALARM(alarm_no,member_no,alarm_content,alarm_rink,alarm_read_enabled) values (#{alarmNo},#{memberNo},#{alarmContent},#{alarmRink},#{alarmReadEnabled})
+    insert into ALARM(alarm_no,member_no,alarm_content,alarm_link,alarm_read_enabled) values (#{alarmNo},#{memberNo},#{alarmContent},#{alarmLink},#{alarmReadEnabled})
     </insert>
 
     <select id="count" resultType="int">
@@ -16,7 +16,7 @@
                 select rownum as rnum, a.* from
                     (
                         select
-                            alarm_no as alarmNo,alarm_content as alarmContent,alarm_rink as alarmRink,alarm_read_enabled as alarmReadEnabled
+                            alarm_no as alarmNo,alarm_content as alarmContent,alarm_link as alarmLink,alarm_read_enabled as alarmReadEnabled
                         from ALARM
                     ) a
                 where rownum&lt;=#{endRownum}
@@ -26,7 +26,7 @@
 
     <select id="read" resultType="kr.kro.namohagae.member.dto.AlarmDto$FindAll">
         select
-            alarm_no as alarmNo,alarm_content as alarmContent,alarm_rink as alarmRink,alarm_read_enabled as alarmReadEnabled
+            alarm_no as alarmNo,alarm_content as alarmContent,alarm_link as alarmLink,alarm_read_enabled as alarmReadEnabled
         from ALARM where alarm_no=#{no}
     </select>
 
