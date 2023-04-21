@@ -11,12 +11,25 @@ public class GlobalController {
         return "main.html";
     }
 
-    @GetMapping("/puching/puching_main")
-    public void puchingmain() {
+    @GetMapping("/puching/main")
+    public String puchingMain() {
+        return "/puching/main.html";
+    }
+
+    @GetMapping("/mall/main")
+    public String mallMain(){
+        return "/mall/main.html";
+    }
+
+    @GetMapping("/board/main")
+    public String boardMain(){
+        return "/board/main.html";
+    }
+
+    @GetMapping("/puching/chatroom")
+    public void chatroom() {
     };
 
-    @GetMapping("/puching/puching_chatroom")
-    public void puchingchatroom() {
 
-    };
+
 }
