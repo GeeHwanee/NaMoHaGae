@@ -15,5 +15,8 @@ public class GlobalController {
     public void puchingmain() {
 
     };
+    @GetMapping("/puching/puching_chatroom")
+    public void puchingchatroom() {
 
+    };
 }
