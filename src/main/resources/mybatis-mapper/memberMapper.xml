@@ -3,7 +3,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.member.dao.MemberDao">
     <insert id="save" parameterType="Member">
-        insert into MEMBER(member_no,town_no,member_email,member_password,memeber_nickname,member_phone,member_introduce)
-        values (#{memberNo},#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberIntroduce})
+        insert into MEMBER(member_no,town_no,member_email,member_password,member_nickname,member_phone)
+        values (#{memberNo},#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone})
     </insert>
+
+    <update id="updateMember" parameterType="kr.kro.namohagae.member.dto.MemberDto$UpdateMember">
+        update member set
+        <if test="memberPassword != null">member_password = #{memberPassword},</if>
+        <if test="memberNickname != null">member_nickname = #{memberNickname},</if>
+        <if test="memberPhone != null">member_phone = #{memberPhone},</if>
+        <if test="townNo != null">town_no = #{townNo},</if>
+        where member_no = #{no}
+    </update>
+
+    <select id="findByMemberNo" resultType="Member">
+        select * from MEMBER where member_no=#{no}
+    </select>
+
 </mapper>
