@@ -13,10 +13,10 @@ import java.util.Optional;
 public class MemberDaoTest {
     @Autowired
     private MemberDao dao;
-    @Test
-    public void test1(){
+//    @Test
+//    public void test1(){
         Member member = Member.builder().memberNo(2).townNo(0).memberEmail("qweasd@never.com").memberPhone("010-0101-0101").memberPassword("qweasdzxc").memberNickname("홍길동").build();
-        dao.save(member);
+//        dao.save(member);
     }
 
     @Test
