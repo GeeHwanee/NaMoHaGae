@@ -7,6 +7,7 @@
         <result property="productImageFilename" column="product_image_filename" />
     </resultMap>
 
+    <!-- 상품 이미지 저장 -->
     <update id="save">
         insert all
         <foreach collection="list" item="item" separator=" ">
