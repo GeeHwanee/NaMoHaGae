@@ -3,14 +3,15 @@
 <mapper namespace="kr.kro.namohagae.mall.dao.ProductImageDao">
     <resultMap id="productImageResultMap" type="kr.kro.namohagae.mall.entity.ProductImage">
         <id property="productNo" column="product_no" />
-        <result property="productImageNo" column="product_image_no" />
+        <id property="productImageNo" column="product_image_no" />
         <result property="productImageFilename" column="product_image_filename" />
     </resultMap>
 
     <update id="save">
         insert all
         <foreach collection="list" item="item" separator=" ">
-            into PRODUCT_IMAGE values(#{item.productNo, jdbcType=INTEGER}, #{item.productImageNo, jdbcType=VARCHAR}, #{item.productImageFilename, jdbcType=VARCHAR})
+            into PRODUCT_IMAGE (product_no, product_image_no, product_image_filename)
+            values (#{item.productNo, jdbcType=INTEGER}, #{item.productImageNo, jdbcType=INTEGER}, #{item.productImageFilename, jdbcType=VARCHAR})
         </foreach>
         select * from dual
     </update>
