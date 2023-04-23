@@ -23,6 +23,6 @@ public class MemberDaoTest {
     public void test2(){
     Member member = dao.findByMemberNo(0).get();
 
-    dao.updateMember(member.getMemberNo(),"asdasd","etertert","sdgdfg","");
+    dao.updateMember(member.getMemberNo(),"asdasd","etertert","sdgdfg",0);
     }
 }

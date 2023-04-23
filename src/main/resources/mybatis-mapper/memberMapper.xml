@@ -13,7 +13,7 @@
         <if test="memberNickname != null">member_nickname = #{memberNickname},</if>
         <if test="memberPhone != null">member_phone = #{memberPhone},</if>
         <if test="townNo != null">town_no = #{townNo},</if>
-        where member_no = #{memberNo}
+        where member_no = #{no}
     </update>
 
     <select id="findByMemberNo" resultType="Member">
