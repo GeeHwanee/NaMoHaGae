@@ -21,6 +21,12 @@
             border: 1px solid gray;
             padding: 10px;
         }
+        .loading {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -36,11 +42,17 @@
         <section id="section">
             <div id="map" style="width:500px;height:400px; float:left;"></div>
             <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
-            <div id="itemList"></div>
+            <div id="itemList">
+            </div>
+            <div id="loading" class="loading" style="display: none;">
+                Loading...
+            </div>
+
             <!--좌표 자리수 맞추는 함수 geoloaction함수 updatelist함수   -->
             <script>
                 var pageNum = 1; // 현재 페이지
                 var pageSize = 10; // 한 페이지당 아이템 개수
+                var isLoading = false;
 
                 function roundLatlong(num,n){
                     if(isNaN(num)){
@@ -60,16 +72,21 @@
                     });
                     marker.setMap(null);
                     marker.setMap(map)
+                    $('#itemList').empty();
+                    pageNum=1;
+                    loadItems(pageNum,pageSize,pos.coords.latitude,pos.coords.longitude)
                     // map.setCenter(currentPos);
                 }
                 function locationLoadError(pos){
                     var defalut_LatLng = new kakao.maps.LatLng(37.4398411, 126.6640894)
+
                     map.panTO(defalut_LatLng)
 
                     alert('위치 정보를 못가져왔넹')
                 }
                 function getCurrentPosBtn(){
                     navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
+
                 }
 
 
@@ -82,49 +99,69 @@
                     // var pageNum = 1; // 현재 페이지
                     // var pageSize = 10; // 한 페이지당 아이템 개수
                     // loadItems(pageNum, pageSize);
+                    var $itemList= $('#itemList')
 
                     // 스크롤 이벤트 핸들러 등록
-                    $(window).scroll(function() {
-                        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                    $itemList.scroll(function() {
+                        // console.log("스크롤 움직임")
+                        // console.log($itemList.scrollTop())
+                        // console.log($itemList.height())
+                        // console.log($itemList[0].scrollHeight)
+                        if (($itemList.scrollTop()+20) + $itemList.height() >= $itemList[0].scrollHeight) {
                             // 리스트의 끝까지 도달함
-                            pageNum++; // 다음 페이지
+
                             console.log(pageNum)
                             var center=map.getCenter();
                             var now_Centerlag=roundLatlong(center.Ma,7);
                             var now_Centerlng=roundLatlong(center.La,7);
 
                             loadItems(pageNum,pageSize,now_Centerlag,now_Centerlng); //
+                            pageNum++;
+
                         }
                     });
 
                     // 아이템 로드 함수
-                     function loadItems(pageNum,pageSize,latitude,longitude) {
-                         $.ajax({
-                            url: "/api/v1/puching/userlist",
-                            type: "GET",
-                            data: {
-                                pageNum: pageNum,
-                                pageSize: pageSize,
-                                latitude:latitude,
-                                longitude:longitude
-                            },
-                            success: function(data) {
-                                var userdata=data;
-                                console.log(userdata);
+                     async function loadItems(pageNum,pageSize,latitude,longitude) {
+                         if (!isLoading) {
+                             isLoading = true;
+                             $('#loading').show(); // 로딩 div 노출
+                             $.ajax({
+                                 url: "/api/v1/puching/userlist",
+                                 type: "GET",
+                                 data: {
+                                     pageNum: pageNum,
+                                     pageSize: pageSize,
+                                     latitude: latitude,
+                                     longitude: longitude
+                                 },
+                                 success: await function (data) {
+                                     var userdata = data;
+                                     console.log(userdata);
 
-                                // 데이터 가져오기 성공
-                                var itemList = $("#itemList");
-                                $.each(userdata, function(i, item) {
-                                    itemList.append("<div class='item'>" +item.memberNickName+':'+ item.memberNo+'---'+item.distance + "</div>");
-                                });
-                            },
-                            error:function(err) {
-                                console.log(err)
-                                // 데이터 가져오기 실패
-                                alert("데이터를 가져오는데 실패하였습니다.");
-                            }
-                        });
-                    }
+                                     // 데이터 가져오기 성공
+                                     var itemList = $("#itemList");
+                                     $.each(userdata, function (i, item) {
+                                         itemList.append("<div class='item'>" + item.memberNickName + ':' + item.memberNo + '---' + item.distance + "</div>");
+                                     });
+                                     isLoading = false;
+                                     $('#loading').hide();
+                                     },
+                                 error: await function (err) {
+                                     console.log(err)
+                                     // 데이터 가져오기 실패
+                                     alert("데이터를 가져오는데 실패하였습니다.");
+                                     isLoading = false;
+                                     $('#loading').hide();
+                                 }
+
+                             });
+
+
+
+                         }
+
+                     }
 
 
             </script>
@@ -189,13 +226,13 @@
                             // 마커에 mouseover 이벤트를 등록한다
                             kakao.maps.event.addListener(circle, 'mouseover', function () {
                                 circle.setOptions(town_mouseoverOption);
-                                console.log('원에 mouseover 이벤트가 발생했습니다!');
+                                // console.log('원에 mouseover 이벤트가 발생했습니다!');
                             });
 
                             // 마커에 mouseout 이벤트 등록
                             kakao.maps.event.addListener(circle, 'mouseout', function () {
                                 circle.setOptions(town_mouseoutOption);
-                                console.log('원에 mouseout 이벤트가 발생했습니다!');
+                                // console.log('원에 mouseout 이벤트가 발생했습니다!');
                             });
                             return circle;
                         })
@@ -224,6 +261,12 @@
             <script>
                 $(document).ready(async function(){
                     await updatetown();
+                    var center=map.getCenter();
+                    var now_Centerlag=roundLatlong(center.Ma,7);
+                    var now_Centerlng=roundLatlong(center.La,7);
+
+                   await loadItems(pageNum,pageSize,now_Centerlag,now_Centerlng); //
+
 
                 });
 
