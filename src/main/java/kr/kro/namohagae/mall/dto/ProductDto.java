@@ -3,13 +3,41 @@ package kr.kro.namohagae.mall.dto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductReview;
 import kr.kro.namohagae.mall.entity.Qna;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductDto {
+
+    // 상품 등록
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Add {
+        private Integer productNo;
+        private Integer productCategoryNo;
+        private String productName;
+        private Integer productPrice;
+        private Integer productStock;
+        private Integer productGrade;
+        private String productContent;
+        private LocalDateTime productWriteDate;
+        private List<MultipartFile> productImages;
+
+        public void setProductNo(Integer productNo) {
+            this.productNo = productNo;
+        }
+
+        public Product toEntity() {
+            return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
+        }
+    }
 
     // 상품 목록
     @Data
@@ -38,32 +66,11 @@ public class ProductDto {
         private List<Qna> qnas;
     }
 
-    // 상품 등록
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Add {
-        @Setter
-        private Integer productNo;
-        private Integer productCategoryNo;
-        private String productName;
-        private Integer productPrice;
-        private Integer productStock;
-        private Integer productGrade;
-        private String productContent;
-        private LocalDateTime productWriteDate;
-        //private List<MultipartFile> productImages; //테스트때문에 주석
-
-        public Product toEntity() {
-            return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
-        }
-    }
-
     // 페이지네이션
     @Data
     @AllArgsConstructor
     public static class Pagination {
-        private Integer pageno;
+        private Integer pageNo;
         private Integer prev;
         private Integer start;
         private Integer end;
