@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.security;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,13 +20,15 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Autowired
     private MemberDao memberDao;
 
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        Integer memberNo = memberDao.findNoByUsername(authentication.getName());
-        memberDao.resetMemberLoginCount(memberNo);
-
+        //Integer memberNo = memberDao.findNoByUsername(authentication.getName());
+        //memberDao.resetMemberLoginCount(memberNo);
         String redirectUrl = "/";
-
+        SavedRequest sr = new HttpSessionRequestCache().getRequest(request, response);
+        HttpSession session = request.getSession();
+        response.sendRedirect("/");
 
 
     }
