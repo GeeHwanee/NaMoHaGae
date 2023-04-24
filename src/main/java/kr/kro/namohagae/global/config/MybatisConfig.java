@@ -1,4 +1,4 @@
-package kr.kro.namohagae.global;
+package kr.kro.namohagae.global.config;
 
 import javax.sql.DataSource;
 
