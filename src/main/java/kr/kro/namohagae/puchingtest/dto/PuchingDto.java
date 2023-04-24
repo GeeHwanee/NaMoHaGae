@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
-//@Getter
+
 public class PuchingDto {
 
     @Data
@@ -24,4 +24,6 @@ public class PuchingDto {
         private Double memberLongitude;
         private Double distance;
     }
+
+
 };
