@@ -32,7 +32,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if(username.equals("admin")) {
-            return new MyUserDetails(0, username, "1234", true, Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+            return new MyUserDetails(0, username, passwordEncoder.encode("1234"), true, Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
         }
         try {
             Member member = memberDao.findByUsername(username).get();
