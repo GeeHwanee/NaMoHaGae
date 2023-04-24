@@ -20,12 +20,13 @@ public class SecurityConfig {
     private LoginFailHandler loginFailHandler;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.formLogin().loginPage("/login")
+        //http.csrf().disable();
+        http.formLogin()
                 .loginProcessingUrl("/login")
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
         http.logout().logoutUrl("/login").logoutSuccessUrl("/login");
+
         return http.build();
     }
 
