@@ -140,12 +140,11 @@
         <h1>Sign in</h1>
         <h2>A minimalist layout for Login pages</h2>
       </hgroup>
-      <form>
+      <form action="/login" method="post">
         <input
-                type="email"
-                name="login"
+                type="text"
+                name="username"
                 placeholder="Login"
-
         />
         <input
                 type="password"
@@ -160,7 +159,7 @@
           <a href="#"><img src="member/ko/kakao_login_large_wide.png" class="kakao"></a>
         </fieldset>
 
-        <button type="submit" class="contrast" onclick="event.preventDefault()">Login</button>
+        <button type="button" class="contrast">Login</button>
 
       </form>
     </div>
