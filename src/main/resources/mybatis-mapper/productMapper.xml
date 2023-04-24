@@ -6,6 +6,6 @@
             select product_seq_product_no.nextval from dual
         </selectKey>
         insert into PRODUCT(product_no,product_category_no,product_name,product_price,product_stock,product_grade,product_content,product_write_date)
-        values(#{product_no},#{productCategoryNo},#{productName},#{productPrice},#{productStock},#{productGrade},#{productContent},#{productWriteDate})
+        values(#{productNo},#{productCategoryNo},#{productName},#{productPrice},#{productStock},#{productGrade},#{productContent},#{productWriteDate})
     </insert>
 </mapper>
