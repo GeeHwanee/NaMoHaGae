@@ -13,16 +13,16 @@ import java.util.Optional;
 public class MemberDaoTest {
     @Autowired
     private MemberDao dao;
-//    @Test
-//    public void test1(){
-        Member member = Member.builder().memberNo(2).townNo(0).memberEmail("qweasd@never.com").memberPhone("010-0101-0101").memberPassword("qweasdzxc").memberNickname("홍길동").build();
-//        dao.save(member);
-    }
+//        @Test
+    public void test1(){
+    Member member = Member.builder().memberNo(1).townNo(0).memberEmail("qweasd@never.com").memberPhone("010-0101-0101").memberPassword("qweasdzxc").memberNickname("홍길동").build();
+        dao.save(member);
+}
 
     @Test
     public void test2(){
-    Member member = dao.findByMemberNo(0).get();
+    Member member = dao.findByMember(0).get();
 
-    dao.updateMember(member.getMemberNo(),"asdasd","etertert","sdgdfg",0);
+    dao.disabled(member.getMemberNo(),true);
     }
 }
