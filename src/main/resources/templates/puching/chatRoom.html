@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>퍼칭 채팅방 페이지</title>
+    <link rel="stylesheet" href="/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+
 
         .container {
             display: flex;
@@ -57,15 +56,6 @@
             margin-bottom: 10px;
         }
 
-        .chat-bubble.sent {
-            align-self: flex-end;
-            background-color: #DCF8C6;
-        }
-
-        .chat-bubble.received {
-            align-self: flex-start;
-            background-color: #EAEAEA;
-        }
 
         ul {
             list-style: none;
@@ -82,10 +72,6 @@
             cursor: pointer;
         }
 
-        li.active {
-            background-color: #4CAF50;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -109,8 +95,7 @@
             </div>
             <div class="chat-area">
                 <div class="chat-header">
-                    <h2>채팅방 1</h2>
-                    <p>마지막 대화: 2023-04-20 15:30</p>
+                    <h2>채팅상대 이름</h2>
                 </div>
                 <div class="chat-content">
                     <div class="message received">
@@ -126,18 +111,71 @@
                         <span>2023-04-20 15:02</span>
                     </div>
                 </div>
-                <form>
-                    <input type="text" placeholder="메시지를 입력하세요...">
-                    <button>보내기</button>
-                </form>
+
+                    <input id="message" type="text" placeholder="메시지를 입력하세요...">
+                    <button onclick="sendMessage()">보내기</button>
+
             </div>
         </div>
 
     </section>
 </main>
-<footer th:replace="~{/fragment/aside.html}">
+<footer th:replace="~{/fragment/footer.html}">
 </footer>
+<script>
+    var socket = new WebSocket("ws://localhost:8081/chatroom");
+    var chatLog = [];
 
+    socket.onopen = function() {
+        console.log("WebSocket connection opened.");
+
+        // 유저의 채팅방목록 불러오기
+        $.ajax({
+            type: "GET",
+            url: "/api/v1/findchatroom",
+            success: function(data) {
+                chatLog = data;
+                // 채팅창에 이전 채팅 내용을 출력합니다.
+                for (var i = 0; i < chatLog.length; i++) {
+                    var message = chatLog[i];
+                    // 메시지를 화면에 표시하는 코드를 작성합니다.
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error while getting chat log: " + error);
+            }
+        });
+    };
+
+    socket.onmessage = function(event) {
+        var message = event.data;
+        // 수신된 메시지를 화면에 표시하는 코드를 작성합니다.
+        chatLog.push(message);
+        // 채팅 로그에 메시지를 추가합니다.
+    };
+
+    socket.onerror = function(error) {
+        console.log("WebSocket error: " + error);
+    };
+
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed with code " + event.code + " and reason " + event.reason);
+    };
+
+    function sendMessage() {
+        var messageInput = document.getElementById("message");
+        var checkmessage =messageInput.value.trim();
+        if(checkmessage==0){
+            return;
+        }
+        var message = messageInput.value;
+        socket.send(messageInput);
+
+        messageInput.value = "";
+    }
+
+
+</script>
 
 
 
