@@ -11,8 +11,8 @@ public interface FavoriteDao {
     public Integer save(Favorite favorite);
 
     // 해당 멤버의 찜리스트 찾기
-    public List<Favorite> findByMemberNickname(String memberNickname);
+    public List<Favorite> findByMemberNo(Integer memberNo);
 
     // 찜리스트 삭제
-    public Integer delete(List<Favorite> list, String memberNickname);
+    public Integer delete(List<Integer> list, Integer memberNo);
 }
