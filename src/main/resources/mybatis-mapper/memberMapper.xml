@@ -23,6 +23,10 @@
         select * from MEMBER where member_no=#{no} and rownum=1
     </select>
 
+    <select id="findByUsername" resultType="Member">
+        select * from MEMBER where member_email=#{email} and rownum=1
+    </select>
+
     <update id="increaseMemberLoginCount">
         update member set member_login_count = member_login_count+1 where member_no=#{no} and rownum=1
     </update>

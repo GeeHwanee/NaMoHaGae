@@ -16,6 +16,8 @@ public interface MemberDao {
 
     public Optional<Member> findByMember(Integer no);
 
+    public Optional<Member> findByUsername(String email);
+
     public Integer increaseMemberLoginCount(Integer no);
 
     public Integer resetMemberLoginCount(Integer no);
