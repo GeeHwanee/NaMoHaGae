@@ -3,7 +3,82 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.member.dao.MemberDao">
     <insert id="save" parameterType="Member">
-        insert into MEMBER(member_no,town_no,member_email,member_password,memeber_nickname,member_phone,member_introduce)
-        values (#{memberNo},#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberIntroduce})
+        insert into MEMBER(member_no,town_no,member_email,member_password,member_nickname,member_phone,member_introduce,member_profile_image,member_login_count,member_grade,member_question_select_count,
+                           member_point)
+        values (#{memberNo},#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberIntroduce},#{memberProfileImage},0,365,0,0)
     </insert>
+
+    <update id="updateMember">
+        update member
+        <trim prefix="set" suffixOverrides=",">
+        <if test="password != null"> member_password = #{password},</if>
+        <if test="nickname != null">member_nickname = #{nickname},</if>
+        <if test="phone != null">member_phone = #{phone},</if>
+        <if test="townNo != null">town_no = #{townNo},</if>
+        </trim>
+        where member_no = #{no} and rownum=1
+    </update>
+
+    <select id="findByMember" resultType="Member">
+        select * from MEMBER where member_no=#{no} and rownum=1
+    </select>
+
+    <select id="findByUsername" resultType="Member">
+        select * from MEMBER where member_email=#{email} and rownum=1
+    </select>
+
+    <update id="increaseMemberLoginCount">
+        update member set member_login_count = member_login_count+1 where member_no=#{no} and rownum=1
+    </update>
+
+    <update id="resetMemberLoginCount">
+        update member set member_login_count = 0 where member_no=#{no} and rownum=1
+    </update>
+
+    <update id="memberEnabled">
+        update member set member_enabled = #{disabled} where member_no=#{no} and rownum=1
+    </update>
+
+    <update id="updateLocation">
+        update member
+        <trim prefix="set" suffixOverrides=",">
+            <if test="latitude != null"> member_latitude  = #{latitude},</if>
+            <if test="longitude != null">member_longitude = #{longitude},</if>
+        </trim>
+        where member_no = #{no} and rownum=1
+    </update>
+
+    <update id="updatePoint">
+        update member set member_point = member_point+#{point} where member_no=#{no} and rownum=1
+    </update>
+
+    <update id="locationEnabled">
+        update member set member_Location_enabled = #{enabled} where member_no=#{no} and rownum=1
+    </update>
+
+    <update id="dogSignEnabled">
+        update member set member_dog_sign_enabled = #{enabled} where member_no=#{no} and rownum=1
+    </update>
+
+
+    <select id="findByEmail" resultType="String">
+        select member_email from member where member_nickname=#{nickname} and member_phone=#{phone}
+    </select>
+
+    <select id="existsByEmail" resultType="Boolean">
+        select count(*) from member where member_nickname=#{email} and rownum=1
+    </select>
+
+    <select id="existsByNickname" resultType="Boolean">
+        select count(*) from member where member_nickname=#{nickname} and rownum=1
+    </select>
+
+    <update id="updateProfile">
+        update member set member_profile_image = #{profile} where member_no = #{no} and rownum=1
+    </update>
+
+    <update id="disabled">
+        update member set member_enabled where member_no=#{memberNo} and rownum=1
+    </update>
+
 </mapper>
