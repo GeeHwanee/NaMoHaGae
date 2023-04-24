@@ -16,6 +16,8 @@ public interface MemberDao {
 
     public Optional<Member> findByMember(Integer no);
 
+    public Integer findNoByUsername(String email);
+
     public Optional<Member> findByUsername(String email);
 
     public Integer increaseMemberLoginCount(Integer no);
@@ -38,4 +40,8 @@ public interface MemberDao {
     public Boolean existsByEmail(String email);
 
     public Integer updateProfile(String profile,Integer no);
+
+    //public Integer updateEnable
+
+    public Integer disabled(Integer memberNo);
 }
