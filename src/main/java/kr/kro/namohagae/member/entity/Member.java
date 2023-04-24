@@ -21,6 +21,7 @@ public class Member {
     private Integer memberLongitude;
     private Integer memberGrade;
     private String memberIntroduce;
+    private String memberProfileImage;
     private Boolean memberDogSignEnabled;
     private Boolean memberEnabled;
     private Integer memberLoginCount;
