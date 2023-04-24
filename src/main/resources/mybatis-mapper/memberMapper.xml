@@ -77,4 +77,8 @@
         update member set member_profile_image = #{profile} where member_no = #{no} and rownum=1
     </update>
 
+    <update id="disabled">
+        update member set member_enabled where member_no=#{memberNo} and rownum=1
+    </update>
+
 </mapper>
