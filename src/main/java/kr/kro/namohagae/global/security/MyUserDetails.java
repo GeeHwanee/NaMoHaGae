@@ -17,6 +17,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Builder
 public class MyUserDetails implements UserDetails {
+    private Integer memberNo;
     private String username;
     private String password;
     private Boolean enabled;
