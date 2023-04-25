@@ -1,59 +1,63 @@
 package kr.kro.namohagae.puchingtest.websocket;
 
-import kr.kro.namohagae.puchingtest.entity.Puching;
+
 import kr.kro.namohagae.puchingtest.service.ChatService;
+import org.apache.catalina.core.ApplicationContext;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ChatWebSocketHandler implements WebSocketHandler {
-    private static final Map<String, WebSocketSession> sessions = new HashMap<>();
+    private static final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     @Autowired
     private ChatService service;
 
 
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String username = getUsername(session);
+
+        String username= session.getPrincipal().getName();
+        System.out.println(username);
+        System.out.println("웹소켓 열렸다@@@@@@@@@@");
+        // WebSocketSession에서 사용자 정보를 저장합니다.
+        session.getAttributes().put("username", username);
+        // 저장된 사용자 정보를 출력합니다.
+        System.out.println("WebSocketSession에 저장된 사용자 이름: " + session.getAttributes().get("username"));
         sessions.put(username, session);
         // WebSocket 연결이 성공적으로 열리면 호출됩니다.
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        String username = getUsername(session);
-        String receiverUsername = (String) session.getAttributes().get("receiverUsername");
+        String sendusername= session.getPrincipal().getName();
         String payload = message.getPayload().toString();
 
-//        if(message.getClass()== File.class){
-//
-//        }
-//        if(message.getClass()== Puching.class) {
-//
-//        }
+        JSONObject jsonPayload = new JSONObject(payload);
+        String receiverUsername = jsonPayload.getString("receiverUsername");
+        String messageContent = jsonPayload.getString("message");
 
         if (receiverUsername != null) {
             // 수신자가 지정된 경우, 수신자에게만 메시지를 전송합니다.
             WebSocketSession receiverSession = sessions.get(receiverUsername);
             if (receiverSession != null && receiverSession.isOpen()) {
-                TextMessage textMessage = new TextMessage(payload);
+                TextMessage textMessage = new TextMessage(messageContent);
                 receiverSession.sendMessage(textMessage);
             }
         } else {
-            // 수신자가 지정되지 않은 경우, 모든 클라이언트에게 메시지를 전송합니다.
-            for (WebSocketSession clientSession : sessions.values()) {
-                if (clientSession.isOpen()) {
-                    TextMessage textMessage = new TextMessage(payload);
-                    clientSession.sendMessage(textMessage);
-                }
-            }
+            // 수신자가 지정되지 않은 경우, 메시지를 전송하지 않습니다.
         }
+
+
+
     }
 
 
@@ -66,8 +70,10 @@ public class ChatWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-        String username = getUsername(session);
+        String username= session.getPrincipal().getName();
         sessions.remove(username);
+        System.out.println("웹소켓 닫혔다@@@@@@@@@@");
+
     }
 
     @Override
@@ -75,7 +81,5 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         return false;
     }
 
-    private String getUsername(WebSocketSession session) {
-        return (String) session.getAttributes().get("username");
-    }
+
 }

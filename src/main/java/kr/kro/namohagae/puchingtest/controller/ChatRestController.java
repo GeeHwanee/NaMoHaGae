@@ -1,6 +1,7 @@
 package kr.kro.namohagae.puchingtest.controller;
 
 
+
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.dto.MessageDto;
 import kr.kro.namohagae.puchingtest.service.ChatService;
@@ -18,10 +19,12 @@ import java.util.List;
 public class ChatRestController {
     @Autowired
     private ChatService service;
+
     @GetMapping("/findchatroom")
-    public ResponseEntity<List<ChatRoomDto.Read>> findByChatRoom(Principal principal, Integer memberNo){
+    public ResponseEntity<List<ChatRoomDto.Read>> findByChatRoom(Principal principal){
         String username = principal.getName();
-        List<ChatRoomDto.Read> list =service.findByChatRoom(memberNo);
+
+        List<ChatRoomDto.Read> list =service.findByChatRoom(username);
 
         return ResponseEntity.ok().body(list);
     }
@@ -33,7 +36,7 @@ public class ChatRestController {
         return null;
     }
 
-    //상대 아이디를 세션에 저장하는 메소드
+
 
 
 }
