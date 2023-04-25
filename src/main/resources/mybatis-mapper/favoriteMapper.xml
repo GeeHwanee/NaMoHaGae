@@ -12,14 +12,17 @@
 
     <!-- 해당 멤버의 찜리스트 찾기 -->
     <select id="findByMemberNo" parameterType="int" resultType="Favorite">
-        select * from FAVORITE where member_no=#{memberNo}
+        select * from FAVORITE f
+        join MEMBER m on f.member_no = m.member_no
+        where m.member_no=#{memberNo}
     </select>
 
     <!-- 찜리스트 삭제 -->
-    <delete id="delete" parameterType="map">
+    <delete id="delete">
         <foreach collection="list" item="favoriteNo" separator=",">
-            delete from FAVORITE
-            where favorite_no = #{favoriteNo} and member_no = #{memberNo}
+            delete from FAVORITE f
+            join MEMBER m on f.member_no = m.member_no
+            where f.favorite_no = #{favoriteNo} and m.member_no = #{memberNo}
         </foreach>
     </delete>
 </mapper>
