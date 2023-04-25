@@ -1,10 +1,12 @@
 package kr.kro.namohagae.puchingtest.websocket;
 
+import kr.kro.namohagae.puchingtest.entity.Puching;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,13 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         String username = getUsername(session);
         String receiverUsername = (String) session.getAttributes().get("receiverUsername");
         String payload = message.getPayload().toString();
+
+//        if(message.getClass()== File.class){
+//
+//        }
+//        if(message.getClass()== Puching.class) {
+//
+//        }
 
         if (receiverUsername != null) {
             // 수신자가 지정된 경우, 수신자에게만 메시지를 전송합니다.
