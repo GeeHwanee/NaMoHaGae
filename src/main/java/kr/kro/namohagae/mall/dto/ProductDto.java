@@ -74,7 +74,7 @@ public class ProductDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private Integer category;
+        private Integer categoryNo;
         private List<ProductDto.ReadAll> products;
     }
 }
