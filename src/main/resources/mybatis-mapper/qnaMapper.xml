@@ -9,6 +9,8 @@
 
     <!-- 상품 큐엔에이 보기 -->
     <select id="findByProductNo">
-        select * from QNA where product_no=#{productNo}
+        select * from QNA q
+        join PRODUCT p on q.product_no = p.product_no
+        where p.product_no=#{productNo}
     </select>
 </mapper>
