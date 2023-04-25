@@ -17,7 +17,7 @@
                     (
                         select
                             alarm_no as alarmNo,alarm_content as alarmContent,alarm_link as alarmLink,alarm_read_enabled as alarmReadEnabled
-                        from ALARM
+                        from ALARM where member_no =#{memberNo}
                     ) a
                 where rownum&lt;=#{endRownum}
             )
