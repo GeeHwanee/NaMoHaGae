@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kro.namohagae.member.dao.FollowDao">
+    <insert id="save">
+        insert into follow(follow_no,member_no,follow_member_no) values(follow_seq_follow_no.nextval,#{memberNo},#{followMemberNo})
+    </insert>
+
+    <delete id="delete">
+        delete from follow where follow_no=#{followNo}
+    </delete>
+
+    <select id="findFollowList" resultType="kr.kro.namohagae.member.dto.FollowDto$list">
+        select * from
+            (
+                select rownum as rnum, a.* from
+                    (
+                        select
+                            alarm_no as alarmNo,alarm_content as alarmContent,alarm_link as alarmLink,alarm_read_enabled as alarmReadEnabled
+                        from member where member_no=#{memberNo}
+                    ) a
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+
+</mapper>
