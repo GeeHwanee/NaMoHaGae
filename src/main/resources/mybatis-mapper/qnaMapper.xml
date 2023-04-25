@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kro.namohagae.mall.dao.QnaDao">
+    <!-- 큐엔에이 저장 -->
+    <insert id="save" parameterType="kr.kro.namohagae.mall.entity.Qna" useGeneratedKeys="true" keyProperty="qnaNo">
+        insert into QNA (product_no, qna_writer, qna_content, qna_write_date, qna_answer_content, qna_answer_write_date)
+        values (#{productNo}, #{qnaWriter}, #{qnaContent}, #{qnaWriteDate}, #{qnaAnswerContent}, #{qnaAnswerWriteDate})
+    </insert>
+
+    <!-- 상품 큐엔에이 보기 -->
+    <select id="findByProductNo">
+        select * from QNA where product_no=#{productNo}
+    </select>
+</mapper>
