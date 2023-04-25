@@ -11,13 +11,16 @@
     <script>
         $(document).ready(function (){
             $('#town_gu').change(async function(e) {
-                let gu = e.target.value;
+                const gu = e.target.value;
+                console.log("111")
                 try {
-                    const town = await $.ajax('/api/v1/member/join/?gu=' + gu);
+                    console.log("222")
+                    const town = await $.ajax('/api/v1/member/join?gu='+encodeURIComponent(gu));
+                    console.log("11")
                     const $townDong = $('#town_dong').empty();
                     console.log(town);
-                    for (let t of town) {
-                        $townDong.append($('<option>').attr('value', t.townNo).text(t.townDong));
+                    for (t of town) {
+                        $townDong.append($('<option>').attr('value', t.TOWN_NO).text(t.TOWN_DONG));
                     }
                 }catch (err){
                     console.log(err);
@@ -66,8 +69,8 @@
                  <h3>주소 선택</h3>
                     <select id="town_gu">
                         <option disabled selected>구 선택</option>
-                        <option value="gu">미추홀구</option>
-                        <option value="gu2">서구</option>
+                        <option value="미추홀구">미추홀구</option>
+                        <option value="서구">서구</option>
                     </select>
                     <select id="town_dong" name="townDong">
                         <option>구 부터 선택</option>

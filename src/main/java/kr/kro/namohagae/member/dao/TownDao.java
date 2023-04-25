@@ -10,7 +10,7 @@ import java.util.Map;
 @Mapper
 public interface TownDao {
 
-    @Select("select townNo, townDong from TOWN where town_gu=#{gu}")
+    @Select("select town_no, town_dong from TOWN where town_gu=#{gu}")
     public List<Map> findByGu(String gu);
 
 }
