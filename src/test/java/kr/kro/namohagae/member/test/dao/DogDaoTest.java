@@ -23,6 +23,6 @@ public class DogDaoTest {
 
     @Test
     public void test2(){
-        DogDto dto = dao.findDogList(0,0).get(0);
+        DogDto dto = dao.findDogList(0,0).get();
     }
 }
