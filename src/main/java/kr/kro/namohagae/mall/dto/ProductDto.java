@@ -3,10 +3,7 @@ package kr.kro.namohagae.mall.dto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductReview;
 import kr.kro.namohagae.mall.entity.Qna;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -62,7 +59,9 @@ public class ProductDto {
         private Integer productStock;
         private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
+        @Setter
         private List<ProductReview> productReviews;
+        @Setter
         private List<Qna> qnas;
     }
 
