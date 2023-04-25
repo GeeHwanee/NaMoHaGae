@@ -12,13 +12,13 @@ public interface ProductDao {
     public Integer save(Product product);
 
     // 특정 카테고리의 상품 개수를 조회
-    public Integer count(String categoryName);
+    public Integer count(Integer categoryNo);
 
     // 상품 목록 조회
     public List<ProductDto.ReadAll> findAll(Integer startRownum, Integer endRownum, Integer categoryNo, Integer memberNo);
 
     // 상품 상세 보기
-    public ProductDto.Read read(Integer productNo);
+    public ProductDto.Read findByProductNo(Integer productNo);
 
     // 상품명으로 검색
     public List<Product> findByProductName(String productName);

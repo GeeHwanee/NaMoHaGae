@@ -46,8 +46,9 @@ public class ProductDaoTest {
     // 특정 카테고리의 상품 개수를 조회
     //@Test
     public void countOfCategory() {
-        int count = productDao.count("사료/간식");
-        System.out.println("사료/간식 카테고리 상품 개수: " + count);
+        Integer categoryNo = 1;
+        Integer result = productDao.count(categoryNo);
+        System.out.println(categoryNo + "번 카테고리 상품 개수: " + result);
     }
 
     // 상품명으로 검색

@@ -11,10 +11,10 @@
     </insert>
 
     <!--특정 카테고리의 상품 개수를 조회-->
-    <select id="count" resultType="java.lang.Integer" parameterType="String">
+    <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         select count(*) from PRODUCT p
         join PRODUCT_CATEGORY c on p.product_category_no = c.product_category_no
-        where c.product_category_name = #{categoryName}
+        where c.product_category_no = #{categoryNo}
     </select>
 
     <!-- 상품 목록 조회 -->
