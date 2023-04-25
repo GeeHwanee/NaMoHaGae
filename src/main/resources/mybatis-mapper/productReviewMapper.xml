@@ -3,7 +3,12 @@
 <mapper namespace="kr.kro.namohagae.mall.dao.ProductReviewDao">
     <!-- 리뷰 저장 -->
     <insert id="save" parameterType="kr.kro.namohagae.mall.entity.ProductReview" useGeneratedKeys="true" keyProperty="productReviewNo">
-        insert into PRODUCTREVIEW (product_no, order_no, order_detail_no, product_review_writer, product_review_content, product_review_star, product_review_write_date)
+        insert into PRODUCT_REVIEW (product_no, order_no, order_detail_no, product_review_writer, product_review_content, product_review_star, product_review_write_date)
         values (#{productNo}, #{orderNo}, #{orderDetailNo}, #{productReviewWriter}, #{productReviewContent}, #{productReviewStar}, #{productReviewWriteDate})
     </insert>
+
+    <!-- 상품 리뷰 보기 -->
+    <select id="findByProductNo">
+        select * from PRODUCT_REVIEW where product_no=#{productNo}
+    </select>
 </mapper>
