@@ -27,10 +27,10 @@ public class ProductService {
     // 이미지 처리 후 만들것
     //public Integer add(ProductDto.Add dto) {  }
 
-    public ProductDto.Pagination list(Integer pageNo, Integer categoryNo, Integer memberNo) {
+    public ProductDto.Pagination list(Integer pageNo, Integer categoryNo) {
         Integer startRownum = (pageNo-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products =  productDao.findAll(startRownum, endRownum, categoryNo, memberNo);
+        List<ProductDto.ReadAll> products =  productDao.findAll(startRownum, endRownum, categoryNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
