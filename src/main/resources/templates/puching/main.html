@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="utf-8">
     <title>퍼칭 메인화면</title>
@@ -48,18 +48,20 @@
         <!--section  section   section   section-->
         <section id="section">
             <div class="map_wrap">
-                <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+                <div id="map" style="width:50%;height:100%;position:relative;overflow:hidden;"></div>
                 <div class="hAddr">
                     <span class="title">지도중심기준 행정동 주소정보</span>
                     <span id="centerAddr"></span>
                 </div>
             </div>
             <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
-            <select>
-                <option>거리</option>
-                <option>리뷰</option>
-                <option>인기</option>
-            </select>
+            <label>
+                <select>
+                    <option>거리</option>
+                    <option>리뷰</option>
+                    <option>인기</option>
+                </select>
+            </label>
             <div id="itemList">
             </div>
             <div id="loading" class="loading" style="display: none;">
