@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/api/v1/login")
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
-        http.logout().logoutUrl("/api/v1/logout").logoutSuccessUrl("/");
+        http.logout().logoutUrl("/logout").logoutSuccessUrl("/");
 
         return http.build();
     }

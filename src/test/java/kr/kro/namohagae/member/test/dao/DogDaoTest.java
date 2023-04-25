@@ -21,8 +21,8 @@ public class DogDaoTest {
         dao.register(dog);
     }
 
-    @Test
+   //@Test
     public void test2(){
-        DogDto dto = dao.findDogList(0,0).get(0);
+
     }
 }

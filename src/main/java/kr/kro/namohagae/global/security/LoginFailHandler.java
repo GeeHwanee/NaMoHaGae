@@ -24,9 +24,9 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
         HttpSession session = request.getSession();
 
         if (exception instanceof BadCredentialsException){
-            String email = request.getParameter("email");
+            String username = request.getParameter("username");
 
-            Member member = memberDao.findByUsername(email).get();
+            Member member = memberDao.findByUsername(username).get();
 
             if (member.getMemberLoginCount()<4){
                 memberDao.increaseMemberLoginCount(member.getMemberNo());

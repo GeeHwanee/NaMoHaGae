@@ -1,8 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html  lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <title>Insert title here</title>
+	<script>
+		$(document).ready(function() {
+			$("#logout").click(function() {
+				// body.append(form) -> body,  form.appendTo(body) -> form
+				$('<form>').attr("action","/logout").attr("method","post")
+						.appendTo($('body')).submit();
+			})
+		})
+	</script>
+</head>
 <body>
 <header>
 	<h1 class="nav_logo">
@@ -19,7 +30,8 @@
 
 		</ul>
 		<div class="icon">
-			<a href="/login">로그인</a>
+			<a href="/login" sec:authorize="isAnonymous()">로그인</a>
+			<button type="button" sec:authorize="isAuthenticated()" id="logout">로그아웃</button>
 			<a href="/member/main">내 정보</a>
 			<a href="/mall/cart">장바구니</a>
 			<a href="/puching/chatroom">채팅(퍼칭)</a>
