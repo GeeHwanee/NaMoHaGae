@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.puchingtest.dao.ChatDao">
 
+    <select id="findAllChatRoom" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
+       SELECT CHATROOM_RECEIVER_NO,MEMBER_NICKNAME,MEMBER_IMAGE FROM CHATROOM where =#{memberNo}
+
+    </select>
 
 
 

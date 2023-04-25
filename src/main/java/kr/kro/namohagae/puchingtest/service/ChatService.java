@@ -1,5 +1,6 @@
 package kr.kro.namohagae.puchingtest.service;
 
+import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puchingtest.dao.ChatDao;
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.entity.Message;
@@ -11,10 +12,15 @@ import java.util.List;
 @Service
 public class ChatService {
     @Autowired
-    private ChatDao dao;
+    private ChatDao cdao;
+    @Autowired
+    private MemberDao mdao;
 
-    public List<ChatRoomDto.Read> findByChatRoom(Integer memberNo) {
-        List<ChatRoomDto.Read> list = dao.findAllChatRoom(memberNo);
+    public List<ChatRoomDto.Read> findByChatRoom(String userEmail) {
+        Integer memberNo= mdao.findNoByUsername(userEmail);
+
+
+        List<ChatRoomDto.Read> list = cdao.findAllChatRoom(memberNo);
         return list;
     }
 
