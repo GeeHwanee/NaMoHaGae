@@ -4,8 +4,8 @@
 <mapper namespace="kr.kro.namohagae.member.dao.MemberDao">
     <insert id="save" parameterType="Member">
         insert into MEMBER(member_no,town_no,member_email,member_password,member_nickname,member_phone,member_introduce,member_profile_image,member_login_count,member_grade,member_question_select_count,
-                           member_point)
-        values (#{memberNo},#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberIntroduce},#{memberProfileImage},0,365,0,0)
+                           member_point,member_enabled)
+        values (#{memberNo},#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberIntroduce},#{memberProfileImage},0,365,0,0,1)
     </insert>
 
     <update id="updateMember">
