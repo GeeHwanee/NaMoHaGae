@@ -19,4 +19,10 @@ public class MemberDaoTest {
         dao.save(member);
 }
 
+//    @Test
+    public void test2(){
+    Member member = dao.findByMember(0).get();
+
+//    dao.disabled(member.getMemberNo(),true);
+    }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kro.namohagae.member.dao.DogDao">
+<insert id="register" parameterType="Dog">
+    insert into DOG(dog_no,member_no,dog_birthday_date,dog_introduce,dog_gender,dog_not_gender_enabled,dog_weight,dog_category,dog_name,dog_profile)
+    values (#{dogNo},#{memberNo},#{dogBirthdayDate},#{dogIntroduce},#{dogGender},#{dogNotGenderEnabled},#{dogWeight},#{dogCategory},#{dogName},#{dogProfile})
+</insert>
+<delete id="delete">
+    delete from dog where member_no=#{memberNo} and dog_no = #{dogNo} and rownum=1
+</delete>
+<update id="update">
+    update dog
+    <trim prefix="set" suffixOverrides=",">
+        <if test="introduce != null"> dog_introduce = #{introduce},</if>
+        <if test="notGenderEnabled != null">dog_not_gender_enabled = #{notGenderEnabled},</if>
+        <if test="weight != null">dog_weight = #{weight},</if>
+        <if test="name != null">dog_name = #{name},</if>
+        <if test="profile != null">dog_pofile = #{profile},</if>
+    </trim>
+   where member_no=#{memberNo} and dog_no = #{dogNo} and rownum=1
+</update>
+<select id="findDogList" resultType="kr.kro.namohagae.member.dto.DogDto$List">
+    select dog_profile as dogProfile,dog_name as dogName from dog where where member_no=#{memberNo} and dog_no = #{dogNo} and rownum = 1
+</select>
+<select id="findByDog" resultType="Dog">
+    select * from dog where member_no=#{memberNo} and dog_no = #{dogNo} and rownum=1
+</select>
+
+</mapper>
