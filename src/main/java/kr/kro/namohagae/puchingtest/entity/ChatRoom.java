@@ -1,5 +1,6 @@
 package kr.kro.namohagae.puchingtest.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,5 +14,7 @@ public class ChatRoom {
     private Integer chatRoomNo;
     private Integer memberNo;
     private Integer chatRoomReceiverNo;
+
+
 
 }

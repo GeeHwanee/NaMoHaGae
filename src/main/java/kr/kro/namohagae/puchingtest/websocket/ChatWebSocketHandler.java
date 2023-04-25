@@ -1,14 +1,12 @@
 package kr.kro.namohagae.puchingtest.websocket;
 
+import kr.kro.namohagae.puchingtest.entity.Puching;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.*;
 
-import java.security.Principal;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,27 +17,43 @@ public class ChatWebSocketHandler implements WebSocketHandler {
     @Autowired
     private ChatService service;
 
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        Principal principal = session.getPrincipal();
-        if (principal != null) {
-            // Principal 객체에서 사용자의 ID를 추출합니다.
-            String userId = principal.getName();
-            session.getAttributes().put("userId", userId);
-        }
+        String username = getUsername(session);
+        sessions.put(username, session);
         // WebSocket 연결이 성공적으로 열리면 호출됩니다.
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-
-        // 클라이언트로부터 메시지가 수신되면 호출됩니다.
+        String username = getUsername(session);
+        String receiverUsername = (String) session.getAttributes().get("receiverUsername");
         String payload = message.getPayload().toString();
-        String ussername = session.getId();
-        System.out.println(ussername+":"+payload);
 
-        // 수신된 메시지를 처리하는 코드를 작성합니다.
+//        if(message.getClass()== File.class){
+//
+//        }
+//        if(message.getClass()== Puching.class) {
+//
+//        }
 
+        if (receiverUsername != null) {
+            // 수신자가 지정된 경우, 수신자에게만 메시지를 전송합니다.
+            WebSocketSession receiverSession = sessions.get(receiverUsername);
+            if (receiverSession != null && receiverSession.isOpen()) {
+                TextMessage textMessage = new TextMessage(payload);
+                receiverSession.sendMessage(textMessage);
+            }
+        } else {
+            // 수신자가 지정되지 않은 경우, 모든 클라이언트에게 메시지를 전송합니다.
+            for (WebSocketSession clientSession : sessions.values()) {
+                if (clientSession.isOpen()) {
+                    TextMessage textMessage = new TextMessage(payload);
+                    clientSession.sendMessage(textMessage);
+                }
+            }
+        }
     }
 
 
@@ -52,14 +66,16 @@ public class ChatWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-        System.out.println("웹소켓이 닫혔당@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        // WebSocket 연결이 닫히면 호출됩니다.
-
-
+        String username = getUsername(session);
+        sessions.remove(username);
     }
 
     @Override
     public boolean supportsPartialMessages() {
         return false;
+    }
+
+    private String getUsername(WebSocketSession session) {
+        return (String) session.getAttributes().get("username");
     }
 }

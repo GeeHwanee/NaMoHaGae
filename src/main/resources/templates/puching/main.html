@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="utf-8">
     <title>퍼칭 메인화면</title>
     <link rel="stylesheet" href="/main.css">
     <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=660792846d96851836832221cf48b4f7"></script>
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=660792846d96851836832221cf48b4f7&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.js"
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <style>
@@ -28,6 +28,13 @@
             padding-top: 10px;
         }
     </style>
+    <style>
+        .map_wrap {position:relative;width:100%;height:350px;}
+        .title {font-weight:bold;display:block;}
+        .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
+        #centerAddr {display:block;margin-top:2px;font-weight: normal;}
+        .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+    </style>
 </head>
 <body>
 <div id="page">
@@ -40,14 +47,21 @@
         </aside>
         <!--section  section   section   section-->
         <section id="section">
-            <div id="map" style="width:500px;height:400px; float:left;"></div>
-            <div style="width:200px;height: 50px;border: 1px solid black;">현재위치 지번주소 동까지</div>
+            <div class="map_wrap">
+                <div id="map" style="width:50%;height:100%;position:relative;overflow:hidden;"></div>
+                <div class="hAddr">
+                    <span class="title">지도중심기준 행정동 주소정보</span>
+                    <span id="centerAddr"></span>
+                </div>
+            </div>
             <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
-            <select>
-                <option>거리</option>
-                <option>리뷰</option>
-                <option>인기</option>
-            </select>
+            <label>
+                <select>
+                    <option>거리</option>
+                    <option>리뷰</option>
+                    <option>인기</option>
+                </select>
+            </label>
             <div id="itemList">
             </div>
             <div id="loading" class="loading" style="display: none;">
@@ -94,6 +108,8 @@
                     navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
 
                 }
+
+
 
 
             </script>
@@ -249,6 +265,7 @@
                 // 지도 확대 레벨 변화 이벤트를 등록한다
                 kakao.maps.event.addListener(map, 'zoom_changed', function () {
                     console.log('지도의 현재 확대레벨은 ' + map.getLevel() + '레벨 입니다.');
+
                 });
                 // 드러그 앤드 이벤트 발생시 리스트 초기화하고 중앙 좌표에서 가까운 사람을 리스트로 출력
                 kakao.maps.event.addListener(map, 'dragend', function() {
@@ -263,6 +280,38 @@
                 });
 
             </script>
+            <!--좌표 주소로 변환 함수 및 객체-->
+            <script>
+                var geocoder = new kakao.maps.services.Geocoder();
+
+
+
+
+                kakao.maps.event.addListener(map, 'idle', function() {
+                    console.log("2123123")
+                    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+                });
+
+                function searchAddrFromCoords(coords, callback) {
+                    // 좌표로 행정동 주소 정보를 요청합니다
+                    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+                }
+
+                function displayCenterInfo(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var infoDiv = document.getElementById('centerAddr');
+
+                        for(var i = 0; i < result.length; i++) {
+                            // 행정동의 region_type 값은 'H' 이므로
+                            if (result[i].region_type === 'H') {
+                                infoDiv.innerHTML = result[i].address_name;
+                                break;
+                            }
+                        }
+                    }
+                }
+            </script>
+
             <!--document ready-->
             <script>
                 $(document).ready(async function(){
@@ -272,7 +321,7 @@
                     var now_Centerlng=roundLatlong(center.La,7);
 
                    await loadItems(pageNum,pageSize,now_Centerlag,now_Centerlng); //
-
+                    await  searchAddrFromCoords(center, displayCenterInfo);
 
                 });
 

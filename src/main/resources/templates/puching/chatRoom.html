@@ -86,11 +86,7 @@
                 <h1><a href="/main"></a></h1>
                 <h2>채팅방 목록</h2>
                 <ul>
-                    <li>채팅방 1</li>
-                    <li>채팅방 2</li>
-                    <li>채팅방 3</li>
-                    <li>채팅방 4</li>
-                    <li>채팅방 5</li>
+                    <li id="chatroom">채팅방 1</li>
                 </ul>
             </div>
             <div class="chat-area">
@@ -149,8 +145,13 @@
 
     socket.onmessage = function(event) {
         var message = event.data;
+
         // 수신된 메시지를 화면에 표시하는 코드를 작성합니다.
-        chatLog.push(message);
+        var $content= `<div className="message received">
+            <p>`+message+`</p>
+            <span>2023-04-20 15:00</span>
+        </div>`
+        $('.chat-content').append($content)
         // 채팅 로그에 메시지를 추가합니다.
     };
 
@@ -169,10 +170,23 @@
             return;
         }
         var message = messageInput.value;
-        socket.send(messageInput);
+
+        var messageToSend = {
+            "message": message,
+            "receiverId": receiverId
+        };
+        socket.send(JSON.stringify(messageToSend));
+
+        var $content= `<div className="message sent">
+            <p>`+message+`</p>
+            <span>2023-04-20 15:00</span>
+        </div>`
+        $('.chat-content').append($content)
+
 
         messageInput.value = "";
     }
+
 
 
 </script>
