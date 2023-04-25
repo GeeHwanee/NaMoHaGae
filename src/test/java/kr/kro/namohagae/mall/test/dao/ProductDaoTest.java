@@ -5,7 +5,6 @@ import kr.kro.namohagae.mall.dao.ProductImageDao;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductImage;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,7 +28,7 @@ public class ProductDaoTest {
     }
     
     // 상품 더미 테스트
-    @Test
+    //@Test
     public void insertProduct() {
         List<Integer> category = Arrays.asList(1,2,3,4);
         for(int i=1; i<=20; i++) {
@@ -47,14 +46,17 @@ public class ProductDaoTest {
     // 특정 카테고리의 상품 개수를 조회
     //@Test
     public void countOfCategory() {
-        String categoryName = "사료/간식"; // 조회할 카테고리명
-        int count = productDao.count(categoryName);
-        System.out.println("카테고리명: " + categoryName + ", 상품 개수: " + count);
+        int count = productDao.count("사료/간식");
+        System.out.println("사료/간식 카테고리 상품 개수: " + count);
     }
 
-    // 상품 목록 조회
+    // 상품명으로 검색
     //@Test
-    public void findAllTest() {
-
+    public void findByProductNameTest() {
+        List<Product> products = productDao.findByProductName("%2%");
+        int count = products.size();
+        System.out.println("2가 포함된 상품명 개수: " + count);
     }
+
+
 }

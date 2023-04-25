@@ -2,9 +2,6 @@ package kr.kro.namohagae.mall.dao;
 
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
-import kr.kro.namohagae.mall.entity.ProductOrderDetail;
-import kr.kro.namohagae.mall.entity.ProductReview;
-import kr.kro.namohagae.mall.entity.Qna;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,7 +15,7 @@ public interface ProductDao {
     public Integer count(String categoryName);
 
     // 상품 목록 조회
-    public List<ProductDto.ReadAll> findAll(Integer startRownum, Integer endRownum, Integer categoryNo);
+    public List<ProductDto.ReadAll> findAll(Integer startRownum, Integer endRownum, Integer categoryNo, Integer memberNo);
 
     // 상품 상세 보기
     public ProductDto.Read read(Integer productNo);
@@ -34,13 +31,4 @@ public interface ProductDao {
 
     // 필터(이름순) 검색
     public List<ProductDto.ReadAll> findAllByProductName(Integer startRownum, Integer endRownum, Integer categoryNo);
-
-    // 주문상품 정보 업데이트
-    public Integer updateOrder(ProductOrderDetail productOrderDetail);
-
-    // 리뷰 업데이트
-    public Integer updateReview(ProductReview productReview);
-
-    // 큐엔에이 업데이트
-    public Integer updateQna(Qna qna);
 }
