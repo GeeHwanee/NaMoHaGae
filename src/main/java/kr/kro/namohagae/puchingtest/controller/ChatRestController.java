@@ -1,7 +1,8 @@
 package kr.kro.namohagae.puchingtest.controller;
 
 
-import kr.kro.namohagae.puchingtest.dto.ChatDto;
+import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
+import kr.kro.namohagae.puchingtest.dto.MessageDto;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,21 @@ public class ChatRestController {
     @Autowired
     private ChatService service;
     @GetMapping("/findchatroom")
-    public ResponseEntity<?> findByChatRoom(Principal principal,Integer memberNo){
+    public ResponseEntity<List<ChatRoomDto.Read>> findByChatRoom(Principal principal, Integer memberNo){
         String username = principal.getName();
-        List<ChatDto.ChatRoomRead> list =service.findByChatRoom(memberNo);
+        List<ChatRoomDto.Read> list =service.findByChatRoom(memberNo);
 
         return ResponseEntity.ok().body(list);
     }
     @GetMapping("/findchatlog")
-    public ResponseEntity<?> findByChatLog(Principal principal,Integer memberNo,Integer memberNo2) {
-        String username = principal.getName();
+    public ResponseEntity<List<MessageDto.MessageRead>> findByChatLog(Principal principal, Integer memberNo1, Integer memberNo2) {
+
 
 
         return null;
     }
+
+    //상대 아이디를 세션에 저장하는 메소드
+
 
 }
