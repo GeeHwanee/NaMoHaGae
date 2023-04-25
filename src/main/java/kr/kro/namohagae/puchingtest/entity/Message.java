@@ -18,4 +18,6 @@ public class Message {
     private String messageContent;
     private String messageContentType;
     private LocalDateTime messageWriteDate;
+
+
 }
