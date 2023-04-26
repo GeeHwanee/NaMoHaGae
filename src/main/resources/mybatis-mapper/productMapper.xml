@@ -12,22 +12,21 @@
 
     <!--특정 카테고리의 상품 개수를 조회-->
     <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        select count(*) from PRODUCT p
-        join PRODUCT_CATEGORY c on p.product_category_no = c.product_category_no
-        where c.product_category_no = #{categoryNo}
+        select count(*) from PRODUCT where product_category_no = #{categoryNo}
     </select>
 
     <!-- 상품 목록 조회 -->
     <select id="findAll" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
-        select p.product_no, p.product_name, p.product_price, i.product_image_filename from PRODUCT p
-        join PRODUCT_IMAGE i on p.product_no = i.product_no
-        join PRODUCT_CATEGORY c on p.product_no = c.product_no
-        where c.product_category_no = #{categoryNo}
-        order by p.product_no desc
-        offset #{startRownum} rows fetch next #{endRownum} rows only
+        select p.PRODUCT_CATEGORY_NO, p.PRODUCT_NO, p.PRODUCT_NAME, p.PRODUCT_PRICE,
+               (select PRODUCT_IMAGE_FILENAME from PRODUCT_IMAGE pi where p.PRODUCT_NO = pi.PRODUCT_NO) as product_image,
+               (select count(*) from FAVORITE where p.product_no=FAVORITE.product_no) as favorite_enabled
+        from PRODUCT p where p.PRODUCT_CATEGORY_NO=#{categoryNo}
+        order by p.product_no desc;
+        offset #{startRowNum} rows fetch next #{endRowNum} rows only
     </select>
 
     <!-- 상품 상세 보기 -->
+
 
     <!-- 상품명으로 검색 -->
     <select id="findByProductName" parameterType="String" resultType="Product">
@@ -36,28 +35,25 @@
 
     <!-- 필터(최신순) 검색 -->
     <select id="findAllByLatestOrder" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
-        select * from PRODUCT p
-        join PRODUCT_CATEGORY c on p.product_category_no = c.product_category_no
-        where c.product_category_no = #{categoryNo}
-        order by p.product_no desc
-        offset #{startRownum} rows fetch next #{endRownum} rows only
+        select * from PRODUCT
+        where product_category_no = #{categoryNo}
+        order by product_no desc
+        offset #{startRowNum} rows fetch next #{endRowNum} rows only
     </select>
 
     <!-- 필터(판매량) 검색 -->
     <select id="findAllByOrderOfHighSales" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
-        select * from PRODUCT p
-        join PRODUCT_CATEGORY c on p.product_category_no = c.product_category_no
-        where c.product_category_no = #{categoryNo}
-        order by p.product_stock asc
-        offset #{startRownum} rows fetch next #{endRownum} rows only
+        select * from PRODUCT
+        where product_category_no = #{categoryNo}
+        order by product_stock asc
+        offset #{startRowNum} rows fetch next #{endRowNum} rows only
     </select>
 
     <!-- 필터(이름순) 검색 -->
     <select id="findAllByProductName" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
-        select * from PRODUCT p
-        join PRODUCT_CATEGORY c on p.product_category_no = c.product_category_no
-        where c.product_category_no = #{categoryNo}
-        order by p.product_name asc
-        offset #{startRownum} rows fetch next #{endRownum} rows only
+        select * from PRODUCT
+        where product_category_no = #{categoryNo}
+        order by product_name asc
+        offset #{startRowNum} rows fetch next #{endRowNum} rows only
     </select>
 </mapper>
