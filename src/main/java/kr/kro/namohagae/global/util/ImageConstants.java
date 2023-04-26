@@ -16,5 +16,8 @@ public interface ImageConstants {
     public final static String IMAGE_TEMP_FOLDER ="./src/main/resources/static/image/temp";
     public final static String IMAGE_TEMP_PATH="/image/temp";
     public final static String IMAGE_TEMP_URL ="http://localhost:8081/image/temp";
+    public final static String IMAGE_CHAT_FOLDER ="./src/main/resources/static/image/chat";
+    public final static String IMAGE_CHAT_PATH="/image/chat";
+    public final static String IMAGE_CHAT_URL ="http://localhost:8081/image/chat";
 
 }
