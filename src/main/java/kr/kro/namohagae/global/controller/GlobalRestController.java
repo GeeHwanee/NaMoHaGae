@@ -14,7 +14,7 @@ import java.nio.file.Files;
 @RestController
 public class GlobalRestController {
 
-    @GetMapping(value = {"/image/board", "/image/embeded", "/image/product", "/image/profile", "/image/temp"}, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = {"/image/board", "/image/embeded", "/image/product", "/image/profile", "/image/temp", "/image/chat"}, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> viewPhoto(String name, HttpServletRequest req){
         String path = req.getRequestURI();
         System.out.println(path);
@@ -25,6 +25,7 @@ public class GlobalRestController {
             case ImageConstants.IMAGE_PRODUCT_PATH -> folder = ImageConstants.IMAGE_PRODUCT_FOLDER;
             case ImageConstants.IMAGE_PROFILE_PATH -> folder = ImageConstants.IMAGE_PROFILE_FOLDER;
             case ImageConstants.IMAGE_TEMP_PATH -> folder = ImageConstants.IMAGE_TEMP_FOLDER;
+            case ImageConstants.IMAGE_CHAT_PATH -> folder = ImageConstants.IMAGE_CHAT_FOLDER;
             default -> throw new IllegalStateException("Unexpected value: " + path);
         }
         File file = new File(folder, name);
