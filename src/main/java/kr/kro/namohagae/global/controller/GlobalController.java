@@ -1,7 +1,16 @@
 package kr.kro.namohagae.global.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import kr.kro.namohagae.global.util.Constants;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /*
     작성자: 박지환
@@ -37,6 +46,22 @@ public class GlobalController {
 
     @GetMapping("/login")
     public void login(){}
+
+    @GetMapping(value = "/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> viewPhoto(String name, HttpServletRequest req){
+        String folder = Constants.IMAGE_FOLDER;
+        File file = new File(folder, name);
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            String contentType = Files.probeContentType(file.toPath());
+            MediaType type = MediaType.parseMediaType(contentType);
+            return ResponseEntity.ok().contentType(type).body(bytes);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     // [회원 파트]--------------------------------------------------------------------
     @GetMapping("/member/join")
