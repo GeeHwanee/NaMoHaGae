@@ -9,8 +9,6 @@
 
     <!-- 상품 리뷰 보기 -->
     <select id="findByProductNo">
-        select * from PRODUCT_REVIEW r
-        join PRODUCT p on r.product_no = p.product_no
-        where p.product_no=#{productNo}
+        select * from PRODUCT_REVIEW where product_no=#{productNo}
     </select>
 </mapper>
