@@ -14,5 +14,5 @@ public interface FavoriteDao {
     public List<Favorite> findByMemberNo(Integer memberNo);
 
     // 찜리스트 삭제
-    public Integer delete(List<Integer> list, Integer memberNo);
+    public Integer delete(Integer productNo, Integer memberNo);
 }
