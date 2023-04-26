@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -72,7 +71,8 @@ public class MemberController {
 		return ResponseEntity.ok(null);
 		*/
         Integer memberNo = ((MyUserDetails)auth.getPrincipal()).getMemberNo();
-        Boolean result = memberService.update(profile, email, memberNo);
+        String loginId = ((MyUserDetails)auth.getPrincipal()).getUsername();
+        Boolean result = memberService.update(profile, email, memberNo, loginId);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
