@@ -46,8 +46,8 @@ public class ProductService {
 
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
-        dto.setQnas(qnaDao.findByProductNo(productNo));
+        //dto.setProductReviews(productReviewDao.findByProductNo(productNo));
+        //dto.setQnas(qnaDao.findByProductNo(productNo));
         return dto;
     }
 
