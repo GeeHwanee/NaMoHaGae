@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.service;
 
+import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
@@ -77,19 +78,20 @@ public class MemberService {
 
 
         if (profile==null || profile.isEmpty()==true) {
-            memberDao.update(null, email, loginId);
+            //memberDao.update(null, email, loginId);
             return true;
         }else {	// else는 Don't care -> 신경쓰지 않는다
         }
         int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
         String ext = profile.getOriginalFilename().substring(postionOfDot);
-        File file = new File(Constants.PROFILE_FOLDER, memberNo + ext);
+        File file = new File(ImageConstants.IMAGE_PROFILE_FOLDER, memberNo + ext);
         try {
             profile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return memberDao.update(loginId+ext, email, memberNo);
+        //return memberDao.update(loginId+ext, email, loginId);
+        return null;
     }
 }

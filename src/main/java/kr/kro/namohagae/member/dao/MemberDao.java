@@ -1,6 +1,5 @@
 package kr.kro.namohagae.member.dao;
 
-import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -44,4 +43,6 @@ public interface MemberDao {
     //public Integer updateEnable
 
     public Integer disabled(Integer memberNo);
+
+   // Boolean update(Object o, String email, String loginId);
 }
