@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.service;
 
+import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.entity.Member;
@@ -15,6 +16,8 @@ public class MemberService {
     PasswordEncoder passwordEncoder;
     @Autowired
     private MemberDao memberDao;
+    @Autowired
+    private DogDao dogDao;
 
     public void join(MemberDto.Join dto){
             String memberIntroduce = " ";
@@ -38,6 +41,11 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(dto.getMemberPassword());
         Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce);
         memberDao.save(member);
+    }
+
+    public MemberDto.Read read(Integer memberNo) {
+        Member member = memberDao.findByMember(memberNo).get();
+        return member.toReadDto();
     }
 
 
