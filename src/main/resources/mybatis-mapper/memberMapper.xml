@@ -81,4 +81,8 @@
         update member set member_enabled where member_no=#{memberNo} and rownum=1
     </update>
 
+    <select id="findNoByUsername" resultType="Integer">
+        select member_no from MEMBER where member_email=#{email} and rownum=1
+    </select>
+
 </mapper>
