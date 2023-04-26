@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.entity;
 
+import kr.kro.namohagae.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.apache.ibatis.type.Alias;
 @Builder
 @Alias("member")
 public class Member {
+
     private Integer memberNo;
     private Integer townNo;
     private String memberEmail;
@@ -27,5 +29,11 @@ public class Member {
     private Integer memberLoginCount;
     private Integer memberQuestionSelectCount;
     private Boolean memberLocationEnabled;
+
+
+    public MemberDto.Read toReadDto() {
+
+       return new MemberDto.Read(memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce);
+    }
 
 }
