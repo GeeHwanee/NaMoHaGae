@@ -117,7 +117,8 @@
             </div>
             <div class="chat-area">
                 <div class="chat-header">
-                    <h2>채팅상대 이름</h2>
+                    <h2 id="senderno">0</h2>
+                    <h2 id="receiverno">1</h2>
                 </div>
                 <div class="chat-content message-container">
                     
@@ -136,7 +137,7 @@
 </footer>
 <script>
     var socket = new WebSocket("ws://localhost:8081/chatroom");
-    var chatLog = [];
+
 
     socket.onopen = function() {
         console.log("WebSocket connection opened.");
@@ -179,13 +180,16 @@
         console.log("WebSocket connection closed with code " + event.code + " and reason " + event.reason);
     };
 
-    function sendMessage() {
+    async function sendMessage() {
         var messageInput = document.getElementById("message");
         var receiverInput = document.getElementById("receiver")
         var checkmessage =messageInput.value.trim();
+        console.log("4444")
         if(checkmessage==0){
             return;
         }
+        console.log("213123send")
+
         var message = messageInput.value;
         var receiverUsername =receiverInput.value;
 
@@ -193,23 +197,70 @@
             "message": message,
             "receiverUsername": receiverUsername
         };
-        socket.send(JSON.stringify(messageToSend));
+        var jsonData=JSON.stringify(messageToSend)
+        try {
+            socket.send(jsonData);
+
+        } catch (err) {
+            $('.chat-content').append($content)
+        }
+
 
         var $content= `<div class="chat-bubble message-sent">
             <p>`+message+`</p>
             <span>2023-04-20 15:00</span>
         </div>`
         $('.chat-content').append($content)
-
-
         messageInput.value = "";
+
+
     }
-
-
-
 </script>
+<script>
+    //채팅 기록 불러오가
+    function chatlog() {
 
+    }
+    var chatLog = [];
+    var $receiver = 1;
+    var $sender = $('#senderno').val();
+    console.log($receiver)
+    console.log("123123")
+    $.ajax({
+        type: "GET",
+        url: "/api/v1/findchatlog",
+        data:{receiverNo: $receiver},
+        success: function(data) {
+            chatLog = data;
+            // 채팅창에 이전 채팅 내용을 출력합니다.
+            for (var i = 0; i < chatLog.length; i++) {
+                var message = chatLog[i];
+                if(message.senderNo==$sender){
+                    var sendContent= `<div class="chat-bubble message-sent">
+                                   <p>`+message.messageContent+`</p>
+                             <span>`+message.messageWriteDate+`</span>
+                         </div>`
+                    $('.chat-content').append(sendContent)
+                }
+                var receiveContent= `<div class="chat-bubble message-received">
+                                 <p>`+message.messageContent+`</p>
+                              <span>`+message.messageWriteDate+`</span>
+                         </div>`
+                  $('.chat-content').append(receiveContent)
 
+                // 메시지를 화면에 표시하는 코드를 작성합니다.
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log("Error while getting chat log: " + error);
+        }
+    });
+</script>
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
 
 </body>
 </html>
