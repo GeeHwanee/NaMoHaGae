@@ -43,7 +43,7 @@ public class ProductDto {
         private String productName;
         private Integer productPrice;
         private String productImage;
-        private Boolean favoriteEnabled; // 찜여부
+        //private Boolean favoriteEnabled; // 찜여부
     }
 
     // 상품 상세보기
@@ -54,10 +54,10 @@ public class ProductDto {
         private String productContent;
         private Integer productPrice;
         private Integer productGrade; // 별점평균
-        private Integer productReviewTotalStar; // 별점합계
-        private Integer productReviewTotalCount; // 리뷰개수
+        //private Integer productReviewTotalStar; // 별점합계
+        //private Integer productReviewTotalCount; // 리뷰개수
         private Integer productStock;
-        private Boolean favoriteEnabled; // 찜여부
+        //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
         @Setter
         private List<ProductReview> productReviews;
