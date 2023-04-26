@@ -1,9 +1,7 @@
 package kr.kro.namohagae.member.dto;
 
 import kr.kro.namohagae.member.entity.Member;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
@@ -40,5 +38,17 @@ public class MemberDto {
             return Member.builder().memberPassword(encodedPassword).memberPhone(memberPhone).townNo(townNo).memberNickname(memberNickname).build();
         }
     }
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    public static class Read{
+        private String memberProfile;
+        private String memberNickname;
+        private Integer memberGrade;
+        private Integer memberPoint;
+        private String memberEmail;
+        private String memberIntroduce;
+    }
+
 }
 
