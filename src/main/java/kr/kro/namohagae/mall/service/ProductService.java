@@ -28,9 +28,9 @@ public class ProductService {
     //public Integer add(ProductDto.Add dto) {  }
 
     public ProductDto.Pagination list(Integer pageNo, Integer categoryNo) {
-        Integer startRownum = (pageNo-1)*PAGESIZE + 1;
-        Integer endRownum = startRownum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products =  productDao.findAll(startRownum, endRownum, categoryNo);
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
