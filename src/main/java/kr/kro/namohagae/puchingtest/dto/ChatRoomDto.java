@@ -12,15 +12,10 @@ public class ChatRoomDto {
     public static class Read{
         private Integer chatRoomReceiverNo;
         private String memberNickName;
-        private String memberimage;
+        private String memberImage;
+        private String memberEmail;
     }
-    @Data
-    public static class Save{
-        private Integer memberNo;
-        private Integer receiverNo;
 
-
-    }
 
 
 }
