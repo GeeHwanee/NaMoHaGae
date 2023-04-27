@@ -28,7 +28,7 @@
     </select>
 
     <select id="findNoByUsername" resultType="int">
-        select memberNo from member where member_email=#{email} and rownum=1
+        select member_no from member where member_email=#{email} and rownum=1
     </select>
 
     <update id="increaseMemberLoginCount">
