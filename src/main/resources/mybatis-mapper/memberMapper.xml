@@ -15,6 +15,7 @@
         <if test="nickname != null">member_nickname = #{nickname},</if>
         <if test="phone != null">member_phone = #{phone},</if>
         <if test="townNo != null">town_no = #{townNo},</if>
+        <if test="profile != null">member_profile_image = #{profile},</if>
         </trim>
         where member_no = #{no} and rownum=1
     </update>
@@ -40,7 +41,7 @@
     </update>
 
     <update id="memberEnabled">
-        update member set member_enabled = #{disabled} where member_no=#{no} and rownum=1
+        update member set member_enabled = #{enabled} where member_no=#{no} and rownum=1
     </update>
 
     <update id="updateLocation">
@@ -70,7 +71,7 @@
     </select>
 
     <select id="existsByEmail" resultType="Boolean">
-        select count(*) from member where member_nickname=#{email} and rownum=1
+        select count(*) from member where member_email=#{email} and rownum=1
     </select>
 
     <select id="existsByNickname" resultType="Boolean">
@@ -84,7 +85,5 @@
     <update id="disabled">
         update member set member_enabled where member_no=#{memberNo} and rownum=1
     </update>
-
-
 
 </mapper>
