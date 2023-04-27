@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.mall.dao.ProductImageDao">
-    <!-- 상품 이미지 저장 -->
+    <!-- 상품 이미지 저장   -->
     <insert id="save" parameterType="java.util.List">
-        insert into PRODUCT_IMAGE (product_no, product_image_no, product_image_filename)
-        values
-        <foreach collection="list" item="item" separator=",">
-            (#{item.productNo}, product_image_seq_product_image_no.nextval, #{item.productImageFilename})
-        </foreach>
+        INSERT INTO PRODUCT_IMAGE(product_no, product_image_no, product_image_filename)
+        SELECT product_image_seq_product_image_no.nextval, p.* FROM (
+        <foreach collection="list" item="item" separator="UNION ALL ">
+				SELECT #{item.productNo},  #{item.productImageFilename}
+				FROM dual
+        </foreach>) p
     </insert>
 </mapper>
