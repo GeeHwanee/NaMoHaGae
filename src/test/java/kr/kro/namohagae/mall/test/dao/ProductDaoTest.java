@@ -31,14 +31,14 @@ public class ProductDaoTest {
     //@Test
     public void insertProduct() {
         List<Integer> category = Arrays.asList(1,2,3,4);
-        for(int i=1; i<=20; i++) {
+        for(int i=1; i<=40; i++) {
             ProductDto.Add dto = new Add(null,category.get(i%4),i+"번째 예제 상품",getPrice(),5,0,"예제 상품입니다", LocalDateTime.now(),null);
             Product p = dto.toEntity();
             productDao.save(p);
             List<ProductImage> images = new ArrayList<>();
-            images.add(new ProductImage(1, p.getProductNo(), "image1.png"));
-            images.add(new ProductImage(2, p.getProductNo(), "image2.png"));
-            images.add(new ProductImage(3, p.getProductNo(), "image3.png"));
+            images.add(new ProductImage(p.getProductNo(), 1, "image1.png"));
+            images.add(new ProductImage(p.getProductNo(), 2, "image2.png"));
+            images.add(new ProductImage(p.getProductNo(), 3, "image3.png"));
             productImageDao.save(images);
         }
     }
