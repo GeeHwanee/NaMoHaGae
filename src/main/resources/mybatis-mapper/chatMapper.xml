@@ -3,9 +3,14 @@
 <mapper namespace="kr.kro.namohagae.puchingtest.dao.ChatDao">
 
     <select id="findAllChatRoom" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
-       SELECT CHATROOM_RECEIVER_NO,MEMBER_NICKNAME,MEMBER_IMAGE FROM CHATROOM where =#{memberNo}
-
+        select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
+        from CHATROOM c,MEMBER m
+        WHERE m.MEMBER_NO=c.CHATROOM_RECEIVER_NO and c.MEMBER_NO=#{memberNo}
     </select>
+
+    <insert id="saveChatRoom">
+        INSERT INTO CHATROOM(CHATROOM_NO,MEMBER_NO,CHATROOM_RECEIVER_NO) VALUES (CHATROOM_SEQ_CHATROOM_NO.NEXTVAL,#{senderNo},#{receiverNo})
+    </insert>
 
     <insert id="saveMessage">
         INSERT INTO MESSAGE(MESSAGE_NO,MESSAGE_SENDER,MESSAGE_RECEIVER,MESSAGE_CONTENT,MESSAGE_CONTENT_TYPE,MESSAGE_WRITE_DATE)
@@ -16,10 +21,13 @@
              ,MESSAGE_CONTENT_TYPE as messageContentType,MESSAGE_WRITE_DATE as messageWriteDate from
             (select *from MESSAGE where (MESSAGE_SENDER=#{senderNo} and MESSAGE_RECEIVER=#{receiverNo}) or (MESSAGE_SENDER=#{receiverNo} and MESSAGE_RECEIVER=#{senderNo})
             order by MESSAGE_NO)
-        order by MESSAGE_NO desc
+        order by MESSAGE_NO asc
 
     </select>
-
+    <select id="existsByChatRoom" resultType="Boolean">
+        select count(*) from CHATROOM WHERE ((MEMBER_NO=#{memberNo} or CHATROOM_RECEIVER_NO=#{receiverNo}) or
+            (MEMBER_NO=#{receiverNo} or CHATROOM_RECEIVER_NO=#{memberNo})) and rownum=1
+    </select>
 
 
 </mapper>
