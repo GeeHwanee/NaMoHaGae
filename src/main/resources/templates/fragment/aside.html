@@ -1,13 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <title>Insert title here</title>
+	<script>
+		const mall = "mall";
+		const puching = "puching";
+		const member = "member";
+		const board = "board";
+		let sideBarMenu;
+	</script>
 
+	<script>
+		$(document).ready(function(){
+			let sideBar = location.href.slice(22);
+			console.log(sideBar);
+			console.log(sideBar.startsWith(puching));
+			const $title = $('#title');
+			const $side_bar = $('#side_bar');
+			$title.text("");
+			$side_bar.empty();
+			if(sideBar.startsWith(mall)){
+				$title.text("뼈다귀몰");
+				$side_bar.append('<li><a href="/mall/product/list?categoryNo=1">사료/간식</a></li>');
+				$side_bar.append('<li><a href="/mall/product/list?categoryNo=2">장난감</a></li>');
+				$side_bar.append('<li><a href="/mall/product/list?categoryNo=3">산책용품</a></li>');
+				$side_bar.append('<li><a href="/mall/product/list?categoryNo=4">기타</a></li>');
+			}else if(sideBar.startsWith(member)){
+				$side_bar.append('<li><a href="/member/">내 정보</a></li>');
+
+			}else if
+
+		})
+
+
+	</script>
 </head>
 <body>
 <aside>
-<ul class="side_bar">
+	<ul>
+		<li><h3 id="title"></h3></li>
+	</ul>
+<ul id="side_bar" class="side_bar">
 	<li><a href="#">퍼칭리뷰보기</a></li>
 	<li><a href="#">채팅방목록</a></li>
 	<li><a href="#"></a></li>
