@@ -49,15 +49,17 @@ public class MemberController {
 
     @PostMapping("/member/update")
     public ResponseEntity<Void> update(MultipartFile profile, String nickname,String password,Authentication auth,String phone,Integer townNo) {
+        System.out.println("12313");
         Integer memberNo = ((MyUserDetails)auth.getPrincipal()).getMemberNo();
         // profile은 null이 될 수 있다 -> 서비스에서 null 체크 -> null이면 변경하지 않는다
         // email은 중복 여부를 확인해야 한다 -> 중복되지 않는 경우 업데이트
         // 사진 + 이메일 -> 이메일이 겹치면 실패 -> 409를 보낸다
-
 			// 기존 내 이메일과 일치한다면 false 리턴
 		if (memberService.checkNickanme(memberNo,nickname)==false) {
+            System.out.println("rkrkrkrk");
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 		}
+        System.out.println("12314657");
         Boolean result = memberService.update(profile,nickname,memberNo,password,phone,townNo);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
