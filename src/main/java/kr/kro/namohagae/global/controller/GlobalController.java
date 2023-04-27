@@ -1,10 +1,16 @@
 package kr.kro.namohagae.global.controller;
 
+
+import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.puchingtest.service.ChatService;
 import kr.kro.namohagae.board.service.BoardService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.Principal;
 
 /*
     작성자: 박지환
@@ -13,6 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class GlobalController {
+    @Autowired
+    private ChatService chatService;
+    @Autowired
+    private MemberDao memberDao;
 
     @Autowired
     BoardService boardService;
@@ -55,7 +65,10 @@ public class GlobalController {
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
-    public void chatroom() {
+    public void chatroom(Principal principal, Model model) {
+        Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
+        model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
+        model.addAttribute("mymemberNo",myMemberNo);
     }
 
     // [게시판 파트]--------------------------------------------------------------------

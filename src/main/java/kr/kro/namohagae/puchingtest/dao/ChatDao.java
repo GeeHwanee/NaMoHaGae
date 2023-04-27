@@ -12,8 +12,8 @@ import java.util.List;
 public interface ChatDao {
 
 
-    public Boolean existsByChatRoom(Integer memberNo,Integer receiverNO);  //상대방과의 채팅방이 있는지 체크
-    public void saveChatRoom(ChatRoom chatroom); // 첫 메세지 저장시 채팅방 생성
+    public Boolean existsByChatRoom(Integer memberNo,Integer receiverNo);  //상대방과의 채팅방이 있는지 체크
+    public void saveChatRoom(Integer senderNo,Integer receiverNo); // 첫 메세지 저장시 채팅방 생성
 
     public List<ChatRoomDto.Read> findAllChatRoom(Integer memberNo); // 자신이 가지고 있는 채팅방
 
