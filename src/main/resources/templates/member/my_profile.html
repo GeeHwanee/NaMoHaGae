@@ -61,12 +61,7 @@
                 // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
                 // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
                 // 어떤 브라우저를 써도 들어간다(단 반대편(스프링)에서 Hidden Http Method Filter를 지정해줘야 한다)
-                /*
-                    try{
-                        $.ajax({url:'/member/resign', method:'post', data:'_method:delete'});
-                    }catch(err){
-                    }
-                */
+
             })
         })
 
