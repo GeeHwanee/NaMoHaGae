@@ -59,7 +59,7 @@ public class MemberService {
 //            String profile = memberDao.findByMember(memberNo).get().getMemberProfileImage();
 //            Integer positionOfEqual = profile.lastIndexOf("=");
 //            String fileName = profile.substring(positionOfEqual+1);
-//            File file = new File(Constants.PROFILE_FOLDER, fileName);
+//            File file = new File(ImageConstants.IMAGE_PROFILE_FOLDER, fileName);
 //
 //            // 예외가 발생하면 롤백되는데, 발생 안하니까... 어떻게 처리하지? -> 작업을 중단하자(아래 코드는 설명용)
 //            if (file.exists()==false) {
@@ -69,16 +69,17 @@ public class MemberService {
 //                file.delete();
 //            }
             memberDao.memberEnabled(memberNo,false);
+            System.out.println("123124");
         }catch(NoSuchElementException e){
             throw e;
         }
     }
 
-    public Boolean update(MultipartFile profile, String email, Integer memberNo, String loginId) {
+    public Boolean update(MultipartFile profile, String nickname, Integer memberNo,String password,String phone,Integer townNo) {
 
 
         if (profile==null || profile.isEmpty()==true) {
-            //memberDao.update(null, email, loginId);
+            memberDao.updateMember(memberNo,password,nickname,phone,townNo,null);
             return true;
         }else {	// else는 Don't care -> 신경쓰지 않는다
         }
@@ -91,7 +92,24 @@ public class MemberService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //return memberDao.update(loginId+ext, email, loginId);
-        return null;
+        return memberDao.updateMember(memberNo,password,nickname,phone,townNo,memberNo+ext);
+
     }
+
+
+    public Boolean checkNickanme(Integer memberNo, String nickname) {
+        Member member = memberDao.findByMember(memberNo).get();
+        Boolean resultDB = !memberDao.existsByNickname(nickname);								// 기존 DB에 이메일이 있다면 false 리턴
+        Boolean resultUser = !member.getMemberNickname().equals(nickname);
+       if(resultDB==false){
+           return false;
+       }
+       if(resultUser==false){
+           return false;
+       }
+        return true;
+    }
+
+
+
 }
