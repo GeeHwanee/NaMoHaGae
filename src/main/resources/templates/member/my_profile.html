@@ -13,18 +13,19 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $('#memberProfile').change(loadProfile);
+            // $('#memberProfile').change(loadProfile);
             $('#update').click(function(){
                 // FormData 처리 방식
                 // 1. new FormData($('폼아이디')[0]);
                 // 2. new FormData() -> 원소를 하나씩 append
                 const formData = new FormData();
 
-                if($('#profile')[0].files[0]!=undefined){
-                    formData.append('profile', $('#profile')[0].files[0]);
-                }
+                // if($('#profile')[0].files[0]!=undefined){
+                //     formData.append('profile', $('#profile')[0].files[0]);
+                // }
 
-                formData.append('email', $('#email1').val()+'@'+$('#email2').val());
+                formData.append('nickname', $('#nickname').val());
+                formData.append('introduce', $('#introduce').val());
 
                 // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
                 for(let key of formData.keys()){
@@ -93,7 +94,7 @@
                     <td>
                         <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span th:text="${member.memberGrade}"></span><span>)도  (</span><span th:text="${member.memberPoint}"></span><span>)포인트</span></td>
                     <td>
-                    <input type="text" name="memberNickname" id="memberNickname" th:value="${member.memberNickname}">
+                    <input type="text" name="nickname" id="nickname" th:value="${member.memberNickname}">
                     </td>
                 </tr>
                 <tr>
@@ -113,8 +114,8 @@
                 <tr>
                     <td>자기소개</td>
                     <td>
-                    <label for="memberIntroduce">
-                        <textarea id="memberIntroduce" name="memberIntroduce"></textarea>
+                    <label for="introduce">
+                        <textarea id="introduce" name="introduce"></textarea>
                     </label>
                     </td>
                 </tr>

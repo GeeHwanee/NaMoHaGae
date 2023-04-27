@@ -79,6 +79,7 @@ public class MemberService {
 
 
         if (profile==null || profile.isEmpty()==true) {
+            System.out.println("11");
             memberDao.updateMember(memberNo,password,nickname,phone,townNo,null);
             return true;
         }else {	// else는 Don't care -> 신경쓰지 않는다
@@ -92,19 +93,24 @@ public class MemberService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return memberDao.updateMember(memberNo,password,nickname,phone,townNo,memberNo+ext);
+        Boolean a = memberDao.updateMember(memberNo,password,nickname,phone,townNo,memberNo+ext);
+        System.out.println("11");
+        return a;
 
     }
 
 
     public Boolean checkNickanme(Integer memberNo, String nickname) {
         Member member = memberDao.findByMember(memberNo).get();
-        Boolean resultDB = !memberDao.existsByNickname(nickname);								// 기존 DB에 이메일이 있다면 false 리턴
+        Boolean resultDB = memberDao.existsByNickname(nickname)==1;								// 기존 DB에 이메일이 있다면 false 리턴
         Boolean resultUser = !member.getMemberNickname().equals(nickname);
+        System.out.println(nickname);
        if(resultDB==false){
-           return false;
+           System.out.println("rhjf");
+           return true;
        }
        if(resultUser==false){
+           System.out.println("gkgk");
            return false;
        }
         return true;
