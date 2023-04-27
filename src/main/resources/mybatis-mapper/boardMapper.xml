@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.board.dao.BoardDao">
+
+
+
+    <insert id="boardFreeInsertData" parameterType="kr.kro.namohagae.board.entity.Board">
+        INSERT INTO BOARD
+            (
+        board_no,town_no,member_no,board_title,board_content,board_write_date,board_read_count,board_recommend_count,board_enabled,fileName,filePath
+            )
+        VALUES (
+                                     SEQ_BOARD_NO.NEXTVAL,
+                                     3,
+                                     1,
+                                     #{boardTitle},
+                                     #{boardContent},
+                                     sysdate,
+                                     0,
+                                     0,
+                                     0,
+                                    #{fileName},
+                                    #{filePath}
+                                 )
+    </insert>
+
+    <select id="boardFreeList" resultType="kr.kro.namohagae.board.entity.Board">
+        select * from board
+    </select>
+
+    <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.Board" parameterType="int">
+        select * from board where board_no = #{boardNo}
+    </select>
+
+</mapper>
+
