@@ -1,6 +1,9 @@
 package kr.kro.namohagae.global.controller;
 
+import kr.kro.namohagae.board.service.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /*
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class GlobalController {
 
+    @Autowired
+    BoardService boardService;
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(){
@@ -55,8 +60,12 @@ public class GlobalController {
 
     // [게시판 파트]--------------------------------------------------------------------
     @GetMapping("/board/free/list")
-    public void list(){}
+    public String boardFreeList(Model model) {
 
+        model.addAttribute("list", boardService.boardFreeList());
+
+        return "board/free/list";
+    }
     // [쇼핑몰 파트]--------------------------------------------------------------------
     @GetMapping("/mall/cart")
     public void cart(){
