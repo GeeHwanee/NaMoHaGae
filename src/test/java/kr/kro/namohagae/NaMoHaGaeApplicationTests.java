@@ -1,7 +1,6 @@
 package kr.kro.namohagae;
 
 import kr.kro.namohagae.member.dao.AlarmDao;
-import kr.kro.namohagae.member.entity.Alarm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +20,10 @@ class NaMoHaGaeApplicationTests {
         System.out.println(dao.read(0).toString());
     }
 
-    @Test
-    public void test1(){
-       dao.findAll(1,5).forEach(a->System.out.println(a));
-    }
+    //@Test
+   // public void test1(){
+    //   dao.findAll(1,5).forEach(a->System.out.println(a));
+   // }
 
 //    @Test
 //    public void test2(){
