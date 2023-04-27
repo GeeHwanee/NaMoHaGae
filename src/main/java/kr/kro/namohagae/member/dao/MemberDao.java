@@ -11,7 +11,7 @@ public interface MemberDao {
 
     public void save(Member member);
 
-    public Integer updateMember(@Param("no") Integer no, @Param("password") String password, @Param("nickname") String nickname,@Param("phone")String phone,@Param("townNo")Integer townNo);
+    public Boolean updateMember(@Param("no") Integer no, @Param("password") String password, @Param("nickname") String nickname,@Param("phone")String phone,@Param("townNo")Integer townNo,@Param("profile")String profile);
 
     public Optional<Member> findByMember(Integer no);
 
@@ -34,9 +34,9 @@ public interface MemberDao {
 
     public String findByEmail(String nickname,String phone);
 
-    public Boolean existsByNickname(String username);
+    public Integer existsByNickname(String nickname);
 
-    public Boolean existsByEmail(String email);
+    public Integer existsByEmail(String email);
 
     public Integer updateProfile(String profile,Integer no);
 
@@ -44,5 +44,4 @@ public interface MemberDao {
 
     public Integer disabled(Integer memberNo);
 
-   // Boolean update(Object o, String email, String loginId);
 }
