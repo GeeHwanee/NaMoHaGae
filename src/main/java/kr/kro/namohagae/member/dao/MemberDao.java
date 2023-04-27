@@ -34,9 +34,9 @@ public interface MemberDao {
 
     public String findByEmail(String nickname,String phone);
 
-    public Boolean existsByNickname(String username);
+    public Integer existsByNickname(String nickname);
 
-    public Boolean existsByEmail(String email);
+    public Integer existsByEmail(String email);
 
     public Integer updateProfile(String profile,Integer no);
 
