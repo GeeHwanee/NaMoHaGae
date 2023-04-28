@@ -18,8 +18,8 @@ public class Member {
     private String memberPassword;
     private String memberNickname;
     private String memberPhone;
-    private Integer memberLatitude;
-    private Integer memberLongitude;
+    private Double memberLatitude;
+    private Double memberLongitude;
     private Integer memberGrade;
     private String memberIntroduce;
     private Integer memberPoint;
