@@ -1,8 +1,18 @@
 package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.entity.Board;
+
+import kr.kro.namohagae.board.entity.BoardComment;
+import kr.kro.namohagae.board.entity.PageDTO;
 import kr.kro.namohagae.board.service.BoardService;
+import kr.kro.namohagae.board.service.CommentService;
+import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.member.dao.MemberDao;
+import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +20,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
+import java.util.List;
+
+
 @Controller
 @RequestMapping("/board/free")
 public class BoardController {
-
+    @Autowired
+    MemberDao memberDao;
     @Autowired
     BoardService boardService;
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/write")
     public String boardFreeWrite() {
@@ -33,7 +52,8 @@ public class BoardController {
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
 
-
+        List<BoardComment> boardCommentList = commentService.commentList(boardService.boardFreeReadData(boardNo).getBoardNo());
+        model.addAttribute("commentList",boardCommentList);
         model.addAttribute("board", boardService.boardFreeReadData(boardNo));
         model.addAttribute("page", page);
         return "board/free/read";
@@ -65,4 +85,14 @@ public class BoardController {
     }
         // value 파라미터 이름 required = false 필수가 아니다
 
+    //  멤버번호 이름 꺼내는법
+//    @GetMapping("/board/free/read")
+//    public void read(@AuthenticationPrincipal MyUserDetails myUserDetails){
+//      Intwger memberNo = myUserDetails.getMemberNo();
+//      String name = myUserDetails.getUsername();
+//
+//
+//
+//
+//    }
 }

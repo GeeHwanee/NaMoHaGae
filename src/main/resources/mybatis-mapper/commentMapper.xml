@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.board.dao.CommentDao">
+
+
+
+    <insert id="commentData" parameterType="kr.kro.namohagae.board.entity.BoardComment">
+        INSERT INTO BOARD_COMMENT VALUES (
+                #{boardNo},SEQ_BOARD_COMMENT_NO.NEXTVAL,1,#{commentContent},sysdate,0
+               )
+    </insert>
+
+    <select id="commentList" resultType="kr.kro.namohagae.board.entity.BoardComment">
+        select bc.comment_no,bc.comment_content,bc.comment_write_date from board b, board_comment bc  where b.board_no = bc.board_no and b.board_no = #{boardNo}
+    </select>
+
+</mapper>
+
