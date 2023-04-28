@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +27,14 @@ public class MemberController {
 
     @PostMapping("/member/join")
     public String join(MemberDto.Join dto){
+        System.out.println(dto.getMemberLatitude());
         memberService.join(dto);
         return "redirect:/login";
     }
 
     @GetMapping("/member/my_profile")
-    public ModelAndView read(Principal principal, Authentication auth){
-      Integer memberNo = ((MyUserDetails)auth.getPrincipal()).getMemberNo();
+    public ModelAndView read(@AuthenticationPrincipal MyUserDetails myUserDetails){
+     Integer memberNo= myUserDetails.getMemberNo();
       MemberDto.Read dto = memberService.read(memberNo);
       return new ModelAndView("member/my_profile").addObject("member",dto);
     }
