@@ -9,18 +9,21 @@ public class MemberDto {
 
     @Data
     public static class Join{
-        private Integer townNo;
+        private String townDong;
         private String memberEmail;
         private String memberPassword;
         private String memberNickname;
         private String memberPhone;
         private String memberIntroduce;
         private MultipartFile memberProfileImage;
+        private Double memberLatitude;
+        private Double memberLongitude;
 
 
-        public Member toEntity(String encodedPassword, String memberProfileImage, String memberIntroduce) {
+        public Member toEntity(String encodedPassword, String memberProfileImage, String memberIntroduce,Integer townNo) {
 
-            return Member.builder().townNo(townNo).memberEmail(memberEmail).memberPassword(encodedPassword).memberNickname(memberNickname).memberPhone(memberPhone).memberIntroduce(memberIntroduce).memberProfileImage(memberProfileImage).build();
+            return Member.builder().townNo(townNo).memberEmail(memberEmail).memberPassword(encodedPassword).memberNickname(memberNickname).memberPhone(memberPhone).
+                    memberIntroduce(memberIntroduce).memberProfileImage(memberProfileImage).memberLatitude(memberLatitude).memberLongitude(memberLongitude).build();
         }
 
     }
