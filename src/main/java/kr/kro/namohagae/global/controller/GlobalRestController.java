@@ -42,7 +42,7 @@ public class GlobalRestController {
         return null;
     }
 
-    //@GetMapping("/side-bar")
-    //public
+
+
 
 }
