@@ -23,6 +23,7 @@ public interface ProductDao {
     // 상품명으로 검색
     public List<Product> findByProductName(String productName);
 
+
     // 필터(최신순) 검색
     public List<ProductDto.ReadAll> findAllByLatestOrder(Integer startRowNum, Integer endRowNum, Integer categoryNo);
 
@@ -31,4 +32,10 @@ public interface ProductDao {
 
     // 필터(이름순) 검색
     public List<ProductDto.ReadAll> findAllByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo);
+
+    //public Integer updateOrder(ProductOrderDetail productOrderDetail);
+
+    //public Integer updateReview(ProductReview productReview);
+
+    //public Integer updateQna(Qna qna);
 }
