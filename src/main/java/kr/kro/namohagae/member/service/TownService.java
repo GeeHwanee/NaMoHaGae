@@ -1,6 +1,6 @@
 package kr.kro.namohagae.member.service;
 
-import kr.kro.namohagae.member.dao.TownDao;
+import kr.kro.namohagae.global.dao.TownDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
