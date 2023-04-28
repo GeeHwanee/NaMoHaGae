@@ -2,7 +2,7 @@ package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.board.entity.PageDTO;
+import kr.kro.namohagae.board.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +56,7 @@ public class BoardService {
 
         return boardDao.pagingList(pagingStart,pageLimit);
     }
-        public PageDTO pagingParam(int page) {
+        public PageDto pagingParam(int page) {
             // 전체 글 갯수 조회
             int boardCount = boardDao.boardCount();
             // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
@@ -68,7 +68,7 @@ public class BoardService {
             if (endPage > maxPage) {
                 endPage = maxPage;
             }
-            PageDTO pageDTO = new PageDTO();
+            PageDto pageDTO = new PageDto();
             pageDTO.setPage(page);
             pageDTO.setMaxPage(maxPage);
             pageDTO.setStartPage(startPage);

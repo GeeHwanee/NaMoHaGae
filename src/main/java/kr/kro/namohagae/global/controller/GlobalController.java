@@ -2,7 +2,7 @@ package kr.kro.namohagae.global.controller;
 
 
 import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.board.entity.PageDTO;
+import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import kr.kro.namohagae.board.service.BoardService;
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 import java.security.Principal;
@@ -84,7 +83,7 @@ public class GlobalController {
                          @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
 
         List<Board> pagingList = boardService.pagingList(page);
-        PageDTO pageDTO = boardService.pagingParam(page);
+        PageDto pageDTO = boardService.pagingParam(page);
         model.addAttribute("list", pagingList);
         model.addAttribute("paging", pageDTO);
         return "board/free/list";
