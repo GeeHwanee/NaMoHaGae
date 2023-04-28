@@ -16,8 +16,7 @@ public class Board {
         private Integer boardReadCount;
         private Integer boardRecommendCount;
         private Boolean boardEnabled;
-        private String fileName;
-        private String filePath;
+
 
     }
 

@@ -2,13 +2,13 @@ package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.entity.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 public class BoardService {
@@ -16,20 +16,9 @@ public class BoardService {
     @Autowired
     BoardDao boardDao;
 
-    public void boardFreeInsertData(Board board, MultipartFile file) throws Exception {
+    public void boardFreeInsertData(Board board)  {
 
-        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files";
 
-        UUID uuid = UUID.randomUUID();
-
-        String fileName = uuid + "_" + file.getOriginalFilename();
-
-        File saveFile = new File(projectPath, fileName);
-
-        file.transferTo(saveFile);
-
-        board.setFileName(fileName);
-        board.setFilePath("/files/" + fileName);
         boardDao.boardFreeInsertData(board);
 
     }
@@ -43,4 +32,48 @@ public class BoardService {
         return boardDao.boardFreeReadData(boardNo);
     }
 
-}
+    public Board boardDeleteData(Integer boardNo) {
+
+
+        return boardDao.boardDeleteData(boardNo);
+    }
+
+    public void boardUpdateData(Board board) {
+
+        boardDao.boardUpdateData(board);
+    }
+        int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
+        int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
+    public List<Board> pagingList(int page) {
+        
+        /*
+        1페이지당 보여지는 글 갯수 5
+            1page => 0
+            2page => 5
+            3page => 10
+         */
+        int pagingStart = (page - 1) * pageLimit;
+
+        return boardDao.pagingList(pagingStart,pageLimit);
+    }
+        public PageDTO pagingParam(int page) {
+            // 전체 글 갯수 조회
+            int boardCount = boardDao.boardCount();
+            // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
+            int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
+            // 시작 페이지 값 계산(1, 4, 7, 10, ~~~~)
+            int startPage = (((int)(Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
+            // 끝 페이지 값 계산(3, 6, 9, 12, ~~~~)
+            int endPage = startPage + blockLimit - 1;
+            if (endPage > maxPage) {
+                endPage = maxPage;
+            }
+            PageDTO pageDTO = new PageDTO();
+            pageDTO.setPage(page);
+            pageDTO.setMaxPage(maxPage);
+            pageDTO.setStartPage(startPage);
+            pageDTO.setEndPage(endPage);
+            return pageDTO;
+        }
+    }
+
