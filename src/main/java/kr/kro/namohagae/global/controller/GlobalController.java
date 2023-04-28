@@ -1,7 +1,22 @@
 package kr.kro.namohagae.global.controller;
 
+
+import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.entity.PageDTO;
+import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.puchingtest.service.ChatService;
+import kr.kro.namohagae.board.service.BoardService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.awt.print.Pageable;
+import java.util.List;
+
+import java.security.Principal;
 
 /*
     작성자: 박지환
@@ -10,7 +25,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class GlobalController {
+    @Autowired
+    private ChatService chatService;
+    @Autowired
+    private MemberDao memberDao;
 
+    @Autowired
+    BoardService boardService;
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(){
@@ -50,13 +71,24 @@ public class GlobalController {
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
-    public void chatroom() {
+    public void chatroom(Principal principal, Model model) {
+        Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
+        model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
+        model.addAttribute("mymemberNo",myMemberNo);
     }
 
     // [게시판 파트]--------------------------------------------------------------------
-    @GetMapping("/board/free/list")
-    public void list(){}
 
+    @GetMapping("/board/free/list")
+    public String paging(Model model,
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
+
+        List<Board> pagingList = boardService.pagingList(page);
+        PageDTO pageDTO = boardService.pagingParam(page);
+        model.addAttribute("list", pagingList);
+        model.addAttribute("paging", pageDTO);
+        return "board/free/list";
+    }
     // [쇼핑몰 파트]--------------------------------------------------------------------
     @GetMapping("/mall/cart")
     public void cart(){

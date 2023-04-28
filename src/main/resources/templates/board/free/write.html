@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>자유 게시판 게시글 쓰기 페이지</title>
-</head>
-<body>
 
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <title>메인</title>
+
+</head>
+<style>
+    .layout{
+        width : 500px;
+        margin : 0 auto;
+        margin-top: 40px;
+    } /*layout 하위에 있는 input태그 스타일 설정*/
+    .layout input{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .layout textarea{
+        width: 100%;
+        margin-top: 10px;
+        min-height: 300px;
+    }
+</style>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+</header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+
+    </aside>
+    <section>
+        <h1>메인 페이지</h1>
+        <article>
+            <div class="layout">
+                <form action="/board/free/writepro" method="post">
+                    <span>제목</span>
+                    <input name="boardTitle" type="text">
+                    <span>내용</span>
+                    <textarea name="boardContent"></textarea>
+                    <button type="submit">작성</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+<footer th:replace="~{/fragment/aside.html}">
+</footer>
 </body>
 </html>

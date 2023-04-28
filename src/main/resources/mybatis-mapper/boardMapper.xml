@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.board.dao.BoardDao">
+
+
+
+    <insert id="boardFreeInsertData" parameterType="kr.kro.namohagae.board.entity.Board">
+        INSERT INTO BOARD
+            (
+        board_no,town_no,member_no,board_title,board_content,board_write_date,board_read_count,board_recommend_count,board_enabled
+            )
+        VALUES ( SEQ_BOARD_NO.NEXTVAL,3,1,#{boardTitle},#{boardContent},sysdate,0,0,0
+               )
+    </insert>
+
+    <select id="boardFreeList" resultType="kr.kro.namohagae.board.entity.Board">
+        select * from board
+    </select>
+
+    <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.Board" parameterType="int">
+        select * from board where board_no = #{boardNo}
+    </select>
+    <delete id="boardDeleteData" parameterType="int">
+        delete board where board_no = #{boardNo}
+    </delete>
+
+    <update id="boardUpdateData">
+        update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
+    </update>
+    <select id="pagingList" resultType="kr.kro.namohagae.board.entity.Board">
+
+        SELECT *
+        FROM board
+        ORDER BY BOARD_NO DESC
+        OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+    <select id="boardCount" resultType="Integer">
+        SELECT COUNT(BOARD_NO) FROM BOARD
+    </select>
+</mapper>
+

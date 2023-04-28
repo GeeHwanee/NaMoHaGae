@@ -1,9 +1,7 @@
 package kr.kro.namohagae.member.test.dao;
 
 import kr.kro.namohagae.member.dao.DogDao;
-import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,8 +19,5 @@ public class DogDaoTest {
         dao.register(dog);
     }
 
-    @Test
-    public void test2(){
-        System.out.println(dao.findDogList(0,0).get(0).toString());
-    }
+
 }

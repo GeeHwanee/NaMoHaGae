@@ -1,10 +1,90 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>자유 게시판 목록 페이지</title>
-</head>
-<body>
 
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <title>메인</title>
+
+</head>
+<style>
+
+    .layout {
+        width : 500px;
+        margin : 0 auto;
+        margin-top : 40px;
+    }
+    .layout2 > ul{
+        display:flex;
+        justify-content: center;
+    }
+    .layout2 > ul > li {
+        margin-top:50px;
+        margin-right:30px;
+        font-size:25px;
+
+    }
+</style>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+</header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+
+    </aside>
+    <section>
+        <h1>메인 페이지</h1>
+        <article>
+            <div class="layout">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>글번호</th>
+                        <th>제목</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="board : ${list}">
+                        <td th:text="${board.boardNo}">1</td>
+                        <td>
+                            <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page})}" th:text="${board.boardTitle}">게시물 제목</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="layout2">
+                <ul>
+                    <li th:if="${paging.page <= 1}">
+                        <span>[이전]</span>
+                    </li>
+                    <li th:if="${paging.page > 1}">
+                        <a th:href="@{/board/free/list(page=${paging.page - 1})}">[이전]</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+                        <div th:if="${i eq paging.page}">
+                            <span th:text="${i}"></span>
+                        </div>
+                        <div th:if="${i != paging.page}">
+                            <a th:href="@{/board/free/list(page=${i})}" th:text="${i}"></a>
+                        </div>
+                    </li>
+                    <li th:if="${paging.page >= paging.maxPage}">
+                        <span>[다음]</span>
+                    </li>
+                    <li th:if="${paging.page < paging.maxPage}">
+                        <a th:href="@{/board/free/list(page=${paging.page + 1})}">[다음]</a>
+                    </li>
+                </ul>
+            </div>
+        </article>
+    </section>
+</main>
+<footer th:replace="~{/fragment/aside.html}">
+</footer>
 </body>
 </html>

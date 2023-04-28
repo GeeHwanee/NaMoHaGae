@@ -45,13 +45,21 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         String messageContent = jsonPayload.getString("message");
 
 
+        JSONObject responseJson = new JSONObject();
+        responseJson.put("sendername", sendusername);
+        responseJson.put("receivername", receiverUsername);
+        responseJson.put("message", messageContent);
+
+
         if (receiverUsername != null) {
             // 수신자가 지정된 경우, 수신자에게만 메시지를 전송합니다.
             WebSocketSession receiverSession = sessions.get(receiverUsername);
            Integer a= service.saveTextMessage(sendusername,receiverUsername,messageContent,"text"); //메세지 저장 실패하면 리턴값이
+
             if (receiverSession != null && receiverSession.isOpen()) {
-                TextMessage textMessage = new TextMessage(messageContent);
+                TextMessage textMessage = new TextMessage(responseJson.toString());
                 receiverSession.sendMessage(textMessage);
+
 
             }
         } else {
