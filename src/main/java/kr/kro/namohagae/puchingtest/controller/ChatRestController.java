@@ -22,14 +22,7 @@ public class ChatRestController {
     @Autowired
     private ChatService service;
 
-    @GetMapping(value="/findAllchatroom")
-    public ResponseEntity<List<ChatRoomDto.Read>> findByChatRoom(Principal principal){
-        String username = principal.getName();
 
-        List<ChatRoomDto.Read> list =service.findByChatRoom(username);
-
-        return ResponseEntity.ok().body(list);
-    }
     @GetMapping(value="/findchatlog")
     public ResponseEntity<List<MessageDto.MessageRead>> findByChatLog(Principal principal,Integer receiverNo) {
          String senderEmail= principal.getName();

@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>자유 게시판 게시글 읽기 페이지</title>
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+
+    <title>메인</title>
+
 </head>
+
 <body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+</header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+
+    </aside>
+    <section>
+        <h1>메인 페이지</h1>
+        <article>
+            <h1 th:text="${board.boardTitle}">제목입니다.</h1>
+            <p th:text="${board.boardContent}">내용이 들어갈 부분입니다.</p>
+            <a th:href="@{/board/free/delete(boardNo=${board.boardNo})}">삭제</a>
+            <a th:href="@{/board/free/modify(boardNo = ${board.boardNo})}">수정</a>
+            <button onclick="listFn()">목록</button>
+        </article>
+    </section>
+</main>
+<footer th:replace="~{/fragment/aside.html}">
+</footer>
 
 </body>
+<script>
+    const listFn = () => {
+        const page =  [[${page}]];
+        location.href = "/board/free/list?page=" + page;
+    }
+
+</script>
 </html>
