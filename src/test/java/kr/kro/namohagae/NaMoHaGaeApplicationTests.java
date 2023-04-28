@@ -14,7 +14,10 @@ class NaMoHaGaeApplicationTests {
     }
 
 
-
+    //@Test
+   // public void test1(){
+    //   dao.findAll(1,5).forEach(a->System.out.println(a));
+   // }
 
 //    @Test
 //    public void test2(){

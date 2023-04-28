@@ -1,6 +1,5 @@
-package kr.kro.namohagae.member.dao;
+package kr.kro.namohagae.global.dao;
 
-import kr.kro.namohagae.global.dto.TownDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
