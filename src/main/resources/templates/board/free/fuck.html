@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 댓글 출력 부분 -->
+<div id="comment-list">
+  <table>
+    <tr>
+      <th>댓글번호</th>
+      <th>작성자</th>
+      <th>내용</th>
+      <th>작성시간</th>
+    </tr>
+    <tr th:each="comment: ${commentList}">
+      <td th:text="${comment.boardNo}"></td>
+      <td th:text="${comment.commentContent}"></td>
+      <td th:text="${comment.commentWriteDate}"></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
