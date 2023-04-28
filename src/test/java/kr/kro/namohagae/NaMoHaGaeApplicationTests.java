@@ -13,12 +13,6 @@ class NaMoHaGaeApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    public void test3(){
-        System.out.println(dao.read(0).toString());
-      dao.alarmRead(0);
-        System.out.println(dao.read(0).toString());
-    }
 
 
 
