@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.service;
 
+import kr.kro.namohagae.global.dao.TownDao;
 import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
@@ -23,7 +24,8 @@ public class MemberService {
     private MemberDao memberDao;
     @Autowired
     private DogDao dogDao;
-
+    @Autowired
+    private TownDao townDao;
     public void join(MemberDto.Join dto){
             String memberIntroduce = " ";
         if(dto.getMemberIntroduce()!=null){
@@ -43,8 +45,9 @@ public class MemberService {
                 e.printStackTrace();
             }
         }*/
+        Integer townNo = townDao.findNoByDong(dto.getTownDong());
         String encodedPassword = passwordEncoder.encode(dto.getMemberPassword());
-        Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce);
+        Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo);
         memberDao.save(member);
     }
 
@@ -82,7 +85,7 @@ public class MemberService {
             System.out.println("11");
             memberDao.updateMember(memberNo,password,nickname,phone,townNo,null);
             return true;
-        }else {	// else는 Don't care -> 신경쓰지 않는다
+        }else {    // else는 Don't care -> 신경쓰지 않는다
         }
         int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
         String ext = profile.getOriginalFilename().substring(postionOfDot);
@@ -102,7 +105,7 @@ public class MemberService {
 
     public Boolean checkNickanme(Integer memberNo, String nickname) {
         Member member = memberDao.findByMember(memberNo).get();
-        Boolean resultDB = memberDao.existsByNickname(nickname)==1;								// 기존 DB에 이메일이 있다면 false 리턴
+        Boolean resultDB = memberDao.existsByNickname(nickname)==1;                                // 기존 DB에 이메일이 있다면 false 리턴
         Boolean resultUser = !member.getMemberNickname().equals(nickname);
         System.out.println(nickname);
        if(resultDB==false){
