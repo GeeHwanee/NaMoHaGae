@@ -44,11 +44,16 @@ public class ProductService {
         return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
     }
 
+//    public ProductDto.Read read(Integer productNo) {
+//        ProductDto.Read dto = productDao.findByProductNo(productNo);
+//        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
+//        dto.setQnas(qnaDao.findByProductNo(productNo));
+//        return dto;
+//    }
+
     public ProductDto.Read read(Integer productNo) {
-        ProductDto.Read dto = productDao.findByProductNo(productNo);
-        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
-        dto.setQnas(qnaDao.findByProductNo(productNo));
-        return dto;
+        return productDao.findByProductNo(productNo);
     }
+
 
 }
