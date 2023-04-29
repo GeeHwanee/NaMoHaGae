@@ -1,18 +1,11 @@
 package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.entity.Board;
-
 import kr.kro.namohagae.board.entity.BoardComment;
-import kr.kro.namohagae.board.entity.PageDTO;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
-import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.dao.MemberDao;
-import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import java.security.Principal;
 import java.util.List;
 
 
