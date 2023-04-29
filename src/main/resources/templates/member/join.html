@@ -54,44 +54,42 @@
 
         }
 
-
-
         const apiUrl = 'https://dapi.kakao.com/v2/local/search/address.json';
         const headers = { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' };
         const address = document.getElementById("sample4_roadAddress").value;
 
-        function location(){
-
-        fetch(`${apiUrl}?query=${encodeURIComponent(address)}`, { headers })
-            .then(response => response.json())
-            .then(data => {
-                // API에서 반환된 데이터 처리
-                const latitude = data.documents[0].road_address.x;
-                const longitude = data.documents[0].road_address.y;
-                const dong = data.documents[0].address.region_3depth_name;
-                console.log(dong);
-                console.log(longitude);
-                console.log(latitude);
-                alert(dong);
-                alert(longitude);
-                alert(latitude);
-               const dong1 = document.getElementById("memberDong").value = dong;
-               const  longitude1 = document.getElementById("memberLatitude").value = longitude;
-               const latitude1= document.getElementById("memberLongitude").value = latitude;
-                address2.add(dong1);
-                address2.add(longitude1);
-                address2.add(latitude1);
-
-            })
-            .catch(error => {
-                // 발생 가능한 모든 오류 처리
-                console.error(error);
-            });
-        }
-
-
-
     </script>
+    <script>
+        $(document).ready(function(){
+            $('#check').click(async function (){
+                $.ajax({
+                    url:'https://dapi.kakao.com/v2/local/search/address.json?query='+encodeURIComponent(document.getElementById("sample4_roadAddress").value),
+                    type:'GET',
+                    headers: { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' },
+                    dataType: 'json',
+                    success: function(data){
+                        console.log(data);
+                        const latitude = data.documents[0].road_address.x;
+                        const longitude = data.documents[0].road_address.y;
+                        const dong = data.documents[0].address.region_3depth_name;
+                        console.log(dong);
+                        console.log(longitude);
+                        console.log(latitude);
+                        document.getElementById("memberDong").value = dong;
+                        document.getElementById("memberLatitude").value = longitude;
+                        document.getElementById("memberLongitude").value = latitude;
+                        alert("");
+                    },error: function(xhr, status, error){
+                        console.log(error);
+                    }
+
+
+                })
+            })
+
+        })
+    </script>
+
 
     <title>회원 가입</title>
 </head>
@@ -141,9 +139,9 @@
                         </div>
                         <input type="text" id="sample4_extraAddress" placeholder="참고항목" style="display:none;">
                 </div>
-                    <input type="hidden" id="memberLatitude" name="memberLatitude">
-                    <input type="hidden" id="memberLongitude" name="memberLongitude">
-                    <input type="hidden" id="memberDong" name="memberDong">
+                    <input type="text" id="memberLatitude" name="memberLatitude">
+                    <input type="text" id="memberLongitude" name="memberLongitude">
+                    <input type="text" id="memberDong" name="memberDong">
                 <div class="mb-3 mt-3 d-grid">
                     ]<button type="button" onclick="location()">Check Values</button>
                     <button id="join" type="submit" class="btn btn-primary btn-block">가입</button>
