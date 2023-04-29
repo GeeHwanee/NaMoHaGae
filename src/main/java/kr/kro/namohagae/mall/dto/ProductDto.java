@@ -42,6 +42,7 @@ public class ProductDto {
         private Integer productNo;
         private String productName;
         private Integer productPrice;
+        private Integer productStock;
         private String productImage;
         //private Boolean favoriteEnabled; // 찜여부
     }
