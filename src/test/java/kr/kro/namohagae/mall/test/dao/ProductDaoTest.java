@@ -59,5 +59,13 @@ public class ProductDaoTest {
         System.out.println("2가 포함된 상품명 개수: " + count);
     }
 
+    //회원의 찜 찾기
+/*    @Test
+    public void findAllTest() {
+        List<ProductDto.ReadAll> result = productDao.findAll(1,3,1);
+        int count = result.size();
+        System.out.println("82번 회원의 찜 개수: " + count);
+        System.out.println("82번 회원의 찜 목록: " + result.toString());
+    }*/
 
 }
