@@ -156,14 +156,15 @@
                             <div class="recent_heading">
                                 <h4>채팅방</h4>
                             </div>
+                                <span id="nowchatusernick" style="float: right">채팅상대</span>
                         </div>
                         <div class="inbox_chat">
                             <div class="chat_list" th:each="l:${list}">
-                                <a id="userclick" th:data-userno="${l.chatRoomReceiverNo}" th:data-useremail="${l.memberEmail}">
+                                <a id="userclick" th:data-userno="${l.chatRoomReceiverNo}" th:data-useremail="${l.memberEmail}" th:data-usernick="${l.memberNickName}">
                                 <div class="chat_people">
                                     <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                                     <div class="chat_ib">
-                                        <h5 th:text="${l.memberNickName}">Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                                        <h5 th:text="${l.memberNickName}"><span class="chat_date"></span></h5>
                                         <p th:text="${l.memberImage}"></p>
                                     </div>
                                 </div>
@@ -218,6 +219,7 @@
         // 수신된 메시지를 화면에 표시하는 코드를 작성합니다.
         var $content= `<div class="incoming_msg">
                                 <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
                                         <p>`+messageContent+`</p>
@@ -276,6 +278,7 @@
 <script>
     var nowChatUser=undefined;
     var nowChatEmail=undefined;
+    var nowChatNick=undefined;
 
     $('a').on('click',async function (){
         $('.msg_history').empty();
@@ -283,13 +286,20 @@
         nowChatUser = userclickvalue;
         var userclickemailvalue=$(this).data("useremail")
         nowChatEmail =userclickemailvalue;
+        var userclicknickvalue=$(this).data("usernick")
+        nowChatNick=userclicknickvalue;
+
+        var $nowchatusernick=$('#nowchatusernick')
+        $nowchatusernick.text('')
+        $nowchatusernick.append(nowChatNick);
         console.log("채팅상대로 지정된 유저번호는"+nowChatUser)
-        console.log("채팅상대로 지정된 유저번호는"+nowChatEmail)
+        console.log("채팅상대로 지정된 유저이메일은"+nowChatEmail)
+        console.log("채팅상대로 지정된 유저닉네임은"+nowChatNick)
         //nowChatUser와의 채팅 기록 불러오가
         var chatLog = [];
         var $sender = $('#myMemberNo').val();
-        console.log($sender)
-        console.log("qienqiwneiqwneiwqneiqwne")
+
+
         $.ajax({
             type: "GET",
             url: "/api/v1/findchatlog",
@@ -299,7 +309,6 @@
                 // 채팅창에 이전 채팅 내용을 출력합니다.
                 for (var i = 0; i < chatLog.length; i++) {
                     var message = chatLog[i];
-                    console.log(message.senderNo)
                     if(message.messageSenderNo==$sender){
                         var sendContent =`<div class="outgoing_msg">
                                 <div class="sent_msg">
@@ -313,6 +322,7 @@
                     if(message.messageSenderNo==nowChatUser) {
                         var receiveContent = `<div class="incoming_msg">
                                 <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
                                         <p>` + message.messageContent + `</p>
