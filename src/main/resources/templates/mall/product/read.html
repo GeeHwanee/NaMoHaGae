@@ -1,60 +1,105 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/main.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<title>상품 상세 보기 페이지</title>
-<script>
-</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <title>상품 상세 보기 페이지</title>
+    <style>
+        #content {
+            border: 1px solid #ccc;
+        }
+        #left {
+            float:left;
+            width: 50%;
+            height:650px;
+        }
+        #right {
+            float: right;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            height:200px;
+        }
+        #buttons {
+            display: inline-block;
+        }
+
+        .choice_image {
+            border: 1px solid red;
+        }
+
+        .images:hover {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+    </script>
 </head>
 <body>
-    <header th:replace="~{/fragment/header.html}">
-    </header>
-    <nav th:replace="~{/fragment/nav.html}">
-    </nav>
-    <main>
-        <aside th:replace="~{/fragment/aside.html}">
-        </aside>
-        <section>
-            <div style="display:none;" th:text="${product.productNo}" id="productNo"></div>
-            <div style="overflow:hidden;">
-                <div id="left">
-                    <div>
-                        <img th:src="${product.productImages[0]}" id="select_image" height="200px">
-                    </div>
-                    <div>
-                        <img th:each="image:${product.productImages}" th:src="${productImage}" width="100px" style="margin: 5px;" class='images'>
-                    </div>
+<header th:replace="~{/fragment/header.html}">
+</header>
+<nav th:replace="~{/fragment/nav.html}">
+</nav>
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+    </aside>
+    <section>
+        <div style="display:none;" th:text="${product.productNo}" id="productNo"></div>
+        <div style="overflow:hidden;">
+            <div id="left">
+                <div>
+                    <img th:src="${product.productImages[0]}" id="select_image" height="200px">
                 </div>
-                <div id="right">
-                    <div th:text="${product.productName}"></div>
-                    <div th:text="${product.productPrice}"></div>
-                    <button id="add_cart">장바구니 담기</button>
+                <div>
+                    <img th:each="image:${product.productImages}" th:src="${image}" width="100px" style="margin: 5px;" class='images'>
                 </div>
             </div>
-            <div id="content" th:utext="${product.productContent}"></div>
-            <hr>
-<!--            <div>
-                <table class="table table-hover">
-                    &lt;!&ndash; 별점	, 내용, 작성자, 작성일 &ndash;&gt;
-                    <tr th:each="review:${product.reviews}">
-                        <td>
-                            <i th:each="i: ${#numbers.sequence(1, 5)}" class="fa" th:classappend="${i<=review.star}?'fa-star': 'fa-star-o'" aria-hidden="true"></i>
-                        </td>
-                        <td th:text="${review.content}"></td>
-                        <td th:text="${review.writer}"></td>
-                        <td th:text="${review.writeTime}"></td>
-                    </tr>
-                </table>
-            </div>-->
-        </section>
-    </main>
-    <footer th:replace="~{/fragment/aside.html}">
-    </footer>
+            <div id="right">
+                <div th:text="${product.productName}"></div>
+                <div>별점출력</div>
+                <!--                    <div th:text="${product.productPrice}"></div>-->
+                <span class="product-price">
+                      <div th:if="${product.productStock == 0}">
+                        <span style="color: red">품절댐</span>
+                      </div>
+                      <div th:unless="${product.productStock == 0}">
+                        <div>
+                          <span th:text="${#numbers.formatInteger(product.productPrice,0,'COMMA')}+'원'"></span>
+                        </div>
+                      </div>
+                    </span>
+                <div>뼈다귀 포인트 1% 적립</div>
+                <div>배송정보 배송비 3,000원</div>
+            </div>
+            <div id="buttons">
+                <button id="buy">구매하기</button>
+                <button id="cart">장바구니</button>
+                <button id="favorite" >찜하기</button>
+            </div>
+        </div>
+        <div id="content" th:utext="${product.productContent}"></div>
+        <hr>
+        <div>
+            <!--                <table class="table table-hover">-->
+            <!--                    &lt;!&ndash; 별점	, 내용, 작성자, 작성일 &ndash;&gt;-->
+            <!--                    <tr th:each="review:${product.productReviews}">-->
+            <!--                        <td>-->
+            <!--                            <i th:each="i: ${#numbers.sequence(1, 5)}" class="fa" th:classappend="${i<=review.productReviewStar}?'fa-star': 'fa-star-o'" aria-hidden="true"></i>-->
+            <!--                        </td>-->
+            <!--                        <td th:text="${review.productReviewContent}"></td>-->
+            <!--                        <td th:text="${review.productReviewWriter}"></td>-->
+            <!--                        <td th:text="${review.productReviewWriteDate}"></td>-->
+            <!--                    </tr>-->
+            <!--                </table>-->
+        </div>
+    </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}">
+</footer>
 </body>
 </html>
