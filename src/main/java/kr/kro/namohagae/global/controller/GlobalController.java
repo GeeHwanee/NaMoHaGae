@@ -133,10 +133,11 @@ public class GlobalController {
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
-    public void chatroom(Principal principal, Model model) {
+    public void chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
         Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
         model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
         model.addAttribute("mymemberNo",myMemberNo);
+        model.addAttribute("startuser",receiverEmail);
     }
 
     // [게시판 파트]--------------------------------------------------------------------

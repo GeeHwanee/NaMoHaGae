@@ -10,6 +10,11 @@
 
 
     <style>
+        a:hover{
+            color: #711515;
+            background-color: #f7f7f7;
+        }
+
         .container{max-width:1000px; margin:auto;}
         img{ max-width:100%;}
         .inbox_people {
@@ -190,6 +195,7 @@
 
             </div></div>
         <input type="text" id="receiver" placeholder="receiverEmail" />
+        <button id="test" type="button">보내는사람이메일</button>
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
@@ -207,11 +213,45 @@
 
         var json = JSON.parse(message);
 
-        var receiverUsername = json.receiverUsername;
+        var receiverUsername = json.receivername;
         console.log(receiverUsername)
         var messageContent = json.message;
         var senderUsername= json.sendername;
-        console.log(senderUsername)
+
+        var firstMessage = json.haveChatRoom;
+        if(firstMessage==2){
+            $.ajax({
+                url: "/api/v1/findchatroom",
+                type: "GET",
+                data: {
+                    receiverEmail: senderUsername
+                }
+            })
+                .then(function(data) {
+                    // 성공적으로 응답을 받았을 때 실행할 코드
+                    console.log("응답 데이터:", data);
+                    var chatroom = ` <div class="chat_list">
+        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`">
+            <div class="chat_people">
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_ib">
+                    <h5>`+data.memberNickName+`<span class="chat_date"></span></h5>
+                    <p>`+data.memberImage+`</p>
+                </div>
+            </div>
+        </a>
+    </div>`
+
+                    $('.inbox_chat').append(chatroom)
+                })
+
+                    .catch(function(err) {
+                    // 오류 발생 시 실행할 코드
+                    console.error("오류 발생:", err);
+                });
+
+        }
+
         if(senderUsername!=nowChatEmail){
             return;
         }
@@ -241,7 +281,7 @@
 
     async function sendMessage() {
         var messageInput = document.getElementById("message");
-
+        console.log(nowChatEmail);
         var checkmessage =messageInput.value.trim();
         console.log("4444")
         if(checkmessage==0){
@@ -259,20 +299,22 @@
 
         try {
             socket.send(jsonData);
-        } catch (err) {
-           alert("socket 메세지전송실패")
-        }finally {
-            messageInput.value = "";
-        }
-        var content = ` <div class="outgoing_msg">
+            var content = ` <div class="outgoing_msg">
                                 <div class="sent_msg">
                                     <p>`+message+`</p>
                                     <span class="time_date"> `+new Date().getTime()+`</span> </div>
                             </div>`
 
 
-        $('.msg_history').append(content)
-        $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
+            $('.msg_history').append(content)
+            $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
+        } catch (err) {
+           alert("socket 메세지전송실패")
+        }finally {
+            messageInput.value = "";
+        }
+
+
     }
 </script>
 <script>
@@ -280,7 +322,7 @@
     var nowChatEmail=undefined;
     var nowChatNick=undefined;
 
-    $('a').on('click',async function (){
+    $(document).on('click','a',async function (){
         $('.msg_history').empty();
         var userclickvalue = $(this).data("userno")
         nowChatUser = userclickvalue;
@@ -288,7 +330,7 @@
         nowChatEmail =userclickemailvalue;
         var userclicknickvalue=$(this).data("usernick")
         nowChatNick=userclicknickvalue;
-
+        console.log("a태그 클릭")
         var $nowchatusernick=$('#nowchatusernick')
         $nowchatusernick.text('')
         $nowchatusernick.append(nowChatNick);
@@ -298,7 +340,6 @@
         //nowChatUser와의 채팅 기록 불러오가
         var chatLog = [];
         var $sender = $('#myMemberNo').val();
-
 
         $.ajax({
             type: "GET",
@@ -347,6 +388,60 @@
     $(document).ready(function(){
 
     });
+</script>
+<script>
+    $('#test').on('click',function (){
+        nowChatEmail= $('#receiver').val()
+        console.log(nowChatEmail)
+    })
+
+
+</script>
+<script th="inline">
+    var startuser = "[[${startuser}]]"
+    if(startuser!=""){
+        nowChatEmail=startuser
+        var $nowchatusernick=$('#nowchatusernick')
+        console.log(nowChatEmail)
+        console.log("@@@@@@@@@@@@@@@@")
+        // startuser(상대 이메일)값을 가지고 있으면 채티방에 append만시켜놓기
+        $.ajax({
+           url:"/api/v1/existchatroom",
+           type:"GET",
+           data:{
+               receiverEmail:nowChatEmail
+           }
+        }).then(function (data){
+            if(data===""|| data==null){
+                return
+            }
+            console.log(data)
+            var chatroom = ` <div class="chat_list">
+        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`">
+            <div class="chat_people">
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_ib">
+                    <h5>`+data.memberNickName+`<span class="chat_date"></span></h5>
+                    <p>`+data.memberImage+`</p>
+                </div>
+            </div>
+        </a>
+    </div>`
+            nowChatNick=data.memberNickName;
+            $nowchatusernick.text('')
+            $nowchatusernick.append(nowChatNick);
+            $('.inbox_chat').append(chatroom)
+
+            //페이지 진입시 startuseremail을 가지고 들어올 경우 채팅방을 append시켜놓고 send버튼을 활성화
+            // 채팅방이 이미 생성되있는지 여부에 따라 채팅방을 append할지 원래있던방을 입력시키고 채팅로그를 띄운다
+        }).catch(function(err){
+            console.log("existchatroom ajax 요청의 catch"+err)
+
+
+        })
+
+    }
+
 </script>
 
 </body>
