@@ -17,7 +17,7 @@ public class ProductDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Add {
-        private Integer productNo;
+//        private Integer productNo;
         private Integer productCategoryNo;
         private String productName;
         private Integer productPrice;
@@ -27,9 +27,9 @@ public class ProductDto {
         private LocalDateTime productWriteDate;
         private List<MultipartFile> productImages;
 
-        public void setProductNo(Integer productNo) {
-            this.productNo = productNo;
-        }
+//        public void setProductNo(Integer productNo) {
+//            this.productNo = productNo;
+//        }
 
         public Product toEntity() {
             return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
@@ -60,9 +60,7 @@ public class ProductDto {
         private Integer productStock;
         //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
-        @Setter
         private List<ProductReview> productReviews;
-        @Setter
         private List<Qna> qnas;
     }
 
