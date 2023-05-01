@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ProductReviewService {
@@ -22,10 +24,15 @@ public class ProductReviewService {
         ProductReview productReview = dto.toEntity(memberEmail);
         productReviewDao.save(productReview);
         productOrderDetailDao.updateReview(dto.getOrderDetailNo());
-        //productDao.updateReview(productReview);
+        productDao.updateReview(productReview);
     }
+
 
     public ProductOrderDetail read(Integer orderDetailNo) {
         return productOrderDetailDao.findByOrderDetailNo(orderDetailNo);
+    }
+
+    public List<ProductReviewDto.Write> findInformationByProductNo(Integer productNo) {
+        return productReviewDao.findInformationByProductNo(productNo);
     }
 }

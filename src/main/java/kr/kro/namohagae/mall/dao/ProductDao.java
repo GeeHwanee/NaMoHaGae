@@ -2,6 +2,7 @@ package kr.kro.namohagae.mall.dao;
 
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
+import kr.kro.namohagae.mall.entity.ProductReview;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface ProductDao {
 
     //public Integer updateOrder(ProductOrderDetail productOrderDetail);
 
-    //public Integer updateReview(ProductReview productReview);
+    public Integer updateReview(ProductReview productReview);
 
     //public Integer updateQna(Qna qna);
 }
