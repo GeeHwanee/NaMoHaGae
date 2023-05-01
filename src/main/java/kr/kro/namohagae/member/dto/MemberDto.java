@@ -52,6 +52,14 @@ public class MemberDto {
         private String memberEmail;
         private String memberIntroduce;
     }
-
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    public static class Profile{
+        private String memberProfile;
+        private String memberNickname;
+        private Integer memberGrade;
+        private String memberIntroduce;
+    }
 }
 
