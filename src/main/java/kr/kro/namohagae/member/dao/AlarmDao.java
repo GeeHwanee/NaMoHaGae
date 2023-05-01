@@ -13,7 +13,7 @@ public interface AlarmDao {
     public void save(Alarm alarm);
 
     public List<AlarmDto.FindAll> findAll(Integer startRownum, Integer endRownum,Integer memberNo);
-    public Integer count();
+    public Integer count(Integer memberNo);
 
     public AlarmDto.FindAll read(Integer no);
     public Integer alarmRead(Integer no);
