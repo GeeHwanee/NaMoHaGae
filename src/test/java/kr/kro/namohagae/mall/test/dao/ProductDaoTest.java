@@ -31,8 +31,8 @@ public class ProductDaoTest {
     //@Test
     public void insertProduct() {
         List<Integer> category = Arrays.asList(1,2,3,4);
-        for(int i=1; i<=40; i++) {
-            ProductDto.Add dto = new Add(null,category.get(i%4),i+"번째 예제 상품",getPrice(),5,0,"예제 상품입니다", LocalDateTime.now(),null);
+        for(int i=1; i<=50; i++) {
+            ProductDto.Add dto = new Add(category.get(i%4),i+"번째 예제 상품",getPrice(),5,0,"예제 상품입니다", LocalDateTime.now(),null);
             Product p = dto.toEntity();
             productDao.save(p);
             List<ProductImage> images = new ArrayList<>();
