@@ -6,6 +6,8 @@ import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.dto.MemberDto;
+import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
@@ -29,6 +32,8 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     BoardService boardService;
@@ -79,8 +84,13 @@ public class GlobalController {
     public void alarm(){}
 
     // [회원 파트]------[회원]--------------------------------------------------------
-    @GetMapping("/member/profile")
-    public void profile(){}
+    @GetMapping("/member/information")
+    public ModelAndView information(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
+        Integer memberNo = myUserDetails.getMemberNo();
+        MemberDto.Read dto = memberService.read(memberNo);
+        return new ModelAndView("/member/information").addObject("member",dto);
+
+    }
 
     // [회원 파트]------[퍼칭]--------------------------------------------------------
     @GetMapping("/member/puching/review")
@@ -156,9 +166,19 @@ public class GlobalController {
     }
 
     // [관리자 파트]--------------------------------------------------------------------
+    @GetMapping("/admin/notice/list")
+    public String adminNoticeList(){
+        return "admin/notice/list";
+    }
 
+    @GetMapping("/admin/qna/list")
+    public String adminQnaList(){ return  "admin/qna/list";}
 
+    @GetMapping("/admin/product/list")
+    public String adminProductList(){ return "admin/product/list";}
 
+    @GetMapping("/admin/report/list")
+    public String adminReportList(){ return "admin/report/list";}
     // -------------------------------------------------------------------------------
 
 }
