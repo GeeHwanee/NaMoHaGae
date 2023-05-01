@@ -27,6 +27,9 @@ public class ProductReviewDto {
     // 리뷰 쓰기
     @Data
     public static class Write {
+        private String productName;
+        private String productImage;
+        //
         private Integer productReviewNo;
         private Integer productNo;
         private Integer orderDetailNo;

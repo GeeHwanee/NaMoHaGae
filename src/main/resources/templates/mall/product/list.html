@@ -99,17 +99,11 @@
             <button class="btn btn-danger mt-3" id="findAllByProductName" onclick="findAllName()">상품명</button>
         </div>
 
-        <div class="product-list" th:each="p:${list.products}">
-            <div class="product-card">
+        <div class="product-list">
+            <div class="product-card" th:each="p:${list.products}">
                 <div class="product-img">
                     <a th:href="@{/mall/product/read(productNo=${p.productNo})}">
-                        <img src="http://localhost:8081/api/v1/image/product?name=image1.png" width="200px" height="200px" alt="">
-                        <!--                        <div th:if="${p.productImage == 1}">
-                                                  <img th:src="${p.productImage}" alt="">
-                                                </div>
-                                                <div th:unless="${p.productImage == 1}">
-                                                  이미지 미등록
-                                                </div>-->
+                        <img th:src="${p.productImage}" width="200px" height="200px" alt="">
                     </a>
                 </div>
                 <div class="product-contents">
