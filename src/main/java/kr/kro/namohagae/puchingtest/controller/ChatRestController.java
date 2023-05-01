@@ -26,15 +26,21 @@ public class ChatRestController {
     @GetMapping(value="/findchatlog")
     public ResponseEntity<List<MessageDto.MessageRead>> findByChatLog(Principal principal,Integer receiverNo) {
          String senderEmail= principal.getName();
-
-
-        System.out.println(senderEmail+"레스트컨트롤러"+receiverNo);
-
-
         return ResponseEntity.ok().body(service.findMessageLog(senderEmail,receiverNo));
     }
 
+    @GetMapping(value="/findchatroom")
+    public ResponseEntity<ChatRoomDto.Read> findChatRoomByreceiverNo(Principal principal,String receiverEmail){
 
+
+        return ResponseEntity.ok().body(service.findChatRoom(principal.getName(),receiverEmail));
+    }
+
+    @GetMapping(value = "/existchatroom")
+    public ResponseEntity<ChatRoomDto.Read> existchatroom(Principal principal,String receiverEmail){
+
+        return ResponseEntity.ok().body(service.existchatRoom(principal.getName(),receiverEmail));
+    }
 
 
 

@@ -17,6 +17,10 @@ public interface ChatDao {
 
     public List<ChatRoomDto.Read> findAllChatRoom(Integer memberNo); // 자신이 가지고 있는 채팅방
 
+    public ChatRoomDto.Read findChatRoom(Integer memberNo,Integer receiverNo);// 내번호와 상대번호로 채팅방 정보 불러오기
+
+    public ChatRoomDto.Read findChatRoomByReceiverNo(Integer receiverNo);
+
     public Integer saveMessage(Message message); // 메세지 전송 성공시 저장
 
     public List<MessageDto.MessageRead> findAllMessageByReceiverNo(Integer senderNo,Integer receiverNo); // 상대방과의 채팅 기록 불러오기
