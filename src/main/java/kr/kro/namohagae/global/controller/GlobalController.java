@@ -92,6 +92,13 @@ public class GlobalController {
 
     }
 
+    @GetMapping("/member/profile")
+    public ModelAndView profile(Integer memberNo, Model model){
+        MemberDto.Read dto = memberService.read(memberNo);
+        return new ModelAndView("/member/profile").addObject("member",dto);
+    }
+
+
     // [회원 파트]------[퍼칭]--------------------------------------------------------
     @GetMapping("/member/puching/review")
     public String puchingReview(){
