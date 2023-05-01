@@ -43,11 +43,12 @@ public class GlobalController {
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        if(myUserDetails!=null){
-            Integer memberNo = myUserDetails.getMemberNo();
-            System.out.println(memberNo);
-        }
-
+      if(myUserDetails!=null) {
+          String username = myUserDetails.getUsername();
+          if (username.equals("admin")) {
+              return "/admin/main";
+          }
+      }
         return "main.html";
     }
 
@@ -177,17 +178,20 @@ public class GlobalController {
     }
 
     // [관리자 파트]--------------------------------------------------------------------
+    @Secured("ROLE_ADMIN")
     @GetMapping("/admin/notice/list")
     public String adminNoticeList(){
         return "admin/notice/list";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/admin/qna/list")
     public String adminQnaList(){ return  "admin/qna/list";}
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
-    public String adminProductList(Model model){
-        model.addAttribute("list",productService.findAll());
+    public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
+        model.addAttribute("list",productService.list(pageNo, categoryNo));
         return "admin/product/list";
     }
 
