@@ -7,7 +7,7 @@
     </insert>
 
     <select id="count" resultType="int">
-        select count(alarm_no) from alarm
+        select count(alarm_no) from alarm where member_no=#{memberNo}
     </select>
 
     <select id="findAll" resultType="kr.kro.namohagae.member.dto.AlarmDto$FindAll">

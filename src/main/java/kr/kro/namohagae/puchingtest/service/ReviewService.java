@@ -1,19 +1,22 @@
-package kr.kro.namohagae.member.service;
+package kr.kro.namohagae.puchingtest.service;
 
-import kr.kro.namohagae.member.dao.AlarmDao;
 import kr.kro.namohagae.member.dto.AlarmDto;
+import kr.kro.namohagae.puchingtest.dao.ReviewDao;
+import kr.kro.namohagae.puchingtest.dto.ReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public class AlarmService {
+public class ReviewService {
     @Autowired
-    private AlarmDao alarmDao;
+    private ReviewDao reviewDao;
+
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
-    public AlarmDto.Pagination findAll(Integer pageno,Integer memberNo) {
-        Integer countOfProduct = alarmDao.count(memberNo);
+    public ReviewDto.Pagination findContent(Integer pageno,Integer receiverNo) {
+        Integer countOfProduct = reviewDao.count(receiverNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
         pageno = Math.abs(pageno);
@@ -22,7 +25,7 @@ public class AlarmService {
 
         Integer startRownum = (pageno-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<AlarmDto.FindAll> alarm = alarmDao.findAll(startRownum, endRownum,0);
+        List<ReviewDto.profile> review = reviewDao.findContentByReceiverNo(startRownum, endRownum,receiverNo);
         // 리스트 log로 찍어
         Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
@@ -32,13 +35,7 @@ public class AlarmService {
             end = countOfPage;
             next = 0;
         }
-        return new AlarmDto.Pagination(pageno, prev, start, end, next, alarm);
+        return new ReviewDto.Pagination(pageno, prev, start, end, next, review);
 
     }
-
-    public void read (Integer bno){
-        alarmDao.alarmRead(bno);
-    }
-
-
 }

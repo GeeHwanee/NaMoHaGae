@@ -1,131 +1,201 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/main.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="/script/profile.js"></script>
-    <title>내 정보</title>
-    <script type="text/javascript">
-        $(document).ready(function(){
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/main.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="/script/profile.js"></script>
+  <title>내 정보</title>
+  <script>
+    function printBoard(review) {
+      const $tbody = $('#review');
+      for(const r of review) {
+        const tpl = `<tr>
+				<td>${r.reviewReceiver}</td>
+				<td>${r.reviewContent}</td>
+			</tr>`;
+        $tbody.append(tpl);
+      }
+    }
 
-            // $('#memberProfile').change(loadProfile);
-            $('#update').click(function(){
-                // FormData 처리 방식
-                // 1. new FormData($('폼아이디')[0]);
-                // 2. new FormData() -> 원소를 하나씩 append
-                const formData = new FormData();
+    function printPagination({prev, start, end, next, pageno}) {
+      const $ul = $('#page_ul');
+      if(prev>0)
+        $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+      for(let i=start; i<=end; i++) {
+        const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+        $ul.append(tpl);
+      }
+      if(next>0)
+        $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+    }
 
-                // if($('#profile')[0].files[0]!=undefined){
-                //     formData.append('profile', $('#profile')[0].files[0]);
-                // }
+    $(document).ready(async function() {
+      const param = new URLSearchParams(location.search);
+      const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+      try {
+        const result = await $.ajax("/api/v1/review/list?pageno=" + pageno);
+        console.log(result);
+        printBoard(result.review);
+        printPagination(result);
 
-                formData.append('nickname', $('#nickname').val());
-                formData.append('introduce', $('#introduce').val());
+        // Add a click event listener to the pagination links
+        $('#page_ul').on('click', '.page-link', async function (e) {
+          e.preventDefault();
+          const pageNum = $(this).data('page-no');
+          const result = await $.ajax("/api/v1/review/list?pageno=" + pageNum);
+          console.log(result);
+          printBoard(result.review);
+          printPagination(result);
+        });
+      }catch (err){
+        console.log(err);
+      }
+    });
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.ajax({
+        type: "GET",
+        url: "/api/v1/review/list",
+        success: function (data) {
 
-                // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
-                for(let key of formData.keys()){
-                    console.log(key+" : "+formData.get(key));
-                }
-                // 1. Multipart-formdata: contentType: false
-                // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
-                //		{username:'spring', nai:20} -> ?username=spring&nai=20}
-                try{
-                    $.ajax({
-                        url: "/member/update",
-                        method:'post',
-                        data: formData,
-                        processData:false, 	// urlencoded 자동 변환 옵션
-                        contentType:false 	// Multipart-formdata 지정 옵션
-                    });
-                    alert('변경 성공');
-                    location.reload();
-                }catch(err){
-                    alert('변경 실패');
-                }
-            });
+        },
+        error: function (xhr, status, error) {
+// Handle the error here
+        }
+      });
 
-            $('#resign').click(function(){
-                console.log("11")
-                const result = confirm("정말 탈퇴하시겠습니까?");
-                if(result==false){
-                    alert("열심히 하겠습니다, 감사합니다.");
-                    return;
-                }
-                const $form = $('<form>');
-                $form.attr('action','/member/resign').attr('method','post').appendTo($('body')).submit();
+      $.ajax({
+        type: "GET",
+        url: "/member/information",
+        success: function (data) {
+          console.log(data);
 
-                // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
-                // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
-                // 어떤 브라우저를 써도 들어간다(단 반대편(스프링)에서 Hidden Http Method Filter를 지정해줘야 한다)
+          // Handle the JSON response here
+          // 데이터를 담을 div 요소 생성
+          var div = document.createElement("div");
+          // 받은 데이터를 div 요소의 innerHTML로 설정
+          div.innerHTML = data;
+          // div 요소를 페이지 body에 추가
+          document.body.appendChild(div);
+        },
+        error: function (xhr, status, error) {
+// Handle the error here
+        }
+      });
+    });
+      //
+      // // $('#memberProfile').change(loadProfile);
+      // $('#update').click(function(){
+      //   // FormData 처리 방식
+      //   // 1. new FormData($('폼아이디')[0]);
+      //   // 2. new FormData() -> 원소를 하나씩 append
+      //   const formData = new FormData();
+      //
+      //   // if($('#profile')[0].files[0]!=undefined){
+      //   //     formData.append('profile', $('#profile')[0].files[0]);
+      //   // }
+      //
+      //   formData.append('nickname', $('#nickname').val());
+      //   formData.append('introduce', $('#introduce').val());
+      //
+      //   // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
+      //   for(let key of formData.keys()){
+      //     console.log(key+" : "+formData.get(key));
+      //   }
+      //   // 1. Multipart-formdata: contentType: false
+      //   // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
+      //   //		{username:'spring', nai:20} -> ?username=spring&nai=20}
+      //   try{
+      //     $.ajax({
+      //       url: "/member/update",
+      //       method:'post',
+      //       data: formData,
+      //       processData:false, 	// urlencoded 자동 변환 옵션
+      //       contentType:false 	// Multipart-formdata 지정 옵션
+      //     });
+      //     alert('변경 성공');
+      //     location.reload();
+      //   }catch(err){
+      //     alert('변경 실패');
+      //   }
+      // });
+      //
+      // $('#resign').click(function(){
+      //   console.log("11")
+      //   const result = confirm("정말 탈퇴하시겠습니까?");
+      //   if(result==false){
+      //     alert("열심히 하겠습니다, 감사합니다.");
+      //     return;
+      //   }
+      //   const $form = $('<form>');
+      //   $form.attr('action','/member/resign').attr('method','post').appendTo($('body')).submit();
+      //
+      //   // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
+      //   // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
+      //   // 어떤 브라우저를 써도 들어간다(단 반대편(스프링)에서 Hidden Http Method Filter를 지정해줘야 한다)
+      //
+      // })
 
-            })
-        })
 
-    </script>
+  </script>
 </head>
 <body>
 <div th:text="${member}"></div>
 <div id="page">
-    <header th:replace="~{/fragment/header.html}">
-    </header>
-    <nav th:replace="~{/fragment/nav.html}">
-    </nav>
-    <main>
-        <aside th:replace="~{/fragment/aside.html}">
-        </aside>
-        <section>
-            <table class ="table table-hover">
-                <colgroup>
-                    <col width="30%">
-                    <col width="70%">
-                </colgroup>
-                <tr>
-                    <td colspan="2">
-                        <img id="show-profile" th:src="${member.memberProfile}" width="240px">
-                        <input type="file" id="memberProfile" name="memberProfile">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span th:text="${member.memberGrade}"></span><span>)도  (</span><span th:text="${member.memberPoint}"></span><span>)포인트</span></td>
-                    <td>
-                    <input type="text" name="nickname" id="nickname" th:value="${member.memberNickname}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>강아지</td>
-                    <td id="dog"></td>
-                </tr>
-                <tr>
-                    <td>이메일</td>
-                    <td th:text="${member.memberEmail}"></td>
-                </tr>
-                <tr>
-                    <td>비밀번호</td>
-                    <td>
-                    <input type="password" name="memberPassword" id="memberPassword">
-                    </td>
-                </tr>
-                <tr>
-                    <td>자기소개</td>
-                    <td>
-                    <label for="introduce">
-                        <textarea id="introduce" name="introduce"></textarea>
-                    </label>
-                    </td>
-                </tr>
-            </table>
-            <button id="update" type="button" class="btn btn-warning">변경</button>
-            <button id="resign" type="button" class="btn btn-danger">탈퇴</button>
-        </section>
-    </main>
-    <footer th:replace="~{/fragment/footer.html}">
-    </footer>
+  <header th:replace="~{/fragment/header.html}">
+  </header>
+  <nav th:replace="~{/fragment/nav.html}">
+  </nav>
+  <main>
+    <aside th:replace="~{/fragment/aside.html}">
+    </aside>
+    <section>
+      <table class ="table table-hover">
+        <colgroup>
+          <col width="30%">
+          <col width="70%">
+        </colgroup>
+        <tr>
+          <td colspan="2">
+            <img id="show-profile" th:src="${member.memberProfile}" width="240px">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span th:text="${member.memberGrade}"></span><span>)도</span></td>
+        </tr>
+        <tr>
+          <td>강아지</td>
+          <td id="dog"></td>
+        </tr>
+          <td>자기소개</td>
+          <td>
+            <label for="introduce">
+              <textarea id="introduce" name="introduce" readonly></textarea>
+            </label>
+          </td>
+        </tr>
+        <tr id="review">
+      <ul class="pagination" id="page_ul">
+      </ul>
+        </tr>
+      </table>
+      <button id="follow" type="button" class="btn btn-warning">팔로우</button>
+      <button id="chat" type="button" class="btn btn-danger">채팅하기</button>
+    </section>
+  </main>
+  <footer th:replace="~{/fragment/footer.html}">
+  </footer>
 </div>
 </body>
 </html>
