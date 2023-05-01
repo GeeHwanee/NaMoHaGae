@@ -25,9 +25,21 @@
 
     </select>
     <select id="existsByChatRoom" resultType="Boolean">
-        select count(*) from CHATROOM WHERE ((MEMBER_NO=#{memberNo} or CHATROOM_RECEIVER_NO=#{receiverNo}) or
-            (MEMBER_NO=#{receiverNo} or CHATROOM_RECEIVER_NO=#{memberNo})) and rownum=1
+        select count(*) from CHATROOM WHERE ((MEMBER_NO=#{memberNo} and CHATROOM_RECEIVER_NO=#{receiverNo}) or
+            (MEMBER_NO=#{receiverNo} and CHATROOM_RECEIVER_NO=#{memberNo})) and rownum=1
     </select>
 
+    <select id="findChatRoom" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
+        select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
+        from CHATROOM c,MEMBER m
+        WHERE m.MEMBER_NO=c.CHATROOM_RECEIVER_NO and c.MEMBER_NO=#{memberNo} and c.CHATROOM_RECEIVER_NO=#{receiverNo}
+
+    </select>
+
+    <select id="findChatRoomByReceiverNo" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
+        select MEMBER_NO as chatRoomReceiverNo,MEMBER_NICKNAME as memberNickName,MEMBER_PROFILE_IMAGE as memberImage,
+               MEMBER_EMAIL as memberEmail
+         from MEMBER WHERE MEMBER_NO=#{receiverNo}
+    </select>
 
 </mapper>
