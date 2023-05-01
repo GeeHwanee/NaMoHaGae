@@ -23,7 +23,7 @@ public class ProductService {
     public List<ProductCategory> findAll() {
         return productCategoryDao.findAll();
     }
-    
+
     // 이미지 처리 후 만들것
     //public Integer add(ProductDto.Add dto) {  }
 
@@ -44,11 +44,67 @@ public class ProductService {
         return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
     }
 
+    // 필터(최신순) 정렬
+    public ProductDto.Pagination findAllByLatestOrder(Integer pageNo, Integer categoryNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductDto.ReadAll> products = productDao.findAllByLatestOrder(startRowNum, endRowNum, categoryNo);
+        Integer countOfProduct = productDao.count(categoryNo);
+        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
+    }
+
+    // 필터(판매량) 정렬
+    public ProductDto.Pagination findAllByOrderOfHighSales(Integer pageNo, Integer categoryNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductDto.ReadAll> products = productDao.findAllByOrderOfHighSales(startRowNum, endRowNum, categoryNo);
+        Integer countOfProduct = productDao.count(categoryNo);
+        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
+    }
+
+    // 필터(이름순) 정렬
+    public ProductDto.Pagination findAllByProductName(Integer pageNo, Integer categoryNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductDto.ReadAll> products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo);
+        Integer countOfProduct = productDao.count(categoryNo);
+        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
+    }
+
+
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
-        dto.setQnas(qnaDao.findByProductNo(productNo));
+//        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
+//        dto.setQnas(qnaDao.findByProductNo(productNo));
         return dto;
     }
+
 
 }
