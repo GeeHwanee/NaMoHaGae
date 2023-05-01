@@ -12,8 +12,8 @@ public class AlarmService {
     private AlarmDao alarmDao;
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
-    public AlarmDto.Pagination findAll(Integer pageno) {
-        Integer countOfProduct = alarmDao.count();
+    public AlarmDto.Pagination findAll(Integer pageno,Integer memberNo) {
+        Integer countOfProduct = alarmDao.count(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
         pageno = Math.abs(pageno);

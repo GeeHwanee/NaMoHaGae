@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.puchingtest.dao.ReviewDao">
+    <select id="findContentByReceiverNo" resultType="kr.kro.namohagae.puchingtest.dto.ReviewDto$profile">
+        select * from
+            (
+                select rownum as rnum, r.* from
+                    (
+                        select
+                            (select member_nickname from member where (select puching_review_writer from PUCHING_REVIEW where puching_review_receiver=#{receiverNo})=member_no) reviewWriter,puching_review_content as reviewContent
+                        from PUCHING_REVIEW
+                    ) r
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+    <select id="count" resultType="int">
+        select count(puching_review_no) from PUCHING_REVIEW where puching_review_receiver = #{receiverNo}
+    </select>
+</mapper>
