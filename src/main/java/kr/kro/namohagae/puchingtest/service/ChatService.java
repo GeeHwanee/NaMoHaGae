@@ -28,19 +28,40 @@ public class ChatService {
         Integer senderNo=mdao.findNoByUsername(senderEmail);
         Integer receiverNo=mdao.findNoByUsername(receiverEmail);
         Message message =  new MessageDto.MessageSave(senderNo,receiverNo,messageContent).toEntity(messageType);
-
+            cdao.saveMessage(message);
+        Boolean a= cdao.existsByChatRoom(senderNo,receiverNo);
+        System.out.println(a);
+        System.out.println("12312312312313131232131231232131");
         if(cdao.existsByChatRoom(senderNo,receiverNo)==false){
 
             cdao.saveChatRoom(senderNo,receiverNo);
-            cdao.saveChatRoom(receiverNo,senderNo);     //첫 메세지시 채팅방 2개 생성 각자 채팅방이 생성
+            cdao.saveChatRoom(receiverNo,senderNo);  //첫 메세지시 채팅방 2개 생성 각자 채팅방이 생성
+            return 2;
         }
-        return cdao.saveMessage(message);
+        return 1;
     }
 
     public List<MessageDto.MessageRead> findMessageLog(String senderEmail,Integer receiverNo){
             Integer senderNo = mdao.findNoByUsername(senderEmail);
         System.out.println(senderNo+"챗서비스");
         return  cdao.findAllMessageByReceiverNo(senderNo,receiverNo);
+    }
+
+    public ChatRoomDto.Read findChatRoom(String userEmail,String receiverEmail) {
+        Integer userNo =mdao.findNoByUsername(userEmail);
+        Integer receiverNo= mdao.findNoByUsername(receiverEmail);
+        System.out.println("**********************************$@$@#@Q@#");
+        System.out.println(receiverNo);
+        return cdao.findChatRoom(userNo,receiverNo);
+    }
+
+    public ChatRoomDto.Read existchatRoom(String username,String receiverEmail) {
+        Integer userNo= mdao.findNoByUsername(username);
+        Integer receiverNo= mdao.findNoByUsername(receiverEmail);
+            if(!cdao.existsByChatRoom(userNo,receiverNo)) {
+             return cdao.findChatRoomByReceiverNo(receiverNo);
+            }
+        return null;
     }
 
 }
