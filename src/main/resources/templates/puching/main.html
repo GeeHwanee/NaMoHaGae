@@ -164,7 +164,8 @@
                                      // 데이터 가져오기 성공
                                      var itemList = $("#itemList");
                                      $.each(userdata, function (i, item) {
-                                         itemList.append("<div class='item'>" + item.memberNickName + ':' + item.memberNo + '---' + item.distance + "</div>");
+                                         itemList.append("<div class='item'>" + item.memberNickName + "<a href=http://localhost:8081/member/profile?memberNo="+item.memberNo+">프로필이동</a>" + item.memberNo + '---' + item.distance + "</div>");
+
                                      });
                                      isLoading = false;
                                      $('#loading').hide();
