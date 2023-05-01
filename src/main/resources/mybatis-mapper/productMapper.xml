@@ -24,7 +24,7 @@
         select p.product_no, p.product_name, p.product_price, p.product_stock,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p
-        left join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.product_image_no = 1
+        left join PRODUCT_IMAGE pi on p.product_no=pi.product_no and rownum=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by p.product_no desc
         ) p
@@ -33,14 +33,7 @@
         where rnum&gt;=#{startRowNum}
     </select>
 
-    <!-- 상품 상세 보기
-    <select id="findByProductNo" resultType="kr.kro.namohagae.mall.dto.ProductDto$Read">
-        select p.product_no, p.product_name, p.product_content, p.product_price, p.product_grade, p.product_stock,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on p.product_no = pi.product_no
-        where p.product_no=#{productNo} and rownum=1
-    </select>
-    -->
+    <!-- 상품 상세 보기 -->
     <resultMap id="readMap" type="kr.kro.namohagae.mall.dto.ProductDto$Read">
         <id column="product_no" property="productNo" />
         <result column="product_name" property="productName" />
@@ -57,7 +50,7 @@
         select p.product_no, p.product_name, p.product_content, p.product_price, p.product_grade, p.product_stock,
                'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p left join PRODUCT_IMAGE pi on p.product_no = pi.product_no
-        where p.product_no=#{productNo} and rownum=1
+        where p.product_no=#{productNo}
     </select>
 
     <!-- 상품명으로 검색 -->
@@ -74,7 +67,7 @@
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and pi.product_image_no = 1
+        p.product_no=pi.product_no and and rownum=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by p.product_no desc
         ) p
@@ -92,7 +85,7 @@
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and pi.product_image_no = 1
+        p.product_no=pi.product_no and rownum=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by product_stock asc
         ) p
@@ -110,7 +103,7 @@
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and pi.product_image_no = 1
+        p.product_no=pi.product_no and rownum=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by product_name asc
         ) p
@@ -118,4 +111,9 @@
         )
         where rnum&gt;=#{startRowNum}
     </select>
+
+    <!-- 리뷰 update -->
+    <update id="updateReview">
+        update PRODUCT set product_grade=product_grade+1 where product_no=#{productNo}
+    </update>
 </mapper>
