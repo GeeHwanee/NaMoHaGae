@@ -74,24 +74,6 @@
         }
       });
 
-      $.ajax({
-        type: "GET",
-        url: "/member/information",
-        success: function (data) {
-          console.log(data);
-
-          // Handle the JSON response here
-          // 데이터를 담을 div 요소 생성
-          var div = document.createElement("div");
-          // 받은 데이터를 div 요소의 innerHTML로 설정
-          div.innerHTML = data;
-          // div 요소를 페이지 body에 추가
-          document.body.appendChild(div);
-        },
-        error: function (xhr, status, error) {
-// Handle the error here
-        }
-      });
     });
       //
       // // $('#memberProfile').change(loadProfile);
@@ -181,13 +163,16 @@
           <td>자기소개</td>
           <td>
             <label for="introduce">
-              <textarea id="introduce" name="introduce" readonly></textarea>
+              <textarea th:text="${member.memberIntroduce}" id="introduce" name="introduce" readonly></textarea>
             </label>
           </td>
         </tr>
         <tr id="review">
-      <ul class="pagination" id="page_ul">
-      </ul>
+          <td>
+            <ul class="pagination" id="page_ul">
+            </ul>
+          </td>
+
         </tr>
       </table>
       <button id="follow" type="button" class="btn btn-warning">팔로우</button>
