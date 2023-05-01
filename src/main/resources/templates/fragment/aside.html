@@ -9,6 +9,7 @@
 		const puching = "puching";
 		const member = "member";
 		const board = "board";
+		const admin	= "admin";
 	</script>
 
 	<script>
@@ -51,6 +52,12 @@
 				$side_bar.append('<li><a href="/board/free/list">자유 게시판</a></li>');
 				$side_bar.append('<li><a href="/board/town/list">동네 게시판</a></li>');
 				$side_bar.append('<li><a href="/board/knowledge/list">지식인</a></li>');
+			}else if(sideBar.startsWith(admin)){
+				$title.append('<li><a href="/admin/main">관리자 메인</a></li>');
+				$side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
+				$side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
+				$side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
+				$side_bar.append('<li><a href="/admin/report/list">신고 관리</a></li>');
 			}
 
 		})
