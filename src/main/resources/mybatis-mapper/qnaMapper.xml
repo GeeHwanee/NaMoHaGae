@@ -8,7 +8,7 @@
     </insert>
 
     <!-- 상품 큐엔에이 보기 -->
-    <select id="findByProductNo">
+    <select id="findByProductNo" resultType="Qna">
         select * from QNA where product_no=#{productNo}
     </select>
 </mapper>
