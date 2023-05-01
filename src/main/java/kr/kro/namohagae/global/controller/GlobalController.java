@@ -5,6 +5,7 @@ import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.MemberService;
@@ -34,6 +35,8 @@ public class GlobalController {
     private MemberDao memberDao;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     BoardService boardService;
@@ -183,7 +186,10 @@ public class GlobalController {
     public String adminQnaList(){ return  "admin/qna/list";}
 
     @GetMapping("/admin/product/list")
-    public String adminProductList(){ return "admin/product/list";}
+    public String adminProductList(Model model){
+        model.addAttribute("list",productService.findAll());
+        return "admin/product/list";
+    }
 
     @GetMapping("/admin/report/list")
     public String adminReportList(){ return "admin/report/list";}
