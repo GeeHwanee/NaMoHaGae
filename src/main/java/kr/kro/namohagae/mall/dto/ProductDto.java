@@ -22,7 +22,6 @@ public class ProductDto {
         private String productName;
         private Integer productPrice;
         private Integer productStock;
-        private Integer productGrade;
         private String productContent;
         private LocalDateTime productWriteDate;
         private List<MultipartFile> productImages;

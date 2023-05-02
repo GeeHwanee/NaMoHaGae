@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 public class MemberService {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private MemberDao memberDao;
     @Autowired
