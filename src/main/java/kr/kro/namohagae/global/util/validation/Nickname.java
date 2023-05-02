@@ -1,4 +1,4 @@
-package kr.kro.namohagae.member.util.validation;
+package kr.kro.namohagae.global.util.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
