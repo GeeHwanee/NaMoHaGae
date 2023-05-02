@@ -15,8 +15,8 @@ public class ReviewService {
 
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
-    public ReviewDto.Pagination findContent(Integer pageno,Integer receiverNo) {
-        Integer countOfProduct = reviewDao.count(receiverNo);
+    public ReviewDto.Pagination findContent(Integer pageno,Integer memberNo) {
+        Integer countOfProduct = reviewDao.count(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
         pageno = Math.abs(pageno);
@@ -25,7 +25,7 @@ public class ReviewService {
 
         Integer startRownum = (pageno-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<ReviewDto.profile> review = reviewDao.findContentByReceiverNo(startRownum, endRownum,receiverNo);
+        List<ReviewDto.profile> review = reviewDao.findContentByReceiverNo(startRownum, endRownum,memberNo);
         // 리스트 log로 찍어
         Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
