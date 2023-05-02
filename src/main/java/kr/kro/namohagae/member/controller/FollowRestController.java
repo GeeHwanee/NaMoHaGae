@@ -22,9 +22,8 @@ public class FollowRestController {
     }
 
     @GetMapping("/follow/check")
-    public  ResponseEntity<Void> checkFollow(Integer memberNo,@AuthenticationPrincipal MyUserDetails myUserDetails){
+    public  ResponseEntity<Boolean> checkFollow(Integer memberNo,@AuthenticationPrincipal MyUserDetails myUserDetails){
         Integer myMemberNo=myUserDetails.getMemberNo();
-        Boolean result =service.checkFollow(memberNo,myMemberNo);
-        return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        return ResponseEntity.ok(service.checkFollow(memberNo,myMemberNo));
     }
 }
