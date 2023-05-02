@@ -7,7 +7,7 @@
     </insert>
 
     <delete id="delete">
-        delete from follow where follow_member_no=#{followMemberNo} and member_no=#{memberNo}
+        delete from follow where follow_member_no=#{memberNo} and member_no=#{myMemberNo}
     </delete>
 
     <select id="findFollowList" resultType="kr.kro.namohagae.member.dto.FollowDto$list">
