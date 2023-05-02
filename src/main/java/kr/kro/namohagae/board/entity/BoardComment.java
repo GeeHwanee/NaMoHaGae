@@ -3,6 +3,7 @@ package kr.kro.namohagae.board.entity;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class BoardComment {
@@ -10,7 +11,7 @@ public class BoardComment {
     private Integer memberNo;
     private Integer commentNo;
     private String commentContent;
-    private LocalDate commentWriteDate;
+    private LocalDateTime commentWriteDate;
     private Boolean commentEnabled;
 
 

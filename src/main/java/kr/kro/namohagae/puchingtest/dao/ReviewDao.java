@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface ReviewDao {
 
-    public List<ReviewDto.profile> findContentByReceiverNo(Integer startRownum, Integer endRownum,Integer receiverNo);
+    public List<ReviewDto.profile> findContentByReceiverNo(Integer startRownum, Integer endRownum,Integer memberNo);
 
     public Integer count(Integer receiverNo);
 }

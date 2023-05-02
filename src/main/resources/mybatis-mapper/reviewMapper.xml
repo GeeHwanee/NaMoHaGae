@@ -10,7 +10,7 @@
                 select rownum as rnum, r.* from
                     (
                         select
-                            (select member_nickname from member where (select puching_review_writer from PUCHING_REVIEW where puching_review_receiver=#{receiverNo})=member_no) reviewWriter,puching_review_content as reviewContent
+                            (select member_nickname from member where #{memberNo}=puching_review_writer) reviewWriter,puching_review_content as reviewContent
                         from PUCHING_REVIEW
                     ) r
                 where rownum&lt;=#{endRownum}

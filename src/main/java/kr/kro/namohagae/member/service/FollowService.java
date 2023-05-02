@@ -4,21 +4,30 @@ import kr.kro.namohagae.member.dao.FollowDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class FollowService {
     @Autowired
     private FollowDao followDao;
 
-    public Boolean save(Integer followMemberNo,Integer memberNo){
-        return followDao.save(followMemberNo,memberNo);
+
+    public Boolean checkFollow(Integer memberNo,Integer myMemberNo){
+        return  followDao.existsByMemberNoAndFollowMemberNo(memberNo,myMemberNo);
     }
 
-    public Boolean delete(Integer followMemberNo,Integer memberNo){
-        return followDao.delete(followMemberNo,memberNo);
-    }
+    public Map<String,Boolean> follow(Integer memberNo, Integer myMemberNo) {
 
-
-    public Boolean checkFollow(Integer followMemberNo,Integer memberNo){
-        return  followDao.existsByMemberNoAndFollowMemberNo(followMemberNo,memberNo);
+        Boolean alreadyFollow = followDao.existsByMemberNoAndFollowMemberNo(memberNo,myMemberNo);
+        Map<String,Boolean> map = new HashMap<>();
+        if (alreadyFollow==false) {
+            followDao.save(memberNo,myMemberNo);
+            map.put("follow", true);
+        } else {
+            followDao.delete(memberNo,myMemberNo);
+            map.put("follow", false);
+        }
+        return map;
     }
 }
