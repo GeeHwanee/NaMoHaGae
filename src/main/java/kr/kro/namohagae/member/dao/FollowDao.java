@@ -10,9 +10,11 @@ import java.util.List;
 @Mapper
 public interface FollowDao {
 
-    public Integer save(Integer memberNo,Integer followMemberNo);
+    public Integer save(Integer memberNo,Integer myMemberNo);
 
-    public Integer delete(Integer followNo);
+    public Integer delete(Integer memberNo,Integer followMemberNo);
 
     public List<FollowDto.list> findFollowList(Integer startRownum, Integer endRownum,Integer memberNo);
+
+    public Boolean existsByMemberNoAndFollowMemberNo(Integer memberNo,Integer myMemberNo);
 }

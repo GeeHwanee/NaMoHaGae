@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.entity;
 
+import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class Member {
 
     public MemberDto.Read toReadDto() {
 
-       return new MemberDto.Read(memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce);
+       return new MemberDto.Read(ImageConstants.IMAGE_PROFILE_URL +memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce);
     }
 
 }

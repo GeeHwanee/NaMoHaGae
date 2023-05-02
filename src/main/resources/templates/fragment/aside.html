@@ -9,13 +9,14 @@
 		const puching = "puching";
 		const member = "member";
 		const board = "board";
+		const admin	= "admin";
 	</script>
 
 	<script>
 		$(document).ready(function(){
 			let sideBar = location.href.slice(22);
 			console.log(sideBar);
-			console.log(sideBar.startsWith(puching));
+
 			const $title = $('#title');
 			const $side_bar = $('#side_bar');
 			$title.text("");
@@ -29,7 +30,7 @@
 			}else if(sideBar.startsWith(member)){
 				$title.append('<li><a href="/member/main">내 정보 메인</a></li>');
 				$side_bar.append('<li><h2>내 정보</h2></li>');
-				$side_bar.append('<li><a href="/member/profile">내 정보 수정</a></li>');
+				$side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
 				$side_bar.append('<li><h2>퍼칭</h2></li>');
 				$side_bar.append('<li><a href="/member/review">내게 쓴 리뷰</a></li>');
 				$side_bar.append('<li><a href="/member/follow">팔로우 목록</a></li>');
@@ -51,6 +52,12 @@
 				$side_bar.append('<li><a href="/board/free/list">자유 게시판</a></li>');
 				$side_bar.append('<li><a href="/board/town/list">동네 게시판</a></li>');
 				$side_bar.append('<li><a href="/board/knowledge/list">지식인</a></li>');
+			}else if(sideBar.startsWith(admin)){
+				$title.append('<li><a href="/admin/main">관리자 메인</a></li>');
+				$side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
+				$side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
+				$side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
+				$side_bar.append('<li><a href="/admin/report/list">신고 관리</a></li>');
 			}
 
 		})
@@ -61,15 +68,12 @@
 <body>
 <aside>
 	<ul>
-		<li><h1 id="title"></h1></li>
+		<h1 id="title">
+		</h1>
 	</ul>
 <ul id="side_bar" class="side_bar">
-	<li><a href="#">퍼칭리뷰보기</a></li>
-	<li><a href="#">채팅방목록</a></li>
-	<li><a href="#"></a></li>
 </ul>
 <div class="border4"></div>
 </aside>
-</body>
 </body>
 </html>

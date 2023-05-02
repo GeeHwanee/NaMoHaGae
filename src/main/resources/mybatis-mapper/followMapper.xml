@@ -2,12 +2,12 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.member.dao.FollowDao">
-    <insert id="save">
-        insert into follow(follow_no,member_no,follow_member_no) values(follow_seq_follow_no.nextval,#{memberNo},#{followMemberNo})
+    <insert id="save" parameterType="Integer">
+        insert into follow(follow_no,member_no,follow_member_no) values(follow_seq_follow_no.nextval,#{myMemberNo},#{memberNo})
     </insert>
 
     <delete id="delete">
-        delete from follow where follow_no=#{followNo}
+        delete from follow where follow_member_no=#{followMemberNo} and member_no=#{memberNo}
     </delete>
 
     <select id="findFollowList" resultType="kr.kro.namohagae.member.dto.FollowDto$list">
@@ -23,5 +23,7 @@
             )
         where rnum&gt;=#{startRownum}
     </select>
-
+    <select id="existsByMemberNoAndFollowMemberNo" resultType="Boolean">
+        select count(*) from follow where follow_member_no=#{memberNo} and member_no=#{myMemberNo}
+    </select>
 </mapper>

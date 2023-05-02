@@ -1,8 +1,7 @@
-package kr.kro.namohagae.member.util.validation;
+package kr.kro.namohagae.global.util.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.Valid;
 
 public class PasswordValidator implements ConstraintValidator<Password,String> {
     @Override

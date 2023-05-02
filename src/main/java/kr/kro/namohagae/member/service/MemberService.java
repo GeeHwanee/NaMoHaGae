@@ -27,24 +27,26 @@ public class MemberService {
     @Autowired
     private TownDao townDao;
     public void join(MemberDto.Join dto){
-            String memberIntroduce = " ";
+        String memberIntroduce = " ";
+        String profileName = "default.jpg";
         if(dto.getMemberIntroduce()!=null){
             memberIntroduce = dto.getMemberIntroduce();
         }
         MultipartFile mf = dto.getMemberProfileImage();
-        String profileName = "default.jpg";
-        /*if(mf!=null && mf.isEmpty()==false) {
-
+        if(mf!=null && !mf.isEmpty()) {
             int postionOfDot = mf.getOriginalFilename().lastIndexOf(".");
             String ext = mf.getOriginalFilename().substring(postionOfDot);
-            File file = new File(, dto.getUsername() + ext);
+            String currentDir = System.getProperty("user.dir")+"/";
+            System.out.println(currentDir);
+            String imagePath = currentDir+ImageConstants.IMAGE_PROFILE_FOLDER;
+            File file = new File(imagePath, dto.getMemberEmail() + ext);
             try {
                 mf.transferTo(file);
-                profileName = dto.getUsername() + ext;
+                profileName = dto.getMemberEmail() + ext;
             } catch (IllegalStateException | IOException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
         Integer townNo = townDao.findNoByDong(dto.getTownDong());
         String encodedPassword = passwordEncoder.encode(dto.getMemberPassword());
         Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo);
