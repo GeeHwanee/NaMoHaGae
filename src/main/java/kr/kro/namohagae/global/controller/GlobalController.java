@@ -87,6 +87,9 @@ public class GlobalController {
     @GetMapping("/member/join")
     public void join(){}
 
+    @GetMapping("/member/dog/registeration")
+    public  void dogRegisteration(){}
+
     @GetMapping("/member/find")
     public void find(){}
 
