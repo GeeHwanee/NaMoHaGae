@@ -17,7 +17,7 @@
     </insert>
 
     <select id="boardFreeList" resultType="kr.kro.namohagae.board.entity.Board">
-        select * from board
+        select * from board where town_no = 0
     </select>
 
     <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.Board" parameterType="int">

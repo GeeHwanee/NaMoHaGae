@@ -19,7 +19,9 @@
     <select id="boardTownList" resultType="kr.kro.namohagae.board.entity.Board">
         select * from board where town_no = #{townNo}
     </select>
-
+    <select id="count" resultType="int">
+        select count(town_no) from board where town_no <![CDATA[>]]> 0
+    </select>
 
 </mapper>
 

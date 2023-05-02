@@ -174,13 +174,22 @@ public class GlobalController {
 
         return "board/town/write";
     }
-    @PostMapping("board/town/writepro")
+    @PostMapping("/board/town/writepro")
     public String boardTownWritePro(Board board){
 
 
         boardTownService.boardTownInsertData(board);
         return "redirect:/board/town/list";
     }
+    @GetMapping("/board/town/read")
+    public String boardTownRead(Model model, Integer boardNo) {
+
+        model.addAttribute("board",boardTownService.boardTownRead(boardNo));
+
+
+        return "board/town/read";
+    }
+
     @GetMapping("/board/town/list")
     public String townList(){
         return "/board/town/list";
