@@ -5,6 +5,7 @@ import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
@@ -16,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,9 +39,8 @@ public class GlobalController {
     private MemberService memberService;
     @Autowired
     private ProductService productService;
-
     @Autowired
-    BoardService boardService;
+    private BoardService boardService;
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -174,8 +175,7 @@ public class GlobalController {
 
     // [쇼핑몰 파트]--------------------------------------------------------------------
     @GetMapping("/mall/cart")
-    public void cart(){
-    }
+    public void cart(){}
 
     // [관리자 파트]--------------------------------------------------------------------
     @Secured("ROLE_ADMIN")
@@ -191,12 +191,32 @@ public class GlobalController {
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
     public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
-        model.addAttribute("list",productService.list(pageNo, categoryNo));
+        model.addAttribute("list",productService.list(pageNo, null));
         return "admin/product/list";
     }
-
     @GetMapping("/admin/report/list")
     public String adminReportList(){ return "admin/report/list";}
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/product/write")
+    public void adminProductWrite(){}
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/product/write")
+    public String adminProductWrite(ProductDto.Add dto){
+        Integer productNo = productService.add(dto);
+        System.out.println(dto.getProductImages().size());
+        return "redirect:/admin/product/list";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/product/read")
+    public String read(Integer productNo, Model model) {
+        Integer no = productNo;
+        System.out.println(no);
+        model.addAttribute("product", productService.read(productNo));
+        return "admin/product/read";
+    }
     // -------------------------------------------------------------------------------
 
 }
