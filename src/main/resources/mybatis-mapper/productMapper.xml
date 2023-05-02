@@ -115,6 +115,11 @@
 
     <!-- 리뷰 update -->
     <update id="updateReview">
-        update PRODUCT set product_grade=product_grade+1 where product_no=#{productNo}
+        UPDATE product p
+        SET p.product_grade = (
+            SELECT ROUND(AVG(pr.product_review_star), 1)
+            FROM product_review pr
+            WHERE pr.productNo = p.productNo
+        )
     </update>
 </mapper>
