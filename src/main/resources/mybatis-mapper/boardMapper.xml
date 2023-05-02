@@ -12,7 +12,7 @@
             (
         board_no,town_no,member_no,board_title,board_content,board_write_date,board_read_count,board_recommend_count,board_enabled
             )
-        VALUES ( SEQ_BOARD_NO.NEXTVAL,3,1,#{boardTitle},#{boardContent},sysdate,0,0,0
+        VALUES ( SEQ_BOARD_NO.NEXTVAL,0,1,#{boardTitle},#{boardContent},sysdate,0,0,0
                )
     </insert>
 
@@ -26,7 +26,9 @@
     <delete id="boardDeleteData" parameterType="int">
         delete board where board_no = #{boardNo}
     </delete>
-
+    <update id="increaseReadCnt">
+        update board set board_read_count=board_read_count+1 where board_no = #{boardNo}
+    </update>
     <update id="boardUpdateData">
         update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
     </update>
@@ -39,6 +41,12 @@
     </select>
     <select id="boardCount" resultType="Integer">
         SELECT COUNT(BOARD_NO) FROM BOARD
+    </select>
+
+    <select id="boardSearch">
+        SELECT *
+        FROM BOARD
+        WHERE BOARD_TITLE LIKE '%#{searchName}%';
     </select>
 </mapper>
 

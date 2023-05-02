@@ -26,5 +26,14 @@ public class CommentService {
         return commentDao.commentList(boardNo);
     }
 
+    public void commentUpdate(BoardComment boardComment) {
+
+        commentDao.commentUpdate(boardComment);
+    }
+
+    public BoardComment commentDelete(Integer commentNo) {
+
+        return commentDao.commentDelete(commentNo);
+    }
 }
 
