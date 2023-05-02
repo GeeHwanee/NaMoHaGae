@@ -39,10 +39,12 @@
     }
 
     $(document).ready(async function() {
+    let result = undefined;
       const param = new URLSearchParams(location.search);
+      const memberNo = param.get('memberNo');
       const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
       try {
-        const result = await $.ajax("/api/v1/review/list?pageno=" + pageno);
+        result = await $.ajax("/api/v1/review/list?pageno=" + pageno+"&memberNo="+memberNo);
         console.log(result);
         printBoard(result.review);
         printPagination(result);
@@ -59,74 +61,33 @@
       }catch (err){
         console.log(err);
       }
+      try{
+        const result = await $.ajax("/api/v1/follow/check?memberNo="+memberNo);
+        if(result == true){
+        $('#follow_text').text("팔로우취소 ");
+        }else{
+          $('#follow_text').text("팔로우 ");
+        }
+      }catch (err){
+        console.log(err)
+      }
+      $('#follow_btn').on('click',async function(){
+        try{
+          // 추천하면 서버는 새로운 추천수를 리턴한다 -> #good_cnt를 업데이트
+          const result =await $.ajax({url:'/api/v1/member/follow?memberNo='+memberNo, method:"patch",});
+          if(result.follow == true){
+          $('#follow_text').text("팔로우취소 ");
+          } else {
+          $('#follow_text').text("팔로우")
+          }
+        }catch (err){
+          console.log(err)
+          }
+      })
     });
   </script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $.ajax({
-        type: "GET",
-        url: "/api/v1/review/list",
-        success: function (data) {
 
-        },
-        error: function (xhr, status, error) {
-// Handle the error here
-        }
-      });
 
-    });
-      //
-      // // $('#memberProfile').change(loadProfile);
-      // $('#update').click(function(){
-      //   // FormData 처리 방식
-      //   // 1. new FormData($('폼아이디')[0]);
-      //   // 2. new FormData() -> 원소를 하나씩 append
-      //   const formData = new FormData();
-      //
-      //   // if($('#profile')[0].files[0]!=undefined){
-      //   //     formData.append('profile', $('#profile')[0].files[0]);
-      //   // }
-      //
-      //   formData.append('nickname', $('#nickname').val());
-      //   formData.append('introduce', $('#introduce').val());
-      //
-      //   // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
-      //   for(let key of formData.keys()){
-      //     console.log(key+" : "+formData.get(key));
-      //   }
-      //   // 1. Multipart-formdata: contentType: false
-      //   // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
-      //   //		{username:'spring', nai:20} -> ?username=spring&nai=20}
-      //   try{
-      //     $.ajax({
-      //       url: "/member/update",
-      //       method:'post',
-      //       data: formData,
-      //       processData:false, 	// urlencoded 자동 변환 옵션
-      //       contentType:false 	// Multipart-formdata 지정 옵션
-      //     });
-      //     alert('변경 성공');
-      //     location.reload();
-      //   }catch(err){
-      //     alert('변경 실패');
-      //   }
-      // });
-      //
-      // $('#resign').click(function(){
-      //   console.log("11")
-      //   const result = confirm("정말 탈퇴하시겠습니까?");
-      //   if(result==false){
-      //     alert("열심히 하겠습니다, 감사합니다.");
-      //     return;
-      //   }
-      //   const $form = $('<form>');
-      //   $form.attr('action','/member/resign').attr('method','post').appendTo($('body')).submit();
-      //
-      //   // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
-      //   // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
-      //   // 어떤 브라우저를 써도 들어간다(단 반대편(스프링)에서 Hidden Http Method Filter를 지정해줘야 한다)
-      //
-      // })
 
 
   </script>
@@ -175,7 +136,7 @@
 
         </tr>
       </table>
-      <button id="follow" type="button" class="btn btn-warning">팔로우</button>
+      <button type="button" class="btn btn-primary" id="follow_btn" > <span id="follow_text">팔로우</span></button>
       <button id="chat" type="button" class="btn btn-danger"><a th:href="@{/puching/chatroom(receiverEmail=${member.memberEmail})}">채팅하기</a></button>
     </section>
   </main>

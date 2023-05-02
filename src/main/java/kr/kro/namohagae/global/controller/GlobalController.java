@@ -4,8 +4,8 @@ package kr.kro.namohagae.global.controller;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
+import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
-import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
@@ -35,12 +35,15 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
+
     @Autowired
     private MemberService memberService;
     @Autowired
     private ProductService productService;
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private BoardTownService boardTownService;
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -65,7 +68,8 @@ public class GlobalController {
 
     @GetMapping("/board/main")
     public String boardMain(){
-        return "/board/main.html";
+
+        return "/board/main";
     }
 
     @GetMapping("/member/main")
@@ -149,10 +153,11 @@ public class GlobalController {
 
     @GetMapping("/board/free/list")
     public String paging(Model model,
-                         @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,String searchName) {
 
         List<Board> pagingList = boardService.pagingList(page);
         PageDto pageDTO = boardService.pagingParam(page);
+
         model.addAttribute("list", pagingList);
         model.addAttribute("paging", pageDTO);
         return "board/free/list";
@@ -163,6 +168,18 @@ public class GlobalController {
         return "board/notice/list";
     }
 
+    @GetMapping("board/town/write")
+    public String boardTownWrite() {
+
+        return "board/town/write";
+    }
+    @PostMapping("board/town/writepro")
+    public String boardTownWritePro(Board board){
+
+
+        boardTownService.boardTownInsertData(board);
+        return "redirect:/board/town/list";
+    }
     @GetMapping("/board/town/list")
     public String townList(){
         return "/board/town/list";
@@ -175,7 +192,8 @@ public class GlobalController {
 
     // [쇼핑몰 파트]--------------------------------------------------------------------
     @GetMapping("/mall/cart")
-    public void cart(){}
+    public void cart(){
+    }
 
     // [관리자 파트]--------------------------------------------------------------------
     @Secured("ROLE_ADMIN")
@@ -191,32 +209,12 @@ public class GlobalController {
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
     public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
-        model.addAttribute("list",productService.list(pageNo, null));
+        model.addAttribute("list",productService.list(pageNo, categoryNo));
         return "admin/product/list";
     }
+
     @GetMapping("/admin/report/list")
     public String adminReportList(){ return "admin/report/list";}
-
-    @Secured("ROLE_ADMIN")
-    @GetMapping("/admin/product/write")
-    public void adminProductWrite(){}
-
-    @Secured("ROLE_ADMIN")
-    @PostMapping("/admin/product/write")
-    public String adminProductWrite(ProductDto.Add dto){
-        Integer productNo = productService.add(dto);
-        System.out.println(dto.getProductImages().size());
-        return "redirect:/admin/product/list";
-    }
-
-    @Secured("ROLE_ADMIN")
-    @GetMapping("/admin/product/read")
-    public String read(Integer productNo, Model model) {
-        Integer no = productNo;
-        System.out.println(no);
-        model.addAttribute("product", productService.read(productNo));
-        return "admin/product/read";
-    }
     // -------------------------------------------------------------------------------
 
 }
