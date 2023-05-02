@@ -35,6 +35,7 @@ public class ProductService {
     @Transactional
     public Integer add(ProductDto.Add dto) {
         Integer imageIndex = 1;
+        String currentDir = System.getProperty("user.dir")+"/";
         Product product = dto.toEntity();
         productDao.save(product);
 
@@ -42,7 +43,7 @@ public class ProductService {
         for(MultipartFile image: dto.getProductImages()) {
             if(image!=null && !image.isEmpty()) {
                 String originalFilename = image.getOriginalFilename();
-                File saveFile = new File(ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
                 try {
                     image.transferTo(saveFile);
                 } catch (IllegalStateException | IOException e) {
