@@ -14,13 +14,14 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
-@Controller
+@RestController
 public class MemberController {
     @Autowired
     private MemberService memberService;
@@ -32,11 +33,11 @@ public class MemberController {
         return "redirect:/login";
     }
 
-    @GetMapping("/member/my_profile")
-    public ModelAndView read(@AuthenticationPrincipal MyUserDetails myUserDetails){
-     Integer memberNo= myUserDetails.getMemberNo();
+    @GetMapping("api/v1/member/information")
+    public ResponseEntity<MemberDto.Read> read(@AuthenticationPrincipal MyUserDetails myUserDetails){
+         Integer memberNo= myUserDetails.getMemberNo();
       MemberDto.Read dto = memberService.read(memberNo);
-      return new ModelAndView("member/my_profile").addObject("member",dto);
+      return ResponseEntity.ok(dto);
     }
 
 

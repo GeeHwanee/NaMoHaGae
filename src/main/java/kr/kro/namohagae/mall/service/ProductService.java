@@ -1,11 +1,19 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.ProductDto;
+import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductCategory;
+import kr.kro.namohagae.mall.entity.ProductImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,13 +32,41 @@ public class ProductService {
         return productCategoryDao.findAll();
     }
 
-    // 이미지 처리 후 만들것
-    //public Integer add(ProductDto.Add dto) {  }
+    @Transactional
+    public Integer add(ProductDto.Add dto) {
+        Integer imageIndex = 1;
+        Product product = dto.toEntity();
+        productDao.save(product);
+
+        List<ProductImage> images = new ArrayList<>();
+        for(MultipartFile image: dto.getProductImages()) {
+            if(image!=null && !image.isEmpty()) {
+                String originalFilename = image.getOriginalFilename();
+                File saveFile = new File(ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                try {
+                    image.transferTo(saveFile);
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
+                }
+                images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
+            }
+        }
+        if(images.size()==0)
+            images.add(new ProductImage(product.getProductNo(), 1, "default.jpg"));
+        productImageDao.save(images);
+        return product.getProductNo();
+    }
 
     public ProductDto.Pagination list(Integer pageNo, Integer categoryNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo);
+//        for (ProductDto.ReadAll r :products
+//        ){
+//           r.setProductImage(ImageConstants.IMAGE_PRODUCT_URL+"?name="+r.getProductImage());
+//           System.out.println(r.getProductImage());
+//        }
+
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -101,7 +137,7 @@ public class ProductService {
 
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-//        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
+        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
 //        dto.setQnas(qnaDao.findByProductNo(productNo));
         return dto;
     }

@@ -6,7 +6,10 @@ import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.dto.MemberDto;
+import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -16,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
@@ -31,6 +35,11 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
+
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private ProductService productService;
     @Autowired
     private BoardService boardService;
     @Autowired
@@ -38,11 +47,12 @@ public class GlobalController {
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        if(myUserDetails!=null){
-            Integer memberNo = myUserDetails.getMemberNo();
-            System.out.println(memberNo);
-        }
-
+      if(myUserDetails!=null) {
+          String username = myUserDetails.getUsername();
+          if (username.equals("admin")) {
+              return "/admin/main";
+          }
+      }
         return "main.html";
     }
 
@@ -83,8 +93,20 @@ public class GlobalController {
     public void alarm(){}
 
     // [회원 파트]------[회원]--------------------------------------------------------
+    @GetMapping("/member/information")
+    public ModelAndView information(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
+        Integer memberNo = myUserDetails.getMemberNo();
+        MemberDto.Read dto = memberService.read(memberNo);
+        return new ModelAndView("/member/information").addObject("member",dto);
+
+    }
+
     @GetMapping("/member/profile")
-    public void profile(){}
+    public ModelAndView profile(Integer memberNo, Model model){
+        MemberDto.Read dto = memberService.read(memberNo);
+        return new ModelAndView("/member/profile").addObject("member",dto);
+    }
+
 
     // [회원 파트]------[퍼칭]--------------------------------------------------------
     @GetMapping("/member/puching/review")
@@ -120,10 +142,11 @@ public class GlobalController {
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
-    public void chatroom(Principal principal, Model model) {
+    public void chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
         Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
         model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
         model.addAttribute("mymemberNo",myMemberNo);
+        model.addAttribute("startuser",receiverEmail);
     }
 
     // [게시판 파트]--------------------------------------------------------------------
@@ -173,9 +196,25 @@ public class GlobalController {
     }
 
     // [관리자 파트]--------------------------------------------------------------------
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/list")
+    public String adminNoticeList(){
+        return "admin/notice/list";
+    }
 
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/qna/list")
+    public String adminQnaList(){ return  "admin/qna/list";}
 
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/product/list")
+    public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
+        model.addAttribute("list",productService.list(pageNo, categoryNo));
+        return "admin/product/list";
+    }
 
+    @GetMapping("/admin/report/list")
+    public String adminReportList(){ return "admin/report/list";}
     // -------------------------------------------------------------------------------
 
 }
