@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>동네 게시판 상세 페이지</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <title>메인</title>
 </head>
-<body>
 
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+    </aside>
+    <section>
+        <h1>메인 페이지</h1>
+        <article>
+            <h1 th:text="${board.boardTitle}">제목입니다.</h1>
+            <p th:text="${board.boardContent}">내용이 들어갈 부분입니다.</p>
+        </article>
+    </section>
+</main>
+<footer th:replace="~{/fragment/aside.html}">
+</footer>
 </body>
+<script>
+</script>
 </html>
