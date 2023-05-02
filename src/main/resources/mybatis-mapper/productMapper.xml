@@ -12,7 +12,8 @@
 
     <!--특정 카테고리의 상품 개수를 조회-->
     <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        select count(*) from PRODUCT where product_category_no = #{categoryNo}
+        select count(*) from PRODUCT
+        <if test="categoryNo!=null"> where product_category_no = #{categoryNo} </if>
     </select>
 
     <!-- 상품 목록 조회 -->
