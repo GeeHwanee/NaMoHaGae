@@ -1,4 +1,4 @@
-package kr.kro.namohagae.member.util.validation;
+package kr.kro.namohagae.global.util.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,11 +10,10 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PhoneValidator.class)
-public @interface Phone {
-    String message() default  "전화번호는 숫자의 11글자만 가능합니다";
+@Constraint(validatedBy = PasswordValidator.class)
+public @interface Password {
+    String message() default "비밀번호는 영문,숫자의 8~16글자만 가능합니다";
 
     Class<?>[] groups() default {};
-    Class<? extends Payload> [] payload() default  {};
-
+    Class<? extends Payload>[] payload() default {};
 }
