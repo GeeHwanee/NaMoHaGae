@@ -50,43 +50,61 @@
 </footer>
 </body>
 <script>
-    const commentWrite = () => {
-        const contents = document.getElementById("commentContents").value;
+    function printComment() {
+        $('#')
+    }
+
+    function commentWrite() {
+        const content = document.getElementById("commentContent").value;
         const boardNo = [[${board.boardNo}]];
-        $.ajax({
+        const param = $.ajax({
             type: "post",
-            url: "/board/free/write",
+            url: "/board/free/comment/write",
             data: {
-                "commentContent": contents,
+                "commentContent": content,
                 "boardNo": boardNo
-            },
-            success: function (res) {
-                console.log("요청성공", res);
-                let output = "<table>";
-                output += "<tr><th>댓글번호</th>";
-                output += "<th>내용</th>";
-                output += "<th>작성시간</th></tr>";
-                for (let i in res) {
-                    output += "<tr>";
-                    output += "<td>" + res[i].commentNo + "</td>";
-                    output += "<td>" + res[i].commentContent + "</td>";
-                    output += "<td>" + res[i].commentWriteDate + "</td>";
-                    output += "</tr>";
-                }
-                output += "</table>";
-                document.getElementById('comment-list').innerHTML = output;
-                document.getElementById('commentContents').value = '';
-            },
-            error: function (err) {
-                console.log("요청실패", err);
+
             }
-        });
+        })
 
     }
-    const listFn = () => {
-        const page =  [[${page}]];
-        location.href = "/board/free/list?page=" + page;
-    }
+    // const commentWrite = () => {
+    //     const contents = document.getElementById("commentContents").value;
+    //     const boardNo = [[${board.boardNo}]];
+    //     $.ajax({
+    //         type: "post",
+    //         url: "/board/free/write",
+    //         data: {
+    //             "commentContent": contents,
+    //             "boardNo": boardNo
+    //         },
+    //         success: function (res) {
+    //             console.log("요청성공", res);
+    //             let output = "<table>";
+    //             output += "<tr><th>댓글번호</th>";
+    //             output += "<th>내용</th>";
+    //             output += "<th>작성시간</th></tr>";
+    //             for (let i in res) {
+    //                 output += "<tr>";
+    //                 output += "<td>" + res[i].commentNo + "</td>";
+    //                 output += "<td>" + res[i].commentContent + "</td>";
+    //                 output += "<td>" + res[i].commentWriteDate + "</td>";
+    //                 output += "</tr>";
+    //             }
+    //             output += "</table>";
+    //             document.getElementById('comment-list').innerHTML = output;
+    //             document.getElementById('commentContents').value = '';
+    //         },
+    //         error: function (err) {
+    //             console.log("요청실패", err);
+    //         }
+    //     });
+    //
+    // }
+    // const listFn = () => {
+    //     const page =  [[${page}]];
+    //     location.href = "/board/free/list?page=" + page;
+    // }
 
 </script>
 </html>

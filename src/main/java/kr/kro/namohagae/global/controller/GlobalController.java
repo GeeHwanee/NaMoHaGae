@@ -4,6 +4,7 @@ package kr.kro.namohagae.global.controller;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
+import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puchingtest.service.ChatService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
@@ -29,9 +31,10 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
-
     @Autowired
-    BoardService boardService;
+    private BoardService boardService;
+    @Autowired
+    private BoardTownService boardTownService;
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -55,7 +58,8 @@ public class GlobalController {
 
     @GetMapping("/board/main")
     public String boardMain(){
-        return "/board/main.html";
+
+        return "/board/main";
     }
 
     @GetMapping("/member/main")
@@ -126,10 +130,11 @@ public class GlobalController {
 
     @GetMapping("/board/free/list")
     public String paging(Model model,
-                         @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,String searchName) {
 
         List<Board> pagingList = boardService.pagingList(page);
         PageDto pageDTO = boardService.pagingParam(page);
+
         model.addAttribute("list", pagingList);
         model.addAttribute("paging", pageDTO);
         return "board/free/list";
@@ -140,6 +145,18 @@ public class GlobalController {
         return "board/notice/list";
     }
 
+    @GetMapping("board/town/write")
+    public String boardTownWrite() {
+
+        return "board/town/write";
+    }
+    @PostMapping("board/town/writepro")
+    public String boardTownWritePro(Board board){
+
+
+        boardTownService.boardTownInsertData(board);
+        return "redirect:/board/town/list";
+    }
     @GetMapping("/board/town/list")
     public String townList(){
         return "/board/town/list";
