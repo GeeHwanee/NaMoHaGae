@@ -2,7 +2,8 @@ package kr.kro.namohagae.board.entity;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 @Data
 public class Board {
@@ -12,7 +13,7 @@ public class Board {
         private Integer memberNo;
         private String boardTitle;
         private String boardContent;
-        private LocalDate boardWriteDate;
+        private LocalDateTime boardWriteDate;
         private Integer boardReadCount;
         private Integer boardRecommendCount;
         private Boolean boardEnabled;

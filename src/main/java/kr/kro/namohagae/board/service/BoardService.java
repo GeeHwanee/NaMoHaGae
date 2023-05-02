@@ -75,5 +75,11 @@ public class BoardService {
             pageDTO.setEndPage(endPage);
             return pageDTO;
         }
+
+        public Integer increaseReadCnt(Integer boardNo) {
+
+        return boardDao.increaseReadCnt(boardNo);
+        }
+
     }
 
