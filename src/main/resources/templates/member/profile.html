@@ -62,22 +62,23 @@
         console.log(err);
       }
       try{
-        await $.ajax("/api/v1/follow/check?memberNo="+memberNo);
+        const result = await $.ajax("/api/v1/follow/check?memberNo="+memberNo);
+        if(result == true){
         $('#follow_text').text("팔로우취소 ");
-      }catch (err){
-        if(err.status == 409){
+        }else{
           $('#follow_text').text("팔로우 ");
         }
+      }catch (err){
         console.log(err)
       }
-      $('#follow_btn').click(async function(){
+      $('#follow_btn').on('click',async function(){
         try{
           // 추천하면 서버는 새로운 추천수를 리턴한다 -> #good_cnt를 업데이트
           const result =await $.ajax({url:'/api/v1/member/follow?memberNo='+memberNo, method:"patch",});
-          if(result.follow=true){
+          if(result.follow == true){
           $('#follow_text').text("팔로우취소 ");
           } else {
-          $('#{follow_text}').text("팔로우")
+          $('#follow_text').text("팔로우")
           }
         }catch (err){
           console.log(err)
