@@ -3,7 +3,11 @@ package kr.kro.namohagae.mall.dto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductReview;
 import kr.kro.namohagae.mall.entity.Qna;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -24,6 +28,7 @@ public class ProductDto {
         private Integer productStock;
         private Integer productGrade;
         private String productContent;
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime productWriteDate;
         private List<MultipartFile> productImages;
 
@@ -32,7 +37,7 @@ public class ProductDto {
 //        }
 
         public Product toEntity() {
-            return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
+            return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(productWriteDate).build();
         }
     }
 
@@ -62,6 +67,11 @@ public class ProductDto {
         private List<String> productImages;
         private List<ProductReview> productReviews;
         private List<Qna> qnas;
+
+        // 리뷰 페이징 처리
+//        private Integer reviewsStartRow;
+//        private Integer reviewsEndRow;
+
     }
 
     // 페이지네이션
