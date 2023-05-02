@@ -11,4 +11,8 @@ public interface BoardTownDao {
     public void boardTownInsertData(Board board);
 
     public List<Board> boardTownList(Integer townNo);
+
+    public Board boardTownRead(Integer boardNo);
+
+    public Integer count();
 }
