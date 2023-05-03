@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -23,11 +24,10 @@ public class PuchingRestController {
     }
 
     @GetMapping(value="/puching/userlist")
-    public ResponseEntity<List<PuchingDto.readUser>> userList(Double latitude,Double longitude,Integer pageNum,Integer pageSize) { //들어온 숫자 검증
-        System.out.println(latitude);
-        System.out.println(longitude);
-
-        return ResponseEntity.ok().body(service.readUsers(latitude,longitude,pageNum,pageSize));
+    public ResponseEntity<List<PuchingDto.readUser>> userList(Double latitude, Double longitude, Integer pageNum, Integer pageSize, Principal principal) { //들어온 숫자 검증
+        String userEmail=principal.getName();
+        System.out.println(userEmail);
+        return ResponseEntity.ok().body(service.readUsers(latitude,longitude,pageNum,pageSize,userEmail));
     }
 
 

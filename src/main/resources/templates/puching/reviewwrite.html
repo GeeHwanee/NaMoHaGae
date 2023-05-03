@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>퍼칭 리뷰 작성페이지</title>
+    <style>
+        #itemList {
+            height: 400px;
+            width: 500px;
+            overflow-y: scroll;
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        .item {
+            margin-bottom: 10px;
+            border: 1px solid gray;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .item-info img {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+
+<main>
+  <aside th:replace="~{/fragment/aside.html}">
+
+  </aside>
+  <section>
+      <div id="itemList">
+          <div class="item">
+              <div class="item-info">
+                  <img src="user-profile-image.jpg" alt="user profile image">
+                  <div class="item-text">
+                      <h3 class="item-title">홍길동</h3>
+                      <p class="item-address">서울시 강남구 역삼동 123-456</p>
+                  </div>
+              </div>
+              <div class="item-actions">
+                  <a href="#" class="profile-link">프로필 이동</a>
+              </div>
+          </div>
+          <!-- 이하 동일한 형태의 리스트 아이템이 추가됨 -->
+      </div>
+
+  </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}">
+</footer>
+</body>
+</html>

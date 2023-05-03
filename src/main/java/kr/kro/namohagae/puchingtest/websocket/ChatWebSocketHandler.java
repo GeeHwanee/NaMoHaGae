@@ -62,7 +62,6 @@ public class ChatWebSocketHandler implements WebSocketHandler {
             if (receiverSession != null && receiverSession.isOpen()) {
                 TextMessage textMessage = new TextMessage(responseJson.toString());
                 receiverSession.sendMessage(textMessage);
-
             }
         } else {
             // 수신자가 지정되지 않은 경우, 메시지를 전송하지 않습니다. 여기에 메세지전송 실패를 리턴해줘서 채팅창에 찍자
