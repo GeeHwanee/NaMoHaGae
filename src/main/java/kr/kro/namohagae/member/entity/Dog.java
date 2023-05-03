@@ -1,10 +1,14 @@
 package kr.kro.namohagae.member.entity;
 
+import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.member.dto.DogDto;
+import kr.kro.namohagae.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.ibatis.type.Alias;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,9 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 @Alias("Dog")
 public class Dog {
-    private Integer dogNo;
     private Integer memberNo;
-    private LocalDateTime dogBirthdayDate;
+    private LocalDate dogBirthdayDate;
     private String dogIntroduce;
     private Boolean dogGender;
     private Boolean dogNotGenderEnabled;
@@ -22,4 +25,9 @@ public class Dog {
     private String dogCategory;
     private String dogName;
     private String dogProfile;
+
+    public DogDto.Read toReadDto(String dogNotGenderEnabled) {
+
+        return new DogDto.Read(ImageConstants.IMAGE_PROFILE_URL +dogProfile,dogName,dogGender,dogCategory,dogBirthdayDate,dogNotGenderEnabled,dogWeight,dogIntroduce);
+    }
 }
