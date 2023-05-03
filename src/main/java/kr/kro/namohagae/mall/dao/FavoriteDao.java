@@ -1,18 +1,21 @@
 package kr.kro.namohagae.mall.dao;
 
-import kr.kro.namohagae.mall.entity.Favorite;
+import kr.kro.namohagae.mall.dto.FavoriteDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface FavoriteDao {
-    // 찜리스트 저장
-    public Integer save(Favorite favorite);
+    // 찜 등록
+    public Integer save(Integer productNo, Integer memberNo);
 
-    // 해당 멤버의 찜리스트 찾기
-    public List<Favorite> findByMemberNo(Integer memberNo);
+    // 해당 멤버의 찜리스트
+    public List<FavoriteDto.list> findListByMemberNo(Integer startRowNum, Integer endRowNum, Integer memberNo);
 
-    // 찜리스트 삭제
+    // 찜 삭제
     public Integer delete(Integer productNo, Integer memberNo);
+
+    // 찜 등록 여부 체크
+    public boolean existsByMyFavorite(Integer productNo, Integer memberNo);
 }
