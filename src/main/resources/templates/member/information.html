@@ -24,16 +24,16 @@
                 }
             });
 
-            // $('#memberProfile').change(loadProfile);
+            $('#profile').change(loadProfile);
             $('#update').click(function(){
                 // FormData 처리 방식
                 // 1. new FormData($('폼아이디')[0]);
                 // 2. new FormData() -> 원소를 하나씩 append
                 const formData = new FormData();
 
-                // if($('#profile')[0].files[0]!=undefined){
-                //     formData.append('profile', $('#profile')[0].files[0]);
-                // }
+                if($('#profile')[0].files[0]!=undefined){
+                    formData.append('profile', $('#profile')[0].files[0]);
+                }
 
                 formData.append('nickname', $('#nickname').val());
                 formData.append('introduce', $('#introduce').val());
@@ -98,7 +98,7 @@
                 <tr>
                     <td colspan="2">
                         <img id="show-profile" th:src="${member.memberProfile}" width="240px">
-                        <input type="file" id="memberProfile" name="memberProfile">
+                        <input type="file" id="profile" name="profile">
                     </td>
                 </tr>
                 <tr>
@@ -119,7 +119,7 @@
                 <tr>
                     <td>비밀번호</td>
                     <td>
-                    <input type="password" name="memberPassword" id="memberPassword">
+                    <input type="password" name="password" id="password">
                     </td>
                 </tr>
                 <tr>
