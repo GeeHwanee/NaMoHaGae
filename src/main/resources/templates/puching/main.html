@@ -20,12 +20,21 @@
             margin-bottom: 10px;
             border: 1px solid gray;
             padding: 10px;
+            height:80px;
         }
         .loading {
             font-size: 18px;
             font-weight: bold;
             text-align: center;
             padding-top: 10px;
+        }
+        .itemImage{
+            border-radius: 70%;
+            width: 90px;
+        }
+        .itemNickname{
+            padding: 10px;
+            margin:0 auto;
         }
     </style>
     <style>
@@ -164,7 +173,9 @@
                                      // 데이터 가져오기 성공
                                      var itemList = $("#itemList");
                                      $.each(userdata, function (i, item) {
-                                         itemList.append("<div class='item'>" + item.memberNickName + "<a href=http://localhost:8081/member/profile?memberNo="+item.memberNo+">프로필이동</a>" + item.memberNo + '---' + item.distance + "</div>");
+                                         itemList.append("<div class='item'><img class='itemImage' src='"+item.memberImage+"' alt='profile image'><" +
+                                             "span class='itemNickname'>" + item.memberNickName + "</span>" +
+                                             "<a href=http://localhost:8081/member/profile?memberNo="+item.memberNo+">프로필이동</a>" + item.memberNo + '---' + item.distance + "</div>");
 
                                      });
                                      isLoading = false;
