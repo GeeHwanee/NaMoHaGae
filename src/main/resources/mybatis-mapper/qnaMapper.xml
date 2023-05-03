@@ -2,10 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.mall.dao.QnaDao">
     <!-- 큐엔에이 저장 -->
-    <insert id="save" parameterType="kr.kro.namohagae.mall.entity.Qna" useGeneratedKeys="true" keyProperty="qnaNo">
-        insert into QNA (product_no, qna_writer, qna_content, qna_write_date, qna_answer_content, qna_answer_write_date)
-        values (#{productNo}, #{qnaWriter}, #{qnaContent}, #{qnaWriteDate}, #{qnaAnswerContent}, #{qnaAnswerWriteDate})
+    <insert id="save">
+        <selectKey keyProperty="qnaNo" order="BEFORE" resultType="int">
+            select qna_seq_qna_no.nextval from dual
+        </selectKey>
+        insert into QNA (qna_no, product_no, qna_writer, qna_content, qna_write_date)
+        values (#{qnaNo}, #{productNo}, #{qnaWriter}, #{qnaContent}, #{qnaWriteDate})
     </insert>
+
 
     <!-- 특정 상품의 큐엔에이 개수를 조회 -->
     <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer">
