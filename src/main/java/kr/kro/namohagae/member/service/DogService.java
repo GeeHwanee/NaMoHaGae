@@ -4,7 +4,6 @@ import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
-import kr.kro.namohagae.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,9 +53,11 @@ public class DogService {
     }
 
     public boolean checkNickanme(Integer memberNo, String nickname) {
+        return true;
     }
 
     public Boolean update(MultipartFile profile, String nickname, Integer memberNo, String password, String phone, Integer townNo) {
+        return true;
     }
 
     public void resign(Integer dogNo) {
