@@ -11,4 +11,6 @@ public interface ProductImageDao {
     public void save(List<ProductImage> productImages);
 
     public Integer delete(Integer productNo);
+
+    public void update(List<ProductImage> images);
 }
