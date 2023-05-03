@@ -32,7 +32,7 @@ public class BoardService {
         return boardDao.boardFreeReadData(boardNo);
     }
 
-    public Board boardDeleteData(Integer boardNo) {
+    public Integer boardDeleteData(Integer boardNo) {
 
 
         return boardDao.boardDeleteData(boardNo);

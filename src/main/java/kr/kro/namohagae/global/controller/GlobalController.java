@@ -12,6 +12,7 @@ import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -187,10 +188,17 @@ public class GlobalController {
     @GetMapping("/board/town/read")
     public String boardTownRead(Model model, Integer boardNo) {
 
+        boardTownService.townReadCnt(boardNo);
         model.addAttribute("board",boardTownService.boardTownRead(boardNo));
 
 
         return "board/town/read";
+    }
+    @GetMapping("/board/town/delete")
+    public String boardTownDelete(Integer boardNo) {
+        boardTownService.townDeleteData(boardNo);
+
+        return "redirect:/board/town/list";
     }
 
     @GetMapping("/board/town/list")
