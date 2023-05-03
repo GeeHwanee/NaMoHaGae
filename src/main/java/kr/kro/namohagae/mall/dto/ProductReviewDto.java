@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,22 +31,15 @@ public class ProductReviewDto {
         private String productName;
         private String productImage;
         //
-        //private Integer productReviewNo;
         private Integer productNo;
         private Integer orderDetailNo;
         private Integer productReviewWriter;
         private String productReviewContent;
         private Integer productReviewStar;
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        private LocalDateTime productReviewWriteDate;
-
-        //public void setProductReviewNo(Integer productReviewNo) {
-        //    this.productReviewNo = productReviewNo;
-        //}
 
         public ProductReview toEntity(Integer memberNo) {
             return ProductReview.builder().productNo(productNo).orderDetailNo(orderDetailNo).productReviewWriter(memberNo).
-                    productReviewContent(productReviewContent).productReviewStar(productReviewStar).productReviewWriteDate(productReviewWriteDate).build();
+                    productReviewContent(productReviewContent).productReviewStar(productReviewStar).productReviewWriteDate(LocalDateTime.now()).build();
         }
     }
 
