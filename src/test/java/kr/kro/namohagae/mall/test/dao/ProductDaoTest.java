@@ -5,11 +5,9 @@ import kr.kro.namohagae.mall.dao.ProductImageDao;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductImage;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,11 +27,11 @@ public class ProductDaoTest {
     }
     
     // 상품 더미 테스트
-    @Test
+    //@Test
     public void insertProduct() {
         List<Integer> category = Arrays.asList(1,2,3,4);
         for(int i=1; i<=10; i++) {
-            ProductDto.Add dto = new Add(category.get(i%4),i+"번째 상품",getPrice(),5,i+"번째 상품", LocalDateTime.now(),null);
+            ProductDto.Add dto = new Add(category.get(i%4),i+"번째 상품",getPrice(),5,i+"번째 상품", null);
             Product p = dto.toEntity();
             productDao.save(p);
             List<ProductImage> images = new ArrayList<>();

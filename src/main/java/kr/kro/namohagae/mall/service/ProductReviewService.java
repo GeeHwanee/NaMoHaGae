@@ -23,8 +23,8 @@ public class ProductReviewService {
     private final Integer BLOCKSIZE = 5;
 
     @Transactional
-    public void write(ProductReviewDto.Write dto, String memberEmail) {
-        ProductReview productReview = dto.toEntity(memberEmail);
+    public void write(ProductReviewDto.Write dto, Integer memberNo) {
+        ProductReview productReview = dto.toEntity(memberNo);
         productReviewDao.save(productReview);
         productOrderDetailDao.updateReview(dto.getOrderDetailNo());
         productDao.updateReview(productReview);
