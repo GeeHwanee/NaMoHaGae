@@ -20,7 +20,6 @@ public class ProductDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Add {
-//        private Integer productNo;
         private Integer productCategoryNo;
         private String productName;
         private Integer productPrice;
@@ -35,6 +34,21 @@ public class ProductDto {
         public Product toEntity() {
             return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
         }
+    }
+
+    @Data
+    public static class Put{
+        private Integer productNo;
+        private String productName;
+        private Integer productPrice;
+        private Integer productStock;
+        private String productContent;
+        private List<MultipartFile> productImages;
+
+        public Product toEntity(){
+            return Product.builder().productNo(productNo).productName(productName).productPrice(productPrice).productStock(productStock).productContent(productContent).build();
+        }
+
     }
 
     // 상품 목록
