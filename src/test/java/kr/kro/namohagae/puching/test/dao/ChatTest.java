@@ -26,7 +26,7 @@ public class ChatTest {
         System.out.println("result2e2e12e12e21e21");
     }
 
-    @Test
+   // @Test
     public void messagefindTest() {
         List<MessageDto.MessageRead> list= dao.findAllMessageByReceiverNo(1,0);
         for (MessageDto.MessageRead l:list) {
@@ -38,4 +38,9 @@ public class ChatTest {
             System.out.println(l.getMessageWriteDate());
         }
     }
+    @Test
+    public void chatroomfind() {
+        System.out.println(dao.existsByChatRoom(1,0));
+    }
+
 }
