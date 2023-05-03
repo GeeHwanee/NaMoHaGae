@@ -1,23 +1,31 @@
 package kr.kro.namohagae.global.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.dto.MemberDto;
+import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -37,6 +45,8 @@ public class GlobalController {
     private MemberService memberService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private DogService dogService;
 
     @Autowired
     BoardService boardService;
@@ -81,6 +91,36 @@ public class GlobalController {
     @GetMapping("/member/join")
     public void join(){}
 
+    @PostMapping("/member/join")
+    public String join(MemberDto.Join dto){
+        System.out.println(dto.getMemberLatitude());
+        memberService.join(dto);
+        return "redirect:/login";
+    }
+
+    @PostMapping("/dog/registeration")
+    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, DogDto.registeration dto){
+        Integer memberNo = myUserDetails.getMemberNo();
+        dogService.save(dto,memberNo);
+        return "redirect:/member/main";
+    }
+
+    @PostMapping("/member/resign")
+    public String memberResign(SecurityContextLogoutHandler handler, HttpServletRequest req, HttpServletResponse res, Authentication auth, RedirectAttributes ra) {
+        Integer memberNo = ((MyUserDetails)auth.getPrincipal()).getMemberNo();
+        memberService.resign(memberNo);
+        handler.logout(req, res, auth);
+        ra.addFlashAttribute("msg", "감사합니다. 꼭 다시 뵙겠습니다."); // 이런 메시지도 상수로 빼면 좋다
+        return "redirect:/";
+    }
+    @PostMapping("/dog/resign")
+    public String dogResign(Integer dogNo,SecurityContextLogoutHandler handler, HttpServletRequest req, HttpServletResponse res, Authentication auth, RedirectAttributes ra) {
+        dogService.resign(dogNo);
+        handler.logout(req, res, auth);
+        ra.addFlashAttribute("msg", "삭제했습니다"); // 이런 메시지도 상수로 빼면 좋다
+        return "redirect:/";
+    }
+
     @GetMapping("/member/dog/registeration")
     public  void dogRegisteration(){}
 
@@ -103,6 +143,11 @@ public class GlobalController {
     public ModelAndView profile(Integer memberNo, Model model){
         MemberDto.Read dto = memberService.read(memberNo);
         return new ModelAndView("/member/profile").addObject("member",dto);
+    }
+    @GetMapping("/member/dog/porfile")
+    public  ModelAndView dogProfile(Integer dogNo){
+        DogDto.Read dto = dogService.read(dogNo);
+        return  new ModelAndView("/dog/profile").addObject("dog",dto);
     }
 
 
