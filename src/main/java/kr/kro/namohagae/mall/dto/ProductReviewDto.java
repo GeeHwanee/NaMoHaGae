@@ -35,7 +35,7 @@ public class ProductReviewDto {
         //private Integer productReviewNo;
         private Integer productNo;
         private Integer orderDetailNo;
-        private String productReviewWriter;
+        private Integer productReviewWriter;
         private String productReviewContent;
         private Integer productReviewStar;
         @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -45,8 +45,8 @@ public class ProductReviewDto {
         //    this.productReviewNo = productReviewNo;
         //}
 
-        public ProductReview toEntity(String memberEmail) {
-            return ProductReview.builder().productNo(productNo).orderDetailNo(orderDetailNo).productReviewWriter(memberEmail).
+        public ProductReview toEntity(Integer memberNo) {
+            return ProductReview.builder().productNo(productNo).orderDetailNo(orderDetailNo).productReviewWriter(memberNo).
                     productReviewContent(productReviewContent).productReviewStar(productReviewStar).productReviewWriteDate(productReviewWriteDate).build();
         }
     }
