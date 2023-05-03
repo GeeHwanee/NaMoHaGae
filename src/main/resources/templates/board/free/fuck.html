@@ -3,23 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 </head>
 <body>
-<!-- 댓글 출력 부분 -->
-<div id="comment-list">
-  <table>
-    <tr>
-      <th>댓글번호</th>
-      <th>작성자</th>
-      <th>내용</th>
-      <th>작성시간</th>
-    </tr>
-    <tr th:each="comment: ${commentList}">
-      <td th:text="${comment.boardNo}"></td>
-      <td th:text="${comment.commentContent}"></td>
-      <td th:text="${comment.commentWriteDate}"></td>
-    </tr>
-  </table>
-</div>
+  <button onclick="ex01Fn()">ex01 함수 호출</button>
+
 </body>
+<script>
+  function ex01Fn() {
+    const val1 = "Hello SpringBoot!!";
+
+    const params = {
+        "param1" : val1,
+        "param2" : '호이'
+    };
+
+    $.ajax({
+       // 요청방식 : get
+      // 요청주소 : /board/free/fuck
+      type: "post",
+      url: "/board/free/king",
+      // parameter 전달하기
+      data : JSON.stringify(params),
+      contentType: "application/json",
+      // 요청이 성공했을 때 실행되는 부분
+      success : function(res) {
+        console.log("성공",res);
+      },
+      // 요청이 실패했을 때 실행되는 부분
+      error : function() {
+        console.log("실패");
+      }
+    })
+  }
+</script>
 </html>

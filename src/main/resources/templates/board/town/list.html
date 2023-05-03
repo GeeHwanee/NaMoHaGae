@@ -43,7 +43,7 @@
             const tpl = `<tr>
                      <td>${b.boardNo}</td>
                      <td>${b.townNo}</td>
-                     <td>${b.boardContent}</td>
+                     <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
                      <td>${b.memberNo}</td>
                      <td>${b.boardWriteDate.replace('T', ' ')}</td>
                      <td>${b.boardReadCount}</td>

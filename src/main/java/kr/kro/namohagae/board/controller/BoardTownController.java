@@ -2,12 +2,8 @@ package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardTownService;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,4 +19,12 @@ public class BoardTownController {
 
         return ResponseEntity.ok(boardTownService.boardTownList(townNo));
     }
+
+    @PostMapping("/board/town/update")
+    public ResponseEntity<String> boardTownUpdate(Board board) {
+            boardTownService.townUpdateData(board);
+        return ResponseEntity.ok().body("변경성공");
+    }
+
+
 }
