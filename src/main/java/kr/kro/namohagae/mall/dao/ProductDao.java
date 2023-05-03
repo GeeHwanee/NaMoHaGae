@@ -38,5 +38,7 @@ public interface ProductDao {
 
     public Integer updateReview(ProductReview productReview);
 
+    public Integer delete(Integer productNo);
+
     //public Integer updateQna(Qna qna);
 }
