@@ -3,15 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <title>퍼칭 신청 페이지</title>
+
+    <style>
+        .chat-message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .username {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .message-body {
+            display: flex;
+            justify-content: center;
+        }
+
+        .gift-button {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .gift-button img {
+            width: 200px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 10px;
+        }
+
+        .gift-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .gift-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .gift-description {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .location-button,
+        .accept-button {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            background-color: #1e90ff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .location-button:hover,
+        .accept-button:hover {
+            background-color: #4169e1;
+        }
+
+        .location-button:focus,
+        .accept-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #1e90ff;
+        }
+
+    </style>
+
 </head>
 <body>
-<header id="header" th:replace="~{/fragment/header.html}">
-</header>
-<nav id="nav" th:replace="~{/fragment/nav.html}">
-</nav>
+<header th:replace="~{/fragment/header.html}"> </header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}">
+    </aside>
+    <section>
+        <div class="chat-message">
+            <div class="avatar">
+                <img src="https://via.placeholder.com/50x50" alt="Avatar">
+            </div>
+            <div class="message">
+                <div class="message-header">
+                    <span class="username">John</span>
+                    <span class="timestamp">10:00 AM</span>
+                </div>
+                <div class="message-body">
+                    <div class="gift-button">
+                        <img src="https://via.placeholder.com/200x150" alt="Gift Image">
+                        <div class="gift-info">
+                            <span class="gift-title">퍼칭신청이 왔어요!</span>
+                            <span class="gift-description">시간 : 2023-05-03 10:19</span>
+                            <span class="gift-description">장소 : 인천시 미추홀구 주안역 101-2</span>
+                            <button class="location-button">수락하기</button>
+                            <button class="accept-button">거절하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-<footer id="footer" th:replace="~{/fragment/footer.html}">
+    </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}">
 </footer>
 </body>
 </html>
