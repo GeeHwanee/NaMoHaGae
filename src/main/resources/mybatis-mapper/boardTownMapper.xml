@@ -19,9 +19,20 @@
     <select id="boardTownList" resultType="kr.kro.namohagae.board.entity.Board">
         select * from board where town_no = #{townNo}
     </select>
+    <select id="boardTownRead" resultType="kr.kro.namohagae.board.entity.Board">
+        select * from board where board_no = #{boardNo}
+    </select>
     <select id="count" resultType="int">
         select count(town_no) from board where town_no <![CDATA[>]]> 0
     </select>
-
+    <update id="townReadCnt">
+        update board set board_read_count=board_read_count+1 where board_no = #{boardNo}
+    </update>
+    <update id="townUpdateData">
+        update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
+    </update>
+    <delete id="townDeleteData" parameterType="int">
+        delete board where board_no = #{boardNo}
+    </delete>
 </mapper>
 
