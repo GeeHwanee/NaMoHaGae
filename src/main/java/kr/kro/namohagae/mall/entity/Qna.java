@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Qna {
     private Integer qnaNo;
     private Integer productNo;
-    private String qnaWriter;
+    private Integer qnaWriter;
     private String qnaContent;
     private LocalDateTime qnaWriteDate;
     private String qnaAnswerContent;

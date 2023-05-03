@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,19 +28,12 @@ public class QnaDto {
     // 질문 쓰기
     @Data
     public static class Write {
-        //private Integer qnaNo;
         private Integer productNo;
-        private String qnaWriter;
+        private Integer qnaWriter;
         private String qnaContent;
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        private LocalDateTime qnaWriteDate;
 
-        //public void setQnaNo(Integer qnaNo) {
-        //    this.qnaNo = qnaNo;
-        //}
-
-        public Qna toEntity(String memberEmail) {
-            return Qna.builder().productNo(productNo).qnaWriter(memberEmail).qnaContent(qnaContent).qnaWriteDate(qnaWriteDate).build();
+        public Qna toEntity(Integer memberNo) {
+            return Qna.builder().productNo(productNo).qnaWriter(memberNo).qnaContent(qnaContent).qnaWriteDate(LocalDateTime.now()).build();
         }
     }
 }

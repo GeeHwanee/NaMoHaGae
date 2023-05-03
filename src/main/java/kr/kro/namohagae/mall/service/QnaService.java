@@ -1,6 +1,8 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dao.QnaDao;
+import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
 import kr.kro.namohagae.mall.entity.Qna;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +15,19 @@ import java.util.List;
 @Service
 public class QnaService {
     private final QnaDao qnaDao;
+    private final ProductDao productDao;
 
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
     @Transactional
-    public void write(QnaDto.Write dto, String memberEmail) {
-        Qna qna = dto.toEntity(memberEmail);
+    public void write(QnaDto.Write dto, Integer memberNo) {
+        Qna qna = dto.toEntity(memberNo);
         qnaDao.save(qna);
+    }
+
+    public ProductDto.Read read(Integer productNo) {
+        return productDao.findByProductNo(productNo);
     }
 
     public QnaDto.Pagination list(Integer pageNo, Integer productNo) {
