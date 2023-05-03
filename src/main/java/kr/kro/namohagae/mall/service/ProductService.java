@@ -37,13 +37,14 @@ public class ProductService {
     public Integer add(ProductDto.Add dto) {
         Integer imageIndex = 1;
         String currentDir = System.getProperty("user.dir")+"/";
+        String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.save(product);
 
         List<ProductImage> images = new ArrayList<>();
         for(MultipartFile image: dto.getProductImages()) {
             if(image!=null && !image.isEmpty()) {
-                String originalFilename = image.getOriginalFilename();
+                originalFilename = image.getOriginalFilename();
                 File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
                 try {
                     image.transferTo(saveFile);
@@ -54,8 +55,36 @@ public class ProductService {
             }
         }
         if(images.size()==0)
-            images.add(new ProductImage(product.getProductNo(), 1, "default.jpg"));
+            images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
         productImageDao.save(images);
+        return product.getProductNo();
+    }
+
+    @Transactional
+    public Integer put(ProductDto.Put dto) {
+        Integer imageIndex = 1;
+        String currentDir = System.getProperty("user.dir")+"/";
+        String originalFilename = "default.jpg";
+        Product product = dto.toEntity();
+        productDao.update(product);
+
+        List<ProductImage> images = new ArrayList<>();
+        for(MultipartFile image: dto.getProductImages()) {
+            if(image!=null && !image.isEmpty()) {
+                originalFilename = image.getOriginalFilename();
+                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                try {
+                    image.transferTo(saveFile);
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
+                }
+                images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
+            }
+        }
+        if(images.size()==0)
+            images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
+
+        productImageDao.update(images);
         return product.getProductNo();
     }
 
@@ -147,9 +176,7 @@ public class ProductService {
     @Transactional
     public Boolean delete(Integer productNo) {
         Integer imageDeleteResult = productImageDao.delete(productNo);
-        System.out.println(imageDeleteResult>0?"삭제":"안삭제");
         Integer productDeleteResult = productDao.delete(productNo);
-        System.out.println(productDeleteResult>0?"삭제":"안삭제");
 
         return (imageDeleteResult>0)&&(productDeleteResult>0);
     }
