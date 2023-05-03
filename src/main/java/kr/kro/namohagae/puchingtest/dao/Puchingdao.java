@@ -15,6 +15,6 @@ public interface Puchingdao {
             "from TOWN t,MEMBER m   where t.TOWN_NO=m.TOWN_NO(+) " +
             "group by t.town_no,t.town_dong,t.town_latitude,t.town_longitude,m.town_no order by townNO")
     public List<PuchingDto.readTown> findAllTown();
-    public List<PuchingDto.readUser> findByUsers(Double latitude,Double longitude,Integer startrownum,Integer endrownum);
+    public List<PuchingDto.readUser> findByUsers(Double latitude,Double longitude,Integer startrownum,Integer endrownum,Integer memberNo);
 
 }

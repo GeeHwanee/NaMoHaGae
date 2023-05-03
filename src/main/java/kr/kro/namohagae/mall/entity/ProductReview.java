@@ -14,7 +14,7 @@ public class ProductReview {
     private Integer productNo;
     private Integer orderNo;
     private Integer orderDetailNo;
-    private String productReviewWriter;
+    private Integer productReviewWriter;
     private String productReviewContent;
     private Integer productReviewStar;
     private LocalDateTime productReviewWriteDate;

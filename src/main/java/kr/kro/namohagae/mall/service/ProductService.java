@@ -24,6 +24,7 @@ public class ProductService {
     private final ProductImageDao productImageDao;
     private final ProductReviewDao productReviewDao;
     private final QnaDao qnaDao;
+    private final ProductReviewService reviewService;
 
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
@@ -35,14 +36,16 @@ public class ProductService {
     @Transactional
     public Integer add(ProductDto.Add dto) {
         Integer imageIndex = 1;
+        String currentDir = System.getProperty("user.dir")+"/";
+        String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.save(product);
 
         List<ProductImage> images = new ArrayList<>();
         for(MultipartFile image: dto.getProductImages()) {
             if(image!=null && !image.isEmpty()) {
-                String originalFilename = image.getOriginalFilename();
-                File saveFile = new File(ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                originalFilename = image.getOriginalFilename();
+                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
                 try {
                     image.transferTo(saveFile);
                 } catch (IllegalStateException | IOException e) {
@@ -52,8 +55,36 @@ public class ProductService {
             }
         }
         if(images.size()==0)
-            images.add(new ProductImage(product.getProductNo(), 1, "default.jpg"));
+            images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
         productImageDao.save(images);
+        return product.getProductNo();
+    }
+
+    @Transactional
+    public Integer put(ProductDto.Put dto) {
+        Integer imageIndex = 1;
+        String currentDir = System.getProperty("user.dir")+"/";
+        String originalFilename = "default.jpg";
+        Product product = dto.toEntity();
+        productDao.update(product);
+
+        List<ProductImage> images = new ArrayList<>();
+        for(MultipartFile image: dto.getProductImages()) {
+            if(image!=null && !image.isEmpty()) {
+                originalFilename = image.getOriginalFilename();
+                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                try {
+                    image.transferTo(saveFile);
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
+                }
+                images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
+            }
+        }
+        if(images.size()==0)
+            images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
+
+        productImageDao.update(images);
         return product.getProductNo();
     }
 
@@ -137,10 +168,34 @@ public class ProductService {
 
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-        dto.setProductReviews(productReviewDao.findByProductNo(productNo));
-//        dto.setQnas(qnaDao.findByProductNo(productNo));
+        dto.setProductReviews(productReviewDao.findByProductNo(productNo)); //여기에 페이징을 넣으면 dto에 값을 못 넣으니까 문제네
+        dto.setQnas(qnaDao.findByProductNo(productNo));
         return dto;
     }
+
+    @Transactional
+    public Boolean delete(Integer productNo) {
+        Integer imageDeleteResult = productImageDao.delete(productNo);
+        Integer productDeleteResult = productDao.delete(productNo);
+
+        return (imageDeleteResult>0)&&(productDeleteResult>0);
+    }
+
+
+    // 수정중 (리뷰페이징추가,)
+    /*
+    public ProductDto.Read read(Integer startRowNum, Integer endRowNum, Integer productNo) {
+        ProductDto.Read dto = productDao.findByProductNo(productNo);
+
+        // 리뷰 리스트 및 페이징 정보를 설정
+        ProductReviewDto.Pagination pagination = reviewService.list(startRowNum, productNo);
+        dto.setProductReviews(pagination.getReviews());
+        dto.setReviewsStartRow(pagination.getStart());
+        dto.setReviewsEndRow(pagination.getEnd());
+
+        return dto;
+    }
+     */
 
 
 }
