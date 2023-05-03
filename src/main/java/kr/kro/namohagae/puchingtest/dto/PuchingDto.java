@@ -23,6 +23,7 @@ public class PuchingDto {
         private Double memberLatitude;
         private Double memberLongitude;
         private Double distance;
+        private String memberImage;
     }
 
 

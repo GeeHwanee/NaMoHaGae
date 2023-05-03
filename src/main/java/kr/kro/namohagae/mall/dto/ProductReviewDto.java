@@ -21,6 +21,7 @@ public class ProductReviewDto {
         private Integer start;
         private Integer end;
         private Integer next;
+        private Integer productNo;
         private List<ProductReview> reviews;
     }
     
@@ -30,21 +31,16 @@ public class ProductReviewDto {
         private String productName;
         private String productImage;
         //
-        private Integer productReviewNo;
         private Integer productNo;
         private Integer orderDetailNo;
-        private String productReviewWriter;
+        private Integer productReviewWriter;
         private String productReviewContent;
         private Integer productReviewStar;
-        private LocalDateTime productReviewWriteDate;
 
-        public void setProductReviewNo(Integer productReviewNo) {
-            this.productReviewNo = productReviewNo;
-        }
-
-        public ProductReview toEntity(String memberEmail) {
-            return ProductReview.builder().productNo(productNo).orderDetailNo(orderDetailNo).productReviewWriter(memberEmail).
+        public ProductReview toEntity(Integer memberNo) {
+            return ProductReview.builder().productNo(productNo).orderDetailNo(orderDetailNo).productReviewWriter(memberNo).
                     productReviewContent(productReviewContent).productReviewStar(productReviewStar).productReviewWriteDate(LocalDateTime.now()).build();
         }
     }
+
 }

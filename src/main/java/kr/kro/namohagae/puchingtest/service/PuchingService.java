@@ -1,5 +1,6 @@
 package kr.kro.namohagae.puchingtest.service;
 
+import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puchingtest.dao.Puchingdao;
 import kr.kro.namohagae.puchingtest.dto.PuchingDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import java.util.List;
 public class PuchingService {
     @Autowired
     private Puchingdao dao;
+    @Autowired
+    private MemberDao mdao;
 
     public List<PuchingDto.readTown> findAllTown() {
         System.out.println("퍼칭서비스-puchingmap실행");
@@ -19,12 +22,12 @@ public class PuchingService {
         return list;
     }
 
-    public List<PuchingDto.readUser> readUsers(Double latitude,Double longitude,Integer pageNum,Integer pageSize){
+    public List<PuchingDto.readUser> readUsers(Double latitude,Double longitude,Integer pageNum,Integer pageSize,String userEmail){
         Integer startrownum=1+((pageNum-1)*10);
         Integer endrownum=pageSize*pageNum;
 
-
-        List<PuchingDto.readUser> list =dao.findByUsers(latitude,longitude,startrownum,endrownum);
+        Integer memberNo=mdao.findNoByUsername(userEmail);
+        List<PuchingDto.readUser> list =dao.findByUsers(latitude,longitude,startrownum,endrownum,memberNo);
 
         return  list;
     }

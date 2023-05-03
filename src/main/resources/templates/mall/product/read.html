@@ -20,7 +20,7 @@
     #left {
         float:left;
         width: 50%;
-        height:650px;
+        height:500px;
     }
     #right {
         float: right;
@@ -32,9 +32,11 @@
     #buttons {
         display: inline-block;
     }
-
+    #content {
+        height: 500px;
+    }
     .choice_image {
-        border: 1px solid red;
+        border: 1px solid black;
     }
 
     .images:hover {
@@ -42,6 +44,21 @@
     }
 </style>
 <script>
+    $(document).ready(function() {
+        $('.images:first-of-type').addClass('choice_image');
+
+        $('.images').click(function() {
+            $('.images').removeClass('choice_image');
+            $(this).addClass('choice_image');
+            $('#select_image').attr('src', $(this).attr('src'));
+        });
+
+        // qna 문의하기
+        $("#write").click(function() {
+            const $productNo = $("#productNo").text();
+            window.location.href = "http://localhost:8081/mall/product/qna/write?productNo=" + $productNo;
+        });
+    });
 </script>
 </head>
 <body>
@@ -57,16 +74,16 @@
         <div style="overflow:hidden;">
             <div id="left">
                 <div>
-                    <img th:src="${product.productImages[0]}" id="select_image" height="200px">
+                    <img th:src="${product.productImages[0]}" id="select_image" height="300px" width="325px">
                 </div>
                 <div>
-                    <img th:each="image:${product.productImages}" th:src="${image}" width="100px" style="margin: 5px;" class='images'>
+                    <img th:each="image:${product.productImages}" th:src="${image}" height="100px" width="100px" style="margin: 5px;" class='images'>
                 </div>
             </div>
             <div id="right">
                 <div th:text="${product.productName}"></div>
-                <div>별점출력</div>
-                <!--                    <div th:text="${product.productPrice}"></div>-->
+                <div>별점출력하는곳</div>
+                <!--<div th:text="${product.productGrade}"></div>-->
                 <span class="product-price">
                       <div th:if="${product.productStock == 0}">
                         <span style="color: red">품절댐</span>
@@ -87,7 +104,10 @@
             </div>
         </div>
         <div id="content" th:utext="${product.productContent}"></div>
+
+
         <hr>
+        <p>리뷰 출력중</p>
         <div>
             <table class="table table-hover">
                 <!-- 별점	, 내용, 작성자, 작성일 -->
@@ -101,6 +121,21 @@
                 </tr>
             </table>
         </div>
+
+        <hr>
+        <p>qna 출력중</p>
+        <div>
+            <table class="table table-hover">
+                <!-- 내용, 작성자, 작성일 -->
+                <tr th:each="qna:${product.qnas}">
+                    <td th:text="${qna.qnaContent}"></td>
+                    <td th:text="${qna.qnaWriter}"></td>
+                    <td th:text="${qna.qnaWriteDate}"></td>
+                </tr>
+            </table>
+            <button id="write" class="btn btn-primary">문의하기</button>
+        </div>
+
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/main.css">
+  <title>큐엔에이쓰기</title>
+</head>
+<style>
+  .qnaTitle {
+    text-align:center;
+  }
+
+  #qnaText {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-bottom: 20px;
+  }
+
+  textarea {
+    width: 80%;
+    height: 15em;
+    resize: none;
+    margin-left: 20px;
+  }
+
+  .button-group {
+    text-align:center;
+  }
+</style>
+<script>
+  const productNo = document.getElementById('productNo').value;
+</script>
+<script>
+
+  $(document).ready(function(){
+    $('#write').click(function(){
+      $('#add_form').submit();
+    });
+
+    $('#cancel').click(function(){
+      window.location.href = '/mall/product/read?productNo='+productNo;
+    });
+  })
+</script>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+</header>
+<nav th:replace="~{/fragment/nav.html}">
+</nav>
+<main>
+  <aside th:replace="~{/fragment/aside.html}">
+  </aside>
+  <section>
+    <h1>큐엔에이쓰기 페이지</h1>
+    <hr>
+    <div class="qnaTitle">
+      <span>문의하기</span>
+    </div>
+    <hr>
+    <form id="add_form" action="/mall/product/qna/write" method="post" enctype="multipart/form-data">
+      <input type="hidden" id="productNo" name="productNo" th:value="${item.productNo}" />
+      <input type="hidden" id="mamberNo" name="mamberNo" th:value="${writer}" />
+      <div id="qnaText">
+        <span>내용</span>
+        <textarea placeholder="내용을 입력해주세요" id="qnaContent" name="qnaContent"></textarea>
+      </div>
+<!--      버튼 하나 form 밖으로 빼고, 버튼 한 줄 정렬-->
+      <div class="button-group">
+        <button type="submit" id="write" class="btn btn-primary">확인</button>
+        <button type="button" id="cancel" class="btn btn-primary">취소</button>
+      </div>
+    </form>
+  </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}">
+</footer>
+</body>
+</html>

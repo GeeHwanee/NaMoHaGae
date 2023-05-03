@@ -9,4 +9,8 @@ import java.util.List;
 public interface ProductImageDao {
     // 상품 이미지 저장
     public void save(List<ProductImage> productImages);
+
+    public Integer delete(Integer productNo);
+
+    public void update(List<ProductImage> images);
 }

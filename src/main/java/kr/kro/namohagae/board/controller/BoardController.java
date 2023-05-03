@@ -1,18 +1,19 @@
 package kr.kro.namohagae.board.controller;
 
+import kr.kro.namohagae.board.entity.AjaxDTO;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,8 +27,15 @@ public class BoardController {
     @Autowired
     CommentService commentService;
 
+
+
+
+
+
+
     @GetMapping("/write")
     public String boardFreeWrite() {
+
 
         return "board/free/write";
     }
@@ -41,7 +49,7 @@ public class BoardController {
     @GetMapping("/read")
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
-
+        boardService.increaseReadCnt(boardNo);
         List<BoardComment> boardCommentList = commentService.commentList(boardService.boardFreeReadData(boardNo).getBoardNo());
         model.addAttribute("commentList",boardCommentList);
         model.addAttribute("board", boardService.boardFreeReadData(boardNo));

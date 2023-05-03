@@ -10,9 +10,29 @@
         values(#{productNo},#{productCategoryNo},#{productName},#{productPrice},#{productStock},#{productGrade},#{productContent},#{productWriteDate})
     </insert>
 
+    <update id="put">
+        update PRODUCT
+        <trim suffixOverrides=",">
+        <if test="productName!=null">
+            product_name = #{productName},
+        </if>
+        <if test="productPrice!=null">
+            product_price = #{productPrice},
+        </if>
+        <if test="productStock!=null">
+            product_stock = #{productStock},
+        </if>
+        <if test="productContent!=null">
+            product_content = #{productContent},
+        </if>
+        </trim>
+        where PRODUCT_NO = #{productNo}
+    </update>
+
     <!--특정 카테고리의 상품 개수를 조회-->
     <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        select count(*) from PRODUCT where product_category_no = #{categoryNo}
+        select count(*) from PRODUCT
+        <if test="categoryNo!=null"> where product_category_no = #{categoryNo} </if>
     </select>
 
     <!-- 상품 목록 조회 -->
@@ -24,7 +44,7 @@
         select p.product_no, p.product_name, p.product_price, p.product_stock,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p
-        left join PRODUCT_IMAGE pi on p.product_no=pi.product_no and rownum=1
+        join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by p.product_no desc
         ) p
@@ -66,8 +86,8 @@
         (
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and and rownum=1
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by p.product_no desc
         ) p
@@ -84,8 +104,8 @@
         (
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and rownum=1
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by product_stock asc
         ) p
@@ -102,8 +122,8 @@
         (
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and rownum=1
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by product_name asc
         ) p
@@ -114,6 +134,15 @@
 
     <!-- 리뷰 update -->
     <update id="updateReview">
-        update PRODUCT set product_grade=product_grade+1 where product_no=#{productNo}
+        UPDATE product p
+        SET p.product_grade = (
+            SELECT ROUND(AVG(pr.product_review_star), 1)
+            FROM product_review pr
+            WHERE pr.productNo = p.productNo
+        )
     </update>
+
+    <delete id="delete">
+        delete from PRODUCT where PRODUCT_NO= #{productNo} and ROWNUM=1
+    </delete>
 </mapper>

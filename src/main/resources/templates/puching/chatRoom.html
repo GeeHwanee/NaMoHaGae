@@ -10,10 +10,15 @@
 
 
     <style>
-        a:hover{
-            color: #711515;
-            background-color: #f7f7f7;
+       .inbox_chat :hover{
+
+            background-color: #ebebeb;
+            cursor: pointer;
         }
+       .inbox_chat :active {
+           /* 마우스 hover 및 클릭시 적용될 스타일 */
+           background-color: #ec8447;
+       }
 
         .container{max-width:1000px; margin:auto;}
         img{ max-width:100%;}
@@ -48,6 +53,7 @@
         .chat_img {
             float: left;
             width: 11%;
+
         }
         .chat_ib {
             float: left;
@@ -63,7 +69,7 @@
         }
         .inbox_chat { height: 550px; overflow-y: scroll;}
 
-        .active_chat{ background:#ebebeb;}
+        .active_chat{ background:#ec8447;}
 
         .incoming_msg_img {
             display: inline-block;
@@ -73,7 +79,7 @@
             display: inline-block;
             padding: 0 0 0 10px;
             vertical-align: top;
-            width: 92%;
+            max-width: 92%;
         }
         .received_withd_msg p {
             background: #ebebeb none repeat scroll 0 0;
@@ -83,32 +89,48 @@
             margin: 0;
             padding: 5px 10px 5px 12px;
             width: 100%;
+            word-break:break-all;
+
         }
         .time_date {
             color: #747474;
             display: block;
             font-size: 12px;
             margin: 8px 0 0;
+            
         }
+        .sent_msg .time_date{
+            float: right;
+        }
+        .received_msg .time_date{
+            float: left;
+            width: 200px;
+        }
+        
         .received_withd_msg { width: 57%;}
         .mesgs {
             float: left;
-            padding: 30px 15px 0 25px;
-            width: 51%;
+            padding: 30px 15px 0 35px;
+            width: 52%;
         }
 
         .sent_msg p {
-            background: #05728f none repeat scroll 0 0;
+            background: #f37346 none repeat scroll 0 0;
             border-radius: 3px;
             font-size: 14px;
             margin: 0; color:#fff;
             padding: 5px 10px 5px 12px;
-            width:100%;
+            width:80%;
+            float: right;
+            word-break:break-all;
+
         }
         .outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
         .sent_msg {
             float: right;
-            width: 46%;
+           max-width: 46%;
+
+
         }
         .input_msg_write input {
             background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
@@ -140,6 +162,7 @@
         .msg_history {
             height: 516px;
             overflow-y: auto;
+            overflow-x: hidden;
         }
     </style>
 </head>
@@ -165,12 +188,11 @@
                         </div>
                         <div class="inbox_chat">
                             <div class="chat_list" th:each="l:${list}">
-                                <a id="userclick" th:data-userno="${l.chatRoomReceiverNo}" th:data-useremail="${l.memberEmail}" th:data-usernick="${l.memberNickName}">
+                                <a id="userclick" th:data-userno="${l.chatRoomReceiverNo}" th:data-useremail="${l.memberEmail}" th:data-usernick="${l.memberNickName}" th:data-userimage="${l.memberImage}">
                                 <div class="chat_people">
-                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                    <div class="chat_img"> <img th:src="${l.memberImage}" alt="profileimage"> </div>
                                     <div class="chat_ib">
                                         <h5 th:text="${l.memberNickName}"><span class="chat_date"></span></h5>
-                                        <p th:text="${l.memberImage}"></p>
                                     </div>
                                 </div>
                                 </a>
@@ -186,7 +208,7 @@
                         <div class="type_msg">
                             <div class="input_msg_write">
                                 <input type="text" id="message" class="write_msg" placeholder="Type a message" />
-                                <button onclick="sendMessage()" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                                <button onclick="sendMessage()" class="msg_send_btn" type="button" disabled><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
 
                             </div>
                         </div>
@@ -196,6 +218,7 @@
             </div></div>
         <input type="text" id="receiver" placeholder="receiverEmail" />
         <button id="test" type="button">보내는사람이메일</button>
+
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
@@ -231,12 +254,11 @@
                     // 성공적으로 응답을 받았을 때 실행할 코드
                     console.log("응답 데이터:", data);
                     var chatroom = ` <div class="chat_list">
-        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`">
+        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`" data-userimage="`+data.memberImage+`">
             <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_img"> <img src="`+data.memberImage+`" alt="profile"> </div>
                 <div class="chat_ib">
                     <h5>`+data.memberNickName+`<span class="chat_date"></span></h5>
-                    <p>`+data.memberImage+`</p>
                 </div>
             </div>
         </a>
@@ -252,18 +274,18 @@
 
         }
 
-        if(senderUsername!=nowChatEmail){
+        if(senderUsername!=nowChatEmail){   //여기다가 채팅방을 바꿔주는 css효과 넣고 누를시 없애주는 작업해야함
             return;
         }
 
         // 수신된 메시지를 화면에 표시하는 코드를 작성합니다.
         var $content= `<div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="incoming_msg_img"> <img src="`+nowChatImage+`" alt="sunil"> </div>
                                 <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
                                         <p>`+messageContent+`</p>
-                                        <span class="time_date">`+new Date().getTime()+`</span></div>
+                                        <span class="time_date">`+getCurrentTime()+`</span></div>
                                 </div>
                             </div>`
         $('.msg_history').append($content)
@@ -302,7 +324,7 @@
             var content = ` <div class="outgoing_msg">
                                 <div class="sent_msg">
                                     <p>`+message+`</p>
-                                    <span class="time_date"> `+new Date().getTime()+`</span> </div>
+                                    <span class="time_date"> `+getCurrentTime()+`</span> </div>
                             </div>`
 
 
@@ -316,20 +338,45 @@
 
 
     }
+
+    function sendImage() {
+        const fileInput = document.getElementById('image-file');
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const base64Image = event.target.result;
+            // WebSocket을 통해 base64Image를 서버에 전송합니다.
+            // ...
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    function sendPuching(senderEmail,receiverEmail) {
+        //현재 퍼칭상태라면 못보내게 막자
+        //
+
+    }
+
 </script>
 <script>
     var nowChatUser=undefined;
     var nowChatEmail=undefined;
     var nowChatNick=undefined;
+    var nowChatImage=undefined;
 
     $(document).on('click','a',async function (){
         $('.msg_history').empty();
+        $('.msg_send_btn').prop('disabled', false);
+        $('.chat_list').removeClass('active_chat');
+
+        $(this).parent().addClass('active_chat')
+
         var userclickvalue = $(this).data("userno")
         nowChatUser = userclickvalue;
         var userclickemailvalue=$(this).data("useremail")
         nowChatEmail =userclickemailvalue;
         var userclicknickvalue=$(this).data("usernick")
         nowChatNick=userclicknickvalue;
+        var userclickimagevalue=$(this).data("userimage")
+        nowChatImage=userclickimagevalue;
         console.log("a태그 클릭")
         var $nowchatusernick=$('#nowchatusernick')
         $nowchatusernick.text('')
@@ -337,6 +384,7 @@
         console.log("채팅상대로 지정된 유저번호는"+nowChatUser)
         console.log("채팅상대로 지정된 유저이메일은"+nowChatEmail)
         console.log("채팅상대로 지정된 유저닉네임은"+nowChatNick)
+        console.log("채팅상대 이미지는"+nowChatImage)
         //nowChatUser와의 채팅 기록 불러오가
         var chatLog = [];
         var $sender = $('#myMemberNo').val();
@@ -362,7 +410,7 @@
                     }
                     if(message.messageSenderNo==nowChatUser) {
                         var receiveContent = `<div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="incoming_msg_img"> <img src="`+nowChatImage+`" alt="profile"> </div>
                                 <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
@@ -417,12 +465,11 @@
             }
             console.log(data)
             var chatroom = ` <div class="chat_list">
-        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`">
+        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`" data-userimage="`+data.memberImage+`">
             <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_img"> <img src="`+data.memberImage+`" alt="profile"> </div>
                 <div class="chat_ib">
                     <h5>`+data.memberNickName+`<span class="chat_date"></span></h5>
-                    <p>`+data.memberImage+`</p>
                 </div>
             </div>
         </a>
@@ -430,19 +477,45 @@
             nowChatNick=data.memberNickName;
             $nowchatusernick.text('')
             $nowchatusernick.append(nowChatNick);
-            $('.inbox_chat').append(chatroom)
-
+           $('.inbox_chat').append(chatroom)
+            $('.inbox_chat').find('.chat_list:last-child').addClass('active_chat');
+            $('.msg_send_btn').prop('disabled', false);
             //페이지 진입시 startuseremail을 가지고 들어올 경우 채팅방을 append시켜놓고 send버튼을 활성화
             // 채팅방이 이미 생성되있는지 여부에 따라 채팅방을 append할지 원래있던방을 입력시키고 채팅로그를 띄운다
         }).catch(function(err){
             console.log("existchatroom ajax 요청의 catch"+err)
-
-
         })
+    }
+</script>
+<script>
+    function getCurrentTime() {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = now.getMonth() + 1;
+        let day = now.getDate();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
 
+        if (month < 10) {
+            month = "0" + month;
+        }
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+        return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
-</script>
 
+</script>
 </body>
 </html>
