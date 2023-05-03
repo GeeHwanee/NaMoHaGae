@@ -3,10 +3,10 @@
 <mapper namespace="kr.kro.namohagae.member.dao.DogDao">
 <insert id="register" parameterType="Dog">
     insert into DOG(dog_no,member_no,dog_birthday_date,dog_introduce,dog_gender,dog_not_gender_enabled,dog_weight,dog_category,dog_name,dog_profile)
-    values (#{dogNo},#{memberNo},#{dogBirthdayDate},#{dogIntroduce},#{dogGender},#{dogNotGenderEnabled},#{dogWeight},#{dogCategory},#{dogName},#{dogProfile})
+    values (dog_seq_dog_no.nextval,#{memberNo},#{dogBirthdayDate},#{dogIntroduce},#{dogGender},#{dogNotGenderEnabled},#{dogWeight},#{dogCategory},#{dogName},#{dogProfile})
 </insert>
 <delete id="delete">
-    delete from dog where member_no=#{memberNo} and dog_no = #{dogNo} and rownum=1
+    delete from dog where dog_no = #{dogNo} and rownum=1
 </delete>
 <update id="update">
     update dog
@@ -17,13 +17,13 @@
         <if test="name != null">dog_name = #{name},</if>
         <if test="profile != null">dog_pofile = #{profile},</if>
     </trim>
-   where member_no=#{memberNo} and dog_no = #{dogNo} and rownum=1
+   where dog_no = #{dogNo} and rownum=1
 </update>
 <select id="findDogList" resultType="kr.kro.namohagae.member.dto.DogDto$List">
     select dog_profile as dogProfileImage,dog_name as dogName from dog where member_no=#{memberNo} and rownum = 1
 </select>
 <select id="findByDog" resultType="Dog">
-    select * from dog where member_no=#{memberNo} and dog_no = #{dogNo} and rownum=1
+    select * from dog where dog_no = #{dogNo} and rownum=1
 </select>
 
 </mapper>
