@@ -42,6 +42,25 @@
     }
 </style>
 <script>
+    $(document).ready(function (){
+        const $productNo = $('#productNo').text();
+
+        $('#put').click(function (){
+            const $input=$('<input type="hidden" name="productNo">').attr("value",$productNo)
+            $('<form>').attr("action","/admin/product/put").attr("method","post")
+                .append($input)
+                .appendTo($('body')).submit();
+        })
+
+        $('#delete').click(function(){
+                const $input=$('<input type="hidden" name="productNo">').attr("value",$productNo)
+                $('<form>').attr("action","/admin/product/delete").attr("method","post")
+                    .append($input)
+                    .appendTo($('body')).submit();
+        })
+
+    })
+
 </script>
 </head>
 <body>
@@ -81,9 +100,8 @@
                 <div>배송정보 배송비 3,000원</div>
             </div>
             <div id="buttons">
-                <button id="buy">구매하기</button>
-                <button id="cart">장바구니</button>
-                <button id="favorite" >찜하기</button>
+                <button id="put">상품 수정</button>
+                <button id="delete">상품 삭제</button>
             </div>
         </div>
         <div id="content" th:utext="${product.productContent}"></div>

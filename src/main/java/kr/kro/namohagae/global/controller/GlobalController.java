@@ -236,6 +236,7 @@ public class GlobalController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/product/write")
     public String adminProductWrite(ProductDto.Add dto){
+        productService.add(dto);
         return "redirect:/admin/product/list";
     }
 
@@ -244,6 +245,19 @@ public class GlobalController {
     public String read(Integer productNo, Model model) {
         model.addAttribute("product", productService.read(productNo));
         return "admin/product/read";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/product/delete")
+    public String deleteProduct(Integer productNo){
+       Boolean result =  productService.delete(productNo);
+       if (result) {
+           return "redirect:/admin/product/list";
+       }else{
+           return "redirect:/admin/main";
+       }
+
+
     }
     // -------------------------------------------------------------------------------
 
