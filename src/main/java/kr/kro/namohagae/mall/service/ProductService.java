@@ -144,6 +144,16 @@ public class ProductService {
         return dto;
     }
 
+    @Transactional
+    public Boolean delete(Integer productNo) {
+        Integer imageDeleteResult = productImageDao.delete(productNo);
+        System.out.println(imageDeleteResult>0?"삭제":"안삭제");
+        Integer productDeleteResult = productDao.delete(productNo);
+        System.out.println(productDeleteResult>0?"삭제":"안삭제");
+
+        return (imageDeleteResult>0)&&(productDeleteResult>0);
+    }
+
 
     // 수정중 (리뷰페이징추가,)
     /*

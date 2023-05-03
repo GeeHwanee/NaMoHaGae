@@ -10,4 +10,8 @@
                 )
         </foreach>
     </insert>
+
+    <delete id="delete">
+        delete from PRODUCT_IMAGE where PRODUCT_NO = #{productNo}
+    </delete>
 </mapper>

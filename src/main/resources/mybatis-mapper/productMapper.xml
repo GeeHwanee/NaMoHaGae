@@ -25,7 +25,7 @@
         select p.product_no, p.product_name, p.product_price, p.product_stock,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p
-        left join PRODUCT_IMAGE pi on p.product_no=pi.product_no and rownum=1
+        join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by p.product_no desc
         ) p
@@ -67,8 +67,8 @@
         (
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and and rownum=1
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by p.product_no desc
         ) p
@@ -85,8 +85,8 @@
         (
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and rownum=1
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by product_stock asc
         ) p
@@ -103,8 +103,8 @@
         (
         select p.product_no, p.product_name, p.product_price,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        from PRODUCT p left join PRODUCT_IMAGE pi on
-        p.product_no=pi.product_no and rownum=1
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
         order by product_name asc
         ) p
@@ -122,4 +122,8 @@
             WHERE pr.productNo = p.productNo
         )
     </update>
+
+    <delete id="delete">
+        delete from PRODUCT where PRODUCT_NO= #{productNo} and ROWNUM=1
+    </delete>
 </mapper>
