@@ -14,5 +14,12 @@ public interface BoardTownDao {
 
     public Board boardTownRead(Integer boardNo);
 
+
     public Integer count();
+
+    public Integer townReadCnt(Integer boardNo);
+
+    public void townUpdateData(Board board);
+
+    public Integer townDeleteData(Integer boardNo);
 }
