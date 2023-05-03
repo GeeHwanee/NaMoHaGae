@@ -11,45 +11,43 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" href="/main.css">
     <script>
+        function ShowSliderValue(sVal)
+        {
+            var obValueView = document.getElementById("dogWeight_value");
+            obValueView.innerHTML = sVal
+        }
+
+        var RangeSlider = function(){
+            var range = $('#dogWeight');
+
+            range.on('input', function(){
+                ShowSliderValue(this.value);
+            });
+        };
+
         $(document).ready(function(){
+            fetch('/dogCategory.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const breeds = data.split('\n');
+                    const selectElement = document.getElementById('dogCategory');
+                    breeds.forEach(breed => {
+                        const optionElement = document.createElement('option');
+                        optionElement.textContent = breed;
+                        optionElement.value = breed;
+                        selectElement.appendChild(optionElement);
+                    });
+                })
+                .catch(error => console.error(error));
+
+                RangeSlider();
             $('#dogWeight').change(function (){
                 const dogWeight=$('#dogWeight').val();
                 $('#dogWeight_value').text(dogWeight+"kg");
             });
-
-            const apiUrl = "https://dog.ceo/api/breeds/list/all";
-            const translationApiUrl = "https://openapi.naver.com/v1/papago/n2mt";
-
-// API 호출
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const breedList = Object.keys(data.message);
-                    const selectElement = document.getElementById("breed-select");
-
-                    // 파파고 API 호출
-                    fetch(translationApiUrl, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                            "X-Naver-Client-Id": "AsEbxpj7XeoGV9mr2s1y",
-                            "X-Naver-Client-Secret": "xpj6oYxngd",
-                        },
-                        body: `source=en&target=ko&text=${breedList.join(",")}`
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            const translations = data.message.result.translatedText.split("\n");
-
-                            // select 태그에 option 태그 추가
-                            translations.forEach((translation, index) => {
-                                const optionElement = document.createElement("option");
-                                optionElement.value = breedList[index];
-                                optionElement.text = translation;
-                                selectElement.appendChild(optionElement);
-                            });
-                        });
-                });
+            $('#registeration').click(function (){
+                $('#registeration_form').submit();
+            });
         })
     </script>
 
@@ -63,9 +61,9 @@
         <aside th:replace="~{/fragment/aside.html}"></aside>
         <section>
             <h1>회원 가입</h1>
-            <form id="join_form" method="post" action="/member/dog/registeration" enctype="multipart/form-data">
+            <form id="registeration_form" method="post" action="/dog/registeration" enctype="multipart/form-data">
                 <div class="mb-3 mt-3">
-                    <input type="file" name="memberProfileImage" id="memberProfileImage" class="form-control">
+                    <input type="file" name="dogProfile" id="dogProfile" class="form-control">
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="dogName">강아지 이름:</label>
@@ -74,14 +72,14 @@
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="dogCategory">견종</label>
-                    <select id="dogCategory">
+                    <select id="dogCategory" name="dogCategory">
                     </select>
                     <span id="dogCategory_msg"></span>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="dogBirthDayDate">생일</label>
-                    <input type="date" name="dogBirthDayDate" id="dogBirthDayDate" class="form-control">
-                    <span id="memberNickname_msg"></span>
+                    <input type="date" name="dogBirthdayDate" id="dogBirthdayDate" class="form-control">
+                    <span id="dogBirthDayDate_msg"></span>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="dogGender">성별</label>
@@ -89,7 +87,7 @@
                         <option value="0">남자</option>
                         <option value="1">여자</option>
                     </select>
-                    <span id="memberPhone_msg"></span>
+                    <span id="dogGender_msg"></span>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="dogIntroduce">강아지 소개:</label>
@@ -97,7 +95,7 @@
                     <span id="dogIntroduce_msg"></span>
                 </div>
                 <div class="mb-3 mt-3">
-                    <label for="dogNotGenderEnabled">성별</label>
+                    <label for="dogNotGenderEnabled">중성화</label>
                     <select id="dogNotGenderEnabled" name="dogNotGenderEnabled">
                         <option value="0">안함</option>
                         <option value="1">완료</option>
@@ -111,7 +109,7 @@
                     <span id="dogWeight_msg"></span>
                 </div>
                 <div class="mb-3 mt-3 d-grid">
-                    <button id="join" type="button" class="btn btn-primary btn-block">가입</button>
+                    <button id="registeration" type="button" class="btn btn-primary btn-block">가입</button>
                 </div>
             </form>
         </section>
