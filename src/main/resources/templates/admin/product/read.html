@@ -43,22 +43,15 @@
 </style>
 <script>
     $(document).ready(function (){
-        const $productNo = $('#productNo').text();
-
         $('#put').click(function (){
-            const $input=$('<input type="hidden" name="productNo">').attr("value",$productNo)
-            $('<form>').attr("action","/admin/product/put").attr("method","post")
-                .append($input)
-                .appendTo($('body')).submit();
+            $('#form').attr("action","/api/v1/admin/product/put").submit();
         })
-
         $('#delete').click(function(){
-                const $input=$('<input type="hidden" name="productNo">').attr("value",$productNo)
-                $('<form>').attr("action","/admin/product/delete").attr("method","post")
-                    .append($input)
-                    .appendTo($('body')).submit();
+            const deleteMessage = confirm("삭제하시겠습니까?");
+            if (deleteMessage){
+                $('#form').attr("action","/admin/product/delete").submit();
+            }
         })
-
     })
 
 </script>
@@ -72,7 +65,8 @@
     <aside th:replace="~{/fragment/aside.html}">
     </aside>
     <section>
-        <div style="display:none;" th:text="${product.productNo}" id="productNo"></div>
+        <form id="form" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="productNo" th:value="${product.productNo}" id="productNo">
         <div style="overflow:hidden;">
             <div id="left">
                 <div>
@@ -83,29 +77,22 @@
                 </div>
             </div>
             <div id="right">
-                <div th:text="${product.productName}"></div>
-                <div>별점출력</div>
-                <!--                    <div th:text="${product.productPrice}"></div>-->
                 <span class="product-price">
-                      <div th:if="${product.productStock == 0}">
-                        <span style="color: red">품절댐</span>
-                      </div>
-                      <div th:unless="${product.productStock == 0}">
-                        <div>
-                          <span th:text="${#numbers.formatInteger(product.productPrice,0,'COMMA')}+'원'"></span>
-                        </div>
-                      </div>
-                    </span>
-                <div>뼈다귀 포인트 1% 적립</div>
-                <div>배송정보 배송비 3,000원</div>
+                    <input th:value="${product.productName}"><br>
+                    <input th:value="${product.productStock}"><span> 개</span><br>
+                    <input th:value="${#numbers.formatInteger(product.productPrice,0,'COMMA')}"><span> 원</span>
+                </span>
             </div>
             <div id="buttons">
-                <button id="put">상품 수정</button>
-                <button id="delete">상품 삭제</button>
+                <button id="put" type="button">상품 수정</button>
+                <button id="delete" type="button">상품 삭제</button>
             </div>
         </div>
-        <div id="content" th:utext="${product.productContent}"></div>
+        <div id="content">
+            <input th:value="${product.productContent}">
+        </div>
         <hr>
+        </form>
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
