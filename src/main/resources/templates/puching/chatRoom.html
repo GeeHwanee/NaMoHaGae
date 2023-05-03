@@ -53,6 +53,7 @@
         .chat_img {
             float: left;
             width: 11%;
+
         }
         .chat_ib {
             float: left;
@@ -187,12 +188,11 @@
                         </div>
                         <div class="inbox_chat">
                             <div class="chat_list" th:each="l:${list}">
-                                <a id="userclick" th:data-userno="${l.chatRoomReceiverNo}" th:data-useremail="${l.memberEmail}" th:data-usernick="${l.memberNickName}">
+                                <a id="userclick" th:data-userno="${l.chatRoomReceiverNo}" th:data-useremail="${l.memberEmail}" th:data-usernick="${l.memberNickName}" th:data-userimage="${l.memberImage}">
                                 <div class="chat_people">
-                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                    <div class="chat_img"> <img th:src="${l.memberImage}" alt="profileimage"> </div>
                                     <div class="chat_ib">
                                         <h5 th:text="${l.memberNickName}"><span class="chat_date"></span></h5>
-                                        <p th:text="${l.memberImage}"></p>
                                     </div>
                                 </div>
                                 </a>
@@ -218,6 +218,7 @@
             </div></div>
         <input type="text" id="receiver" placeholder="receiverEmail" />
         <button id="test" type="button">보내는사람이메일</button>
+
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
@@ -253,12 +254,11 @@
                     // 성공적으로 응답을 받았을 때 실행할 코드
                     console.log("응답 데이터:", data);
                     var chatroom = ` <div class="chat_list">
-        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`">
+        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`" data-userimage="`+data.memberImage+`">
             <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_img"> <img src="`+data.memberImage+`" alt="profile"> </div>
                 <div class="chat_ib">
                     <h5>`+data.memberNickName+`<span class="chat_date"></span></h5>
-                    <p>`+data.memberImage+`</p>
                 </div>
             </div>
         </a>
@@ -274,13 +274,13 @@
 
         }
 
-        if(senderUsername!=nowChatEmail){
+        if(senderUsername!=nowChatEmail){   //여기다가 채팅방을 바꿔주는 css효과 넣고 누를시 없애주는 작업해야함
             return;
         }
 
         // 수신된 메시지를 화면에 표시하는 코드를 작성합니다.
         var $content= `<div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="incoming_msg_img"> <img src="`+nowChatImage+`" alt="sunil"> </div>
                                 <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
@@ -338,11 +338,29 @@
 
 
     }
+
+    function sendImage() {
+        const fileInput = document.getElementById('image-file');
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const base64Image = event.target.result;
+            // WebSocket을 통해 base64Image를 서버에 전송합니다.
+            // ...
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    function sendPuching(senderEmail,receiverEmail) {
+        //현재 퍼칭상태라면 못보내게 막자
+        //
+
+    }
+
 </script>
 <script>
     var nowChatUser=undefined;
     var nowChatEmail=undefined;
     var nowChatNick=undefined;
+    var nowChatImage=undefined;
 
     $(document).on('click','a',async function (){
         $('.msg_history').empty();
@@ -357,6 +375,8 @@
         nowChatEmail =userclickemailvalue;
         var userclicknickvalue=$(this).data("usernick")
         nowChatNick=userclicknickvalue;
+        var userclickimagevalue=$(this).data("userimage")
+        nowChatImage=userclickimagevalue;
         console.log("a태그 클릭")
         var $nowchatusernick=$('#nowchatusernick')
         $nowchatusernick.text('')
@@ -364,6 +384,7 @@
         console.log("채팅상대로 지정된 유저번호는"+nowChatUser)
         console.log("채팅상대로 지정된 유저이메일은"+nowChatEmail)
         console.log("채팅상대로 지정된 유저닉네임은"+nowChatNick)
+        console.log("채팅상대 이미지는"+nowChatImage)
         //nowChatUser와의 채팅 기록 불러오가
         var chatLog = [];
         var $sender = $('#myMemberNo').val();
@@ -389,7 +410,7 @@
                     }
                     if(message.messageSenderNo==nowChatUser) {
                         var receiveContent = `<div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="incoming_msg_img"> <img src="`+nowChatImage+`" alt="profile"> </div>
                                 <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
@@ -444,12 +465,11 @@
             }
             console.log(data)
             var chatroom = ` <div class="chat_list">
-        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`">
+        <a id="userclick" data-userno="`+data.chatRoomReceiverNo+`" data-useremail="`+data.memberEmail+`" data-usernick="`+data.memberNickName+`" data-userimage="`+data.memberImage+`">
             <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_img"> <img src="`+data.memberImage+`" alt="profile"> </div>
                 <div class="chat_ib">
                     <h5>`+data.memberNickName+`<span class="chat_date"></span></h5>
-                    <p>`+data.memberImage+`</p>
                 </div>
             </div>
         </a>
@@ -464,12 +484,8 @@
             // 채팅방이 이미 생성되있는지 여부에 따라 채팅방을 append할지 원래있던방을 입력시키고 채팅로그를 띄운다
         }).catch(function(err){
             console.log("existchatroom ajax 요청의 catch"+err)
-
-
         })
-
     }
-
 </script>
 <script>
     function getCurrentTime() {
@@ -496,7 +512,6 @@
         if (seconds < 10) {
             seconds = "0" + seconds;
         }
-
         return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
