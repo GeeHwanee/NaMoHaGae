@@ -1,6 +1,8 @@
 package kr.kro.namohagae.puchingtest.service;
 
+import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.entity.Member;
 import kr.kro.namohagae.puchingtest.dao.ChatDao;
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.dto.MessageDto;
@@ -8,8 +10,12 @@ import kr.kro.namohagae.puchingtest.entity.ChatRoom;
 import kr.kro.namohagae.puchingtest.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ChatService {
@@ -62,6 +68,29 @@ public class ChatService {
              return cdao.findChatRoomByReceiverNo(receiverNo);
             }
         return null;
+    }
+    public Message saveImage(MultipartFile image,String userEmail,Integer receiverNo){
+        Integer senderNo=mdao.findNoByUsername(userEmail);
+        String imageName="default.jpg";
+        if(image!=null && !image.isEmpty()) {
+            int postionOfDot = image.getOriginalFilename().lastIndexOf(".");
+            String ext = image.getOriginalFilename().substring(postionOfDot);
+            String currentDir = System.getProperty("user.dir")+"/";
+            System.out.println(currentDir);
+            String imagePath = currentDir+ ImageConstants.IMAGE_CHAT_FOLDER;
+            imageName=UUID.randomUUID()+ext;
+            File file = new File(imagePath, imageName);
+            try {
+                image.transferTo(file);
+            } catch (IllegalStateException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String img = "image";
+        Message message= new MessageDto.ImageMessageSave(senderNo,receiverNo).toEntity(img,imageName);
+        cdao.saveImage(message);
+
+    return message;
     }
 
 }

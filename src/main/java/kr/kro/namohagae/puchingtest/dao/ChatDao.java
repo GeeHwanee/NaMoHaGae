@@ -25,6 +25,6 @@ public interface ChatDao {
 
     public List<MessageDto.MessageRead> findAllMessageByReceiverNo(Integer senderNo,Integer receiverNo); // 상대방과의 채팅 기록 불러오기
 
-
+    public void saveImage(Message message); // 이미지 저장후 messagedata리턴
 
 }
