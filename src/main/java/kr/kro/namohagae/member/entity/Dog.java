@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @Alias("Dog")
 public class Dog {
+    private Integer dogNo;
     private Integer memberNo;
     private LocalDate dogBirthdayDate;
     private String dogIntroduce;
