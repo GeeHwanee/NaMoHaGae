@@ -24,12 +24,9 @@ public class ChatWebSocketHandler implements WebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
         String username= session.getPrincipal().getName();
-        System.out.println(username);
-        System.out.println("웹소켓 열렸다@@@@@@@@@@");
         // WebSocketSession에서 사용자 정보를 저장합니다.
         session.getAttributes().put("username", username);
         // 저장된 사용자 정보를 출력합니다.
-        System.out.println("WebSocketSession에 저장된 사용자 이름: " + session.getAttributes().get("username"));
         sessions.put(username, session);
         // WebSocket 연결이 성공적으로 열리면 호출됩니다.
 
@@ -51,8 +48,6 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         responseJson.put("message", messageContent);
 
         Integer haveChatRoom= service.saveTextMessage(sendusername,receiverUsername,messageContent,"text"); //메세지 저장 실패하면 리턴값이
-        System.out.println(haveChatRoom);
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         responseJson.put("haveChatRoom",haveChatRoom);
 
         if (receiverUsername != null) {

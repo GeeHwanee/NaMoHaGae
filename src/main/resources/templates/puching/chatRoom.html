@@ -10,6 +10,17 @@
 
 
     <style>
+        .chat_image_sender{
+            width: 60%;
+            float: right;
+            border-radius: 10%;
+
+        }
+        .chat_image_receiver{
+            width: 40%;
+            float: left;
+            border-radius: 10%;
+        }
        .inbox_chat :hover{
 
             background-color: #ebebeb;
@@ -17,7 +28,7 @@
         }
        .inbox_chat :active {
            /* 마우스 hover 및 클릭시 적용될 스타일 */
-           background-color: #ec8447;
+           background-color: #ed9e71;
        }
 
         .container{max-width:1000px; margin:auto;}
@@ -32,6 +43,7 @@
             border: 1px solid #c4c4c4;
             clear: both;
             overflow: hidden;
+            border-radius: 3%;
         }
 
 
@@ -41,7 +53,7 @@
         .headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
 
         .recent_heading h4 {
-            color: #05728f;
+            color: #ed9e71;
             font-size: 21px;
             margin: auto;
         }
@@ -202,22 +214,41 @@
                     </div>
                     <div class="mesgs">
                         <div class="msg_history">
-
-
+                            <div class="incoming_msg">
+                                <div class="incoming_msg_img"> <img src="/image/profile/default.jpg" alt="sunil"> </div>
+                                <p>이름떙떙떙</p>
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                       <div class="chat_image_receiver"><img src="/image/profile/default.jpg" alt="sunil"></div>
+                                        <span class="time_date">`+getCurrentTime()+`</span></div>
+                                </div>
+                            </div>
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                   <img class="chat_image_sender" src="/image/profile/default.jpg" alt="sunil">
+                                    <span class="time_date"> `+message.messageWriteDate+`</span> </div>
+                            </div>
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <img class="chat_image_sender" src="/image/profile/default.jpg" alt="sunil">
+                                    <span class="time_date"> `+message.messageWriteDate+`</span> </div>
+                            </div>
                         </div>
                         <div class="type_msg">
                             <div class="input_msg_write">
                                 <input type="text" id="message" class="write_msg" placeholder="Type a message" />
                                 <button onclick="sendMessage()" class="msg_send_btn" type="button" disabled><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div></div>
-        <input type="text" id="receiver" placeholder="receiverEmail" />
-        <button id="test" type="button">보내는사람이메일</button>
+
+        <label for="imageInput">Image: </label>
+        <input type="file" id="imageInput">
+        <button id="sendImageButton" type="button">SendImage</button>
+
 
     </section>
 </main>
@@ -339,16 +370,7 @@
 
     }
 
-    function sendImage() {
-        const fileInput = document.getElementById('image-file');
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const base64Image = event.target.result;
-            // WebSocket을 통해 base64Image를 서버에 전송합니다.
-            // ...
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-    }
+
     function sendPuching(senderEmail,receiverEmail) {
         //현재 퍼칭상태라면 못보내게 막자
         //
@@ -381,10 +403,7 @@
         var $nowchatusernick=$('#nowchatusernick')
         $nowchatusernick.text('')
         $nowchatusernick.append(nowChatNick);
-        console.log("채팅상대로 지정된 유저번호는"+nowChatUser)
-        console.log("채팅상대로 지정된 유저이메일은"+nowChatEmail)
-        console.log("채팅상대로 지정된 유저닉네임은"+nowChatNick)
-        console.log("채팅상대 이미지는"+nowChatImage)
+
         //nowChatUser와의 채팅 기록 불러오가
         var chatLog = [];
         var $sender = $('#myMemberNo').val();
@@ -438,11 +457,61 @@
     });
 </script>
 <script>
-    $('#test').on('click',function (){
-        nowChatEmail= $('#receiver').val()
-        console.log(nowChatEmail)
-    })
+   //이미지 전송 및 화면에 바로 띄우는 거
+   var imageSocket = new WebSocket("ws://localhost:8081/chatimage");
 
+   imageSocket.onopen=function (){
+       console.log("image 웹소켓 open")
+   };
+   imageSocket.onmessage=function (event){
+        console.log(event)
+
+   }
+   imageSocket.onerror=function (error){
+        console.log(error)
+   }
+   imageSocket.onclose=function(event){
+        console.log(event+'이미지웹소켓 닫힘')
+
+   }
+   $('#sendImageButton').on('click',async function(){
+       var imageInput=$('#imageInput')[0];
+
+       if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+           console.log('No file selected');
+           return;
+       }
+
+       var formData = new FormData();
+       formData.append('file', imageInput.files[0]);
+       formData.append('receiverNo', nowChatUser);
+
+       try {
+           var response = await $.ajax({
+               url: '/api/v1/savechatimage',
+               method: 'POST',
+               data: formData,
+               contentType: false,
+               processData: false
+           });
+           imageSocket.send(response); //response 는 Message Entitiy타입 이므로 json으로 파싱하자
+
+       } catch (error) {
+           console.log(error);
+       }
+
+       })
+   function sendImage() {
+       const fileInput = document.getElementById('image-file');
+       const reader = new FileReader();
+       reader.onload = function(event) {
+           const base64Image = event.target.result;
+           // WebSocket을 통해 base64Image를 서버에 전송합니다.
+           // ...
+       };
+       reader.readAsDataURL(fileInput.files[0]);
+
+   }
 
 </script>
 <script th="inline">
@@ -475,6 +544,7 @@
         </a>
     </div>`
             nowChatNick=data.memberNickName;
+            nowChatUser=data.chatRoomReceiverNo;
             $nowchatusernick.text('')
             $nowchatusernick.append(nowChatNick);
            $('.inbox_chat').append(chatroom)
