@@ -204,7 +204,7 @@ public class GlobalController {
 
     @GetMapping("/board/free/list")
     public String paging(Model model,
-                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,String searchName) {
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
 
         List<Board> pagingList = boardService.pagingList(page);
         PageDto pageDTO = boardService.pagingParam(page);
