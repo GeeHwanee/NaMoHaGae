@@ -21,6 +21,6 @@ public interface ImageConstants {
     public final static String IMAGE_CHAT_URL ="http://localhost:8081/image/chat?name=";
     public final static String IMAGE_DOG_FOLDER ="./src/main/resources/static/image/dog";
     public final static String IMAGE_DOG_PATH="/api/v1/image/dog";
-    public final static String IMAGE_DOG_URL ="http://localhost:8081/image/dog?name=";
+    public final static String IMAGE_DOG_URL ="http://localhost:8081/api/v1/image/dog?name=";
 
 }
