@@ -1,19 +1,15 @@
 package kr.kro.namohagae.board.controller;
 
-import kr.kro.namohagae.board.entity.AjaxDTO;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
