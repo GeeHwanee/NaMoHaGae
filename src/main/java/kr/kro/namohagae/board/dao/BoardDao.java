@@ -4,10 +4,13 @@ import kr.kro.namohagae.board.entity.Board;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.security.Principal;
 import java.util.List;
 
 @Mapper
 public interface BoardDao {
+
+
 
     public void boardFreeInsertData(Board board);
     public List<Board> boardFreeList();

@@ -1,5 +1,8 @@
 package kr.kro.namohagae.board.controller;
 
+
+import kr.kro.namohagae.board.dto.BoardDto;
+
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.board.service.BoardService;
@@ -9,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+
+import java.security.Principal;
 
 import java.util.List;
 
@@ -37,8 +43,9 @@ public class BoardController {
     }
 
     @PostMapping("/writepro")
-    public String boardFreeWritePro(Board board)  {
-        boardService.boardFreeInsertData(board);
+    public String boardFreeWritePro(BoardDto.write boardDto, Principal principal)  {
+        String userEmail = principal.getName();
+        boardService.boardFreeInsertData(boardDto,userEmail);
         return "redirect:/board/free/list";
     }
 
