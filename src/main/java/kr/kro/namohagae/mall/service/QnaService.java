@@ -46,4 +46,16 @@ public class QnaService {
         }
         return new QnaDto.Pagination(pageNo, prev, start, end, next, productNo, qnas);
     }
+
+    public List<QnaDto.Read> readAll(){
+        return qnaDao.findAll();
+    }
+    public Integer update(QnaDto.Put dto){
+        Qna qna = dto.toEntity();
+        return qnaDao.update(qna);
+    }
+
+    public QnaDto.Read print(Integer qnaNo) {
+        return qnaDao.findByQnaNo(qnaNo);
+    }
 }

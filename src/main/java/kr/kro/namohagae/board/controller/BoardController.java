@@ -1,6 +1,8 @@
 package kr.kro.namohagae.board.controller;
 
+
 import kr.kro.namohagae.board.dto.BoardDto;
+
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.board.service.BoardService;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.security.Principal;
+
 import java.util.List;
 
 

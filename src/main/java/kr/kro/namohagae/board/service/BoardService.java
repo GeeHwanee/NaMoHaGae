@@ -1,10 +1,18 @@
 package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardDao;
+
 import kr.kro.namohagae.board.dto.BoardDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.member.dao.MemberDao;
+
+import kr.kro.namohagae.board.dao.BoardNoticeDao;
+import kr.kro.namohagae.board.dto.NoticeDto;
+import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.dto.PageDto;
+import kr.kro.namohagae.board.entity.BoardNotice;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +24,8 @@ public class BoardService {
 
     @Autowired
     BoardDao boardDao;
+    @Autowired
+    BoardNoticeDao boardNoticeDao;
 
     @Autowired
     private MemberDao memberDao;
@@ -87,5 +97,9 @@ public class BoardService {
         return boardDao.increaseReadCnt(boardNo);
         }
 
+        public void addNotice(NoticeDto.Add dto){
+            BoardNotice boardNotice = dto.toEntity();
+            boardNoticeDao.save(boardNotice);
+        }
     }
 

@@ -17,9 +17,9 @@ public class AdminRestController {
 
     @PostMapping("/admin/product/put")
     public ResponseEntity<ProductDto.Read> productPut(ProductDto.Put dto) {
+        System.out.println(dto.toString());
         Integer result = productService.put(dto);
-
-
-        return ResponseEntity.ok(null);
+        ProductDto.Read resultDto = productService.read(result);
+        return ResponseEntity.ok().body(resultDto);
     }
 }

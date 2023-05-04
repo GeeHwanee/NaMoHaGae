@@ -10,8 +10,8 @@
         values(#{productNo},#{productCategoryNo},#{productName},#{productPrice},#{productStock},#{productGrade},#{productContent},#{productWriteDate})
     </insert>
 
-    <update id="put">
-        update PRODUCT
+    <update id="update" parameterType="Product">
+        update PRODUCT SET
         <trim suffixOverrides=",">
         <if test="productName!=null">
             product_name = #{productName},

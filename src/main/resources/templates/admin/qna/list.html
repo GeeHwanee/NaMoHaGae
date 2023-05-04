@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>qna 목록 페이지</title>
-</head>
-<body>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <title>QnA 리스트</title>
 
+</head>
+<style>
+
+</style>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
+    <section>
+        <h1>QnA 리스트</h1>
+        <table>
+            <colgroup>
+                <col width="25%">
+                <col width="30%">
+                <col width="25%">
+                <col width="20%">
+
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>상품 명</th>
+                    <th>작성자</th>
+                    <th>작성 시간</th>
+                    <th> </th>
+                </tr>
+                <tr th:each="q:${list}">
+                    <td th:text="${q.productName}"></td>
+                    <td th:text="${q.qnaWriter}"></td>
+                    <td th:text="${q.qnaWriteDate}"></td>
+                    <td> <a th:href="@{/admin/qna/write(qnaNo=${q.qnaNo})}">답변 달기</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}"></footer>
 </body>
 </html>

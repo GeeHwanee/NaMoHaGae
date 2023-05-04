@@ -4,14 +4,16 @@ package kr.kro.namohagae.puchingtest.controller;
 
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.dto.MessageDto;
+import kr.kro.namohagae.puchingtest.entity.Message;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -41,6 +43,15 @@ public class ChatRestController {
 
         return ResponseEntity.ok().body(service.existchatRoom(principal.getName(),receiverEmail));
     }
+
+    @PostMapping(value = "/savechatimage")
+    public ResponseEntity<Message> saveImage(MultipartFile file, Principal principal, Integer receiverNo){
+      System.out.println("saveImage실행");
+      String userEmail=principal.getName();
+       Message message= service.saveImage(file,userEmail,receiverNo);
+
+        return ResponseEntity.ok().body(message);
+    };
 
 
 

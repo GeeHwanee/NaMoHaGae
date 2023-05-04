@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.dto;
 
+
 import kr.kro.namohagae.mall.entity.Qna;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class QnaDto {
         private Integer end;
         private Integer next;
         private Integer productNo;
-        private List<Qna> qnas;
+        private List<Qna> qna;
     }
 
     // 질문 쓰기
@@ -34,6 +35,26 @@ public class QnaDto {
 
         public Qna toEntity(Integer memberNo) {
             return Qna.builder().productNo(productNo).qnaWriter(memberNo).qnaContent(qnaContent).qnaWriteDate(LocalDateTime.now()).build();
+        }
+    }
+
+    @Data
+    public static class Read{
+       private Integer qnaNo;
+        private String productName;
+        private String qnaWriter;
+        private String qnaContent;
+        private LocalDateTime qnaWriteDate;
+    }
+
+
+    @Data
+    public static class Put{
+        private Integer qnaNo;
+        private String qnaAnswerContent;
+
+        public Qna toEntity(){
+           return Qna.builder().qnaAnswerContent(qnaAnswerContent).qnaNo(qnaNo).qnaAnswerWriteDate(LocalDateTime.now()).build();
         }
     }
 }
