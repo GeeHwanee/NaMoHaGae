@@ -12,13 +12,24 @@
         (
         select rownum as rnum, f.* from
         (
-
-            <!-- sql문 수정중 -->
-
+            select
+            p.product_name, p.product_price,
+            'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
+            from FAVORITE f
+            join PRODUCT_IMAGE pi on f.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
+            join PRODUCT p on f.product_no = p.product_no
+            where f.member_no=#{memberNo}
+            order by f.product_no desc
         ) f
         where rownum&lt;=#{endRowNum}
         )
         where rnum&gt;=#{startRowNum}
+    </select>
+
+    <!-- 해당 멤버의 찜 개수를 조회 -->
+    <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select count(*) from FAVORITE
+        where member_no = #{memberNo}
     </select>
 
     <!-- 찜 삭제 -->

@@ -1,7 +1,6 @@
 package kr.kro.namohagae.mall.controller;
 
 import jakarta.servlet.http.HttpSession;
-import kr.kro.namohagae.mall.service.ProductReviewService;
 import kr.kro.namohagae.mall.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,15 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ProductController {
     private final ProductService service;
-    private final ProductReviewService reviewService;
 
 //    @GetMapping("/mall/product/list")
 //    public void list(){
 //    }
 
-//    @GetMapping("/mall/product/read")
-//    public void read(){
-//    }
+    //@GetMapping("/mall/product/read")
+    //public void read(){
+    //}
 
 
     /*
@@ -79,13 +77,5 @@ public class ProductController {
     }
 
 
-    // 리뷰 페이징 처리 후 read
-    /*
-    @GetMapping("/mall/product/read")
-    public String read(Integer startRowNum, Integer endRowNum, Integer productNo, Model model) {
-        model.addAttribute("product", service.read(startRowNum, endRowNum, productNo));
-        //model.addAttribute("pagination", reviewService.);
-        return "/mall/product/read";
-    }
-     */
+
 }
