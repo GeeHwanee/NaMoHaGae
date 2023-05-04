@@ -152,10 +152,10 @@ public class GlobalController {
         MemberDto.Read dto = memberService.read(memberNo);
         return new ModelAndView("/member/profile").addObject("member",dto);
     }
-    @GetMapping("/member/dog/porfile")
+    @GetMapping("/member/dog/profile")
     public  ModelAndView dogProfile(Integer dogNo){
         DogDto.Read dto = dogService.read(dogNo);
-        return  new ModelAndView("/dog/profile").addObject("dog",dto);
+        return  new ModelAndView("/member/dog/profile").addObject("dog",dto);
     }
 
 
