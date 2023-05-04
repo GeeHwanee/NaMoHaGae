@@ -44,7 +44,22 @@
 <script>
     $(document).ready(function (){
         $('#put').click(function (){
-            $('#form').attr("action","/api/v1/admin/product/put").submit();
+            const formData = $('#form').serialize();
+            $.ajax({
+                url:'/api/v1/admin/product/put',
+                type:'post',
+                data: formData,
+                success: function(data){
+                    $('#productName').attr("value",data.productName);
+                    $('#productStock').attr("value",data.productStock);
+                    $('#productPrice').attr("value",data.productPrice);
+                    $('#productContent').attr("value",data.productContent);
+                    alert("성공적으로 변경하였습니다.");
+                },
+                error(err){
+                    console.log(err);
+                }
+            })
         })
         $('#delete').click(function(){
             const deleteMessage = confirm("삭제하시겠습니까?");
@@ -78,9 +93,9 @@
             </div>
             <div id="right">
                 <span class="product-price">
-                    <input th:value="${product.productName}"><br>
-                    <input th:value="${product.productStock}"><span> 개</span><br>
-                    <input th:value="${#numbers.formatInteger(product.productPrice,0,'COMMA')}"><span> 원</span>
+                    <input id="productName" name="productName" th:value="${product.productName}"><br>
+                    <input id="productStock" name="productStock" th:value="${product.productStock}"><span> 개</span><br>
+                    <input id="productPrice" name="productPrice" th:value="${product.productPrice}"><span> 원</span>
                 </span>
             </div>
             <div id="buttons">
@@ -89,7 +104,7 @@
             </div>
         </div>
         <div id="content">
-            <input th:value="${product.productContent}">
+            <input id="productContent" name="productContent" th:value="${product.productContent}">
         </div>
         <hr>
         </form>
