@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -42,6 +43,7 @@ public class DogService {
     }
 
     public DogDto.Read read(Integer dogNo) {
+        System.out.println(dogNo);
         Dog dog = dogDao.findByDog(dogNo).get();
         String dogNotGenderEnbled = "";
         if(dog.getDogNotGenderEnabled()==true){
@@ -52,26 +54,40 @@ public class DogService {
         return dog.toReadDto(dogNotGenderEnbled);
     }
 
-    public boolean checkNickanme(Integer memberNo, String nickname) {
-        return true;
-    }
-
-    public Boolean update(MultipartFile profile, String nickname, Integer memberNo, String password, String phone, Integer townNo) {
-        return true;
+    public Boolean update(MultipartFile profile, String name,String introduce, Boolean notGenderEnabled,Double weight,Integer dogNo) {
+        File file = null;
+        String ext = "";
+        String currentDir = System.getProperty("user.dir")+"/";
+        if (profile==null || profile.isEmpty()==true) {
+            dogDao.update(dogNo,introduce,notGenderEnabled,weight,name,null);
+            return true;
+        }else {    // else는 Don't care -> 신경쓰지 않는다
+        }
+        if(name!=null||name.trim().equals("")==false){
+        int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
+        ext = profile.getOriginalFilename().substring(postionOfDot);
+        file = new File(currentDir+ImageConstants.IMAGE_DOG_FOLDER, name + ext);}else{}
+        try {
+            profile.transferTo(file);
+        } catch (IllegalStateException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Boolean a = dogDao.update(dogNo,introduce,notGenderEnabled,weight,name,name+ext);
+        return a;
     }
 
     public void resign(Integer dogNo) {
         try {
+            String currentDir = System.getProperty("user.dir")+"/";
             String profile = dogDao.findByDog(dogNo).get().getDogProfile();
-            Integer positionOfEqual = profile.lastIndexOf("=");
-            String fileName = profile.substring(positionOfEqual+1);
-            File file = new File(ImageConstants.IMAGE_DOG_FOLDER, fileName);
+            File file = new File(currentDir+ImageConstants.IMAGE_DOG_FOLDER, profile);
 
             // 예외가 발생하면 롤백되는데, 발생 안하니까... 어떻게 처리하지? -> 작업을 중단하자(아래 코드는 설명용)
             if (file.exists()==false) {
                 return;
             }
-            if (fileName.equals("default.jpg")==false) {
+            if (profile.equals("default.jpg")==false) {
                 file.delete();
             }
             dogDao.delete(dogNo);
@@ -79,5 +95,13 @@ public class DogService {
         }catch(NoSuchElementException e){
             throw e;
         }
+    }
+
+    public List<DogDto.dogList> dogList(Integer memberNo) {
+        System.out.println("9807");
+        List<DogDto.dogList> dogList = dogDao.findDogList(memberNo);
+        dogList.get(0).setDogProfile(ImageConstants.IMAGE_DOG_URL+dogList.get(0).getDogProfile());
+        dogList.get(1).setDogProfile(ImageConstants.IMAGE_DOG_URL+dogList.get(1).getDogProfile());
+        return dogList;
     }
 }
