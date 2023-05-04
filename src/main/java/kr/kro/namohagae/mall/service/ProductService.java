@@ -67,24 +67,25 @@ public class ProductService {
         String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.update(product);
-
-        List<ProductImage> images = new ArrayList<>();
-        for(MultipartFile image: dto.getProductImages()) {
-            if(image!=null && !image.isEmpty()) {
-                originalFilename = image.getOriginalFilename();
-                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
-                try {
-                    image.transferTo(saveFile);
-                } catch (IllegalStateException | IOException e) {
-                    e.printStackTrace();
+        if (dto.getProductImages()!=null) {
+            List<ProductImage> images = new ArrayList<>();
+            for (MultipartFile image : dto.getProductImages()) {
+                if (image != null && !image.isEmpty()) {
+                    originalFilename = image.getOriginalFilename();
+                    File saveFile = new File(currentDir + ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                    try {
+                        image.transferTo(saveFile);
+                    } catch (IllegalStateException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
                 }
-                images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
             }
-        }
-        if(images.size()==0)
-            images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
+            if (images.size() == 0)
+                images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
 
-        productImageDao.update(images);
+            productImageDao.update(images);
+        }
         return product.getProductNo();
     }
 
