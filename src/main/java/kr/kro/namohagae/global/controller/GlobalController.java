@@ -9,14 +9,15 @@ import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dto.ProductDto;
+import kr.kro.namohagae.mall.dto.QnaDto;
 import kr.kro.namohagae.mall.service.ProductService;
+import kr.kro.namohagae.mall.service.QnaService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -44,7 +45,8 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
-
+    @Autowired
+    private QnaService qnaService;
     @Autowired
     private MemberService memberService;
     @Autowired
@@ -270,19 +272,15 @@ public class GlobalController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/admin/qna/list")
-    public String adminQnaList(){ return  "admin/qna/list";}
-
-    @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
     public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
         model.addAttribute("list",productService.list(pageNo, null));
         return "admin/product/list";
     }
+
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/report/list")
     public String adminReportList(){ return "admin/report/list";}
-
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/write")
     public void adminProductWrite(){}
@@ -313,6 +311,28 @@ public class GlobalController {
 
 
     }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/qna/list")
+    public String adminQnaList(Model model){
+        model.addAttribute("list", qnaService.readAll());
+        return  "admin/qna/list";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/qna/write")
+    public String adminQnaWrite(Integer qnaNo, Model model){
+        model.addAttribute("qna",qnaService.print(qnaNo));
+        return "admin/qna/write";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/qna/write")
+    public String adminQnaWrite(QnaDto.Put dto){
+        qnaService.update(dto);
+        return "redirect:/admin/qna/list";
+    }
+
     // -------------------------------------------------------------------------------
 
 }
