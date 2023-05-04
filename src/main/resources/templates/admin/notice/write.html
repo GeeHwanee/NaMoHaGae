@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/main.css">
-    <title>공지사항 게시판 목록 페이지</title>
+    <title>notice 작성</title>
 
 </head>
 <style>
@@ -16,9 +16,16 @@
 <main>
     <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
-        <h1>공지사항 게시판 목록 페이지</h1>
-        <a href="/admin/notice/write">게시물 쓰기</a>
+        <div>
 
+            <form action="/admin/notice/write" method="post">
+                <input type="text" name="boardNoticeTitle">
+                <textarea name="boardNoticeContent"></textarea>
+                <button >답변 작성하기</button>
+            </form>
+
+
+        </div>
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}"></footer>

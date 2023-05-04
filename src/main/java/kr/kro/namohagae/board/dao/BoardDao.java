@@ -3,7 +3,6 @@ package kr.kro.namohagae.board.dao;
 import kr.kro.namohagae.board.entity.Board;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.context.annotation.Primary;
 
 import java.util.List;
 
@@ -23,5 +22,4 @@ public interface BoardDao {
     public int boardCount();
 
     public Integer increaseReadCnt(Integer boardNo);
-
 }
