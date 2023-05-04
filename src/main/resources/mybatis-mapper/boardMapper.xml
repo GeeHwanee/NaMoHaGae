@@ -5,15 +5,32 @@
 
 <mapper namespace="kr.kro.namohagae.board.dao.BoardDao">
 
-
-
     <insert id="boardFreeInsertData" parameterType="kr.kro.namohagae.board.entity.Board">
-        INSERT INTO BOARD
-            (
-        board_no,town_no,member_no,board_title,board_content,board_write_date,board_read_count,board_recommend_count,board_enabled
-            )
-        VALUES ( SEQ_BOARD_NO.NEXTVAL,0,1,#{boardTitle},#{boardContent},sysdate,0,0,0
-               )
+        INSERT INTO board (
+            board_no,
+            town_no,
+            member_no,
+            board_title,
+            board_content,
+            board_write_date,
+            board_read_count,
+            board_recommend_count,
+            board_enabled
+        )
+        SELECT
+            SEQ_BOARD_NO.NEXTVAL,
+            0,
+            m.member_no,
+            #{boardTitle},
+            #{boardContent},
+            sysdate,
+            0,
+            0,
+            0
+        FROM
+            member m
+        WHERE
+            m.member_no = #{memberNo}
     </insert>
 
     <select id="boardFreeList" resultType="kr.kro.namohagae.board.entity.Board">
