@@ -45,6 +45,7 @@ public class MemberDto {
     @AllArgsConstructor
     @ToString
     public static class Read{
+        private Integer memberNo;
         private String memberProfile;
         private String memberNickname;
         private Integer memberGrade;

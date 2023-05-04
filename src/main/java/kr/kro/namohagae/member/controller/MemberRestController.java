@@ -23,7 +23,7 @@ public class MemberRestController {
     @Autowired
     private MemberService memberService;
     @PostMapping("/member/update")
-    public ResponseEntity<Void> update(MultipartFile profile, String nickname,String password,Authentication auth,String phone,Integer townNo) {
+    public ResponseEntity<Void> update(MultipartFile profile, String nickname,String password,Authentication auth,String phone,Integer townNo,String introduce) {
         Integer memberNo = ((MyUserDetails)auth.getPrincipal()).getMemberNo();
         // profile은 null이 될 수 있다 -> 서비스에서 null 체크 -> null이면 변경하지 않는다
         // email은 중복 여부를 확인해야 한다 -> 중복되지 않는 경우 업데이트
@@ -32,7 +32,7 @@ public class MemberRestController {
 		if (memberService.checkNickanme(memberNo,nickname)==false) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 		}
-        Boolean result = memberService.update(profile,nickname,memberNo,password,phone,townNo);
+        Boolean result = memberService.update(profile,nickname,introduce,memberNo,password,phone,townNo);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
