@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <title>qna 작성</title>
+
+</head>
+<style>
+
+</style>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+<main>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
+    <section>
+        <div>
+            <div>
+                <p th:text="${qna.qnaWriter}"></p>
+                <p th:text="${qna.qnaContent}"></p>
+                <p th:text="${qna.qnaWriteDate}"></p>
+            </div>
+            <form action="/admin/qna/write" method="post">
+                <input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
+                <textarea name="qnaAnswerContent"></textarea>
+                <button >답변 작성하기</button>
+            </form>
+
+
+        </div>
+    </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}"></footer>
+</body>
+</html>
