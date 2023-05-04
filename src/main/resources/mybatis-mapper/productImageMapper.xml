@@ -11,6 +11,15 @@
         </foreach>
     </insert>
 
+    <update id="update" parameterType="java.util.List">
+        <foreach collection="list" item="image" separator=";">
+        UPDATE PRODUCT_IMAGE SET
+            PRODUCT_IMAGE_NO = #{image.productImageNo},
+            PRODUCT_IMAGE_FILENAME = #{image.productFileName}
+        where PRODUCT_NO = #{image.productNo}
+        </foreach>
+    </update>
+
     <delete id="delete">
         delete from PRODUCT_IMAGE where PRODUCT_NO = #{productNo}
     </delete>
