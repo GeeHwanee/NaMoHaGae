@@ -11,21 +11,29 @@
     <script src="/script/profile.js"></script>
     <title>내 정보</title>
     <script type="text/javascript">
-        $(document).ready(function(){
-          $.ajax({
-                type: "GET",
-                url: "/api/v1/member/information",
-                success: function(data) {
-// Handle the JSON response here
-                 console.log(data);
-                },
-                error: function(xhr, status, error) {
-// Handle the error here
-                }
+        function printBoard(dogList) {
+            const $tdog = $('#dog');
+            console.log(dogList);
+            dogList.forEach(d => {
+                const tpl = `
+            <img id="show-profile" src="${d.dogProfile}" width="100px" height="100px">
+             <a href="/member/dog/profile?dogNo=${d.dogNo}">${d.dogName}</a>
+        `;
+                $tdog.append(tpl);
             });
+        }
+        $(document).ready(async function(){
+            try {
+                const result = await $.ajax("/api/v1/dog/list");
 
-            $('#profile').change(loadProfile);
-            $('#update').click(function(){
+
+                console.log(result);
+                printBoard(result);
+            }catch (err){
+              console.log(err)
+            }
+          $('#profile').change(loadProfile);
+          $('#update').click(function(){
                 // FormData 처리 방식
                 // 1. new FormData($('폼아이디')[0]);
                 // 2. new FormData() -> 원소를 하나씩 append
@@ -59,8 +67,7 @@
                     alert('변경 실패');
                 }
             });
-
-            $('#resign').click(function(){
+          $('#resign').click(function(){
                 console.log("11")
                 const result = confirm("정말 탈퇴하시겠습니까?");
                 if(result==false){
@@ -73,7 +80,6 @@
                 // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
                 // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
                 // 어떤 브라우저를 써도 들어간다(단 반대편(스프링)에서 Hidden Http Method Filter를 지정해줘야 한다)
-
             })
         })
 
@@ -134,6 +140,7 @@
             <button id="update" type="button" class="btn btn-warning">변경</button>
             <button id="resign" type="button" class="btn btn-danger">탈퇴</button>
         </section>
+        <input type="hidden" id="memberNo" th:value="${member.memberNo}">
     </main>
     <footer th:replace="~{/fragment/footer.html}">
     </footer>
