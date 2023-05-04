@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
@@ -269,6 +270,20 @@ public class GlobalController {
     @GetMapping("/admin/notice/list")
     public String adminNoticeList(){
         return "admin/notice/list";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/write")
+    public String adminNoticeWrite(){
+        return "admin/notice/write";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/notice/write")
+    public String adminNoticeWrite(NoticeDto.Add dto){
+        boardService.addNotice(dto);
+
+        return "redirect:/admin/notice/list";
     }
 
     @Secured("ROLE_ADMIN")
