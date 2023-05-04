@@ -11,10 +11,13 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private ChatWebSocketHandler chatWebSocketHandler;
+    @Autowired
+    private ChatImageWebsocketHandler chatImageWebsocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // 소켓연결 주소와 소켓접근가능 도메안 설정
         registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("http://localhost:8081");
+        registry.addHandler(chatImageWebsocketHandler,"/chatimage").setAllowedOrigins(("http://localhost:8081:"));
     }
 }

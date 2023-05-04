@@ -1,9 +1,11 @@
 package kr.kro.namohagae.puchingtest.dto;
 
+import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.puchingtest.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +32,20 @@ public class MessageDto {
 
         public Message toEntity(String messageContentType) {
             return Message.builder().messageSender(messageSender).messageReceiver(messageReceiver).messageContent(messageContent)
+                    .messageContentType(messageContentType).messageWriteDate(LocalDateTime.now()).build();
+        }
+    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ImageMessageSave{
+        private Integer messageSender;
+        private Integer messageReceiver;
+
+
+        public Message toEntity(String messageContentType,String imageName){
+            return Message.builder().messageSender(messageSender).messageReceiver(messageReceiver)
+                    .messageContent("<img src='"+ImageConstants.IMAGE_CHAT_URL +imageName+"'alt='chatimage'>")
                     .messageContentType(messageContentType).messageWriteDate(LocalDateTime.now()).build();
         }
     }
