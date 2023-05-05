@@ -1,6 +1,5 @@
 package kr.kro.namohagae.puchingtest.dto;
 
-import kr.kro.namohagae.member.dto.AlarmDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;

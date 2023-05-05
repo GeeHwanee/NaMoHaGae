@@ -1,19 +1,20 @@
-package kr.kro.namohagae.member.service;
+package kr.kro.namohagae.global.service;
 
-import kr.kro.namohagae.member.dao.AlarmDao;
-import kr.kro.namohagae.member.dto.AlarmDto;
+import kr.kro.namohagae.global.dao.NotificationDao;
+import kr.kro.namohagae.global.dto.NotificationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class AlarmService {
+public class NotificationService {
     @Autowired
-    private AlarmDao alarmDao;
+    private NotificationDao notificationDao;
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
-    public AlarmDto.Pagination findAll(Integer pageno,Integer memberNo) {
-        Integer countOfProduct = alarmDao.count(memberNo);
+
+    public NotificationDto.Pagination findAll(Integer pageno, Integer memberNo) {
+        Integer countOfProduct = notificationDao.count(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
         pageno = Math.abs(pageno);
@@ -22,7 +23,7 @@ public class AlarmService {
 
         Integer startRownum = (pageno-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<AlarmDto.FindAll> alarm = alarmDao.findAll(startRownum, endRownum,0);
+        List<NotificationDto.FindAll> notifications = notificationDao.findAll(startRownum, endRownum,memberNo);
         // 리스트 log로 찍어
         Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
@@ -32,12 +33,12 @@ public class AlarmService {
             end = countOfPage;
             next = 0;
         }
-        return new AlarmDto.Pagination(pageno, prev, start, end, next, alarm);
+        return new NotificationDto.Pagination(pageno, prev, start, end, next, notifications);
 
     }
 
     public void read (Integer bno){
-        alarmDao.alarmRead(bno);
+        notificationDao.notificationRead(bno);
     }
 
 
