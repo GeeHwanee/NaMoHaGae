@@ -1,11 +1,10 @@
 package kr.kro.namohagae.puchingtest.dto;
 
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.puchingtest.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 

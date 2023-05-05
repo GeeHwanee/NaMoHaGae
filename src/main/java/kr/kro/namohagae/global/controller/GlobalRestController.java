@@ -1,7 +1,7 @@
 package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

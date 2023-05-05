@@ -1,6 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
