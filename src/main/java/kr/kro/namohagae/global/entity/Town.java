@@ -1,4 +1,4 @@
-package kr.kro.namohagae.member.entity;
+package kr.kro.namohagae.global.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
