@@ -138,8 +138,8 @@ public class GlobalController {
     @GetMapping("/member/find")
     public void find(){}
 
-    @GetMapping("/member/alarm")
-    public void alarm(){}
+    @GetMapping("/member/notification")
+    public void notification(){}
 
     // [회원 파트]------[회원]--------------------------------------------------------
     @GetMapping("/member/information")
