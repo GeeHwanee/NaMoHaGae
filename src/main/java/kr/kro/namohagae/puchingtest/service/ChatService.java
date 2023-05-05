@@ -1,12 +1,10 @@
 package kr.kro.namohagae.puchingtest.service;
 
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
-import kr.kro.namohagae.member.entity.Member;
 import kr.kro.namohagae.puchingtest.dao.ChatDao;
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.dto.MessageDto;
-import kr.kro.namohagae.puchingtest.entity.ChatRoom;
 import kr.kro.namohagae.puchingtest.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package kr.kro.namohagae.member.service;
 
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
