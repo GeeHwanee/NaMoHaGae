@@ -83,15 +83,17 @@ aside {
     position:relative;
 
 }
+.title > li{ text-align: center;}
+.title > li > a { text-align: center; font-size: 15px; font-weight:bold; color:black;}
 .side_bar {
     text-align:center;
-
 }
+.side_bar > li > h2{ font-size: 15px; color: darkblue;}
 .side_bar > li {
-    margin-top:45px;
+    margin-top:20px;
 }
 .side_bar > li > a {
-    font-size:18px;
+    font-size:14px;
     font-weight:bold;
     color:#000;
 }
