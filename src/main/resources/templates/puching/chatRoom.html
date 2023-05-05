@@ -369,7 +369,55 @@
 
 
     }
+    //이미지 전송 -> 전송중일 때 추가로 요청보내는걸 막자 loading 중 인걸 나타내든가
+    $('#sendImageButton').on('click',async function(){
+        var imageInput=$('#imageInput')[0];
 
+        if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+            console.log('No file selected');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('file', imageInput.files[0]);
+        formData.append('receiverNo', nowChatUser);
+
+        try {
+            var response = await $.ajax({
+                url: '/api/v1/savechatimage',
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false
+            })
+
+            var imageMessage=response.messageContent;
+            console.log(imageMessage)
+            var imageMessageToSend = {
+                "message": imageMessage,
+                "receiverUsername": nowChatEmail  //상대이메일
+            };
+            var jsonData=JSON.stringify(imageMessageToSend)
+            socket.send(jsonData);
+            //보낸걸 자기거에 띄우는거
+            var content = ` <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>`+imageMessage+`</p>
+                                    <span class="time_date"> `+getCurrentTime()+`</span> </div>
+                            </div>`
+
+
+            $('.msg_history').append(content)
+            $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
+
+        } catch (error) {
+            console.log(error);
+            console.log("이미지 전송실패")
+        }finally {
+            imageInput.val(null);
+        }
+
+    })
 
     function sendPuching(senderEmail,receiverEmail) {
         //현재 퍼칭상태라면 못보내게 막자
@@ -474,44 +522,8 @@
         console.log(event+'이미지웹소켓 닫힘')
 
    }
-   $('#sendImageButton').on('click',async function(){
-       var imageInput=$('#imageInput')[0];
 
-       if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
-           console.log('No file selected');
-           return;
-       }
 
-       var formData = new FormData();
-       formData.append('file', imageInput.files[0]);
-       formData.append('receiverNo', nowChatUser);
-
-       try {
-           var response = await $.ajax({
-               url: '/api/v1/savechatimage',
-               method: 'POST',
-               data: formData,
-               contentType: false,
-               processData: false
-           });
-           imageSocket.send(response); //response 는 Message Entitiy타입 이므로 json으로 파싱하자
-
-       } catch (error) {
-           console.log(error);
-       }
-
-       })
-   function sendImage() {
-       const fileInput = document.getElementById('image-file');
-       const reader = new FileReader();
-       reader.onload = function(event) {
-           const base64Image = event.target.result;
-           // WebSocket을 통해 base64Image를 서버에 전송합니다.
-           // ...
-       };
-       reader.readAsDataURL(fileInput.files[0]);
-
-   }
 
 </script>
 <script th="inline">
