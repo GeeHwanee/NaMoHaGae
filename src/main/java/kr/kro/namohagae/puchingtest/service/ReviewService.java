@@ -1,6 +1,5 @@
 package kr.kro.namohagae.puchingtest.service;
 
-import kr.kro.namohagae.member.dto.AlarmDto;
 import kr.kro.namohagae.puchingtest.dao.ReviewDao;
 import kr.kro.namohagae.puchingtest.dto.ReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
