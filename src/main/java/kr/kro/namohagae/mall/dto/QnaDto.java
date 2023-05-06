@@ -12,6 +12,14 @@ import java.util.List;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class QnaDto {
 
+    @Data
+    public static class list {
+        // 내용 작성자 작성일, 답변내용 답변일자
+        private String qnaContent;
+        private Integer qnaWriter;
+        private String qnaAnswerContent;
+    }
+    
     // 페이지네이션
     @Data
     @AllArgsConstructor
@@ -22,7 +30,7 @@ public class QnaDto {
         private Integer end;
         private Integer next;
         private Integer productNo;
-        private List<Qna> qnas;
+        private List<QnaDto.list> qna;
     }
 
     // 질문 쓰기
