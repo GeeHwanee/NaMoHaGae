@@ -25,7 +25,7 @@ public class ProductService {
     private final ProductReviewDao productReviewDao;
     private final QnaDao qnaDao;
 
-    private final Integer PAGESIZE = 10;
+    private final Integer PAGESIZE = 9;
     private final Integer BLOCKSIZE = 5;
 
     public List<ProductCategory> findAll() {
@@ -91,12 +91,6 @@ public class ProductService {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo);
-//        for (ProductDto.ReadAll r :products
-//        ){
-//           r.setProductImage(ImageConstants.IMAGE_PRODUCT_URL+"?name="+r.getProductImage());
-//           System.out.println(r.getProductImage());
-//        }
-
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
