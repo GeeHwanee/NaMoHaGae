@@ -44,7 +44,126 @@
     }
 </style>
 <script>
-    $(document).ready(function() {
+    // 날짜 yyyy-MM-dd
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
+
+    // 리뷰리스트 출력
+    function printBoard(review) {
+        const $tbody = $('#review');
+        $tbody.empty();
+        for(const r of review) {
+            const rating = parseInt(r.productReviewStar); // 별점을 숫자로 변환
+            const ReviewStarIcon = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            const tpl = `<tr>
+        <td>${ReviewStarIcon}</td>
+        <td>${r.productReviewContent}</td>
+				<td>${r.productReviewWriter}</td>
+				<td>${formatDate(r.productReviewWriteDate)}</td>
+			</tr>`;
+            $tbody.append(tpl);
+        }
+    }
+
+
+    function printPagination({prev, start, end, next, pageno}) {
+        const $ul = $('#page_ul');
+        $ul.empty();
+        if (prev > 0) {
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+        }
+        for (let i = start; i <= end; i++) {
+            const tpl = `<li class='page-item ${i === pageno ? "active" : ""}'><a class='page-link' href='#' data-page-no='${i}'>${i}</a></li>`;
+            $ul.append(tpl);
+        }
+        if (next > 0) {
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`);
+        }
+    }
+
+
+    // 큐엔에이리스트 출력
+    function printQnaBoard(qna) {
+        const $tbody = $('#qna');
+        $tbody.empty();
+        for(const q of qna) {
+            const tpl = `<tr>
+        <td>${q.qnaContent}</td>
+        <td>${q.qnaWriter}</td>
+				<td>${formatDate(q.qnaWriteDate)}</td>
+			</tr>`;
+            $tbody.append(tpl);
+        }
+    }
+
+    function printQnaPagination({prev, start, end, next, pageno}) {
+        const $ul = $('#q_page_ul');
+        $ul.empty();
+        if (prev > 0) {
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+        }
+        for (let i = start; i <= end; i++) {
+            const tpl = `<li class='page-item ${i === pageno ? "active" : ""}'><a class='page-link' href='#' data-page-no='${i}'>${i}</a></li>`;
+            $ul.append(tpl);
+        }
+        if (next > 0) {
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`);
+        }
+    }
+
+    $(document).ready(async function() {
+        let result = undefined;
+        const param = new URLSearchParams(location.search);
+        const productNo = param.get('productNo');
+        const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+
+        try {
+            result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageno + "&productNo=" + productNo);
+            printBoard(result.review);
+            printPagination({prev: result.prev, start: result.start, end: result.end, next: result.next, pageno: pageno, productNo: productNo});
+
+            $('#page_ul').on('click', '.page-link', async function(e) {
+                e.preventDefault();
+                const pageNum = $(this).data('page-no');
+                try {
+                    result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageNum + "&productNo=" + productNo);
+                    printBoard(result.review);
+                    printPagination(result);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+
+        try {
+            result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageno + "&productNo=" + productNo);
+            printQnaBoard(result.qna);
+            printQnaPagination({prev: result.prev, start: result.start, end: result.end, next: result.next, pageno: pageno, productNo: productNo});
+
+            $('#q_page_ul').on('click', '.page-link', async function (e) {
+                e.preventDefault();
+                const pageNum = $(this).data('page-no');
+                try {
+                    result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageNum + "&productNo=" + productNo);
+                    printQnaBoard(result.qna);
+                    printQnaPagination(result);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+        }catch (err){
+            console.log(err);
+        }
+
+
+        // 이미지 선택
         $('.images:first-of-type').addClass('choice_image');
 
         $('.images').click(function() {
@@ -52,6 +171,32 @@
             $(this).addClass('choice_image');
             $('#select_image').attr('src', $(this).attr('src'));
         });
+
+
+        // 찜하기
+        try{
+            const result = await $.ajax("/api/v1/favorite/check?productNo="+productNo);
+            if(result == true){
+                $('#favorite_text').text("찜하기 취소");
+            }else{
+                $('#favorite_text').text("찜하기");
+            }
+        }catch (err){
+            console.log(err)
+        }
+        $('#favorite').on('click',async function(){
+            try{
+                const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+productNo, method:"patch"});
+                if(result.favorite == true){
+                    $('#favorite_text').text("찜하기 취소");
+                } else {
+                    $('#favorite_text').text("찜하기")
+                }
+            }catch (err){
+                console.log(err)
+            }
+        })
+
 
         // qna 문의하기
         $("#write").click(function() {
@@ -62,83 +207,88 @@
 </script>
 </head>
 <body>
-<header th:replace="~{/fragment/header.html}">
-</header>
-<nav th:replace="~{/fragment/nav.html}">
-</nav>
-<main>
-    <aside th:replace="~{/fragment/aside.html}">
-    </aside>
-    <section>
-        <div style="display:none;" th:text="${product.productNo}" id="productNo"></div>
-        <div style="overflow:hidden;">
-            <div id="left">
-                <div>
-                    <img th:src="${product.productImages[0]}" id="select_image" height="300px" width="325px">
+<div id="page">
+    <header th:replace="~{/fragment/header.html}">
+    </header>
+    <nav th:replace="~{/fragment/nav.html}">
+    </nav>
+    <main>
+        <aside th:replace="~{/fragment/aside.html}">
+        </aside>
+        <section>
+            <div style="display:none;" th:text="${product.productNo}" id="productNo"></div>
+            <div style="overflow:hidden;">
+                <div id="left">
+                    <div>
+                        <img th:src="${product.productImages[0]}" id="select_image" height="300px" width="325px">
+                    </div>
+                    <div>
+                        <img th:each="image:${product.productImages}" th:src="${image}" height="100px" width="100px" style="margin: 5px;" class='images'>
+                    </div>
                 </div>
-                <div>
-                    <img th:each="image:${product.productImages}" th:src="${image}" height="100px" width="100px" style="margin: 5px;" class='images'>
+                <div id="right">
+                    <div th:text="${product.productName}"></div>
+                    <div>별점출력하는곳</div>
+                    <!--<div th:text="${product.productGrade}"></div>-->
+                    <span class="product-price">
+                          <div th:if="${product.productStock == 0}">
+                            <span style="color: red">품절댐</span>
+                          </div>
+                          <div th:unless="${product.productStock == 0}">
+                            <div>
+                              <span th:text="${#numbers.formatInteger(product.productPrice,0,'COMMA')}+'원'"></span>
+                            </div>
+                          </div>
+                        </span>
+                    <div>뼈다귀 포인트 1% 적립</div>
+                    <div>배송정보 배송비 3,000원</div>
+                </div>
+                <div id="buttons">
+                    <button id="buy">구매하기</button>
+                    <button id="cart">장바구니</button>
+                    <button id="favorite"><span id="favorite_text">찜하기</span></button>
                 </div>
             </div>
-            <div id="right">
-                <div th:text="${product.productName}"></div>
-                <div>별점출력하는곳</div>
-                <!--<div th:text="${product.productGrade}"></div>-->
-                <span class="product-price">
-                      <div th:if="${product.productStock == 0}">
-                        <span style="color: red">품절댐</span>
-                      </div>
-                      <div th:unless="${product.productStock == 0}">
-                        <div>
-                          <span th:text="${#numbers.formatInteger(product.productPrice,0,'COMMA')}+'원'"></span>
-                        </div>
-                      </div>
-                    </span>
-                <div>뼈다귀 포인트 1% 적립</div>
-                <div>배송정보 배송비 3,000원</div>
+            <div id="content" th:utext="${product.productContent}"></div>
+
+
+            <hr>
+            <h3>리뷰 출력중</h3>
+            <div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>별점</th><th>내용</th><th>작성자</th><th>작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody id="review">
+                    </tbody>
+                </table>
+                <ul class="pagination" id="page_ul">
+                </ul>
             </div>
-            <div id="buttons">
-                <button id="buy">구매하기</button>
-                <button id="cart">장바구니</button>
-                <button id="favorite" >찜하기</button>
+
+
+            <hr>
+            <h3>qna 출력중 (관리자답변도 같이 끌고오세요)</h3>
+            <div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>내용</th><th>작성자</th><th>작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody id="qna">
+                    </tbody>
+                </table>
+                <button id="write" class="btn btn-primary">문의하기</button>
+                <ul class="pagination" id="q_page_ul">
+                </ul>
             </div>
-        </div>
-        <div id="content" th:utext="${product.productContent}"></div>
-
-
-        <hr>
-        <p>리뷰 출력중</p>
-        <div>
-            <table class="table table-hover">
-                <!-- 별점	, 내용, 작성자, 작성일 -->
-                <tr th:each="review:${product.productReviews}">
-                    <td>
-                        <i th:each="i: ${#numbers.sequence(1, 5)}" class="fa" th:classappend="${i<=review.productReviewStar}?'fa-star': 'fa-star-o'" aria-hidden="true"></i>
-                    </td>
-                    <td th:text="${review.productReviewContent}"></td>
-                    <td th:text="${review.productReviewWriter}"></td>
-                    <td th:text="${review.productReviewWriteDate}"></td>
-                </tr>
-            </table>
-        </div>
-
-        <hr>
-        <p>qna 출력중</p>
-        <div>
-            <table class="table table-hover">
-                <!-- 내용, 작성자, 작성일 -->
-                <tr th:each="qna:${product.qnas}">
-                    <td th:text="${qna.qnaContent}"></td>
-                    <td th:text="${qna.qnaWriter}"></td>
-                    <td th:text="${qna.qnaWriteDate}"></td>
-                </tr>
-            </table>
-            <button id="write" class="btn btn-primary">문의하기</button>
-        </div>
-
-    </section>
-</main>
-<footer th:replace="~{/fragment/footer.html}">
-</footer>
+        </section>
+    </main>
+    <footer th:replace="~{/fragment/footer.html}">
+    </footer>
+</div>
 </body>
 </html>
