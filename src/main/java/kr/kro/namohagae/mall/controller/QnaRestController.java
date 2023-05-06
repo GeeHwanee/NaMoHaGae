@@ -17,8 +17,6 @@ public class QnaRestController {
 
     @GetMapping(value="/mall/product/qna", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageNo, Integer productNo) {
-        System.out.println(productNo);
-        System.out.println(pageNo + "현재페이지");
         return ResponseEntity.ok(service.list(pageNo,productNo));
     }
 }
