@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
@@ -18,6 +15,7 @@ import java.util.Collection;
 @Builder
 public class MyUserDetails implements UserDetails {
     private Integer memberNo;
+    private String memberNickname;
     private String username;
     private String password;
     private Boolean enabled;

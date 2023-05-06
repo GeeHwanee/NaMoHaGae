@@ -1,6 +1,6 @@
 package kr.kro.namohagae;
 
-import kr.kro.namohagae.member.dao.AlarmDao;
+import kr.kro.namohagae.global.dao.NotificationDao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class NaMoHaGaeApplicationTests {
     @Autowired
-    private AlarmDao dao;
+    private NotificationDao dao;
     @Test
     void contextLoads() {
     }

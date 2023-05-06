@@ -1,6 +1,5 @@
 package kr.kro.namohagae.member.dto;
 
-import kr.kro.namohagae.global.util.ImageConstants;
 import kr.kro.namohagae.member.entity.Dog;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,11 +9,12 @@ import java.time.LocalDate;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class DogDto {
     @Data
-    public class List {
-        private String dogProfileImage;
+    @ToString
+    public static class dogList {
+        private Integer dogNo;
+        private String dogProfile;
         private String dogName;
     }
-
     @Data
     public static class registeration{
         private String dogCategory;

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kro.namohagae.global.dao.NotificationDao">
+
+    <insert id="save" parameterType="Notification">
+    insert into NOTIFICATION(NOTIFICATION_no,member_no,NOTIFICATION_content,NOTIFICATION_link,NOTIFICATION_read_enabled)
+    values (#{notificationNo},#{memberNo},#{notificationContent},#{notificationLink},#{notificationReadEnabled})
+    </insert>
+
+    <select id="count" resultType="int">
+        select count(NOTIFICATION_no) from notification where member_no=#{memberNo}
+    </select>
+
+    <select id="findAll" resultType="kr.kro.namohagae.global.dto.NotificationDto$FindAll">
+        select * from
+            (
+                select rownum as rnum, a.* from
+                    (
+                        select
+                            notification_no, notification_content, notification_link, notification_read_enabled
+                        from notification where member_no =#{memberNo}
+                    ) a
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+
+    <select id="read" resultType="kr.kro.namohagae.global.dto.NotificationDto$FindAll">
+        select
+            NOTIFICATION_NO, NOTIFICATION_CONTENT, NOTIFICATION_LINK, NOTIFICATION_READ_ENABLED
+        from notification where notification_no=#{no}
+    </select>
+
+    <update id="notificationRead" parameterType="int">
+        update notification set notification_read_enabled =1 where notification_no=#{no}
+    </update>
+</mapper>
+

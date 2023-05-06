@@ -1,21 +1,20 @@
 package kr.kro.namohagae.member.entity;
 
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dto.DogDto;
-import kr.kro.namohagae.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @Builder
 @Alias("Dog")
 public class Dog {
+    private Integer dogNo;
     private Integer memberNo;
     private LocalDate dogBirthdayDate;
     private String dogIntroduce;

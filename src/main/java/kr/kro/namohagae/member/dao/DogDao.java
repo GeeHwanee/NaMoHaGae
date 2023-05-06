@@ -13,9 +13,9 @@ public interface DogDao {
 
     public Integer delete(Integer dogNo);
 
-    public Integer update(Integer dogNo,String introduce,Boolean notGenderEnabled,Double weight,String name,String profile);
+    public Boolean update(Integer dogNo,String introduce,Boolean notGenderEnabled,Double weight,String name,String profile);
 
-    public List<DogDto.List> findDogList(Integer memberNo);
+    public List<DogDto.dogList> findDogList(Integer memberNo);
 
 
     public Optional<Dog> findByDog(Integer dogNo);
