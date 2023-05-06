@@ -24,9 +24,8 @@ public class ProductService {
     private final ProductImageDao productImageDao;
     private final ProductReviewDao productReviewDao;
     private final QnaDao qnaDao;
-    private final ProductReviewService reviewService;
 
-    private final Integer PAGESIZE = 10;
+    private final Integer PAGESIZE = 9;
     private final Integer BLOCKSIZE = 5;
 
     public List<ProductCategory> findAll() {
@@ -93,12 +92,6 @@ public class ProductService {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo);
-//        for (ProductDto.ReadAll r :products
-//        ){
-//           r.setProductImage(ImageConstants.IMAGE_PRODUCT_URL+"?name="+r.getProductImage());
-//           System.out.println(r.getProductImage());
-//        }
-
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -169,8 +162,8 @@ public class ProductService {
 
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-        dto.setProductReviews(productReviewDao.findByProductNo(productNo)); //여기에 페이징을 넣으면 dto에 값을 못 넣으니까 문제네
-        dto.setQnas(qnaDao.findByProductNo(productNo));
+        //dto.setProductReviews(productReviewDao.findByProductNo(productNo)); // 리뷰+페이징 같이 ajax로 뿌리기 수정중
+        //dto.setQnas(qnaDao.findByProductNo(productNo));
         return dto;
     }
 
@@ -181,15 +174,6 @@ public class ProductService {
 
         return (imageDeleteResult>0)&&(productDeleteResult>0);
     }
-
-
-
-
-
-
-
-
-
 
     // 수정중 (리뷰페이징추가,)
     /*
@@ -205,6 +189,7 @@ public class ProductService {
         return dto;
     }
      */
+
 
 
 }
