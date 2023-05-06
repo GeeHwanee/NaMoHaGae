@@ -1,6 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
@@ -66,24 +66,25 @@ public class ProductService {
         String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.update(product);
-
-        List<ProductImage> images = new ArrayList<>();
-        for(MultipartFile image: dto.getProductImages()) {
-            if(image!=null && !image.isEmpty()) {
-                originalFilename = image.getOriginalFilename();
-                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
-                try {
-                    image.transferTo(saveFile);
-                } catch (IllegalStateException | IOException e) {
-                    e.printStackTrace();
+        if (dto.getProductImages()!=null) {
+            List<ProductImage> images = new ArrayList<>();
+            for (MultipartFile image : dto.getProductImages()) {
+                if (image != null && !image.isEmpty()) {
+                    originalFilename = image.getOriginalFilename();
+                    File saveFile = new File(currentDir + ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                    try {
+                        image.transferTo(saveFile);
+                    } catch (IllegalStateException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
                 }
-                images.add(new ProductImage(product.getProductNo(), imageIndex++, originalFilename));
             }
-        }
-        if(images.size()==0)
-            images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
+            if (images.size() == 0)
+                images.add(new ProductImage(product.getProductNo(), 1, originalFilename));
 
-        productImageDao.update(images);
+            productImageDao.update(images);
+        }
         return product.getProductNo();
     }
 
@@ -173,6 +174,22 @@ public class ProductService {
 
         return (imageDeleteResult>0)&&(productDeleteResult>0);
     }
+
+    // 수정중 (리뷰페이징추가,)
+    /*
+    public ProductDto.Read read(Integer startRowNum, Integer endRowNum, Integer productNo) {
+        ProductDto.Read dto = productDao.findByProductNo(productNo);
+
+        // 리뷰 리스트 및 페이징 정보를 설정
+        ProductReviewDto.Pagination pagination = reviewService.list(startRowNum, productNo);
+        dto.setProductReviews(pagination.getReviews());
+        dto.setReviewsStartRow(pagination.getStart());
+        dto.setReviewsEndRow(pagination.getEnd());
+
+        return dto;
+    }
+     */
+
 
 
 }

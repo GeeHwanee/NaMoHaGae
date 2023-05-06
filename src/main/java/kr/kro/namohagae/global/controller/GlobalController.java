@@ -3,20 +3,22 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dto.ProductDto;
+import kr.kro.namohagae.mall.dto.QnaDto;
 import kr.kro.namohagae.mall.service.ProductService;
+import kr.kro.namohagae.mall.service.QnaService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -44,7 +46,8 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
-
+    @Autowired
+    private QnaService qnaService;
     @Autowired
     private MemberService memberService;
     @Autowired
@@ -135,8 +138,8 @@ public class GlobalController {
     @GetMapping("/member/find")
     public void find(){}
 
-    @GetMapping("/member/alarm")
-    public void alarm(){}
+    @GetMapping("/member/notification")
+    public void notification(){}
 
     // [회원 파트]------[회원]--------------------------------------------------------
     @GetMapping("/member/information")
@@ -152,10 +155,10 @@ public class GlobalController {
         MemberDto.Read dto = memberService.read(memberNo);
         return new ModelAndView("/member/profile").addObject("member",dto);
     }
-    @GetMapping("/member/dog/porfile")
+    @GetMapping("/member/dog/profile")
     public  ModelAndView dogProfile(Integer dogNo){
         DogDto.Read dto = dogService.read(dogNo);
-        return  new ModelAndView("/dog/profile").addObject("dog",dto);
+        return  new ModelAndView("/member/dog/profile").addObject("dog",dto);
     }
 
 
@@ -204,7 +207,7 @@ public class GlobalController {
 
     @GetMapping("/board/free/list")
     public String paging(Model model,
-                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,String searchName) {
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
 
         List<Board> pagingList = boardService.pagingList(page);
         PageDto pageDTO = boardService.pagingParam(page);
@@ -270,8 +273,18 @@ public class GlobalController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/admin/qna/list")
-    public String adminQnaList(){ return  "admin/qna/list";}
+    @GetMapping("/admin/notice/write")
+    public String adminNoticeWrite(){
+        return "admin/notice/write";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/notice/write")
+    public String adminNoticeWrite(NoticeDto.Add dto){
+        boardService.addNotice(dto);
+
+        return "redirect:/admin/notice/list";
+    }
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
@@ -279,10 +292,10 @@ public class GlobalController {
         model.addAttribute("list",productService.list(pageNo, null));
         return "admin/product/list";
     }
+
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/report/list")
     public String adminReportList(){ return "admin/report/list";}
-
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/write")
     public void adminProductWrite(){}
@@ -313,6 +326,28 @@ public class GlobalController {
 
 
     }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/qna/list")
+    public String adminQnaList(Model model){
+        model.addAttribute("list", qnaService.readAll());
+        return  "admin/qna/list";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/qna/write")
+    public String adminQnaWrite(Integer qnaNo, Model model){
+        model.addAttribute("qna",qnaService.print(qnaNo));
+        return "admin/qna/write";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/qna/write")
+    public String adminQnaWrite(QnaDto.Put dto){
+        qnaService.update(dto);
+        return "redirect:/admin/qna/list";
+    }
+
     // -------------------------------------------------------------------------------
 
 }

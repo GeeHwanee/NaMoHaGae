@@ -1,11 +1,15 @@
 package kr.kro.namohagae.board.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class Board {
 
         private Integer boardNo;
@@ -19,5 +23,5 @@ public class Board {
         private Boolean boardEnabled;
 
 
-    }
+}
 

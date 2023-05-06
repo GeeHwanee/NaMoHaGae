@@ -14,9 +14,9 @@
         }
     </style>
     <script>
-        function printBoard(alarm) {
+        function printBoard(notification) {
             const $tbody = $('#tbody');
-            for(const a of alarm) {
+            for(const a of notification) {
                 const tpl = `<tr>
 				<td>${a.alarmNo}</td>
 				<td>
@@ -48,9 +48,9 @@
             const param = new URLSearchParams(location.search);
             const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
             try {
-                const result = await $.ajax("/rest/alarm/list?pageno=" + pageno);
+                const result = await $.ajax("/rest/notification/list?pageno=" + pageno);
                 console.log(result);
-                printBoard(result.alarm);
+                printBoard(result.notification);
                 printPagination(result);
             } catch (err) {
                 console.log(err);
@@ -59,7 +59,7 @@
                 const no = $(this).data("no");
                 try {
                     await $.ajax({
-                        url: "/rest/alarm/read/" + no,
+                        url: "/rest/notification/read/" + no,
                         type: "PUT"
                     });
                     // 읽음 여부를 업데이트한 후의 작업을 수행

@@ -7,7 +7,7 @@
 ### Member
 1. 박지환
   - 팀장, 일정 관리, 작업 관리
-  - 담당 도메인: Global
+  - 담당 도메인: Global, Admin
 2. 김현욱
   - 부팀장, 작업 관리
   - 담당 도메인: Puching
@@ -18,6 +18,6 @@
   - 메인 CSS
   - 담당 도메인: Board
 5. 최준휘
-  - 담당 도메인: Member, Admin
+  - 담당 도메인: Member
 
 

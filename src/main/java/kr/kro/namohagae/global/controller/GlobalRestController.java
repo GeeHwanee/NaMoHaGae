@@ -1,7 +1,7 @@
 package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.kro.namohagae.global.util.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import java.nio.file.Files;
 @RequestMapping(value = "/api/v1")
 public class GlobalRestController {
 
-    @GetMapping(value = {"/image/board", "/image/embeded", "/image/product", "/image/profile", "/image/temp", "/image/chat"}, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = {"/image/board", "/image/dog","/image/embeded", "/image/product", "/image/profile", "/image/temp", "/image/chat"}, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> viewImage(String name, HttpServletRequest req){
         String path = req.getRequestURI();
         String folder = null;

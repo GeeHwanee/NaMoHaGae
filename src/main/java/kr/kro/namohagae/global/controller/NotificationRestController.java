@@ -1,7 +1,7 @@
-package kr.kro.namohagae.member.controller;
+package kr.kro.namohagae.global.controller;
 
 import kr.kro.namohagae.global.security.MyUserDetails;
-import kr.kro.namohagae.member.service.AlarmService;
+import kr.kro.namohagae.global.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest")
-public class AlarmRestController {
+public class NotificationRestController {
     @Autowired
-    private AlarmService service;
+    private NotificationService service;
     @GetMapping(value="/alarm/list", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo= myUserDetails.getMemberNo();
