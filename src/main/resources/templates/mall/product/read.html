@@ -56,6 +56,7 @@
     // 리뷰리스트 출력
     function printBoard(review) {
         const $tbody = $('#review');
+        $tbody.empty();
         for(const r of review) {
             const rating = parseInt(r.productReviewStar); // 별점을 숫자로 변환
             const ReviewStarIcon = '★'.repeat(rating) + '☆'.repeat(5 - rating);
@@ -69,25 +70,27 @@
         }
     }
 
+
     function printPagination({prev, start, end, next, pageno}) {
         const $ul = $('#page_ul');
-        if(prev>0)
+        $ul.empty();
+        if (prev > 0) {
             $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
-        for(let i=start; i<=end; i++) {
-            const tpl = `
-			<li class='page-item ${pageno==i? "active":""}'>
-				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
-			</li>
-		`;
+        }
+        for (let i = start; i <= end; i++) {
+            const tpl = `<li class='page-item ${i === pageno ? "active" : ""}'><a class='page-link' href='#' data-page-no='${i}'>${i}</a></li>`;
             $ul.append(tpl);
         }
-        if(next>0)
-            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        if (next > 0) {
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`);
+        }
     }
+
 
     // 큐엔에이리스트 출력
     function printQnaBoard(qna) {
         const $tbody = $('#qna');
+        $tbody.empty();
         for(const q of qna) {
             const tpl = `<tr>
         <td>${q.qnaContent}</td>
@@ -100,18 +103,17 @@
 
     function printQnaPagination({prev, start, end, next, pageno}) {
         const $ul = $('#q_page_ul');
-        if(prev>0)
+        $ul.empty();
+        if (prev > 0) {
             $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
-        for(let i=start; i<=end; i++) {
-            const tpl = `
-			<li class='page-item ${pageno==i? "active":""}'>
-				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
-			</li>
-		`;
+        }
+        for (let i = start; i <= end; i++) {
+            const tpl = `<li class='page-item ${i === pageno ? "active" : ""}'><a class='page-link' href='#' data-page-no='${i}'>${i}</a></li>`;
             $ul.append(tpl);
         }
-        if(next>0)
-            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        if (next > 0) {
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`);
+        }
     }
 
     $(document).ready(async function() {
@@ -121,37 +123,44 @@
         const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
 
         try {
-            result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageno+"&productNo="+productNo);
+            result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageno + "&productNo=" + productNo);
             printBoard(result.review);
-            printPagination(result);
+            printPagination({prev: result.prev, start: result.start, end: result.end, next: result.next, pageno: pageno, productNo: productNo});
 
-            $('#page_ul').on('click', '.page-link', async function (e) {
+            $('#page_ul').on('click', '.page-link', async function(e) {
                 e.preventDefault();
                 const pageNum = $(this).data('page-no');
-                const result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageNum);
-                printBoard(result.review);
-                printPagination(result);
+                try {
+                    result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageNum + "&productNo=" + productNo);
+                    printBoard(result.review);
+                    printPagination(result);
+                } catch (err) {
+                    console.log(err);
+                }
             });
-        }catch (err){
+        } catch (err) {
             console.log(err);
         }
 
         try {
-            result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageno+"&productNo="+productNo);
+            result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageno + "&productNo=" + productNo);
             printQnaBoard(result.qna);
-            printQnaPagination(result);
+            printQnaPagination({prev: result.prev, start: result.start, end: result.end, next: result.next, pageno: pageno, productNo: productNo});
 
             $('#q_page_ul').on('click', '.page-link', async function (e) {
                 e.preventDefault();
                 const pageNum = $(this).data('page-no');
-                const result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageNum);
-                printBoard(result.qna);
-                printPagination(result);
+                try {
+                    result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageNum + "&productNo=" + productNo);
+                    printQnaBoard(result.qna);
+                    printQnaPagination(result);
+                } catch (err) {
+                    console.log(err);
+                }
             });
         }catch (err){
             console.log(err);
         }
-
 
 
         // 이미지 선택
@@ -176,7 +185,6 @@
             console.log(err)
         }
         $('#favorite').on('click',async function(){
-            console.log("찜했어요");
             try{
                 const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+productNo, method:"patch"});
                 if(result.favorite == true){
@@ -265,13 +273,6 @@
             <h3>qna 출력중 (관리자답변도 같이 끌고오세요)</h3>
             <div>
                 <table class="table table-hover">
-                    <!-- 내용, 작성자, 작성일 / 답변내용, 답변작성일
-                    <tr th:each="qna:${product.qnas}">
-                        <td th:text="${qna.qnaContent}"></td>
-                        <td th:text="${qna.qnaWriter}"></td>
-                        <td th:text="${qna.qnaWriteDate}"></td>
-                    </tr>
-                    -->
                     <thead>
                         <tr>
                             <th>내용</th><th>작성자</th><th>작성일</th>
