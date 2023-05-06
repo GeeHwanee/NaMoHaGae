@@ -13,21 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
-public class FavoriteController {
+public class FavoriteRestController {
     private final FavoriteService service;
 
 
-    @PatchMapping("/mall/favorite")
+    @PatchMapping("/favorite/add")
     public ResponseEntity<?> favorite(Integer productNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
         Integer memberNo=myUserDetails.getMemberNo();
-        System.out.println(memberNo + "나오니 favorite");
         return ResponseEntity.ok(service.favorite(productNo, memberNo));
     }
 
     @GetMapping("/favorite/check")
     public  ResponseEntity<Boolean> checkFavorite(Integer productNo,@AuthenticationPrincipal MyUserDetails myUserDetails){
         Integer memberNo=myUserDetails.getMemberNo();
-        System.out.println(memberNo + "나오니 checkFavorite");
         return ResponseEntity.ok(service.checkFavorite(productNo, memberNo));
     }
 }
