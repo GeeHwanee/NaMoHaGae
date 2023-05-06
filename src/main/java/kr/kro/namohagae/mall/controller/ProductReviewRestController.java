@@ -17,7 +17,6 @@ public class ProductReviewRestController {
 
     @GetMapping(value="/mall/product/review", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageNo, Integer productNo) {
-        System.out.println(productNo);
         return ResponseEntity.ok(service.list(pageNo,productNo));
     }
 }
