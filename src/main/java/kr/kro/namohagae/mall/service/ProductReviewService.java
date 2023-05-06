@@ -41,7 +41,7 @@ public class ProductReviewService {
     public ProductReviewDto.Pagination list(Integer pageNo, Integer productNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductReview> reviews =  productReviewDao.findAllByProductNo(startRowNum, endRowNum, productNo);
+        List<ProductReviewDto.list> review =  productReviewDao.findAllByProductNo(startRowNum, endRowNum, productNo);
         Integer countOfReview = productReviewDao.count(productNo);
         Integer countOfPage = (countOfReview-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -52,6 +52,6 @@ public class ProductReviewService {
             end = countOfPage;
             next = 0;
         }
-        return new ProductReviewDto.Pagination(pageNo, prev, start, end, next, productNo, reviews);
+        return new ProductReviewDto.Pagination(pageNo, prev, start, end, next, productNo, review);
     }
 }

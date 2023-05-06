@@ -12,6 +12,16 @@ import java.util.List;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class ProductReviewDto {
 
+    // 상품read에서 페이징 처리 때문에 5/4추가
+    @Data
+    public static class list {
+        // 별점 내용 작성자 작성일
+        //private Integer productReviewStar;
+        private String productReviewContent;
+        private Integer productReviewWriter;
+        //private LocalDateTime productReviewWriteDate;
+    }
+    
     // 페이지네이션
     @Data
     @AllArgsConstructor
@@ -22,7 +32,7 @@ public class ProductReviewDto {
         private Integer end;
         private Integer next;
         private Integer productNo;
-        private List<ProductReview> reviews;
+        private List<ProductReviewDto.list> review;
     }
     
     // 리뷰 쓰기

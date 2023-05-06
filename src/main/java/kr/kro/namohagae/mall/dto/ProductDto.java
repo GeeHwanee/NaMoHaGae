@@ -1,7 +1,6 @@
 package kr.kro.namohagae.mall.dto;
 
 import kr.kro.namohagae.mall.entity.Product;
-import kr.kro.namohagae.mall.entity.ProductReview;
 import kr.kro.namohagae.mall.entity.Qna;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,10 +25,6 @@ public class ProductDto {
         private Integer productStock;
         private String productContent;
         private List<MultipartFile> productImages;
-
-//        public void setProductNo(Integer productNo) {
-//            this.productNo = productNo;
-//        }
 
         public Product toEntity() {
             return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
@@ -75,12 +70,9 @@ public class ProductDto {
         private Integer productStock;
         //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
-        private List<ProductReview> productReviews;
+        private List<ProductReviewDto.list> productReviews;
         private List<Qna> qnas;
 
-        // 리뷰 페이징 처리
-//        private Integer reviewsStartRow;
-//        private Integer reviewsEndRow;
 
     }
 
