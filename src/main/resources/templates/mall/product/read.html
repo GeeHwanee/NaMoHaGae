@@ -85,6 +85,35 @@
             $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
     }
 
+    // 큐엔에이리스트 출력
+    function printQnaBoard(qna) {
+        const $tbody = $('#qna');
+        for(const q of qna) {
+            const tpl = `<tr>
+        <td>${q.qnaContent}</td>
+        <td>${q.qnaWriter}</td>
+				<td>${formatDate(q.qnaWriteDate)}</td>
+			</tr>`;
+            $tbody.append(tpl);
+        }
+    }
+
+    function printQnaPagination({prev, start, end, next, pageno}) {
+        const $ul = $('#q_page_ul');
+        if(prev>0)
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+        for(let i=start; i<=end; i++) {
+            const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+            $ul.append(tpl);
+        }
+        if(next>0)
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+    }
+
     $(document).ready(async function() {
         let result = undefined;
         const param = new URLSearchParams(location.search);
@@ -93,7 +122,6 @@
 
         try {
             result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageno+"&productNo="+productNo);
-            console.log(result);
             printBoard(result.review);
             printPagination(result);
 
@@ -101,13 +129,29 @@
                 e.preventDefault();
                 const pageNum = $(this).data('page-no');
                 const result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageNum);
-                console.log(result);
                 printBoard(result.review);
                 printPagination(result);
             });
         }catch (err){
             console.log(err);
         }
+
+        try {
+            result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageno+"&productNo="+productNo);
+            printQnaBoard(result.qna);
+            printQnaPagination(result);
+
+            $('#q_page_ul').on('click', '.page-link', async function (e) {
+                e.preventDefault();
+                const pageNum = $(this).data('page-no');
+                const result = await $.ajax("/api/v1/mall/product/qna?pageNo=" + pageNum);
+                printBoard(result.qna);
+                printPagination(result);
+            });
+        }catch (err){
+            console.log(err);
+        }
+
 
 
         // 이미지 선택
@@ -211,35 +255,35 @@
                     </thead>
                     <tbody id="review">
                     </tbody>
-                    <!-- 별점, 내용, 작성자, 작성일
-                    <tr th:each="review:${product.productReviews}">
-                        <td>
-                            <i th:each="i: ${#numbers.sequence(1, 5)}" class="fa" th:classappend="${i<=review.productReviewStar}?'fa-star': 'fa-star-o'" aria-hidden="true"></i>
-                        </td>
-                        <td th:text="${review.productReviewContent}"></td>
-                        <td th:text="${review.productReviewWriter}"></td>
-                        <td th:text="${review.productReviewWriteDate}"></td>
-                    </tr>
-                    -->
                 </table>
                 <ul class="pagination" id="page_ul">
                 </ul>
             </div>
 
+
             <hr>
             <h3>qna 출력중 (관리자답변도 같이 끌고오세요)</h3>
             <div>
                 <table class="table table-hover">
-                    <!-- 내용, 작성자, 작성일 -->
+                    <!-- 내용, 작성자, 작성일 / 답변내용, 답변작성일
                     <tr th:each="qna:${product.qnas}">
                         <td th:text="${qna.qnaContent}"></td>
                         <td th:text="${qna.qnaWriter}"></td>
                         <td th:text="${qna.qnaWriteDate}"></td>
                     </tr>
+                    -->
+                    <thead>
+                        <tr>
+                            <th>내용</th><th>작성자</th><th>작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody id="qna">
+                    </tbody>
                 </table>
                 <button id="write" class="btn btn-primary">문의하기</button>
+                <ul class="pagination" id="q_page_ul">
+                </ul>
             </div>
-
         </section>
     </main>
     <footer th:replace="~{/fragment/footer.html}">

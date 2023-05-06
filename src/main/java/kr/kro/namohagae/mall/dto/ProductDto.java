@@ -1,7 +1,6 @@
 package kr.kro.namohagae.mall.dto;
 
 import kr.kro.namohagae.mall.entity.Product;
-import kr.kro.namohagae.mall.entity.Qna;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -71,7 +70,7 @@ public class ProductDto {
         //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
         private List<ProductReviewDto.list> productReviews;
-        private List<Qna> qnas;
+        private List<QnaDto.list> qnas;
 
 
     }
