@@ -42,6 +42,32 @@
     .images:hover {
         cursor: pointer;
     }
+
+    .qna-icon {
+        display: inline-block;
+        margin-right: 5px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%;
+    }
+
+    .qna-question .qna-icon {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .qna-answer .qna-icon {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .qna-arrow {
+        margin-right: 5px;
+        font-size: 14px;
+        color: #999;
+    }
 </style>
 <script>
     // 날짜 yyyy-MM-dd
@@ -58,7 +84,7 @@
         const $tbody = $('#review');
         $tbody.empty();
         for(const r of review) {
-            const rating = parseInt(r.productReviewStar); // 별점을 숫자로 변환
+            const rating = parseInt(r.productReviewStar);
             const ReviewStarIcon = '★'.repeat(rating) + '☆'.repeat(5 - rating);
             const tpl = `<tr>
         <td>${ReviewStarIcon}</td>
@@ -87,16 +113,32 @@
     }
 
 
-    // 큐엔에이리스트 출력
+    //큐엔에이리스트 출력
     function printQnaBoard(qna) {
         const $tbody = $('#qna');
         $tbody.empty();
-        for(const q of qna) {
-            const tpl = `<tr>
-        <td>${q.qnaContent}</td>
+        for (const q of qna) {
+            let tpl = `
+      <tr class="qna-question">
+        <td>
+          <span class="qna-icon">Q</span>
+          ${q.qnaContent}
+        </td>
         <td>${q.qnaWriter}</td>
-				<td>${formatDate(q.qnaWriteDate)}</td>
-			</tr>`;
+        <td>${formatDate(q.qnaWriteDate)}</td>
+      </tr>`;
+            if (q.qnaAnswerContent !== null) {
+                tpl += `
+        <tr class="qna-answer">
+          <td>
+            <span class="qna-arrow">&rarr;</span>
+            <span class="qna-icon">A</span>
+            ${q.qnaAnswerContent}
+          </td>
+          <td>관리자</td>
+          <td>${formatDate(q.qnaAnswerWriteDate)}</td>
+        </tr>`;
+            }
             $tbody.append(tpl);
         }
     }
