@@ -88,10 +88,10 @@ public class ProductService {
         return product.getProductNo();
     }
 
-    public ProductDto.Pagination list(Integer pageNo, Integer categoryNo) {
+    public ProductDto.Pagination list(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo);
+        List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -106,10 +106,10 @@ public class ProductService {
     }
 
     // 필터(최신순) 정렬
-    public ProductDto.Pagination findAllByLatestOrder(Integer pageNo, Integer categoryNo) {
+    public ProductDto.Pagination findAllByLatestOrder(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByLatestOrder(startRowNum, endRowNum, categoryNo);
+        List<ProductDto.ReadAll> products = productDao.findAllByLatestOrder(startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -124,10 +124,10 @@ public class ProductService {
     }
 
     // 필터(판매량) 정렬
-    public ProductDto.Pagination findAllByOrderOfHighSales(Integer pageNo, Integer categoryNo) {
+    public ProductDto.Pagination findAllByOrderOfHighSales(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByOrderOfHighSales(startRowNum, endRowNum, categoryNo);
+        List<ProductDto.ReadAll> products = productDao.findAllByOrderOfHighSales(startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -142,10 +142,10 @@ public class ProductService {
     }
 
     // 필터(이름순) 정렬
-    public ProductDto.Pagination findAllByProductName(Integer pageNo, Integer categoryNo) {
+    public ProductDto.Pagination findAllByProductName(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo);
+        List<ProductDto.ReadAll> products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;

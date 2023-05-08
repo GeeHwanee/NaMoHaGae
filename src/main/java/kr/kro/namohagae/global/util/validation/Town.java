@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EmailValidator.class)
-public @interface Email {
+@Constraint(validatedBy = TownValidator.class)
+public @interface Town {
 
-    String message()default "이메일은 abc@company.co.kr과 같은 형식만 가능합니다";
+    String message()default "서비스하지 않는 지역입니다";
 
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload() default  {};

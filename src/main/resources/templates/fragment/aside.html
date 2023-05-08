@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+	<meta charset="UTF-8">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<title>Insert title here</title>
+	<title>Insert title here</title>
+	<style>
+		div, ul, li {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding:0;margin:0}
+		a {text-decoration:none;}
+
+		.quickmenu {position:absolute;width:90px;top:50%;margin-top:-50px;right:10px;background:#fff;}
+		.quickmenu ul {position:relative;float:left;width:100%;display:inline-block;*display:inline;border:1px solid #ddd;}
+		.quickmenu ul li {float:left;width:100%;border-bottom:1px solid #ddd;text-align:center;display:inline-block;*display:inline;}
+		.quickmenu ul li a {position:relative;float:left;width:100%;height:30px;line-height:30px;text-align:center;color:#999;font-size:9.5pt;}
+		.quickmenu ul li a:hover {color:#000;}
+		.quickmenu ul li:last-child {border-bottom:0;}
+
+		.content {position:relative;min-height:1000px;}
+	</style>
 	<script>
 		const mall = "mall";
 		const puching = "puching";
 		const member = "member";
 		const board = "board";
 		const admin	= "admin";
-	</script>
-
-	<script>
-		$(document).ready(function(){
+		function printBoard(quikmenu) {
+			const $menu = $('#notificationquikmenu');
+			console.log(quikmenu);
+			quikmenu.forEach(n => {
+				const tpl = `
+             <a href="${n.notificationLink}" id="read">${n.notificationContent}</a>
+        `;
+				$menu.append(tpl);
+			});
+		}
+		function printAside(){
 			let sideBar = location.href.slice(22);
 			console.log(sideBar);
 
@@ -59,6 +79,35 @@
 				$side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
 				$side_bar.append('<li><a href="/admin/report/list">신고 관리</a></li>');
 			}
+		}
+	</script>
+
+	<script>
+		$(document).ready(async function(){
+			printAside();
+			var currentPosition = parseInt($(".quickmenu").css("top"));
+			$(window).scroll(function() {
+				var position = $(window).scrollTop();
+				$(".quickmenu").stop().animate({"top":position+currentPosition+"px"},1000);
+			});
+			try {
+				const result = await $.ajax("/rest/notification/quikmenu");
+				printBoard(result);
+			}catch (err){
+				console.log(err)
+			}
+			$(document).on("click", "#read", async function () {
+				const no = $(this).data("no");
+				try {
+					await $.ajax({
+						url: "/rest/notification/read/" + no,
+						type: "PUT"
+					});
+					// 읽음 여부를 업데이트한 후의 작업을 수행
+				} catch (err) {
+					console.log(err);
+				}
+			})
 
 		})
 
@@ -71,9 +120,13 @@
 		<h1 id="title">
 		</h1>
 	</ul>
-<ul id="side_bar" class="side_bar">
-</ul>
-<div class="border4"></div>
+	<ul id="side_bar" class="side_bar">
+	</ul>
+	<div class="border4"></div>
+	<div class="quickmenu">
+		<ul id="notificationquikmenu">
+		</ul>
+	</div>
 </aside>
 </body>
 </html>

@@ -14,7 +14,7 @@ public interface NotificationDao {
     public List<NotificationDto.FindAll> findAll(Integer startRownum, Integer endRownum, Integer memberNo);
     public Integer count(Integer memberNo);
 
-    public NotificationDto.FindAll read(Integer no);
     public Integer notificationRead(Integer no);
 
+    public List<NotificationDto.FindAll> quikMenu(Integer memberNo);
 }
