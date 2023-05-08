@@ -15,5 +15,5 @@ public interface CommentDao {
 
     public void commentUpdate(BoardComment boardComment);
 
-    public BoardComment commentDelete(Integer commentNo);
+    public void commentDelete(Integer commentNo);
 }

@@ -19,17 +19,8 @@ public class BoardDto {
 
         }
     }
-    public static class list {
-        private Integer boardNo;
-        private String boardTitle;
-        private LocalDateTime boardWriteDate;
-        private Integer boardReadCount;
-        private Integer boardRecommendCount;
 
-        public Board toEntity(Integer boardNo, String boardTitle, LocalDateTime boardWriteDate, Integer boardReadCount, Integer boardRecommendCount) {
 
-            return Board.builder().boardNo(boardNo).boardTitle(boardTitle).boardWriteDate((boardWriteDate)).boardReadCount(boardReadCount).boardRecommendCount(boardRecommendCount).build();
 
-        }
-    }
+
 }

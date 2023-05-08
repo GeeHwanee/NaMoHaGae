@@ -2,7 +2,9 @@ package kr.kro.namohagae.board.service;
 
 
 import kr.kro.namohagae.board.dao.CommentDao;
+
 import kr.kro.namohagae.board.entity.BoardComment;
+import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +16,17 @@ public class CommentService {
 
     @Autowired
     CommentDao commentDao;
+    @Autowired
+    MemberDao memberDao;
 
-    public Integer commentData(BoardComment boardComment) {
+    public Integer commentData(BoardComment boardComment,String userEmail) {
 
-
-        return commentDao.commentData(boardComment);
+        boardComment.setMemberNo(memberDao.findNoByUsername(userEmail));
+         return commentDao.commentData(boardComment);
     };
 
     public List<BoardComment> commentList(Integer boardNo) {
-
+        
         return commentDao.commentList(boardNo);
     }
 
@@ -31,9 +35,9 @@ public class CommentService {
         commentDao.commentUpdate(boardComment);
     }
 
-    public BoardComment commentDelete(Integer commentNo) {
+    public void commentDelete(Integer commentNo) {
 
-        return commentDao.commentDelete(commentNo);
+        commentDao.commentDelete(commentNo);
     }
 }
 
