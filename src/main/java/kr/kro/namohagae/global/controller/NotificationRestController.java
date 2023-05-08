@@ -21,7 +21,7 @@ public class NotificationRestController {
     }
 
     @PutMapping("/notification/read/{no}")
-    public ResponseEntity<String> updateAlarmRead(@PathVariable("no") int no) {
+    public ResponseEntity<String> updateAlarmRead(@PathVariable("no") Integer no) {
         // 알람의 읽음 여부를 업데이트하는 로직 작성
         service.read(no);
         return new ResponseEntity<>("success", HttpStatus.OK);
