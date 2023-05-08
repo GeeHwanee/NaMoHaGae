@@ -6,6 +6,7 @@ import kr.kro.namohagae.mall.entity.ProductReview;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface ProductDao {
@@ -21,9 +22,11 @@ public interface ProductDao {
     // 상품 상세 보기
     public ProductDto.Read findByProductNo(Integer productNo);
 
+    // 상품 정보 읽어 오기
+    public Optional<Product> findProductByNo(Integer productNo);
+
     // 상품명으로 검색
     public List<Product> findByProductName(String productName);
-
 
     // 필터(최신순) 검색
     public List<ProductDto.ReadAll> findAllByLatestOrder(Integer startRowNum, Integer endRowNum, Integer categoryNo);
