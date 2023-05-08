@@ -295,8 +295,8 @@ public class GlobalController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
-    public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
-        model.addAttribute("list",productService.list(pageNo, null));
+    public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails){
+        model.addAttribute("list",productService.list(pageNo, null, myUserDetails.getMemberNo()));
         return "admin/product/list";
     }
 
