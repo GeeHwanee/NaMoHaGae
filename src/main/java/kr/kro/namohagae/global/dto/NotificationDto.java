@@ -11,7 +11,7 @@ public class NotificationDto {
     public static class FindAll {
         private Integer notificationNo;
         private String notificationContent;
-        private String notificationRink;
+        private String notificationLink;
         private Boolean notificationReadEnabled;
     }
     @Data
