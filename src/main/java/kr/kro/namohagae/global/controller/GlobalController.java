@@ -3,16 +3,20 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.kro.namohagae.board.dto.BoardDto;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardNoticeService;
+import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
+import kr.kro.namohagae.mall.service.AddressService;
 import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.mall.service.QnaService;
 import kr.kro.namohagae.member.dao.MemberDao;
@@ -59,6 +63,9 @@ public class GlobalController {
     private DogService dogService;
     @Autowired
     private BoardNoticeService boardNoticeService;
+    @Autowired
+    private AddressService addressService;
+
 
     @Autowired
     private BoardService boardService;
@@ -189,6 +196,17 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address")
     public void address(){}
+    @GetMapping("/member/mall/addressCreate")
+    public void addressCreate(){}
+    @PostMapping("/member/mall/addAddress")
+    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
+        Integer memberNo = myUserDetails.getMemberNo();
+        addressService.save(memberNo,dto);
+        return "redirect:/member/mall/address";
+    }
+
+
+
 
     // [회원 파트]------[게시판]------------------------------------------------------
     @GetMapping("/member/board/post")
@@ -218,7 +236,7 @@ public class GlobalController {
     public String paging(Model model,
                          @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
 
-        List<Board> pagingList = boardService.pagingList(page);
+        List<BoardList> pagingList = boardService.pagingList(page);
         PageDto pageDTO = boardService.pagingParam(page);
 
         model.addAttribute("list", pagingList);

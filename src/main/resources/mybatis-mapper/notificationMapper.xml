@@ -26,12 +26,6 @@
         where rnum&gt;=#{startRownum}
     </select>
 
-    <select id="read" resultType="kr.kro.namohagae.global.dto.NotificationDto$FindAll">
-        select
-            NOTIFICATION_NO, NOTIFICATION_CONTENT, NOTIFICATION_LINK, NOTIFICATION_READ_ENABLED
-        from notification where notification_no=#{no}
-    </select>
-
     <update id="notificationRead" parameterType="int">
         update notification set notification_read_enabled =1 where notification_no=#{no}
     </update>

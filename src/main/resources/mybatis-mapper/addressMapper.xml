@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.mall.dao.AddressDao">
+    <insert id="save">
+        insert into address(address_no,member_no,address_name,address_postcode,address_address,address_address_detail)
+        values (address_seq_address_no.nextval,#{memberNo},#{addressName},#{addressPostcode},#{addressAddress},#{addressAddressDetail})
+    </insert>
+    <select id="findAll" resultType="kr.kro.namohagae.mall.dto.AddressDto$Read">
+        select address_no,address_name,address_postcode,address_address,address_address_detail from address where member_no=#{memberNo}
+    </select>
+    <delete id="delete">
+        delete from address where address_no=#{addressNo}
+    </delete>
+
+</mapper>
