@@ -10,5 +10,9 @@ public class TownDto {
         private Integer townNo;
         private String townDong;
     }
+    @Data
+    public static class Gu{
+        private String townGu;
+    }
 
 }

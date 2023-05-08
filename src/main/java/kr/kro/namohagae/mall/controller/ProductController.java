@@ -1,8 +1,10 @@
 package kr.kro.namohagae.mall.controller;
 
 import jakarta.servlet.http.HttpSession;
+import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,7 @@ public class ProductController {
 
     @GetMapping("/mall/product/list")
     public String list(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model, HttpSession session,
-                       @RequestParam(defaultValue="false") boolean orderByProductName) {
+                       @RequestParam(defaultValue="false") boolean orderByProductName, @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
         if(session.getAttribute("msg")!=null) {
             model.addAttribute("msg", session.getAttribute("msg"));
@@ -23,9 +25,9 @@ public class ProductController {
         }
 
         if (orderByProductName) {
-            model.addAttribute("list", service.findAllByProductName(pageNo, categoryNo));
+            model.addAttribute("list", service.findAllByProductName(pageNo, categoryNo, myUserDetails.getMemberNo()));
         } else {
-            model.addAttribute("list", service.list(pageNo, categoryNo));
+            model.addAttribute("list", service.list(pageNo, categoryNo, myUserDetails.getMemberNo()));
         }
 
         return "/mall/product/list";

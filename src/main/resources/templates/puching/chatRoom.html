@@ -28,7 +28,7 @@
         }
        .inbox_chat :active {
            /* 마우스 hover 및 클릭시 적용될 스타일 */
-           background-color: #ed9e71;
+           background-color: #ea986b;
        }
 
         .container{max-width:1000px; margin:auto;}
@@ -53,7 +53,7 @@
         .headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
 
         .recent_heading h4 {
-            color: #ed9e71;
+            color: #ea986b;
             font-size: 21px;
             margin: auto;
         }
@@ -64,7 +64,8 @@
         .chat_ib p{ font-size:14px; color:#989898; margin:auto}
         .chat_img {
             float: left;
-            width: 11%;
+            width: 21%;
+
 
         }
         .chat_ib {
@@ -81,11 +82,12 @@
         }
         .inbox_chat { height: 550px; overflow-y: scroll;}
 
-        .active_chat{ background:#ec8447;}
+        .active_chat{ background:#ea986b;}
 
         .incoming_msg_img {
             display: inline-block;
-            width: 6%;
+            width: 10%;
+
         }
         .received_msg {
             display: inline-block;
@@ -127,7 +129,7 @@
         }
 
         .sent_msg p {
-            background: #f37346 none repeat scroll 0 0;
+            background: #ea986b none repeat scroll 0 0;
             border-radius: 3px;
             font-size: 14px;
             margin: 0; color:#fff;
@@ -155,7 +157,7 @@
 
         .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
         .msg_send_btn {
-            background: #05728f none repeat scroll 0 0;
+            background: #ea986b none repeat scroll 0 0;
             border: medium none;
             border-radius: 50%;
             color: #fff;
@@ -214,25 +216,7 @@
                     </div>
                     <div class="mesgs">
                         <div class="msg_history">
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="/image/profile/default.jpg" alt="sunil"> </div>
-                                <p>이름떙떙떙</p>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                       <div class="chat_image_receiver"><img src="/image/profile/default.jpg" alt="sunil"></div>
-                                        <span class="time_date">`+getCurrentTime()+`</span></div>
-                                </div>
-                            </div>
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                   <img class="chat_image_sender" src="/image/profile/default.jpg" alt="sunil">
-                                    <span class="time_date"> `+message.messageWriteDate+`</span> </div>
-                            </div>
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                    <img class="chat_image_sender" src="/image/profile/default.jpg" alt="sunil">
-                                    <span class="time_date"> `+message.messageWriteDate+`</span> </div>
-                            </div>
+
                         </div>
                         <div class="type_msg">
                             <div class="input_msg_write">
@@ -248,6 +232,7 @@
         <label for="imageInput">Image: </label>
         <input type="file" id="imageInput">
         <button id="sendImageButton" type="button">SendImage</button>
+        <button id="sendpuching" type="button">퍼칭신청</button>
 
 
     </section>
@@ -264,9 +249,7 @@
 
     socket.onmessage = function(event) {
         var message = event.data;
-
         var json = JSON.parse(message);
-
         var receiverUsername = json.receivername;
         console.log(receiverUsername)
         var messageContent = json.message;
@@ -421,7 +404,9 @@
 
     function sendPuching(senderEmail,receiverEmail) {
         //현재 퍼칭상태라면 못보내게 막자
-        //
+        //현재 신청걸려는 사람과 내가 퍼칭중 인지 체크
+
+        //퍼칭신청 페이지로 이동
 
     }
 

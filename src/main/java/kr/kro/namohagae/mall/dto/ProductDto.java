@@ -53,7 +53,7 @@ public class ProductDto {
         private Integer productPrice;
         private Integer productStock;
         private String productImage;
-        //private Boolean favoriteEnabled; // 찜여부
+        private Boolean favoriteEnabled; // 찜여부
     }
 
     // 상품 상세보기

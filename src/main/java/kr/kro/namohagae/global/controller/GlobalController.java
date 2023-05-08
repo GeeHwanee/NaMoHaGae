@@ -4,6 +4,7 @@ package kr.kro.namohagae.global.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.kro.namohagae.board.dto.BoardDto;
+import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
@@ -11,8 +12,10 @@ import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
+import kr.kro.namohagae.mall.service.AddressService;
 import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.mall.service.QnaService;
 import kr.kro.namohagae.member.dao.MemberDao;
@@ -28,6 +31,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,6 +60,8 @@ public class GlobalController {
     private ProductService productService;
     @Autowired
     private DogService dogService;
+    @Autowired
+    private AddressService addressService;
 
 
     @Autowired
@@ -105,8 +111,13 @@ public class GlobalController {
     public void join(){}
 
     @PostMapping("/member/join")
-    public String join(MemberDto.Join dto){
-        System.out.println(dto.getMemberLatitude());
+    public String join(@Valid MemberDto.Join dto, BindingResult br, RedirectAttributes ra){
+        if(br.hasErrors()) {
+            // ra의 값은 이동후 뷰페이지까지 유지된다. 그 다음에 제거
+            String msg = br.getAllErrors().get(0).getDefaultMessage();
+            ra.addFlashAttribute("msg", msg);
+            return "redirect:/member/join";
+        }
         memberService.join(dto);
         return "redirect:/login";
     }
@@ -182,6 +193,17 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address")
     public void address(){}
+    @GetMapping("/member/mall/addressCreate")
+    public void addressCreate(){}
+    @PostMapping("/member/mall/addAddress")
+    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
+        Integer memberNo = myUserDetails.getMemberNo();
+        addressService.save(memberNo,dto);
+        return "redirect:/member/mall/address";
+    }
+
+
+
 
     // [회원 파트]------[게시판]------------------------------------------------------
     @GetMapping("/member/board/post")
@@ -290,8 +312,8 @@ public class GlobalController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/list")
-    public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model){
-        model.addAttribute("list",productService.list(pageNo, null));
+    public String adminProductList(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails){
+        model.addAttribute("list",productService.list(pageNo, null, myUserDetails.getMemberNo()));
         return "admin/product/list";
     }
 

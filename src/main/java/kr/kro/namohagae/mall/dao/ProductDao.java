@@ -16,7 +16,7 @@ public interface ProductDao {
     public Integer count(Integer categoryNo);
 
     // 상품 목록 조회
-    public List<ProductDto.ReadAll> findAll(Integer startRowNum, Integer endRowNum, Integer categoryNo);
+    public List<ProductDto.ReadAll> findAll(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 상품 상세 보기
     public ProductDto.Read findByProductNo(Integer productNo);
@@ -26,13 +26,13 @@ public interface ProductDao {
 
 
     // 필터(최신순) 검색
-    public List<ProductDto.ReadAll> findAllByLatestOrder(Integer startRowNum, Integer endRowNum, Integer categoryNo);
+    public List<ProductDto.ReadAll> findAllByLatestOrder(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 필터(판매량) 검색
-    public List<ProductDto.ReadAll> findAllByOrderOfHighSales(Integer startRowNum, Integer endRowNum, Integer categoryNo);
+    public List<ProductDto.ReadAll> findAllByOrderOfHighSales(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 필터(이름순) 검색
-    public List<ProductDto.ReadAll> findAllByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo);
+    public List<ProductDto.ReadAll> findAllByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     //public Integer updateOrder(ProductOrderDetail productOrderDetail);
 
