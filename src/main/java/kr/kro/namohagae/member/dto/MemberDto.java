@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.dto;
 
+import kr.kro.namohagae.global.util.validation.*;
 import kr.kro.namohagae.member.entity.Member;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,10 +10,16 @@ public class MemberDto {
 
     @Data
     public static class Join{
+        @Town
+        private String townGu;
         private String townDong;
+        @Email
         private String memberEmail;
+        @Password
         private String memberPassword;
+        @Nickname
         private String memberNickname;
+        @Phone
         private String memberPhone;
         private String memberIntroduce;
         private MultipartFile memberProfileImage;
