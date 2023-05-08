@@ -42,7 +42,8 @@
         select rownum as rnum, p.* from
         (
         select p.product_no, p.product_name, p.product_price, p.product_stock,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
+        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
@@ -85,7 +86,8 @@
         select rownum as rnum, p.* from
         (
         select p.product_no, p.product_name, p.product_price,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
+        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p join PRODUCT_IMAGE pi on
         p.product_no=pi.product_no and PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
@@ -103,7 +105,8 @@
         select rownum as rnum, p.* from
         (
         select p.product_no, p.product_name, p.product_price,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
+        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p join PRODUCT_IMAGE pi on
         p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
@@ -121,7 +124,8 @@
         select rownum as rnum, p.* from
         (
         select p.product_no, p.product_name, p.product_price,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
+        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p join PRODUCT_IMAGE pi on
         p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
