@@ -175,21 +175,4 @@ public class ProductService {
         return (imageDeleteResult>0)&&(productDeleteResult>0);
     }
 
-    // 수정중 (리뷰페이징추가,)
-    /*
-    public ProductDto.Read read(Integer startRowNum, Integer endRowNum, Integer productNo) {
-        ProductDto.Read dto = productDao.findByProductNo(productNo);
-
-        // 리뷰 리스트 및 페이징 정보를 설정
-        ProductReviewDto.Pagination pagination = reviewService.list(startRowNum, productNo);
-        dto.setProductReviews(pagination.getReviews());
-        dto.setReviewsStartRow(pagination.getStart());
-        dto.setReviewsEndRow(pagination.getEnd());
-
-        return dto;
-    }
-     */
-
-
-
 }
