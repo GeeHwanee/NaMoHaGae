@@ -34,6 +34,7 @@ public class CommentController {
     @PostMapping("/comment/free/update")
     public ResponseEntity<?> update(BoardComment boardComment) {
 
+            System.out.println("찎어보기" + boardComment);
          commentService.commentUpdate(boardComment);
         return ResponseEntity.ok(null);
     }
