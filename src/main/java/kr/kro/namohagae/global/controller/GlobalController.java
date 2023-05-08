@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
@@ -56,7 +57,8 @@ public class GlobalController {
     private ProductService productService;
     @Autowired
     private DogService dogService;
-
+    @Autowired
+    private BoardNoticeService boardNoticeService;
 
     @Autowired
     private BoardService boardService;
@@ -275,7 +277,8 @@ public class GlobalController {
     // [관리자 파트]--------------------------------------------------------------------
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/notice/list")
-    public String adminNoticeList(){
+    public String adminNoticeList(Model model){
+        model.addAttribute("list", boardNoticeService.list());
         return "admin/notice/list";
     }
 
@@ -288,7 +291,7 @@ public class GlobalController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/notice/write")
     public String adminNoticeWrite(NoticeDto.Add dto){
-        boardService.addNotice(dto);
+        boardNoticeService.addNotice(dto);
 
         return "redirect:/admin/notice/list";
     }
