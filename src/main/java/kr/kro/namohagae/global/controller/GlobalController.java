@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
@@ -26,6 +27,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -103,8 +105,13 @@ public class GlobalController {
     public void join(){}
 
     @PostMapping("/member/join")
-    public String join(MemberDto.Join dto){
-        System.out.println(dto.getMemberLatitude());
+    public String join(@Valid MemberDto.Join dto, BindingResult br, RedirectAttributes ra){
+        if(br.hasErrors()) {
+            // ra의 값은 이동후 뷰페이지까지 유지된다. 그 다음에 제거
+            String msg = br.getAllErrors().get(0).getDefaultMessage();
+            ra.addFlashAttribute("msg", msg);
+            return "redirect:/member/join";
+        }
         memberService.join(dto);
         return "redirect:/login";
     }
