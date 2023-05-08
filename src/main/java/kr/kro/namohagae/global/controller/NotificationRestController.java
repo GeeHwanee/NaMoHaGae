@@ -14,17 +14,23 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationRestController {
     @Autowired
     private NotificationService service;
-    @GetMapping(value="/alarm/list", produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/notification/list", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo= myUserDetails.getMemberNo();
         return ResponseEntity.ok(service.findAll(pageno,memberNo));
     }
 
-    @PutMapping("/alarm/read/{no}")
+    @PutMapping("/notification/read/{no}")
     public ResponseEntity<String> updateAlarmRead(@PathVariable("no") int no) {
         // 알람의 읽음 여부를 업데이트하는 로직 작성
         service.read(no);
         return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    @GetMapping("/notification/quikmenu")
+    public ResponseEntity<?> quikmenu(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        Integer memberNo = myUserDetails.getMemberNo();
+        return  ResponseEntity.ok(service.quikmenu(memberNo));
     }
 
 }
