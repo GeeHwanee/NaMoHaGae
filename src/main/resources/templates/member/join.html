@@ -10,6 +10,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" href="/main.css">
+    <script th:inline="javascript">
+        const msg = [[${msg}]];
+        if(msg!=null)
+            alert(msg);
+    </script>
     <script>
         function sample4_execDaumPostcode() {
             new daum.Postcode({
@@ -71,8 +76,10 @@
                     success: function(data){
                         const latitude = data.documents[0].road_address.x;
                         const longitude = data.documents[0].road_address.y;
+                        const gu = data.documents[0].address.region_2depth_name;
                         const dong = data.documents[0].address.region_3depth_h_name;
                         document.getElementById("memberDong").value = dong;
+                        document.getElementById("memberGu").value = gu;
                         document.getElementById("memberLatitude").value = longitude;
                         document.getElementById("memberLongitude").value = latitude;
                         $('#join_form').submit();
@@ -146,6 +153,7 @@
                     <input type="hidden" id="memberLatitude" name="memberLatitude">
                     <input type="hidden" id="memberLongitude" name="memberLongitude">
                     <input type="hidden" id="memberDong" name="townDong">
+                    <input type="hidden" id="townGu" name="townGu">
                 <div class="mb-3 mt-3 d-grid">
                     <button id="join" type="button" class="btn btn-primary btn-block">가입</button>
                 </div>
