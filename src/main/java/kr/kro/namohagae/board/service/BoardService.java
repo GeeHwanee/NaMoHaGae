@@ -5,12 +5,11 @@ import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.dto.BoardDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.member.dao.MemberDao;
 
 import kr.kro.namohagae.board.dao.BoardNoticeDao;
 import kr.kro.namohagae.board.dto.NoticeDto;
-import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.BoardNotice;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,8 @@ public class BoardService {
     }
 
     public List<Board> boardFreeList() {
+
+
         return boardDao.boardFreeList();
     }
 
@@ -60,14 +61,15 @@ public class BoardService {
     }
         int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
         int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
-    public List<Board> pagingList(int page) {
-        
+    public List<BoardList> pagingList(int page) {
+
         /*
         1페이지당 보여지는 글 갯수 5
             1page => 0
             2page => 5
             3page => 10
          */
+
         int pagingStart = (page - 1) * pageLimit;
 
         return boardDao.pagingList(pagingStart,pageLimit);

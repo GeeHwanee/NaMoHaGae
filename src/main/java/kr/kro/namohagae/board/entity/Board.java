@@ -1,5 +1,6 @@
 package kr.kro.namohagae.board.entity;
 
+import kr.kro.namohagae.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,5 @@ public class Board {
         private Integer boardReadCount;
         private Integer boardRecommendCount;
         private Boolean boardEnabled;
-
-
 }
 

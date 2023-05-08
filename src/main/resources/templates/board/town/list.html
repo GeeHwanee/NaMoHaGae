@@ -52,14 +52,7 @@
         }
     };
 
-    $(document).ready(async function () {
-        try {
-            const board = await $.ajax("/api/v1/board/town/list")
-            printBoard(board);
-        } catch (err) {
-            console.log(err);
-        }
-    });
+
 
     // select 요소에서 값이 변경될 때마다 호출되는 함수
     function onChangeTownNo() {
