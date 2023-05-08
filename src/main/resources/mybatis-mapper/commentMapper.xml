@@ -8,13 +8,16 @@
 
 
     <insert id="commentData" parameterType="kr.kro.namohagae.board.entity.BoardComment">
-        INSERT INTO BOARD_COMMENT VALUES (
-                #{boardNo},SEQ_BOARD_COMMENT_NO.NEXTVAL,1,#{commentContent},systimestamp,0
-               )
+
+        INSERT INTO BOARD_COMMENT (
+                                   board_no, comment_no, member_no, comment_content, comment_write_date, comment_enabled
+        ) VALUES (
+            #{boardNo},SEQ_BOARD_COMMENT_NO.NEXTVAL,#{memberNo},#{commentContent},sysdate,0
+            )
     </insert>
 
     <select id="commentList" resultType="kr.kro.namohagae.board.entity.BoardComment">
-        select bc.comment_no,bc.comment_content,bc.comment_write_date from board b, board_comment bc  where b.board_no = bc.board_no and b.board_no = #{boardNo}
+        select bc.member_No,bc.comment_no,bc.comment_content,bc.comment_write_date from board b, board_comment bc  where b.board_no = bc.board_no and b.board_no = #{boardNo}
     </select>
 
     <update id="commentUpdate">

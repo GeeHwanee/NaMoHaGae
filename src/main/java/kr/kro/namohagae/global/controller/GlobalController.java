@@ -3,10 +3,12 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.kro.namohagae.board.dto.BoardDto;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
@@ -231,7 +233,7 @@ public class GlobalController {
     public String paging(Model model,
                          @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
 
-        List<Board> pagingList = boardService.pagingList(page);
+        List<BoardList> pagingList = boardService.pagingList(page);
         PageDto pageDTO = boardService.pagingParam(page);
 
         model.addAttribute("list", pagingList);
