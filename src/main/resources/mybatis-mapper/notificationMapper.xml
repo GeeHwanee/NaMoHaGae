@@ -35,5 +35,15 @@
     <update id="notificationRead" parameterType="int">
         update notification set notification_read_enabled =1 where notification_no=#{no}
     </update>
+    <select id="quikMenu" resultType="kr.kro.namohagae.global.dto.NotificationDto$FindAll">
+        SELECT NOTIFICATION_NO, NOTIFICATION_CONTENT, NOTIFICATION_LINK, NOTIFICATION_READ_ENABLED
+        FROM (
+                 SELECT NOTIFICATION_NO, NOTIFICATION_CONTENT, NOTIFICATION_LINK, NOTIFICATION_READ_ENABLED
+                 FROM notification
+                 WHERE member_no = #{memberNo} AND NOTIFICATION_READ_ENABLED = 0
+                 ORDER BY NOTIFICATION_NO DESC
+             )
+        WHERE ROWNUM &lt;= 5
+    </select>
 </mapper>
 
