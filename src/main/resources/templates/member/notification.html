@@ -14,34 +14,35 @@
         }
     </style>
     <script>
-        function printBoard(notification) {
+        function printNotification(notification) {
             const $tbody = $('#tbody');
-            for(const a of notification) {
+                notification.forEach(a => {
                 const tpl = `<tr>
-				<td>${a.alarmNo}</td>
+				<td>${a.notificationNo}</td>
 				<td>
-					<a href=# id="read" data-no="${a.alarmNo}">${a.alarmContent}</a>
+					<a href=# id="read" data-no="${a.notificationNo}">${a.notificationContent}</a>
 				</td>
-				<td>${a.alarmReadEnabled}</td>
+				<td>${a.notificationReadEnabled}</td>
 			</tr>`;
-                $tbody.append(tpl);
+                $tbody.append(tpl);}
+                )
             }
-        }
+
 
         function printPagination({prev, start, end, next, pageno}) {
             const $ul = $('#page_ul');
             if(prev>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/alarm_list?pageno=${prev}'>이전</a></li>`);
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification_list?pageno=${prev}'>이전</a></li>`);
             for(let i=start; i<=end; i++) {
                 const tpl = `
 				<li class='page-item ${pageno==i? "active":""}'>
-					<a class='page-link' href='/member/alarm_list?pageno=${i}'>${i}</a>
+					<a class='page-link' href='/member/notification_list?pageno=${i}'>${i}</a>
 				</li>
 			`;
                 $ul.append(tpl);
             }
             if(next>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/alarm_list?pageno=${next}'>다음</a></li>`)
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification_list?pageno=${next}'>다음</a></li>`)
         }
 
         $(document).ready(async function() {
@@ -50,7 +51,7 @@
             try {
                 const result = await $.ajax("/rest/notification/list?pageno=" + pageno);
                 console.log(result);
-                printBoard(result.notification);
+                printNotification(result.notifications);
                 printPagination(result);
             } catch (err) {
                 console.log(err);
