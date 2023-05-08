@@ -11,12 +11,19 @@ import java.util.List;
 public class CartDetailDto {
     @Data
     @AllArgsConstructor
-    public static class CartDetail {
+    public static class Add {
         private Integer productNo;
         private String productImage;
         private String productName;
         private Integer cartDetailCount;
         private Integer cartDetailPrice;
+        private Integer cartTotalPrice;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class Read {
+        private List<Add> items;
         private Integer cartTotalPrice;
     }
 
