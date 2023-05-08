@@ -10,8 +10,10 @@ import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
+import kr.kro.namohagae.mall.service.AddressService;
 import kr.kro.namohagae.mall.service.ProductService;
 import kr.kro.namohagae.mall.service.QnaService;
 import kr.kro.namohagae.member.dao.MemberDao;
@@ -56,6 +58,8 @@ public class GlobalController {
     private ProductService productService;
     @Autowired
     private DogService dogService;
+    @Autowired
+    private AddressService addressService;
 
 
     @Autowired
@@ -187,6 +191,17 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address")
     public void address(){}
+    @GetMapping("/member/mall/addressCreate")
+    public void addressCreate(){}
+    @PostMapping("/member/mall/addAddress")
+    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
+        Integer memberNo = myUserDetails.getMemberNo();
+        addressService.save(memberNo,dto);
+        return "redirect:/member/mall/address";
+    }
+
+
+
 
     // [회원 파트]------[게시판]------------------------------------------------------
     @GetMapping("/member/board/post")
