@@ -1,10 +1,13 @@
 package kr.kro.namohagae.board.controller;
 
+
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.board.service.CommentService;
-import oracle.jdbc.proxy.annotation.Post;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,28 +17,32 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/board/free")
+@RequestMapping("/api/v1")
 public class CommentController {
 
     @Autowired
     CommentService commentService;
 
-    @PostMapping("/comment/write")
-    public ResponseEntity<List<BoardComment>> commentData(@ModelAttribute BoardComment boardComment) {
-        Integer saveResult = commentService.commentData(boardComment);
-        if (saveResult != null) {
-            List<BoardComment> commentList = commentService.commentList(boardComment.getBoardNo());
 
-            return ResponseEntity.ok(commentList);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    @PostMapping("/comment/free/write")
+    public ResponseEntity<?> write(BoardComment boardComment,Principal principal) {
+
+
+        return ResponseEntity.ok(commentService.commentData(boardComment,principal.getName()));
     }
 
-    @DeleteMapping("/comment/delete")
-    public ResponseEntity<Void> delete(Integer boardNo) {
-        commentService.commentDelete(boardNo);
+    @PostMapping("/comment/free/update")
+    public ResponseEntity<?> update(BoardComment boardComment) {
 
+         commentService.commentUpdate(boardComment);
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/comment/free/delete")
+    public ResponseEntity<?> delete(@RequestParam("commentNo") Integer commentNo) {
+
+        System.out.println("댓글번호" + commentNo);
+        commentService.commentDelete(commentNo);
         return ResponseEntity.ok(null);
     }
 
