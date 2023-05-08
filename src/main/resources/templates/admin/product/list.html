@@ -115,11 +115,11 @@
                       </div>
                       <div th:unless="${p.productStock == 0}">
                         <div>
-                          <span th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span>
+                          <span th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span><br>
+                            <span th:text="${p.productStock}"></span>개
                         </div>
                       </div>
                     </span>
-                    <span class="product-favorite">찜하기</span>
                 </div>
             </div>
             <div id="product"></div>
