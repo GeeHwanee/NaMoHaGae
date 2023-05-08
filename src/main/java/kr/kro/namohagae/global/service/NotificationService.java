@@ -41,5 +41,9 @@ public class NotificationService {
         notificationDao.notificationRead(bno);
     }
 
+    public List<NotificationDto.FindAll> quikmenu(Integer memberNo){
+        return notificationDao.quikMenu(memberNo);
+    }
+
 
 }
