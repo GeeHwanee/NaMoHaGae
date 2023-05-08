@@ -74,6 +74,11 @@
         where p.product_no=#{productNo}
     </select>
 
+    <!-- 상품 정보 읽어 오기 -->
+    <select id="findProductByNo" resultType="Product">
+        select * from product where product_no=#{productNo}
+    </select>
+
     <!-- 상품명으로 검색 -->
     <select id="findByProductName" parameterType="String" resultType="Product">
         select * from PRODUCT where product_name like '%'|| #{productName} || '%'
