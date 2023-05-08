@@ -20,7 +20,7 @@
                 const tpl = `<tr>
 				<td>${a.notificationNo}</td>
 				<td>
-					<a href=# id="read" data-no="${a.notificationNo}">${a.notificationContent}</a>
+					<a href=${a.notificationLink} id="read" data-no="${a.notificationNo}">${a.notificationContent}</a>
 				</td>
 				<td>${a.notificationReadEnabled}</td>
 			</tr>`;
