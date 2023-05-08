@@ -34,7 +34,6 @@ public class BoardController {
 
 
 
-
     @GetMapping("/write")
     public String boardFreeWrite() {
 
@@ -44,17 +43,18 @@ public class BoardController {
 
     @PostMapping("/writepro")
     public String boardFreeWritePro(BoardDto.write boardDto, Principal principal)  {
-        String userEmail = principal.getName();
-        boardService.boardFreeInsertData(boardDto,userEmail);
+
+        boardService.boardFreeInsertData(boardDto,principal.getName());
         return "redirect:/board/free/list";
     }
 
     @GetMapping("/read")
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
-                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
+                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model,BoardComment boardComment,Principal principal) {
         boardService.increaseReadCnt(boardNo);
-        List<BoardComment> boardCommentList = commentService.commentList(boardService.boardFreeReadData(boardNo).getBoardNo());
-        model.addAttribute("commentList",boardCommentList);
+
+        model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
+        model.addAttribute("comment", commentService.commentList(boardNo));
         model.addAttribute("board", boardService.boardFreeReadData(boardNo));
         model.addAttribute("page", page);
         return "board/free/read";

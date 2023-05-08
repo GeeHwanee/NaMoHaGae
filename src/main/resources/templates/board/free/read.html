@@ -35,34 +35,40 @@
                 <h5 th:text="${board.boardTitle}" class="card-title">제목입니다.</h5>
                     <h6 th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}" class="card-subtitle mb=2 text-muted"></h6>
                     <p th:text="${board.boardContent}" class="card=text">내용이 들어갈 부분입니다.</p>
-                    <a class="card-link" th:href="@{/board/free/modify(boardNo=${board.boardNo})}">수정</a>
-                    <a class="card-link" th:href="@{/board/free/delete(boardNo=${board.boardNo})}">삭제</a>
+                    <a class="card-link" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}">수정</a>
+                    <a class="card-link" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}">삭제</a>
                     <button onclick="listFn()">목록</button>
                 </div>
             </div>
 
-
-            <!-- 댓글 작성 부분 -->
             <div id="comment-write">
-                <input type="text" id="commentContents" placeholder="내용">
+                <input type="text" id="commentContent" placeholder="내용">
                 <button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>
             </div>
-            <!-- 댓글 출력 부분 -->
+
             <div id="comment-list">
                 <table>
                     <tr>
                         <th>댓글번호</th>
+                        <th>작성자</th>
                         <th>내용</th>
                         <th>작성시간</th>
                     </tr>
-
-                    <tr th:each="comment: ${commentList}">
-                        <td th:text="${comment.commentNo}"></td>
+                    <tr th:each="comment: ${comment}">
+                        <td th:text="${comment.commentNo}" class="commentNo"></td>
+                        <td th:text="${comment.memberNo}"></td>
                         <td th:text="${comment.commentContent}"></td>
                         <td th:text="${comment.commentWriteDate}"></td>
+                        <td th:if="${comment.memberNo eq modify}">
+                            <button onclick="commentEdit(${comment.commentNo})" >수정</button>
+                        </td>
+                        <td th:if="${comment.memberNo eq modify}">
+                            <button onclick="commentDelete(event)">삭제</button>
+                        </td>
                     </tr>
                 </table>
             </div>
+
         </article>
     </section>
 </main>
@@ -70,61 +76,61 @@
 </footer>
 </body>
 <script>
-    function printComment() {
-        $('#')
-    }
 
-    function commentWrite() {
-        const content = document.getElementById("commentContent").value;
-        const boardNo = [[${board.boardNo}]];
-        const param = $.ajax({
-            type: "post",
-            url: "/board/free/comment/write",
+    function commentDelete(event) {
+        const commentNo = event.target.closest("tr").querySelector(".commentNo").textContent;
+        console.log(commentNo);
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/comment/free/delete",
             data: {
-                "commentContent": content,
-                "boardNo": boardNo
-
+                commentNo: commentNo
+            },
+            success: function(res) {
+                console.log('성공' + res);
+                location.reload();
+            },
+            error: function(err) {
+                console.log('실패' + commentNo);
             }
-        })
-
+        });
     }
-    // const commentWrite = () => {
-    //     const contents = document.getElementById("commentContents").value;
-    //     const boardNo = [[${board.boardNo}]];
-    //     $.ajax({
-    //         type: "post",
-    //         url: "/board/free/write",
-    //         data: {
-    //             "commentContent": contents,
-    //             "boardNo": boardNo
-    //         },
-    //         success: function (res) {
-    //             console.log("요청성공", res);
-    //             let output = "<table>";
-    //             output += "<tr><th>댓글번호</th>";
-    //             output += "<th>내용</th>";
-    //             output += "<th>작성시간</th></tr>";
-    //             for (let i in res) {
-    //                 output += "<tr>";
-    //                 output += "<td>" + res[i].commentNo + "</td>";
-    //                 output += "<td>" + res[i].commentContent + "</td>";
-    //                 output += "<td>" + res[i].commentWriteDate + "</td>";
-    //                 output += "</tr>";
-    //             }
-    //             output += "</table>";
-    //             document.getElementById('comment-list').innerHTML = output;
-    //             document.getElementById('commentContents').value = '';
-    //         },
-    //         error: function (err) {
-    //             console.log("요청실패", err);
-    //         }
-    //     });
-    //
-    // }
-    // const listFn = () => {
-    //     const page =  [[${page}]];
-    //     location.href = "/board/free/list?page=" + page;
-    // }
+    function commentWrite() {
+        const commentContent = document.getElementById("commentContent").value; // 입력된 댓글 내용 가져오기
+
+        console.log("댓글 내용:", commentContent);
+
+        const boardNo = [[${board.boardNo}]];
+        const memberNo = [[${board.memberNo}]];
+
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/comment/free/write",
+
+
+            data: {
+                "commentContent": commentContent,
+                "boardNo": boardNo,
+                "memberNo": memberNo
+            },
+            success: function (res) {
+                console.log("요청 성공", res);
+                location.reload();
+
+            },
+            error: function (err) {
+                console.log("요청 실패", err);
+            }
+        });
+    }
+
+
+    // 댓글 작성 함수
+
+    const listFn = () => {
+        const page =  [[${page}]];
+        location.href = "/board/free/list?page=" + page;
+    }
 
 </script>
 </html>
