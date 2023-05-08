@@ -16,7 +16,7 @@ public interface ProductDao {
     public Integer count(Integer categoryNo);
 
     // 상품 목록 조회
-    public List<ProductDto.ReadAll> findAll(Integer startRowNum, Integer endRowNum, Integer categoryNo);
+    public List<ProductDto.ReadAll> findAll(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 상품 상세 보기
     public ProductDto.Read findByProductNo(Integer productNo);
