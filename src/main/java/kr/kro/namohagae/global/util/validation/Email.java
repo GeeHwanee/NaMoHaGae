@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = EmailValidator.class)
 public @interface Email {
 
-    String message()default "이메일은 abc@company.co.kr과 같은 형식만만 가능합니다";
+    String message()default "이메일은 abc@company.co.kr과 같은 형식만 가능합니다";
 
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload() default  {};
