@@ -11,7 +11,9 @@ import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
+import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
@@ -64,7 +66,8 @@ public class GlobalController {
     private BoardNoticeService boardNoticeService;
     @Autowired
     private AddressService addressService;
-
+    @Autowired
+    private ReportService reportService;
 
     @Autowired
     private BoardService boardService;
@@ -104,6 +107,12 @@ public class GlobalController {
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/main")
     public String adminMain(){return "/admin/main";}
+
+    @GetMapping("/member/report")
+    public String report(Integer memberNo, Model model){
+        model.addAttribute("memberNo", memberNo);
+        return "/member/report";
+    }
 
     @GetMapping("/login")
     public void login(){}
