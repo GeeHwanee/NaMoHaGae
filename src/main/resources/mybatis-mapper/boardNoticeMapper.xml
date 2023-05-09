@@ -10,6 +10,10 @@
     values (BOARD_NOTICE_SEQ_BOARD_NOTICE_NO.nextval,#{boardNoticeWriter}, #{boardNoticeTitle},#{boardNoticeContent}, #{boardNoticeWriteDate}, 0)
     </insert>
 
+    <select id="findAll" resultType="java.util.List" >
+        select *
+        from BOARD_NOTICE
+    </select>
 
 </mapper>
 
