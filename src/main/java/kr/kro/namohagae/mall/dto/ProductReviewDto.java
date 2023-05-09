@@ -16,10 +16,10 @@ public class ProductReviewDto {
     @Data
     public static class list {
         // 별점 내용 작성자 작성일
-        //private Integer productReviewStar;
+        private Integer productReviewStar;
         private String productReviewContent;
         private Integer productReviewWriter;
-        //private LocalDateTime productReviewWriteDate;
+        private LocalDateTime productReviewWriteDate;
     }
     
     // 페이지네이션
