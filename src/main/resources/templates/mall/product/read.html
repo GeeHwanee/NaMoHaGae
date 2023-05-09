@@ -80,7 +80,7 @@
     }
 
     // 리뷰리스트 출력
-    function printBoard(review) {
+    function printReview(review) {
         const $tbody = $('#review');
         $tbody.empty();
         for(const r of review) {
@@ -166,20 +166,11 @@
 
         try {
             result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageno + "&productNo=" + productNo);
-            printBoard(result.review);
+            console.log(result);
+            printReview(result.review);
             printPagination({prev: result.prev, start: result.start, end: result.end, next: result.next, pageno: pageno, productNo: productNo});
 
-            $('#page_ul').on('click', '.page-link', async function(e) {
-                e.preventDefault();
-                const pageNum = $(this).data('page-no');
-                try {
-                    result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageNum + "&productNo=" + productNo);
-                    printBoard(result.review);
-                    printPagination(result);
-                } catch (err) {
-                    console.log(err);
-                }
-            });
+
         } catch (err) {
             console.log(err);
         }
@@ -203,7 +194,17 @@
         }catch (err){
             console.log(err);
         }
-
+        $('#page_ul').on('click', '.page-link', async function(e) {
+            e.preventDefault();
+            const pageNum = $(this).data('page-no');
+            try {
+                result = await $.ajax("/api/v1/mall/product/review?pageNo=" + pageNum + "&productNo=" + productNo);
+                printReview(result.review);
+                printPagination(result);
+            } catch (err) {
+                console.log(err);
+            }
+        });
 
         // 이미지 선택
         $('.images:first-of-type').addClass('choice_image');
