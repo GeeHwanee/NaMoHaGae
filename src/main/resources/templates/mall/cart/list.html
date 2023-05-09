@@ -61,7 +61,7 @@
             }
         });
 
-        // 3. 장바구니의 삭제 버튼을 클릭해 해당 장바구니 상품을 삭제 (ㅇ)
+        // 장바구니의 삭제 버튼을 클릭해 해당 장바구니 상품을 삭제
         $('.delete').click(function() {
             const productNo = $(this).attr('data-productNo');
             const $form = $('<form>').attr("action","/cart/remove").attr("method","post").appendTo($('body'));
@@ -70,7 +70,7 @@
         });
 
 
-        // 4. 장바구니에 담긴 상품들을 선택해 삭제하기 (ㅇ)
+        // 장바구니에 담긴 상품들을 선택해 삭제하기
         $('#delete').click(function() {
             const checkedProducts = $('.productNo:checked');
             if (checkedProducts.length === 0) {
@@ -89,9 +89,9 @@
         });
 
 
-        // 5. 상품들을 선택해 주문 페이지로 이동
+        // 상품들을 선택해 주문 페이지로 이동
         $('#order').click(function() {
-            // 선택한 장바구니 상품이 없으면 처리 중단 (ㅇ)
+            // 선택한 장바구니 상품이 없으면 처리 중단
             if($('.productNo').prop('checked')==false) {
                 alert("구매할 상품을 선택해주세요");
                 return;
