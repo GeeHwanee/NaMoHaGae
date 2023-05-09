@@ -16,6 +16,8 @@ public class BoardNoticeService {
     public void addNotice(NoticeDto.Add dto){
         BoardNotice boardNotice = dto.toEntity();
         boardNoticeDao.save(boardNotice);
+
+
     }
 
 
