@@ -53,6 +53,13 @@ public class ChatRestController {
         return ResponseEntity.ok().body(message);
     };
 
+    @PostMapping(value = "/sendpuching")
+    public ResponseEntity<MessageDto.PuchingMessageRead> savePuchingMessage(Principal principal,MessageDto.PuchingMessageSave dto){
+
+
+        return ResponseEntity.ok().body(service.savePuchingMessage(dto,principal.getName()));
+    };
+
 
 
 

@@ -21,7 +21,6 @@
         $tbody.append(tpl);
       }
     }
-
     function printPagination({prev, start, end, next, pageno}) {
       const $ul = $('#page_ul');
       if(prev>0)
@@ -138,6 +137,7 @@
       </table>
       <button type="button" class="btn btn-primary" id="follow_btn" > <span id="follow_text">팔로우</span></button>
       <button id="chat" type="button" class="btn btn-danger"><a th:href="@{/puching/chatroom(receiverEmail=${member.memberEmail})}">채팅하기</a></button>
+      <button id="report" type="button" class="btn btn-primary"><a th:href="@{/member/report(memberNo=${member.memberNo})}" target="_blank" style="color: white;">신고하기</a></button>
     </section>
   </main>
   <footer th:replace="~{/fragment/footer.html}">
