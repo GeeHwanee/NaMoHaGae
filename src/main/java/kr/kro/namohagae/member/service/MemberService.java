@@ -1,12 +1,17 @@
 package kr.kro.namohagae.member.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import kr.kro.namohagae.global.dao.TownDao;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.entity.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
-
+@RequiredArgsConstructor
 @Service
 public class MemberService {
 
@@ -26,6 +31,7 @@ public class MemberService {
     private DogDao dogDao;
     @Autowired
     private TownDao townDao;
+    private JavaMailSender javaMailSender;
     public void join(MemberDto.Join dto){
         String memberIntroduce = " ";
         String profileName = "default.jpg";
@@ -51,6 +57,20 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(dto.getMemberPassword());
         Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo);
         memberDao.save(member);
+    }
+    private void sendMail(String from, String to, String title, String text) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(title);
+            // false면 글자로 날아가고, true면 html로 날아간다
+            helper.setText(text, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public MemberDto.Read read(Integer memberNo) {
