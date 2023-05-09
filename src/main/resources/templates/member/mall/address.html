@@ -21,6 +21,7 @@
     </style>
     <script>
         function printNotification(address) {
+            $('#tbody').empty();
             const $tbody = $('#tbody');
             address.forEach(a => {
                 const tpl = `<tr>
@@ -49,6 +50,13 @@
                         type: "POST"
                     });
                     // 읽음 여부를 업데이트한 후의 작업을 수행
+                } catch (err) {
+                    console.log(err);
+                }
+                try {
+                    const result = await $.ajax("/api/v1/address/list");
+                    console.log(result);
+                    printNotification(result);
                 } catch (err) {
                     console.log(err);
                 }
