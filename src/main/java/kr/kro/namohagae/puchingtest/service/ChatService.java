@@ -3,6 +3,7 @@ package kr.kro.namohagae.puchingtest.service;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puchingtest.dao.ChatDao;
+import kr.kro.namohagae.puchingtest.dao.Puchingdao;
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.dto.MessageDto;
 import kr.kro.namohagae.puchingtest.entity.Message;
@@ -20,7 +21,11 @@ public class ChatService {
     @Autowired
     private ChatDao cdao;
     @Autowired
+    private Puchingdao pdao;
+    @Autowired
     private MemberDao mdao;
+
+
 
     public List<ChatRoomDto.Read> findAllChatRoom(Integer myMemberNo) {
         List<ChatRoomDto.Read> list = cdao.findAllChatRoom(myMemberNo);
@@ -47,15 +52,12 @@ public class ChatService {
 
     public List<MessageDto.MessageRead> findMessageLog(String senderEmail,Integer receiverNo){
             Integer senderNo = mdao.findNoByUsername(senderEmail);
-        System.out.println(senderNo+"챗서비스");
         return  cdao.findAllMessageByReceiverNo(senderNo,receiverNo);
     }
 
     public ChatRoomDto.Read findChatRoom(String userEmail,String receiverEmail) {
         Integer userNo =mdao.findNoByUsername(userEmail);
         Integer receiverNo= mdao.findNoByUsername(receiverEmail);
-        System.out.println("**********************************$@$@#@Q@#");
-        System.out.println(receiverNo);
         return cdao.findChatRoom(userNo,receiverNo);
     }
 
@@ -91,4 +93,16 @@ public class ChatService {
     return message;
     }
 
+    public MessageDto.PuchingMessageRead savePuchingMessage(MessageDto.PuchingMessageSave dto,String senderEmail){
+        Integer senderNo=mdao.findNoByUsername(senderEmail);
+        Integer receiverNo= mdao.findNoByUsername(dto.getReceiverUsername());
+        String content=""; //태그 포함 저장
+        Message message=dto.toEntity(senderNo,receiverNo,content);
+        //Integer messageNo=cdao.savePuchingMessage(message);
+        //Integer puchingNo=pdao.savePuchingReq(messageNo);
+
+
+        //MessageDto.PuchingMessageRead readDto= new MessageDto.PuchingMessageRead(content,messageNo);
+        return null;//readDto; //퍼칭 메세지를 저장후 메세지 번호를 리턴한걸 퍼칭도 저장후 퍼칭번호에 메세진 번호 넣어서 저장 후 퍼칭번호를 리턴
+    };
 }

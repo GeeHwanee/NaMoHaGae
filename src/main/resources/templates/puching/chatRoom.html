@@ -4,11 +4,130 @@
     <meta charset="UTF-8">
     <title>퍼칭 채팅방 페이지</title>
     <link rel="stylesheet" href="/main.css">
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=660792846d96851836832221cf48b4f7&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.js"
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 
+    <!--신청 맵스타일-->
+    <style>
+        .map_wrap {position:relative;width:100%;height:350px;}
+        .title {font-weight:bold;display:block;}
+        .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
+        #centerAddr {display:block;margin-top:2px;font-weight: normal;}
+        .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+    </style>
+    <!--퍼칭신청팝업 스타일-->
+    <style>
+        .main-content {
+            height: 1vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .popup-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            width: 800px;
+            height: 70%;
+            overflow: auto;
+        }
+
+        .popup-content h2 {
+            margin-top: 0;
+        }
+
+        .popup-content p {
+            margin-bottom: 20px;
+        }
+
+    </style>
+        <!--퍼칭메세지 스타일-->
+    <style>
+        .puching-button {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 3px;
+            width: 200px;
+
+        }
+
+        .puching-button img {
+            width: 200px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 10px;
+        }
+
+        .puching-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .puching-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+            color: #ea986b;
+        }
+
+        .puching-description {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .location-button,
+        .accept-button,
+        .disaccept-button{
+
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            background-color: #ed9e71;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+        }
+
+        .location-button:hover,
+        .accept-button:hover {
+            background-color: #dfaa8b;
+        }
+
+        .location-button:focus,
+        .accept-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #dfaa8b;
+        }
+
+    </style>
+    <!--채팅방 스타일-->
     <style>
         .chat_image_sender{
             width: 60%;
@@ -190,7 +309,7 @@
     <input id="myMemberNo" type="hidden" th:value="${mymemberNo}">
     <section>
         <div class="container">
-            <h3 class=" text-center">퍼칭 채팅방</h3>
+
             <div class="messaging">
                 <div class="inbox_msg">
                     <div class="inbox_people">
@@ -217,6 +336,28 @@
                     <div class="mesgs">
                         <div class="msg_history">
 
+                            <div class="incoming_msg">
+                                <div class="incoming_msg_img"> <img src="http://localhost:8081/api/v1/image/chat/default.jpg" alt="sunil"> </div>
+                                <p>퍼칭메세지테스트</p>
+                                <div class="received_msg">
+
+                                    <div class="received_withd_msg">
+                                        <p>
+                                        <div class="puching-info">
+                                            <span class="puching-title">퍼칭</span>
+                                            <span class="puching-description">2023-05-03 10:19</span>
+                                            <span class="puching-description">장소 : 인천시 미추홀구 주안역 101-2</span>
+                                            <button class="location-button" data-puchingno="">장소보기</button>
+                                            <button class="accept-button" data-puchingno="" data-senderNo="senderNo">수락하기</button>
+                                            <button class="disaccept-button" data-puchingno="">취소하기</button>
+
+                                    </div></p>
+                                        <span class="time_date">현재시간:분:초</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
                         <div class="type_msg">
                             <div class="input_msg_write">
@@ -232,13 +373,159 @@
         <label for="imageInput">Image: </label>
         <input type="file" id="imageInput">
         <button id="sendImageButton" type="button">SendImage</button>
-        <button id="sendpuching" type="button">퍼칭신청</button>
+
+        <div class="main-content">
+            <button id="openPopupButton">퍼칭 신청</button>
+        </div>
+        <div class="popup-background">
+            <div class="popup-content">  <!--퍼칭 신청 화면-->
+                <h2>퍼칭신청</h2>
+                <label for="day"></label>
+                <input type="date" id="day"/>
+                <label for="time"></label>
+                <input type="time" id="time"/>
+
+
+                <div class="map_wrap">
+                    <div id="map" style="width:50%;height:100%;position:relative;overflow:hidden;"></div>
+                    <div class="hAddr">
+                        <span class="title">지도중심기준 행정동 주소정보</span>
+                        <span id="centerAddr"></span>
+                    </div>
+                </div>
+
+
+                <button id="getCurrentPosBtn">현재위치검색</button>
+                <button onclick="sendPuching()">신청하기</button>
+                <button id="closePopupButton">닫기</button>
+            </div>
+        </div>
 
 
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>
+<!--팝업창 및 클릭시 맵생성-->
+<script>
+    // Get the elements
+    const openPopupButton = document.getElementById("openPopupButton");
+    const closePopupButton = document.getElementById("closePopupButton");
+    const popupBackground = document.querySelector(".popup-background");
+
+
+    // Open the popup when the button is clicked
+    //
+    openPopupButton.addEventListener("click", function() {
+        popupBackground.style.display = "flex";
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(37.4398411, 126.6640894), // 지도의 중심좌표 geo로 값을 변경해주자
+                level: 3 // 지도의 확대 레벨
+            };
+        // 지도를 생성한다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        map.setMinLevel(3);
+        map.setMaxLevel(6);
+        var getCurrentPosBtn = document.getElementById("getCurrentPosBtn");
+        getCurrentPosBtn.addEventListener("click", function() {
+            navigator.geolocation.getCurrentPosition(
+                locationLoadSuccess,
+                locationLoadError
+            );
+        });
+        var marker=new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(37.4398411, 126.6640894),
+        });
+        function locationLoadSuccess(pos) {
+            // geo로 받은 내위치
+            var currentPos = new kakao.maps.LatLng(
+                pos.coords.latitude,
+                pos.coords.longitude
+            );
+
+            map.panTo(currentPos);
+            marker.setMap(null);
+            marker = new kakao.maps.Marker({
+                position: currentPos,
+            });
+            marker.setMap(map);
+            pulat=pos.coords.latitude;
+            pulng=pos.coords.longitude;
+
+        }
+        function locationLoadError(pos) {
+            var defalut_LatLng = new kakao.maps.LatLng(37.4398411, 126.6640894);
+
+            map.panTO(defalut_LatLng);
+
+            alert("위치 정보를 못가져왔넹");
+        }
+
+        kakao.maps.event.addListener(map, 'dragend', function() {
+            var center=map.getCenter();
+            var now_Centerlat=roundLatlong(center.Ma,7);
+            var now_Centerlng=roundLatlong(center.La,7);
+            var nowPos=new kakao.maps.LatLng(now_Centerlat,now_Centerlng)
+            console.log('지도의 중심 좌표는 ' + nowPos + ' 입니다.');
+
+            marker.setMap(null);
+            marker = new kakao.maps.Marker({
+                position:nowPos,
+            });
+            marker.setMap(map);
+            pulat=now_Centerlat;
+            pulng=now_Centerlng;
+
+        });
+
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        kakao.maps.event.addListener(map, 'idle', function() {
+            console.log("2123123")
+            searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
+
+        });
+
+        function searchAddrFromCoords(coords, callback) {
+            // 좌표로 행정동 주소 정보를 요청합니다
+            geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+            console.log(coords.getLng(),coords.getLat())
+        }
+
+        function displayCenterInfo(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var infoDiv = document.getElementById('centerAddr');
+                console.log(infoDiv)
+                for(var i = 0; i < result.length; i++) {
+                    // 행정동의 region_type 값은 'H' 이므로
+                    if (result[i].region_type === 'H') {
+                        infoDiv.innerHTML = result[i].address_name;
+                        address=result[i].address_name;
+                        break;
+                    }
+                }
+            }
+        }
+
+    })
+
+    // Close the popup when the close button is clicked
+    closePopupButton.addEventListener("click", function() {
+        popupBackground.style.display = "none";
+    });
+
+    // Close the popup when the user clicks outside of the popup content
+    popupBackground.addEventListener("click", function(event) {
+        if (event.target === popupBackground) {
+            popupBackground.style.display = "none";
+        }
+    });
+
+</script>
+<!--텍스트랑 이미지 전송하는 스크립트-->
 <script>
     var socket = new WebSocket("ws://localhost:8081/chatroom");
 
@@ -401,16 +688,8 @@
         }
 
     })
-
-    function sendPuching(senderEmail,receiverEmail) {
-        //현재 퍼칭상태라면 못보내게 막자
-        //현재 신청걸려는 사람과 내가 퍼칭중 인지 체크
-
-        //퍼칭신청 페이지로 이동
-
-    }
-
 </script>
+<!--nowChatuse등 변수랑 채팅로그 나타내는 스크립트-->
 <script>
     var nowChatUser=undefined;
     var nowChatEmail=undefined;
@@ -485,32 +764,89 @@
     });
 </script>
 <script>
-    $(document).ready(function(){
-
-    });
-</script>
-<script>
    //이미지 전송 및 화면에 바로 띄우는 거
-   var imageSocket = new WebSocket("ws://localhost:8081/chatimage");
+   var puchingSocket = new WebSocket("ws://localhost:8081/puching");
+   var pulat=undefined;
+   var pulng=undefined;
+   var address=undefined;
 
-   imageSocket.onopen=function (){
-       console.log("image 웹소켓 open")
+   puchingSocket.onopen=function (){
+       console.log("퍼칭웹소켓 open")
    };
-   imageSocket.onmessage=function (event){
+   //퍼칭상태가 실시간으로 변경되는 작업은 여기에서 하자
+   puchingSocket.onmessage=function (event){
         console.log(event)
 
    }
-   imageSocket.onerror=function (error){
+   puchingSocket.onerror=function (error){
         console.log(error)
    }
-   imageSocket.onclose=function(event){
-        console.log(event+'이미지웹소켓 닫힘')
+   puchingSocket.onclose=function(event){
+        console.log(event+'퍼칭웹소켓 닫힘')
+
+   }
+  async function sendPuching() {
+       //현재 퍼칭상태라면 못보내게 막자
+       //현재 신청걸려는 사람과 내가 퍼칭중 인지 체크
+       var $day=$('#day').val()
+       var $time=$('#time').val()
+        var date=$day+" "+$time
+       if(compareDate(date)){
+            alert("날짜를 정확하게 입력해주세요")
+           return;
+       }
+       if($day==null||$day==""||$day==undefined){
+           alert('날짜를 입력해주세요')
+           return
+       }
+       if($time==null||$time==""||$time==undefined){
+           alert('시간을 입력해주세요')
+           return
+       }
+       if((pulng || pulat)==null||""||undefined){
+           alert('장소를 지정해주세요')
+           return;
+       }
+       if(nowChatEmail==undefined||""||null){
+           alert('퍼칭상대를 지정해주세요')
+           return;
+       }
+       var param={
+           "receiverUsername":nowChatEmail,
+           "lat":pulat,
+           "lng":pulng,
+           "day":$day,
+           "time":$time,
+           "address":address
+       }
+      try {
+          await $.ajax({
+              url:'/api/v1/sendpuching',
+              type:'POST',
+              data:param
+          }).done(function(data){
+              console.log('성공')
+              console.log(data)
+              //content링 messageNo를 이용해서 append시키고 전송
+          })
+      }catch (err){
+           console.log(err)
+
+      }
+
+
+
+
+   }
+   function acceptPuching(){
+
+   }
+   function cancelPuching(){
 
    }
 
-
-
 </script>
+<!--페이지 진입시 상대넘버 가지고 왔는지 확인하는 스크립트-->
 <script th="inline">
     var startuser = "[[${startuser}]]"
     if(startuser!=""){
@@ -554,6 +890,7 @@
         })
     }
 </script>
+<!--메세지 전송시간 표시하는 함수 & 현재시간 보다 작은지 비교하는 함수-->
 <script>
     function getCurrentTime() {
         let now = new Date();
@@ -581,8 +918,29 @@
         }
         return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
+    function compareDate(dateStr) {
+        const currentDate = new Date(); // 현재 시간을 구합니다.
+        const inputDate = new Date(dateStr); // 입력받은 날짜 값을 Date 객체로 변환합니다.
+
+        return inputDate < currentDate; //  현재시간보다 작으면 트루를 반환
+    }
 
 
+</script>
+<!--좌표 반올림 함수-->
+<script>
+    function roundLatlong(num,n){
+        if(isNaN(num)){
+            console.log(num+'은 숫자가 아니다!!!')
+            return ;
+        }
+        return +(Math.round(num + "e+" + n)  + "e-" + n);
+    }
+</script>
+<script>
+    $(document).ready(function(){
+
+    });
 </script>
 </body>
 </html>
