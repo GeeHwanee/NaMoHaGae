@@ -22,8 +22,19 @@ public class CartDetailDto {
 
     @Data
     @AllArgsConstructor
+    public static class list {
+        private Integer productNo;
+        private String productImage;
+        private String productName;
+        private Integer cartDetailCount;
+        private Integer cartDetailPrice;
+        private Integer cartTotalPrice;
+    }
+
+    @Data
+    @AllArgsConstructor
     public static class Read {
-        private List<Add> items;
+        private List<CartDetailDto.list> items;
         private Integer cartTotalPrice;
     }
 
