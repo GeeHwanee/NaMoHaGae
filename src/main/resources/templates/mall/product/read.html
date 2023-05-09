@@ -158,6 +158,8 @@
         }
     }
 
+
+
     $(document).ready(async function() {
         let result = undefined;
         const param = new URLSearchParams(location.search);
@@ -205,6 +207,25 @@
                 console.log(err);
             }
         });
+
+
+        /*
+        // 품절시 버튼 변경
+        const stock = document.getElementById('productStock').value;
+
+        if (stock == 0) {
+            document.getElementById("buy").style.display = "none";
+            document.getElementById("cart").style.display = "none";
+            document.getElementById("sold_out").style.display = "inline-block";
+            document.getElementById("favorite").style.display = "inline-block";
+        } else {
+            document.getElementById("buy").style.display = "inline-block";
+            document.getElementById("cart").style.display = "inline-block";
+            document.getElementById("sold_out").style.display = "none";
+            document.getElementById("favorite").style.display = "inline-block";
+        }
+         */
+
 
         // 이미지 선택
         $('.images:first-of-type').addClass('choice_image');
@@ -272,8 +293,17 @@
         });
 
 
+        // 품절시 버튼 변경
+        const stock = document.getElementById('productStock').value;
+        const buyButton = document.getElementById('buy');
 
-
+        if (stock == 0) {
+            buyButton.disabled = true;
+            buyButton.innerText = '품절';
+        } else {
+            buyButton.disabled = false;
+            buyButton.innerText = '구매하기';
+        }
     });
 </script>
 </head>
@@ -302,7 +332,7 @@
                     <div>별점출력하는곳</div>
                     <!--<div th:text="${product.productGrade}"></div>-->
                     <span class="product-price">
-                          <div th:if="${product.productStock == 0}">
+                          <div id="product-stock" th:if="${product.productStock == 0}">
                             <span style="color: red">품절댐</span>
                           </div>
                           <div th:unless="${product.productStock == 0}">
@@ -315,9 +345,10 @@
                     <div>배송정보 배송비 3,000원</div>
                 </div>
                 <div id="buttons">
-                    <button id="buy">구매하기</button>
-                    <button id="cart">장바구니</button>
-                    <button id="favorite"><span id="favorite_text">찜하기</span></button>
+                    <input type="hidden" id="productStock" name="productStock" th:value="${product.productStock}" />
+                    <button class="btn btn-secondary" id="buy" th:disabled="${product.productStock == 0}">구매하기</button>
+                    <button class="btn btn-secondary" id="cart" th:disabled="${product.productStock == 0}">장바구니</button>
+                    <button class="btn btn-secondary" id="favorite"><span id="favorite_text">찜하기</span></button>
                 </div>
             </div>
             <div id="content" th:utext="${product.productContent}"></div>

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductOrderDetailDao {
     // 주문 상세 저장
-    public Integer save(ProductOrderDetail productOrderDetail, Integer productOrderNo, String memberEmail);
+    public Integer save(ProductOrderDetail productOrderDetail, Integer productOrderNo, Integer memberNo);
 
     // 내가 쓴 리뷰
     public ProductOrderDetail findByOrderDetailNo(Integer orderDetailNo);
