@@ -16,43 +16,50 @@
     }
 </style>
 <script>
-    // 1. 장바구니 개수 증가
-    async function plus() {
-        const productNo = $(this).attr("data-productNo");
-        try {
-            console.log(productNo +"상품번호 찾았어요")
-            const result = await $.ajax({url: "/api/v1/cart/increase?productNo=" + productNo, method: 'patch' });
-            $(this).prev().text(result.cartDetailcount);
-            $(this).parent().parent().next().find('.item_price').text(result.cartDetailPrice);
-            $('#total_price').text(result.cartTotalPrice);
-        } catch(err) {
-            alert(err.responseText);
-        }
-    }
 
-    // 2. 장바구니 개수 감소
-    async function minus() {
-        const productNo = $(this).attr("data-productNo");
-        try {
-            const result = await $.ajax({url: "/api/v1/cart/decrease?productNo=" + productNo, method: 'patch' });
-            $(this).next().text(result.cartDetailcount);
-            $(this).parent().parent().next().find('.item_price').text(result.cartDetailPrice);
-            $('#total_price').text(result.cartTotalPrice);
-        } catch(err) {
-            alert(err.responseText);
-        }
+    const totalPrice = function (){
+        let sum =0;
+        $('.item_price').each(function(){
+            console.log($(this).text());
+            sum += parseInt($(this).text());
+        })
+        $('#total_price').text(sum);
     }
 
 
     $(document).ready(async function() {
+
         try {
             const result = await $.ajax("/mall/cart/list");
         } catch(err) {
             console.log(err);
         }
 
-        $('.plus').click(plus);
-        $('.minus').click(minus);
+        // 장바구니 개수 증가
+        $('.lower').on('click', '.plus', async function(){
+            const productNo = $(this).attr("data-productNo");
+            try{
+                const result = await $.ajax({url: "/api/v1/cart/increase?productNo=" + productNo, method: 'patch' });
+                $(this).siblings('.count').text(result.cartDetailCount);
+                $(this).parent().parent().next().find('.item_price').text((result.cartDetailPrice)*(result.cartDetailCount));
+                totalPrice();
+            }catch (err){
+                alert(err.responseText);
+            }
+        });
+
+        // 장바구니 개수 감소
+        $('.lower').on('click', '.minus', async function(){
+            const productNo = $(this).attr("data-productNo");
+            try {
+                const result = await $.ajax({url: "/api/v1/cart/decrease?productNo=" + productNo, method: 'patch' });
+                $(this).siblings('.count').text(result.cartDetailcount);
+                $(this).parent().parent().next().find('.item_price').text((result.cartDetailPrice)*(result.cartDetailCount));
+                totalPrice();
+            } catch(err) {
+                alert(err.responseText);
+            }
+        });
 
         // 3. 장바구니의 삭제 버튼을 클릭해 해당 장바구니 상품을 삭제 (ㅇ)
         $('.delete').click(function() {
@@ -63,23 +70,24 @@
         });
 
 
-        // 4. 장바구니에 담긴 상품들을 선택해 삭제하기 - MVC 방식
+        // 4. 장바구니에 담긴 상품들을 선택해 삭제하기 (ㅇ)
         $('#delete').click(function() {
-            // 선택한 장바구니 상품이 없으면 처리 중단 (ㅇ)
-            if($('.productNo').prop('checked')==false) {
+            const checkedProducts = $('.productNo:checked');
+            if (checkedProducts.length === 0) {
                 alert("삭제할 상품을 선택해주세요");
                 return;
             }
 
-            // 선택한 장바구니 상품들의 제품 번호를 가지고 list=20&list=22&list=33 형식의 폼을 만든다
             const $form = $('<form>').attr("action","/cart/remove").attr("method","post").appendTo($('body'));
-            $.each($('.productNo'), function(idx, element) {
+            checkedProducts.each(function(idx, element) {
                 const $element = $(element);
-                if($element.prop('checked')==true)
-                    $form.append($('<input>').attr('type','hidden').attr('name','list').val($element.attr('data-productNo')));
+                $form.append($('<input>').attr('type','hidden').attr('name','list').val($element.attr('data-productNo')));
             });
+
             $form.submit();
+            $form.remove();
         });
+
 
         // 5. 상품들을 선택해 주문 페이지로 이동
         $('#order').click(function() {

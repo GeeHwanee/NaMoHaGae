@@ -10,6 +10,16 @@
         values(#{cartDetailNo},#{memberNo},#{cartNo},#{productNo},#{cartDetailCount},#{cartDetailPrice})
     </insert>
 
+    <!-- 장바구니 개수 증가 업데이트 -->
+    <update id="updateIncrease" parameterType="int">
+        update CART_DETAIL set cart_detail_count = cart_detail_count+1 where cart_detail_no = #{cartDetailNo}
+    </update>
+
+    <!-- 장바구니 개수 감소 업데이트 -->
+    <update id="updateDecrease" parameterType="int">
+        update CART_DETAIL set cart_detail_count = cart_detail_count-1 where cart_detail_no = #{cartDetailNo}
+    </update>
+
     <!-- 장바구니 상세 정보 업데이트 -->
     <update id="update" parameterType="CartDetail">
         update CART_DETAIL
