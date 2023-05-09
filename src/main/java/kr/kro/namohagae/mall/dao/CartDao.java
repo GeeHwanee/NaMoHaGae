@@ -1,7 +1,6 @@
 package kr.kro.namohagae.mall.dao;
 
 import kr.kro.namohagae.mall.entity.Cart;
-import kr.kro.namohagae.mall.entity.CartDetail;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public interface CartDao {
     public Integer save(Cart cart);
 
     // 해당 사용자의 장바구니 찾기
-    public List<CartDetail> findByMemberNo(Integer memberNo);
+    public Optional<Cart> findByMemberNo(Integer memberNo);
 
     // 장바구니 총 가격 업데이트
     public Integer updateTotalPrice(Cart cart);

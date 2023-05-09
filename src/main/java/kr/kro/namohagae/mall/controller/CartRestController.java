@@ -28,7 +28,6 @@ public class CartRestController {
     @PatchMapping("/cart/increase")
     public ResponseEntity<CartDetailDto.Update> increase(@RequestParam Integer productNo, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo=myUserDetails.getMemberNo();
-        System.out.println(memberNo+"멤버보여요");
         return ResponseEntity.ok(service.increase(productNo, memberNo));
     }
 

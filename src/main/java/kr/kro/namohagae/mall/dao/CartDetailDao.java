@@ -11,6 +11,12 @@ public interface CartDetailDao {
     // 장바구니 상세 정보 저장
     public Integer save(CartDetail cartDetail);
 
+    // 장바구니 개수 증가 업데이트
+    public Integer updateIncrease(Integer cartDetailNo);
+
+    // 장바구니 개수 감소 업데이트
+    public Integer updateDecrease(Integer cartDetailNo);
+
     // 장바구니 상세 정보 업데이트
     public Integer update(CartDetail cartDetail);
 
