@@ -72,7 +72,7 @@ public class CartService {
         int totalPrice = 0;
         for (CartDetail cartDetail : carts) {
             ProductDto.Read dto = productDao.findByProductNo(cartDetail.getProductNo());
-            CartDetailDto.list item = new CartDetailDto.list(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
+            CartDetailDto.list item = new CartDetailDto.list(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), dto.getProductStock(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
             items.add(item);
             totalPrice += item.getCartTotalPrice();
         }

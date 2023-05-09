@@ -26,6 +26,7 @@ public class CartDetailDto {
         private Integer productNo;
         private String productImage;
         private String productName;
+        private Integer productStock;
         private Integer cartDetailCount;
         private Integer cartDetailPrice;
         private Integer cartTotalPrice;
