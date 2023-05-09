@@ -48,4 +48,28 @@ public class MessageDto {
                     .messageContentType(messageContentType).messageWriteDate(LocalDateTime.now()).build();
         }
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PuchingMessageSave{
+        private String receiverUsername;
+        private Double lat;
+        private Double lng;
+        private String day;
+        private String time;
+        private String address;
+        public Message toEntity(Integer senderNo,Integer receiverNo,String messageContent){
+
+            return Message.builder().messageSender(senderNo).messageReceiver(receiverNo).messageContent(messageContent)
+                    .messageContentType("puching").messageWriteDate(LocalDateTime.now()).build();
+        };
+    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PuchingMessageRead{
+      private String content;
+      private Integer MessageNo;
+    };
 }
