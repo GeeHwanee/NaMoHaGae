@@ -1,11 +1,10 @@
 package kr.kro.namohagae.global.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 //@Alias("Notification")
 public class Notification {
