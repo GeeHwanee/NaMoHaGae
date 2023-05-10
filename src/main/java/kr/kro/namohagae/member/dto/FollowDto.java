@@ -9,6 +9,7 @@ import java.util.List;
 public class FollowDto {
     @Data
     public static class list{
+        private Integer followMemberNo;
         private String memberNickname;
         private Double memberGrade;
     }
