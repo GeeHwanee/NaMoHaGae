@@ -1,19 +1,25 @@
 package kr.kro.namohagae.member.controller;
 
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.member.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
 public class FollowRestController {
     @Autowired
     private FollowService service;
+    @Autowired
+    private WebSocketService webSocketService;
 
 
     @PatchMapping("/member/follow")
