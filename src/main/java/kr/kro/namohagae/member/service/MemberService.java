@@ -9,6 +9,7 @@ import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class MemberService {
 
     @Autowired
@@ -31,7 +32,8 @@ public class MemberService {
     private DogDao dogDao;
     @Autowired
     private TownDao townDao;
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
+    String authenticationCode = "";
     public void join(MemberDto.Join dto){
         String memberIntroduce = " ";
         String profileName = "default.jpg";
@@ -141,6 +143,19 @@ public class MemberService {
         return true;
     }
 
+    public void sendAuthenticationCode(String email) {
+        try {
+                authenticationCode  = RandomStringUtils.random(5, true, true).toUpperCase();
+            sendMail("aaa@aa.com", email, "인증코드", authenticationCode);
+        } catch(NoSuchElementException e) {
+            throw e;
+        }
+    }
+    public Boolean checkAuthenticationCode(String code){
+          return  code.equals(authenticationCode);
 
-
+    }
+    public void mailTest() {
+        sendMail("admin@zmall.com","dlswh6289@gmail.com","안녕하세요","이메일입니다");
+    }
 }
