@@ -1,7 +1,10 @@
 package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kr.kro.namohagae.global.dto.TownDto;
+import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/v1")
 public class GlobalRestController {
+
+    private final TownService townService;
+
+
 
     @GetMapping(value = {"/image/board", "/image/dog","/image/embeded", "/image/product", "/image/profile", "/image/temp", "/image/chat"}, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> viewImage(String name, HttpServletRequest req){
@@ -42,6 +51,10 @@ public class GlobalRestController {
         return null;
     }
 
+    @GetMapping("/town/find")
+    public ResponseEntity<List<TownDto.Read>> viewTownDong(String townGu){
+        return ResponseEntity.ok(townService.findTownDongByGu(townGu));
+    }
 
 
 

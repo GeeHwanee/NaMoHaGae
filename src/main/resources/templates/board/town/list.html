@@ -52,11 +52,33 @@
         }
     };
 
+    function printTownDong(){
+        const $townGu = $('#townGu').val();
+        console.log($townGu);
+        $.ajax({
+            url: `/api/v1/town/find?townGu=${$townGu}`,
+            method: 'GET',
+            success: function (list) {
+                const $townDong = $('#townDong').empty();
+                let tpl = ` <option selected disabled>구 선택</option>`;
+                $townDong.append(tpl);
+                for (const town of list) {
+                    tpl = `
+                        <option value="${town.townNo}">${town.townDong}</option>
+                    `
+                    $townDong.append(tpl);
+                }
 
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr, status, error);
+            }
+        });
+    }
 
     // select 요소에서 값이 변경될 때마다 호출되는 함수
     function onChangeTownNo() {
-        const townNo = $('select[name="townNo"]').val();
+        const townNo = $('select[name="townDong"]').val();
 
         // townNo 값이 선택되지 않은 경우, 요청하지 않음
         if (!townNo) {
@@ -76,8 +98,11 @@
     }
 
     $(document).ready(function () {
+        $('#townGu').on('change', function (){
+            printTownDong();
+        })
         // select 요소 값 변경 이벤트 등록
-        $('select[name="townNo"]').on('change', onChangeTownNo);
+        $('select[name="townDong"]').on('change', onChangeTownNo);
     });
 </script>
 <body>
@@ -89,31 +114,13 @@
 
     </aside>
     <section>
-        <h1>메인 페이지</h1>
-        <select class="form-select" aria-label="Default select example" name="townNo">
-            <option selected>동네를 선택해주세요</option>
-            <option value="1">중의 1·3동</option>
-            <option value="2">중의2동</option>
-            <option value="3">중의4동</option>
-            <option value="4">용현 1·4동</option>
-            <option value="5">용현2동</option>
-            <option value="6">용현3동</option>
-            <option value="7">용현5동</option>
-            <option value="8">도화1동</option>
-            <option value="9">도화2·3동</option>
-            <option value="10">주안1동</option>
-            <option value="11">주안2동</option>
-            <option value="12">주안3동</option>
-            <option value="13">주안4동</option>
-            <option value="14">주안5동</option>
-            <option value="15">주안6동</option>
-            <option value="16">주안7동</option>
-            <option value="17">주안8동</option>
-            <option value="18">학익1동</option>
-            <option value="19">학익2동</option>
-            <option value="20">관교동</option>
-            <option value="21">문학동</option>
-
+        <h1>동네 게시판</h1>
+        <select class="form-select" aria-label="Default select example" id="townGu" name="townGu">
+            <option selected disabled>구 선택</option>
+            <option value="미추홀구">미추홀구</option>
+        </select>
+        <select class="form-select" id="townDong" name="townDong">
+            <option selected disabled>구 부터 선택해주세요</option>
         </select>
         <article>
 
@@ -137,7 +144,7 @@
         </article>
     </section>
 </main>
-<footer th:replace="~{/fragment/aside.html}">
+<footer th:replace="~{/fragment/footer.html}">
 </footer>
 </body>
 </html>
