@@ -31,7 +31,7 @@ public class FavoriteService {
             end = countOfPage;
             next = 0;
         }
-        return new FavoriteDto.Pagination(pageNo, prev, start, end, next, productNo, favorites);
+        return new FavoriteDto.Pagination(pageNo, prev, start, end, next, favorites);
     }
 
 
