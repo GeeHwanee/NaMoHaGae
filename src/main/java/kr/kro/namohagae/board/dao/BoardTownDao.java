@@ -1,5 +1,6 @@
 package kr.kro.namohagae.board.dao;
 
+import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.entity.Board;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +11,7 @@ public interface BoardTownDao {
 
     public void boardTownInsertData(Board board);
 
-    public List<Board> boardTownList(Integer townNo);
+    public List<BoardTownListDto> boardTownList(Integer townNo);
 
     public Board boardTownRead(Integer boardNo);
 

@@ -32,17 +32,17 @@
         function printPagination({prev, start, end, next, pageno}) {
             const $ul = $('#page_ul');
             if(prev>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification_list?pageno=${prev}'>이전</a></li>`);
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification?pageno=${prev}'>이전</a></li>`);
             for(let i=start; i<=end; i++) {
                 const tpl = `
 				<li class='page-item ${pageno==i? "active":""}'>
-					<a class='page-link' href='/member/notification_list?pageno=${i}'>${i}</a>
+					<a class='page-link' href='/member/notification?pageno=${i}'>${i}</a>
 				</li>
 			`;
                 $ul.append(tpl);
             }
             if(next>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification_list?pageno=${next}'>다음</a></li>`)
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification?pageno=${next}'>다음</a></li>`)
         }
 
         $(document).ready(async function() {

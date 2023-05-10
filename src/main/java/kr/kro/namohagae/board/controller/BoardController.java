@@ -52,6 +52,13 @@ public class BoardController {
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page ,Model model,Principal principal) {
         boardService.increaseReadCnt(boardNo);
+        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
+
+        if(isLiked){
+            model.addAttribute("good","좋아요취소");
+        } else {
+            model.addAttribute("good","좋아요");
+        }
 
         model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
         model.addAttribute("comment", commentService.commentList(boardNo));
@@ -92,6 +99,7 @@ public class BoardController {
         if(isLiked) {
             boardService.removeLike(boardNo,memberNo);
             boardService.badLike(boardNo);
+
 
         } else {
             boardService.insertLike(boardNo,memberNo);

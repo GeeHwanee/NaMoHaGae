@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 public class MemberRestController {
     @Autowired
     private MemberService memberService;
@@ -28,5 +31,16 @@ public class MemberRestController {
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
+    @PatchMapping("/member/sendAudenticationCode")
+    public ResponseEntity<String> sendmail(String email){
+        memberService.sendAuthenticationCode(email);
+        return ResponseEntity.ok("이메일로 인증코드를 보냈습니다");
+    }
+
+    @GetMapping("/member/checkAudenticationCode")
+    public ResponseEntity<String> checkCode(String code){
+        Boolean a=memberService.checkAuthenticationCode(code);
+        return a?ResponseEntity.ok("인증되었습니다"):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+    }
 
 }

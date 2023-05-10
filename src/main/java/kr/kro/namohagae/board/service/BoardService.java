@@ -30,7 +30,7 @@ public class BoardService {
 
         Board board = boardDto.toEntity(memberDao.findNoByUsername(userEmail), boardDto.getTitle(), boardDto.getContent());
 
-        // Set other properties of board
+
         boardDao.boardFreeInsertData(board);
     }
 
