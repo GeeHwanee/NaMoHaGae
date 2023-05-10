@@ -3,6 +3,9 @@ package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.CommentDao;
 
+
+import kr.kro.namohagae.board.dto.CommentListDto;
+
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +28,8 @@ public class CommentService {
          return commentDao.commentData(boardComment);
     };
 
-    public List<BoardComment> commentList(Integer boardNo) {
-        
+    public List<CommentListDto> commentList(Integer boardNo) {
+
         return commentDao.commentList(boardNo);
     }
 

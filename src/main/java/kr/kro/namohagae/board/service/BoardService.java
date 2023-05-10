@@ -3,6 +3,7 @@ package kr.kro.namohagae.board.service;
 import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.dao.BoardNoticeDao;
 import kr.kro.namohagae.board.dto.BoardDto;
+import kr.kro.namohagae.board.dto.BoardLikeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
@@ -30,7 +31,7 @@ public class BoardService {
         Board board = boardDto.toEntity(memberDao.findNoByUsername(userEmail), boardDto.getTitle(), boardDto.getContent());
 
         // Set other properties of board
-         boardDao.boardFreeInsertData(board);
+        boardDao.boardFreeInsertData(board);
     }
 
     public List<Board> boardFreeList() {
@@ -54,8 +55,10 @@ public class BoardService {
 
         boardDao.boardUpdateData(board);
     }
-        int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
-        int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
+
+    int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
+    int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
+
     public List<BoardList> pagingList(int page) {
 
         /*
@@ -67,33 +70,61 @@ public class BoardService {
 
         int pagingStart = (page - 1) * pageLimit;
 
-        return boardDao.pagingList(pagingStart,pageLimit);
+        return boardDao.pagingList(pagingStart, pageLimit);
     }
-        public PageDto pagingParam(int page) {
-            // 전체 글 갯수 조회
-            int boardCount = boardDao.boardCount();
-            // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
-            int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
-            // 시작 페이지 값 계산(1, 4, 7, 10, ~~~~)
-            int startPage = (((int)(Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
-            // 끝 페이지 값 계산(3, 6, 9, 12, ~~~~)
-            int endPage = startPage + blockLimit - 1;
-            if (endPage > maxPage) {
-                endPage = maxPage;
-            }
-            PageDto pageDTO = new PageDto();
-            pageDTO.setPage(page);
-            pageDTO.setMaxPage(maxPage);
-            pageDTO.setStartPage(startPage);
-            pageDTO.setEndPage(endPage);
-            return pageDTO;
-        }
 
-        public Integer increaseReadCnt(Integer boardNo) {
+    public PageDto pagingParam(int page) {
+        // 전체 글 갯수 조회
+        int boardCount = boardDao.boardCount();
+        // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
+        int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
+        // 시작 페이지 값 계산(1, 4, 7, 10, ~~~~)
+        int startPage = (((int) (Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
+        // 끝 페이지 값 계산(3, 6, 9, 12, ~~~~)
+        int endPage = startPage + blockLimit - 1;
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+        PageDto pageDTO = new PageDto();
+        pageDTO.setPage(page);
+        pageDTO.setMaxPage(maxPage);
+        pageDTO.setStartPage(startPage);
+        pageDTO.setEndPage(endPage);
+        return pageDTO;
+    }
+
+    public Integer increaseReadCnt(Integer boardNo) {
 
         return boardDao.increaseReadCnt(boardNo);
-        }
+    }
 
+    public Boolean isLikeExists(Integer boardNo, Integer memberNo) {
+
+
+
+        Integer count = boardDao.isLikeExists(boardNo,memberNo);
+        System.out.println("갯수 : " + count);
+        return count != null && count.intValue() > 0;
 
     }
+
+    public void insertLike(Integer memberNo, Integer boardNo) {
+        System.out.println("갯수 : " + memberNo+boardNo);
+        boardDao.insertLike(memberNo,  boardNo);
+    }
+
+
+    public void removeLike(Integer memberNo, Integer boardNo) {
+        System.out.println("갯수 : " + memberNo+boardNo);
+        boardDao.removeLike(memberNo, boardNo);
+    }
+    public void goodLike(Integer boardNo) {
+
+        boardDao.goodLike(boardNo);
+    }
+    public void badLike(Integer boardNo) {
+
+        boardDao.badLike(boardNo);
+    }
+}
 
