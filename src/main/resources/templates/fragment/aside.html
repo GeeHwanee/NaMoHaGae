@@ -23,7 +23,7 @@
 		const member = "member";
 		const board = "board";
 		const admin	= "admin";
-		function printBoard(quikmenu) {
+		function printNotification(quikmenu) {
 			const $menu = $('#notificationquikmenu');
 			console.log(quikmenu);
 			quikmenu.forEach(n => {
@@ -92,7 +92,7 @@
 			});
 			try {
 				const result = await $.ajax("/rest/notification/quikmenu");
-				printBoard(result);
+				printNotification(result);
 			}catch (err){
 				console.log(err)
 			}
