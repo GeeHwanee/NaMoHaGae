@@ -13,4 +13,6 @@ public interface AddressDao {
     public List<AddressDto.Read> findAll(Integer memberNo);
 
     public Boolean delete(Integer addressNo);
+
+    public Address findByMemberNoAndAddressNo(Integer memberNo, Integer AddressNo);
 }
