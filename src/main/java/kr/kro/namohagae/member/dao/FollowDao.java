@@ -17,4 +17,6 @@ public interface FollowDao {
     public List<FollowDto.list> findFollowList(Integer startRownum, Integer endRownum,Integer memberNo);
 
     public Boolean existsByMemberNoAndFollowMemberNo(Integer memberNo,Integer myMemberNo);
+
+    public Integer count(Integer memberNo);
 }

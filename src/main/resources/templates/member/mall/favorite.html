@@ -16,39 +16,37 @@
     <script>
         function printFavorite(favorites) {
             const $tbody = $('#tbody');
-            favorites.forEach(f => {
+            favorites.forEach((f, i) => {
                 const tpl = `<tr>
-                <td><input type="checkbox" id="checkFavorite" value="${f.productNo}"></td>
-				<td><img id="show-profile" src="${f.productImage}" width="150px" height="150px"></td>
-				<td>
-					<a href="http://localhost:8081/mall/product/read?productNo=${f.productNo}">${f.productName}</a>
-				</td>
-				<td>${f.productPrice}</td>
-			</tr>`;
+                    <td><button id="checkFavorite-${i}" type="button"></button> </td>
+                    <input type="hidden" value="${f.productNo}" id="favoriteNo-${i}">
+                    <td><img id="show-profile" src="${f.productImage}" width="150px" height="150px"></td>
+                    <td>
+                        <a href="http://localhost:8081/mall/product/read?productNo=${f.productNo}">${f.productName}</a>
+                     </td>
+                     <td>${f.productPrice}</td>
+                 </tr>`;
                 $tbody.append(tpl);
-
-            }
-            )
+            });
         }
 
-
-        function printPagination({prev, start, end, next, pageno}) {
+        function printPagination({ prev, start, end, next, pageno}) {
             const $ul = $('#page_ul');
-            if(prev>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/mall/favoritepageno=${prev}'>이전</a></li>`);
-            for(let i=start; i<=end; i++) {
+            if (prev > 0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/mall/favorite?pageno=${prev}'>이전</a></li>`);
+            for (let i = start; i <= end; i++) {
                 const tpl = `
-				<li class='page-item ${pageno==i? "active":""}'>
-					<a class='page-link' href='/member/mall/favorite?pageno=${i}'>${i}</a>
-				</li>
-			`;
+      <li class='page-item ${pageno == i ? "active" : ""}'>
+        <a class='page-link' href='/member/mall/favorite?pageno=${i}'>${i}</a>
+      </li>
+    `;
                 $ul.append(tpl);
             }
-            if(next>0)
+            if (next > 0)
                 $ul.append(`<li class='page-item'><a class='page-link' href='/member/mall/favorite?pageno=${next}'>다음</a></li>`)
         }
 
-        $(document).ready(async function() {
+        $(document).ready(async function () {
             const param = new URLSearchParams(location.search);
             const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
             try {
@@ -59,20 +57,37 @@
             } catch (err) {
                 console.log(err);
             }
-            $(document).on("change", "#checkFavorite", async function () {
-                const no = $(this).val();
-                    console.log(no);
+
+            $("button[id^='checkFavorite-']").each(async function() {
+                const index = $(this).attr('id').split('-')[1];
+                const favoriteNo = $(`#favoriteNo-${index}`).val();
                 try {
-                    await $.ajax({
-                        url: "/api/v1/favorite/add?productNo=" + no,
-                        type: "PATCH"
-                    });
-                    // 읽음 여부를 업데이트한 후의 작업을 수행
+                    const result = await $.ajax({ url: '/api/v1/favorite/check?productNo=' + favoriteNo, method: "get" });
+                    if (result == true) {
+                        $(this).text("취소");
+                    } else {
+                        $(this).text("찜하기");
+                    }
                 } catch (err) {
                     console.log(err);
                 }
-            })
-        });
+            });
+
+            $(document).on("click", "button[id^='checkFavorite-']", async function () {
+                const index = $(this).attr('id').split('-')[1];
+                const favoriteNo = $(`#favoriteNo-${index}`).val();
+                try {
+                    const result = await $.ajax({ url: '/api/v1/favorite/add?productNo=' + favoriteNo, method: "patch" });
+                    if (result.favorite == true) {
+                        $(this).text("취소");
+                    } else {
+                        $(this).text("찜하기");
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+        })
     </script>
 </head>
 <body>
