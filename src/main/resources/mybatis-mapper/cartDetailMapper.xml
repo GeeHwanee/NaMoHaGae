@@ -44,8 +44,12 @@
     </select>
 
     <!-- 주문 완료 후 장바구니에서 상품 삭제 -->
-    <delete id="removeByCartNo" parameterType="int">
-        delete from CART_DETAIL where cart_no = #{cartNo}
+    <delete id="removeByCartNo">
+        delete from CART_DETAIL where product_no in
+        <foreach collection="items" item="item" open="(" close=")" separator=",">
+            #{item.productNo}
+        </foreach>
+        and cart_no = #{cartNo}
     </delete>
 
     <!-- 사용자의 장바구니 상품 총 개수 검색 -->
@@ -61,5 +65,23 @@
     <!-- 사용자의 장바구니 상품 총 가격 검색 -->
     <select id="findTotalPriceByMemberNo" parameterType="int" resultType="int">
         select sum(cart_detail_price) as cart_total_price from CART_DETAIL where member_no = #{memberNo}
+    </select>
+
+    <!-- 결제할 상품 정보 불러오기 -->
+    <select id="findWithProduct" resultType="ProductOrderDetail">
+        SELECT 'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        p.product_no,
+        p.product_name,
+        cd.cart_detail_count,
+        p.product_price * cd.cart_detail_count as cart_total_price
+        FROM PRODUCT p
+        INNER JOIN PRODUCT_IMAGE pi ON pi.product_no = p.product_no
+        INNER JOIN CART_DETAIL cd ON cd.product_no = p.product_no
+        INNER JOIN CART c ON c.cart_no = cd.cart_no
+        WHERE c.member_no = #{member_no}
+        AND cd.product_no IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
 </mapper>
