@@ -66,5 +66,25 @@
         FROM BOARD
         WHERE BOARD_TITLE LIKE '%#{searchName}%';
     </select>
+
+    <update id="goodLike">
+        update board set
+            board_recommend_count=board_recommend_count+1
+        where board_no = #{boardNo}
+    </update>
+    <update id="badLike">
+        update board set
+            board_recommend_count=board_recommend_count-1
+        where board_no = #{boardNo}
+    </update>
+    <update id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
+        INSERT INTO BOARD_LIKE (board_no, member_no) VALUES (#{boardNo}, #{memberNo})
+    </update>
+    <update id="removeLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
+        DELETE FROM BOARD_LIKE WHERE board_no = #{boardNo} AND member_no = #{memberNo}
+    </update>
+    <select id="isLikeExists" resultType="int">
+        SELECT COUNT(*) FROM BOARD_LIKE WHERE member_no = #{memberNo} AND board_no = #{boardNo}
+    </select>
 </mapper>
 

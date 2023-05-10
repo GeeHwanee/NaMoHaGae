@@ -7,8 +7,9 @@ import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.board.service.BoardNoticeService;
+//import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.entity.BoardList;
+import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.dto.ReportDto;
@@ -64,6 +65,9 @@ public class GlobalController {
     private DogService dogService;
     @Autowired
     private BoardNoticeService boardNoticeService;
+
+
+
     @Autowired
     private AddressService addressService;
     @Autowired
