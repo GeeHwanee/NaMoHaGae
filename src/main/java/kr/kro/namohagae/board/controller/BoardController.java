@@ -1,22 +1,22 @@
 package kr.kro.namohagae.board.controller;
 
 
+
 import kr.kro.namohagae.board.dto.BoardDto;
 
+import kr.kro.namohagae.board.dto.BoardLikeDto;
 import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.security.Principal;
-
-import java.util.List;
 
 
 @Controller
@@ -50,7 +50,7 @@ public class BoardController {
 
     @GetMapping("/read")
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
-                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model,BoardComment boardComment,Principal principal) {
+                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page ,Model model,Principal principal) {
         boardService.increaseReadCnt(boardNo);
 
         model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
@@ -84,6 +84,23 @@ public class BoardController {
 
         return "redirect:/board/free/list";
     }
+
+    @PostMapping("/like")
+    public ResponseEntity<?> boardLike(Integer boardNo, Integer memberNo){
+
+        boolean isLiked = boardService.isLikeExists(boardNo,memberNo);
+        if(isLiked) {
+            boardService.removeLike(boardNo,memberNo);
+            boardService.badLike(boardNo);
+
+        } else {
+            boardService.insertLike(boardNo,memberNo);
+            boardService.goodLike(boardNo);
+        }
+
+        return ResponseEntity.ok(boardService.boardFreeReadData(boardNo));
+    }
+
         // value 파라미터 이름 required = false 필수가 아니다
 
     //  멤버번호 이름 꺼내는법
