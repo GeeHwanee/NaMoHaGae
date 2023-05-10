@@ -10,27 +10,28 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/api/v1")
 public class NotificationRestController {
     @Autowired
     private NotificationService service;
     @GetMapping(value="/notification/list", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Integer memberNo= myUserDetails.getMemberNo();
-        return ResponseEntity.ok(service.findAll(pageno,memberNo));
+        return ResponseEntity.ok(service.findAll(pageno,myUserDetails.getMemberNo()));
     }
 
-    @PutMapping("/notification/read/{no}")
-    public ResponseEntity<String> updateAlarmRead(@PathVariable("no") Integer no) {
+    @PutMapping("/notification/read")
+    public ResponseEntity<String> updateNotificationRead(Integer notificationNo) {
         // 알람의 읽음 여부를 업데이트하는 로직 작성
-        service.read(no);
+        service.read(notificationNo);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @GetMapping("/notification/quikmenu")
-    public ResponseEntity<?> quikmenu(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        Integer memberNo = myUserDetails.getMemberNo();
-        return  ResponseEntity.ok(service.quikmenu(memberNo));
-    }
+    @GetMapping("/notification/aside/list")
+    public ResponseEntity<?> printAside(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if (myUserDetails != null) {
+            return ResponseEntity.ok(service.printAside(myUserDetails.getMemberNo()));
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 
+    }
 }
