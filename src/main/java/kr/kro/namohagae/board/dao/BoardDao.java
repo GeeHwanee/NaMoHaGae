@@ -1,5 +1,6 @@
 package kr.kro.namohagae.board.dao;
 
+import kr.kro.namohagae.board.dto.BoardLikeDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,4 +26,12 @@ public interface BoardDao {
     public int boardCount();
 
     public Integer increaseReadCnt(Integer boardNo);
+
+    public Integer isLikeExists(Integer boardNo, Integer memberNo);
+    public void insertLike(Integer boardNo,Integer memberNo);
+    public void removeLike(Integer boardNo, Integer memberNo);
+
+    public void goodLike(Integer boardNo);
+
+    public void badLike(Integer boardNo);
 }
