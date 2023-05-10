@@ -21,11 +21,7 @@ public class NotificationService {
     public void save(Member member, String notificationContent, String notificationLink){
         Notification notification = Notification.builder().memberNo(member.getMemberNo()).notificationContent(notificationContent).notificationLink(notificationLink).build();
         notificationDao.save(notification);
-        Integer notificationNo = notificationDao.getSelectKey();
-        System.out.println("알림번호   "+notificationNo);
-        NotificationDto.FindAll notificationRead = new NotificationDto.FindAll(notificationNo,notification.getNotificationContent(),notification.getNotificationLink(),false);
-
-
+        NotificationDto.FindAll notificationRead = new NotificationDto.FindAll(notification.getNotificationNo(),notification.getNotificationContent(),notification.getNotificationLink(),false);
         webSocketService.sendMessage(member.getMemberEmail(), notificationRead);
     }
 
