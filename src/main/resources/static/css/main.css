@@ -80,6 +80,7 @@ nav {
 
 main {
     display:flex;
+    overflow: hidden;
 }
 aside {
     width:16%;
@@ -111,7 +112,7 @@ aside {
 }
 section {
     width:84%;
-    height:1200px;
+    min-height:970px;
 
 }
 footer {
