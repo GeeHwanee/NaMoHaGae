@@ -23,14 +23,13 @@
 		const member = "member";
 		const board = "board";
 		const admin	= "admin";
-		function printNotification(quikmenu) {
-			const $menu = $('#notificationquikmenu');
-			console.log(quikmenu);
-			quikmenu.forEach(n => {
+		function printNotification(result) {
+			const $notification = $('#notification');
+			result.forEach(n => {
 				const tpl = `
-             <a href="${n.notificationLink}" id="read">${n.notificationContent}</a>
-        `;
-				$menu.append(tpl);
+            		 <li><a href="${n.notificationLink}" id="read" data-notificaion-no="${n.notificationNo}">${n.notificationContent}</a></li>
+       			 `;
+				$notification.append(tpl);
 			});
 		}
 		function printAside(){
@@ -85,22 +84,48 @@
 	<script>
 		$(document).ready(async function(){
 			printAside();
-			var currentPosition = parseInt($(".quickmenu").css("top"));
+
+			const socket = new WebSocket('ws://localhost:8081/notification');
+
+			socket.addEventListener('open', function (event) {
+				// 연결이 성공한 경우 실행되는 코드
+				console.log('socket open');
+			});
+
+			socket.addEventListener('message', function (event) {
+				// 메시지를 받은 경우 실행되는 코드
+				const data = event.data;
+				const notification = JSON.parse(data).notification;
+				let $li = `<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`;
+				$('#notification').prepend($li);
+			});
+
+			socket.addEventListener('close', function (event) {
+				console.log('socket close');
+				// 연결이 종료된 경우 실행되는 코드
+			});
+
+			socket.addEventListener('error', function (event) {
+				console.log('socket error');
+				// 에러가 발생한 경우 실행되는 코드
+			});
+
+			var currentPosition = parseInt($(".quickMenu").css("top"));
 			$(window).scroll(function() {
 				var position = $(window).scrollTop();
 				$(".quickmenu").stop().animate({"top":position+currentPosition+"px"},1000);
 			});
 			try {
-				const result = await $.ajax("/rest/notification/quikmenu");
+				const result = await $.ajax("/api/v1/notification/aside/list");
 				printNotification(result);
 			}catch (err){
 				console.log(err)
 			}
 			$(document).on("click", "#read", async function () {
-				const no = $(this).data("no");
+				const notificationNo = $(this).data("notification-no");
 				try {
 					await $.ajax({
-						url: "/rest/notification/read/" + no,
+						url: "/api/v1/notification/read?notificationNo=" + notificationNo,
 						type: "PUT"
 					});
 					// 읽음 여부를 업데이트한 후의 작업을 수행
@@ -123,8 +148,8 @@
 	<ul id="side_bar" class="side_bar">
 	</ul>
 	<div class="border4"></div>
-	<div class="quickmenu">
-		<ul id="notificationquikmenu">
+	<div class="quickMenu">
+		<ul id="notification">
 		</ul>
 	</div>
 </aside>
