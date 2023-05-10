@@ -12,6 +12,7 @@ public class FavoriteDto {
 
     @Data
     public static class list{
+        private Integer productNo;
         private String productName;
         private Integer productPrice;
         private String productImage;
@@ -25,7 +26,6 @@ public class FavoriteDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private Integer productNo;
         private List<FavoriteDto.list> favorites;
     }
 }

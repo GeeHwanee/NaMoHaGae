@@ -3,12 +3,10 @@ package kr.kro.namohagae.mall.controller;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,4 +26,10 @@ public class FavoriteRestController {
         Integer memberNo=myUserDetails.getMemberNo();
         return ResponseEntity.ok(service.checkFavorite(productNo, memberNo));
     }
+    @GetMapping(value="/favorite/list", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        Integer memberNo= myUserDetails.getMemberNo();
+        return ResponseEntity.ok(service.list(pageno,memberNo));
+    }
+
 }

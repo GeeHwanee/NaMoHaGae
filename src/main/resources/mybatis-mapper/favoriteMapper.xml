@@ -13,7 +13,7 @@
         select rownum as rnum, f.* from
         (
             select
-            p.product_name, p.product_price,
+            p.product_no,p.product_name, p.product_price,
             'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
             from FAVORITE f
             join PRODUCT_IMAGE pi on f.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
