@@ -16,8 +16,8 @@
                 select rownum as rnum, a.* from
                     (
                         select
-                            alarm_no as alarmNo,alarm_content as alarmContent,alarm_link as alarmLink,alarm_read_enabled as alarmReadEnabled
-                        from member where member_no=#{memberNo}
+                                follow_member_no,(select member_nickname from member where member_no=f.follow_member_no) as memberNickname,(select member_grade from member where member_no=f.follow_member_no) as memberGrade
+                        from follow f where member_no=#{memberNo}
                     ) a
                 where rownum&lt;=#{endRownum}
             )
@@ -25,5 +25,8 @@
     </select>
     <select id="existsByMemberNoAndFollowMemberNo" resultType="Boolean">
         select count(*) from follow where follow_member_no=#{memberNo} and member_no=#{myMemberNo}
+    </select>
+    <select id="count" resultType="Integer">
+        select count(*) from follow where member_no = #{memberno}
     </select>
 </mapper>
