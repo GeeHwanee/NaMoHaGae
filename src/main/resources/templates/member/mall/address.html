@@ -26,7 +26,7 @@
             address.forEach(a => {
                 const tpl = `<tr>
 				<td><pre>주소이름       주소          상세주소<br>    ${a.addressName}   ${a.addressAddress}  ${a.addressAddressDetail}</pre></td>
-				<button type="button" value="${a.addressNo}" class="btn btn-primary btn-block">삭제</button>
+				<td><button type="button" value="${a.addressNo}" id="delete" class="btn btn-primary btn-block">삭제</button></td>
 			</tr>`;
                 $tbody.append(tpl);}
             )
@@ -46,7 +46,7 @@
                 const no = $(this).val();
                 try {
                     await $.ajax({
-                        url: "/api/v1/address/delete" + no,
+                        url: "/api/v1/address/delete?addressNo=" + no,
                         type: "POST"
                     });
                     // 읽음 여부를 업데이트한 후의 작업을 수행
