@@ -8,16 +8,38 @@
 
 
     <insert id="boardTownInsertData" parameterType="kr.kro.namohagae.board.entity.Board">
-        INSERT INTO BOARD
-        (
-            board_no,town_no,member_no,board_title,board_content,board_write_date,board_read_count,board_recommend_count,board_enabled
+        INSERT INTO board (
+            board_no,
+            town_no,
+            member_no,
+            board_title,
+            board_content,
+            board_write_date,
+            board_read_count,
+            board_recommend_count,
+            board_enabled
         )
-        VALUES ( SEQ_BOARD_NO.NEXTVAL,#{townNo},1,#{boardTitle},#{boardContent},sysdate,0,0,0
-               )
+        SELECT
+            SEQ_BOARD_NO.NEXTVAL,
+            #{townNo},
+            m.member_no,
+            #{boardTitle},
+            #{boardContent},
+            sysdate,
+            0,
+            0,
+            0
+        FROM
+            member m
+        WHERE
+            m.member_no = #{memberNo}
     </insert>
 
-    <select id="boardTownList" resultType="kr.kro.namohagae.board.entity.Board">
-        select * from board where town_no = #{townNo}
+    <select id="boardTownList" resultType="kr.kro.namohagae.board.dto.BoardTownListDto">
+        SELECT b.*, m.member_nickname AS memberNickname
+        FROM board b
+                 JOIN member m ON b.member_No = m.member_No where b.town_no = #{townNo}
+        ORDER BY b.board_No DESC
     </select>
     <select id="boardTownRead" resultType="kr.kro.namohagae.board.entity.Board">
         select * from board where board_no = #{boardNo}

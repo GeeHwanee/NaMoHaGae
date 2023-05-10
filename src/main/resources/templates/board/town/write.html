@@ -42,7 +42,7 @@
                 <form action="/board/town/writepro" method="post">
 
                     <span>제목</span>
-                    <input name="boardTitle" type="text">
+                    <input name="Title" type="text">
                     <span>내용</span>
                     <select class="form-select" aria-label="Default select example" name="townNo">
                         <option selected>동네를 선택해주세요</option>
@@ -69,14 +69,14 @@
                         <option value="21">문학동</option>
 
                     </select>
-                    <textarea name="boardContent"></textarea>
+                    <textarea name="Content"></textarea>
                     <button type="submit">작성</button>
                 </form>
             </div>
         </article>
     </section>
 </main>
-<footer th:replace="~{/fragment/aside.html}">
+<footer th:replace="~{/fragment/footer.html}">
 </footer>
 </body>
 </html>
