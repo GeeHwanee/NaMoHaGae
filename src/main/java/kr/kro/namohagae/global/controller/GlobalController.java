@@ -7,12 +7,10 @@ import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
-//import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
-import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.mall.dto.AddressDto;
@@ -208,9 +206,13 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address")
     public void address(){}
-    @GetMapping("/member/mall/addressCreate")
-    public void addressCreate(){}
-    @PostMapping("/member/mall/addAddress")
+
+    @GetMapping("/member/mall/address/add")
+    public String addressCreate(){
+        return "/member/mall/addressCreate";
+    }
+
+    @PostMapping("/member/mall/address/add")
     public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
         Integer memberNo = myUserDetails.getMemberNo();
         addressService.save(memberNo,dto);
