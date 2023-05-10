@@ -7,6 +7,7 @@ import kr.kro.namohagae.board.dto.BoardLikeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
+import kr.kro.namohagae.mall.dto.FavoriteDto;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class BoardService {
 
     @Autowired
     private MemberDao memberDao;
+    private final Integer PAGESIZE = 10;
+    private final Integer BLOCKSIZE = 5;
 
     public void boardFreeInsertData(BoardDto.write boardDto, String userEmail) {
 
@@ -125,6 +128,22 @@ public class BoardService {
     public void badLike(Integer boardNo) {
 
         boardDao.badLike(boardNo);
+    }
+    public BoardDto.Pagination memberList(Integer pageno, Integer memberNo) {
+        Integer startRowNum = (pageno-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<BoardDto.FindAllByMemberNo> board =  boardDao.findAllByMemberNo(startRowNum,endRowNum, memberNo);
+        Integer countOfFavorite = boardDao.countByMemberNo(memberNo);
+        Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
+        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new BoardDto.Pagination(pageno, prev, start, end, next, board);
     }
 }
 
