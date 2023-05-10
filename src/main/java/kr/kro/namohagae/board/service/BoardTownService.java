@@ -1,8 +1,11 @@
 package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardTownDao;
+import kr.kro.namohagae.board.dto.BoardTownDto;
+import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +16,19 @@ public class BoardTownService {
 
     @Autowired
     BoardTownDao boardTownDao;
-
+    @Autowired
+    MemberDao memberDao;
     private final static Integer PAGESIZE = 10;
     private final static Integer BLOCKSIZE =5;
 
-    public void boardTownInsertData(Board board) {
+    public void boardTownInsertData(BoardTownDto.write boardTownDto, String userEmail) {
 
+        Board board = boardTownDto.toEntity(boardTownDto.getTownNo(),memberDao.findNoByUsername(userEmail), boardTownDto.getTitle(), boardTownDto.getContent());
+        System.out.println("왜안되 이거"+board);
         boardTownDao.boardTownInsertData(board);
     }
 
-    public List<Board> boardTownList(Integer townNo) {
+    public List<BoardTownListDto> boardTownList(Integer townNo) {
 
 
         return boardTownDao.boardTownList(townNo);

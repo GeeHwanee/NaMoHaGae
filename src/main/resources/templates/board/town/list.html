@@ -44,7 +44,7 @@
                      <td>${b.boardNo}</td>
                      <td>${b.townNo}</td>
                      <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
-                     <td>${b.memberNo}</td>
+                     <td>${b.memberNickname}</td>
                      <td>${b.boardWriteDate.replace('T', ' ')}</td>
                      <td>${b.boardReadCount}</td>
                     </tr>`;
@@ -140,7 +140,7 @@
                 </tbody>
             </table>
 
-
+            <a class="card-link" th:href="@{/board/town/write}">글쓰기</a>
         </article>
     </section>
 </main>
