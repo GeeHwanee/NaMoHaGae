@@ -64,7 +64,7 @@
     <select id="boardSearch">
         SELECT *
         FROM BOARD
-        WHERE BOARD_TITLE LIKE '%#{searchName}%';
+        WHERE BOARD_TITLE LIKE '%#{searchName}%'
     </select>
 
     <update id="goodLike">

@@ -10,6 +10,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" href="/main.css">
+    <style >
+        .hidden{ display: none;}
+    </style>
     <script th:inline="javascript">
         const msg = [[${msg}]];
         if(msg!=null)
@@ -67,6 +70,30 @@
     </script>
     <script>
         $(document).ready(function(){
+            $('#sendEmail').click(async function (){
+                try {
+                    const url = "/member/sendAudenticationCode?email=" + $("#memberEmail").val();
+                    // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
+                    // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
+                    const result = await $.ajax({url:url, method:"patch"});
+                    alert(result);
+                    $('#checkCodeArea').removeClass('hidden');
+                } catch(err) {
+                    alert("이메일을 찾지 못했습니다")
+                }
+            });
+            $('#checkCode').click(async function(){
+                try {
+                const url = "/member/checkAudenticationCode?code=" + $("#code").val();
+                // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
+                // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
+                const result = await $.ajax({url:url, method:"get"});
+                alert(result);
+                    $('#join').prop('disabled', false);
+                }catch (err){
+                    alert("인증에 실패했습니다")
+                }
+            });
             $('#join').click(async function (){
                 $.ajax({
                     url:'https://dapi.kakao.com/v2/local/search/address.json?query='+encodeURIComponent(document.getElementById("sample4_roadAddress").value),
@@ -111,7 +138,14 @@
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="memberEmail">이메일:</label>
+                    <div>
                     <input type="text" name="memberEmail" id="memberEmail" class="form-control">
+                    <button type="button" id="sendEmail" class="btn btn-primary btn-block">인증요청</button>
+                    </div>
+                    <div id="checkCodeArea" class="hidden">
+                    <input type="text" id="code" name="code" class="form-control">
+                    <button type="button" id="checkCode" class="btn btn-primary btn-block">인증확인</button>
+                    </div>
                     <span id="memberEmail_msg"></span>
                 </div>
                 <div class="mb-3 mt-3">
@@ -155,7 +189,7 @@
                     <input type="hidden" id="memberDong" name="townDong">
                     <input type="hidden" id="memberGu" name="townGu">
                 <div class="mb-3 mt-3 d-grid">
-                    <button id="join" type="button" class="btn btn-primary btn-block">가입</button>
+                    <button id="join" type="button" disabled="disabled" class="btn btn-primary btn-block">가입</button>
                 </div>
             </form>
         </section>
