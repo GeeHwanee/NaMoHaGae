@@ -151,6 +151,10 @@
         )
     </update>
 
+    <update id="updateOrder">
+        update PRODUCT set product_stock = product_stock-1 where product_no = #{productNo}
+    </update>
+
     <delete id="delete">
         delete from PRODUCT where PRODUCT_NO= #{productNo} and ROWNUM=1
     </delete>
