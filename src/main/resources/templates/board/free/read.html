@@ -38,8 +38,10 @@
                     <a class="card-link" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}">수정</a>
                     <a class="card-link" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}">삭제</a>
                     <button onclick="listFn()">목록</button>
-                    <button id="likeButton" onclick="updateLike()">좋아요!</button>
-                    <span id="recommendCountSpan">좋아요 수</span>
+                    <button id="likeButton" onclick="updateLike(); change()" type="button" th:text="${good}"></button>
+                    <span id="recommendCountSpan" th:text="${board.boardRecommendCount}"></span>
+                    <a class="card-link" th:href="@{/board/free/write}">글쓰기</a>
+
                 </div>
             </div>
 
@@ -63,7 +65,7 @@
                             <p class="commentContent" th:text="${comment.commentContent}"></p>
                             <textarea class="editCommentContent" style="display: none;"></textarea>
                         </td>
-                        <td th:text="${comment.commentWriteDate}"></td>
+                        <td th:text="${#temporals.format(comment.commentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:if="${comment.memberNo eq modify}">
                             <button onclick="commentEdit(event)">수정</button>
                         </td>
@@ -77,7 +79,7 @@
         </article>
     </section>
 </main>
-<footer th:replace="~{/fragment/aside.html}">
+<footer th:replace="~{/fragment/footer.html}">
 </footer>
 </body>
 <script>
@@ -183,9 +185,20 @@
 
 
 
+    function change() {
+        const likeButton = document.getElementById("likeButton");
+        const likeStatus = likeButton.innerText;
+
+        if (likeStatus === '좋아요') {
+            likeButton.innerText = '좋아요취소';
+        } else {
+            likeButton.innerText = '좋아요';
+        }
+    }
     function updateLike() {
         const boardNo = [[${board.boardNo}]];
-        const memberNo = [[${modify}]]
+        const memberNo = [[${modify}]];
+
         console.log(boardNo);
         console.log(memberNo);
         $.ajax({
@@ -193,14 +206,17 @@
             url: "/board/free/like",
             data: {
                 "boardNo": boardNo,
-                "memberNo": memberNo
+                "memberNo": memberNo,
+
             },
             success: function(res) {
                 console.log("요청 성공", res.boardRecommendCount);
 
                 // 좋아요 수 업데이트
+
                 const updatedCount = res.boardRecommendCount; // 새로운 좋아요 수 값
                 $("#recommendCountSpan").text(updatedCount);
+
             },
             error: function(err) {
                 console.log("요청 실패", err);
