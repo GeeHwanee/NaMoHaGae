@@ -42,47 +42,50 @@
     <aside th:replace="~{/fragment/aside.html}">
     </aside>
     <section>
+        <p>주문레디</p>
         <!-- map에 들은 값 체크중 -->
 
         <div class="container mt-3">
             <h2>주문 상품</h2>
-            <div th:each="i:${map.items}" class="card">
+            <div th:each="i:${map.orderItems}" class="card">
                 <div class="card-body">
                     <div class="product_info" style="overflow:hidden;">
                         <div style="float:left;">
-                            <img th:src="${i.image}" width="100px" >
+                            <img th:src="${i.productImage}" width="100px" >
                         </div>
                         <div style="float:left; margin-left:20px;">
-                            <p th:text="${i.manufacturer}"></p>
-                            <p th:text="${i.name}"></p>
+                            <p th:text="${i.productName}"></p>
                             <p>
-                                <span th:text="${i.itemPrice}"></span>원 /
-                                <span th:text="${i.count}"></span>개
+                                <span th:text="${i.cartDetailPrice}"></span>원 /
+                                <span th:text="${i.cartDetailCount}"></span>개
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <hr>
         <h2>배송지</h2>
         <div th:each="a:${map.addresses}" class="container mt-3">
-            <div th:class="${a.isDefault==true}? 'card bg-secondary text-white' : 'card'">
+            <div th:class="${a.addressNo==true} ? 'card bg-secondary text-white' : 'card'">
                 <div class="card-body">
-                    <input type="radio" class="form-check-input addressNo" th:checked="${a.isDefault}" th:value="${a.ano}" name="address">
-                    (<span th:text="${a.nickname}"></span>)
-                    <span th:text="${a.address1}"></span>
-                    <span th:text="${a.address2}"></span>
+                    <input type="radio" class="form-check-input addressNo" th:checked="${a.addressNo}" th:value="${a.addressNo}" name="address">
+                    (<span th:text="${a.addressName}"></span>)
+                    <span th:text="${a.addressAddress}"></span>
+                    <span th:text="${a.addressAddressDetail}"></span>
                 </div>
             </div>
         </div>
         <div class="mb-3 mt-3">
-            <a type="button" class="btn btn-primary" href="/address/add">배송지 추가</a>
+            <a type="button" class="btn btn-primary" href="/member/mall/address/add">배송지 추가</a>
         </div>
         <hr>
         <div class="mb-3 mt-3 d-grid">
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
         </div>
+
+
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
