@@ -1,7 +1,6 @@
 package kr.kro.namohagae.board.dao;
 
 import kr.kro.namohagae.board.dto.BoardDto;
-import kr.kro.namohagae.board.dto.BoardLikeDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
 import org.apache.ibatis.annotations.Mapper;
@@ -38,4 +37,6 @@ public interface BoardDao {
 
     public List<BoardDto.FindAllByMemberNo> findAllByMemberNo(Integer startRownum,Integer endRownum,Integer memberNo);
     public Integer countByMemberNo(Integer memberNo);
+
+    public Board findByBoardNo(Integer boardNo);
 }
