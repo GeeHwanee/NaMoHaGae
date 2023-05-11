@@ -14,5 +14,7 @@
     <delete id="delete">
         delete from address where address_no=#{addressNo}
     </delete>
-
+    <select id="findByMemberNoAndAddressNo" resultType="Address">
+        select * from address where member_no=#{memberNo} and address_no=#{AddressNo} and rownum=1
+    </select>
 </mapper>

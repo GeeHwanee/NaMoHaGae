@@ -8,6 +8,8 @@ import java.util.List;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class NotificationDto {
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class FindAll {
         private Integer notificationNo;
         private String notificationContent;

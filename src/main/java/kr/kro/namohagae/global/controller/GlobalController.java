@@ -16,6 +16,7 @@ import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
+import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
@@ -74,6 +75,8 @@ public class GlobalController {
     private AddressService addressService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private WebSocketService webSocketService;
 
     @Autowired
     private BoardService boardService;
