@@ -23,15 +23,6 @@
 	<style>
 		div, ul, li {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding:0;margin:0}
 		a {text-decoration:none;}
-
-		.quickmenu {position:absolute;width:90px;top:50%;margin-top:-50px;right:10px;background:#fff;}
-		.quickmenu ul {position:relative;float:left;width:100%;display:inline-block;*display:inline;border:1px solid #ddd;}
-		.quickmenu ul li {float:left;width:100%;border-bottom:1px solid #ddd;text-align:center;display:inline-block;*display:inline;}
-		.quickmenu ul li a {position:relative;float:left;width:100%;height:30px;line-height:30px;text-align:center;color:#999;font-size:9.5pt;}
-		.quickmenu ul li a:hover {color:#000;}
-		.quickmenu ul li:last-child {border-bottom:0;}
-
-		.content {position:relative;min-height:1000px;}
 	</style>
 	<script>
 		const mall = "mall";
@@ -39,15 +30,7 @@
 		const member = "member";
 		const board = "board";
 		const admin	= "admin";
-		function printAsideNotification(result) {
-			const $notification = $('#notification');
-			result.forEach(n => {
-				const tpl = `
-            		 <li><a href="${n.notificationLink}" id="read" data-notification-no="${n.notificationNo}">${n.notificationContent}</a></li>
-       			 `;
-				$notification.append(tpl);
-			});
-		}
+
 		function printAside(){
 			let sideBar = location.href.slice(22);
 			console.log(sideBar);
@@ -100,64 +83,13 @@
 	<script>
 		$(document).ready(async function(){
 			printAside();
-
-			const socket = new WebSocket('ws://localhost:8081/notification');
-
-			socket.addEventListener('open', function (event) {
-				// 연결이 성공한 경우 실행되는 코드
-				console.log('socket open');
-			});
-
-			socket.addEventListener('message', function (event) {
-				// 메시지를 받은 경우 실행되는 코드
-				const data = event.data;
-				const notification = JSON.parse(data).notification;
-				let $li = `<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`;
-				$('#notification').prepend($li);
-			});
-
-			socket.addEventListener('close', function (event) {
-				console.log('socket close');
-				// 연결이 종료된 경우 실행되는 코드
-			});
-
-			socket.addEventListener('error', function (event) {
-				console.log('socket error');
-				// 에러가 발생한 경우 실행되는 코드
-			});
-
-			var currentPosition = parseInt($(".quickMenu").css("top"));
-			$(window).scroll(function() {
-				var position = $(window).scrollTop();
-				$(".quickmenu").stop().animate({"top":position+currentPosition+"px"},1000);
-			});
-
-			try {
-				const result = await $.ajax("/api/v1/notification/aside/list");
-				printAsideNotification(result);
-			}catch (err){
-				console.log(err)
-			}
-			$('#notification').on("click", "#read", async function () {
-				const $notificationNo = $(this).data('notification-no');
-				try {
-					await $.ajax({
-						url: "/api/v1/notification/read?notificationNo=" + $notificationNo,
-						type: "PUT"
-					});
-					// 읽음 여부를 업데이트한 후의 작업을 수행
-				} catch (err) {
-					console.log(err);
-				}
-			})
-
 		})
 
 
 	</script>
 </head>
 <body>
-<aside>
+<aside id="aside">
 	<ul>
 		<h1 id="title">
 		</h1>
@@ -165,10 +97,7 @@
 	<ul id="side_bar" class="side_bar">
 	</ul>
 	<div class="border4"></div>
-	<div class="quickMenu">
-		<ul id="notification">
-		</ul>
-	</div>
+
 </aside>
 </body>
 </html>
