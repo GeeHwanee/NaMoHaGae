@@ -39,6 +39,9 @@ public interface CartDetailDao {
     // 사용자의 장바구니 상품 목록 검색
     public List<CartDetail> findCartDetailsByMemberNo(Integer memberNo);
 
+    // 사용자의 장바구니 중 선택 상품 검색
+    public List<CartDetail> findByMemberNoAndProductNos(Integer memberNo, Integer[] productNos);
+
     // 사용자의 장바구니 상품 총 가격 검색
     public Integer findTotalPriceByMemberNo(Integer memberNo);
 
