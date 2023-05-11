@@ -1,10 +1,14 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.global.service.NotificationService;
+import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dao.QnaDao;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
 import kr.kro.namohagae.mall.entity.Qna;
+import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,8 @@ import java.util.List;
 public class QnaService {
     private final QnaDao qnaDao;
     private final ProductDao productDao;
+    private final MemberDao memberDao;
+    private final NotificationService notificationService;
 
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
@@ -52,7 +58,10 @@ public class QnaService {
     }
     public Integer update(QnaDto.Put dto){
         Qna qna = dto.toEntity();
-        return qnaDao.update(qna);
+        Member member = memberDao.findByMember(qna.getQnaWriter()).get();
+        qnaDao.update(qna);
+        notificationService.save(member, NotificationConstants.QNA_CONTENT,NotificationConstants.QNA_LINK);
+        return 1;
     }
 
     public QnaDto.Read print(Integer qnaNo) {
