@@ -16,5 +16,5 @@ public class TownService {
         return townDao.findTownDongByGu(townGu);
     }
 
-
+    public List<TownDto.Gu> findGu(){return  townDao.findGu();}
 }

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">     <!--SweetAlert2-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">       <!--Toastr-->
     <!--기타 삽입-->
+    <script src="/script/validation.js"></script>                                                               <!--validation-->
+    <script src="/script/profile.js"></script>                                                                  <!--profile-->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <style >
@@ -74,35 +76,12 @@
 
         const apiUrl = 'https://dapi.kakao.com/v2/local/search/address.json';
         const headers = { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' };
-        const address = document.getElementById("sample4_roadAddress").value;
+        const address = document.getElementById("sample4_roadAddress").value();
 
     </script>
     <script>
         $(document).ready(function(){
-            $('#sendEmail').click(async function (){
-                try {
-                    const url = "/member/sendAudenticationCode?email=" + $("#memberEmail").val();
-                    // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
-                    // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
-                    const result = await $.ajax({url:url, method:"patch"});
-                    alert(result);
-                    $('#checkCodeArea').removeClass('hidden');
-                } catch(err) {
-                    alert("이메일을 찾지 못했습니다")
-                }
-            });
-            $('#checkCode').click(async function(){
-                try {
-                const url = "/member/checkAudenticationCode?code=" + $("#code").val();
-                // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
-                // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
-                const result = await $.ajax({url:url, method:"get"});
-                alert(result);
-                    $('#join').prop('disabled', false);
-                }catch (err){
-                    alert("인증에 실패했습니다")
-                }
-            });
+
             $('#join').click(async function (){
                 $.ajax({
                     url:'https://dapi.kakao.com/v2/local/search/address.json?query='+encodeURIComponent(document.getElementById("sample4_roadAddress").value),
@@ -162,6 +141,11 @@
                     <input type="password" name="memberPassword" id="memberPassword" class="form-control">
                     <span id="memberPassword_msg"></span>
                 </div>
+                <div class="mb-3 mt-3">
+                    <label for="memberPassword2">비밀번호 확인:</label>
+                    <input type="password" id="memberPassword2" class="form-control">
+                    <span id="memberPassword2_msg"></span>
+                </div>
 
                 <div class="mb-3 mt-3">
                     <label for="memberNickname">별명:</label>
@@ -192,6 +176,7 @@
                             <input type="text" class="form-control" id="sample4_detailAddress" placeholder="상세주소" name="address2">
                         </div>
                         <input type="text" id="sample4_extraAddress" placeholder="참고항목" style="display:none;">
+                    <span id="address_msg"></span>
                 </div>
                     <input type="hidden" id="memberLatitude" name="memberLatitude">
                     <input type="hidden" id="memberLongitude" name="memberLongitude">

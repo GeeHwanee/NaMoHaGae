@@ -217,6 +217,8 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address")
     public void address(){}
+    @GetMapping("/kakaoLogin")
+    public void kakaoLogin(){}
 
     @GetMapping("/member/mall/address/add")
     public String addressCreate(){
