@@ -9,12 +9,12 @@ import java.util.List;
 @Mapper
 public interface NotificationDao {
 
-    public void save(Notification notification);
+    public Integer save(Notification notification);
 
     public List<NotificationDto.FindAll> findAll(Integer startRownum, Integer endRownum, Integer memberNo);
     public Integer count(Integer memberNo);
 
-    public Integer notificationRead(Integer no);
+    public Integer update(Integer notificationNo);
 
-    public List<NotificationDto.FindAll> quikMenu(Integer memberNo);
+    public List<NotificationDto.FindAll> findByNotificationReadEnabled(Integer memberNo);
 }

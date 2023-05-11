@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/main.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!------------------------------------------------------------------------------------------------------------------------------>
+    <!--스크립트 태그-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>                    <!--jQuery-->
+    <script src="https://kit.fontawesome.com/a606a1a405.js" crossorigin="anonymous"></script>                   <!--FontAwesome-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>        <!--BootStrap-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>         <!--SweetAlert2-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>               <!--Toastr-->
+    <!--CSS 링크-->
+    <link rel="stylesheet" href="/css/main.css">                                                                <!--MainCSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <!--FontAwesome-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">      <!--BootStrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">     <!--SweetAlert2-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">       <!--Toastr-->
+    <!--기타 삽입-->
+
+    <!------------------------------------------------------------------------------------------------------------------------------>
     <title>알림</title>
     <style>
         #page_ul {
@@ -18,13 +31,14 @@
             const $tbody = $('#tbody');
                 notification.forEach(a => {
                 const tpl = `<tr>
-				<td>${a.notificationNo}</td>
-				<td>
-					<a href=${a.notificationLink} id="read" data-no="${a.notificationNo}">${a.notificationContent}</a>
-				</td>
-				<td>${a.notificationReadEnabled}</td>
-			</tr>`;
-                $tbody.append(tpl);}
+                    <td>${a.notificationNo}</td>
+                    <td>
+                        <a href="${a.notificationLink}" id="read" data-no="${a.notificationNo}">${a.notificationContent}</a>
+                    </td>
+                    <td>${a.notificationReadEnabled?'읽음':'안읽음'}</td>
+			    </tr>`;
+                $tbody.append(tpl);
+                }
                 )
             }
 
@@ -32,25 +46,25 @@
         function printPagination({prev, start, end, next, pageno}) {
             const $ul = $('#page_ul');
             if(prev>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification_list?pageno=${prev}'>이전</a></li>`);
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification?pageno=${prev}'>이전</a></li>`);
             for(let i=start; i<=end; i++) {
                 const tpl = `
 				<li class='page-item ${pageno==i? "active":""}'>
-					<a class='page-link' href='/member/notification_list?pageno=${i}'>${i}</a>
+					<a class='page-link' href='/member/notification?pageno=${i}'>${i}</a>
 				</li>
 			`;
                 $ul.append(tpl);
             }
             if(next>0)
-                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification_list?pageno=${next}'>다음</a></li>`)
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/notification?pageno=${next}'>다음</a></li>`)
         }
 
         $(document).ready(async function() {
             const param = new URLSearchParams(location.search);
             const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
             try {
-                const result = await $.ajax("/rest/notification/list?pageno=" + pageno);
-                console.log(result);
+                const result = await $.ajax("/api/v1/notification/list?pageno=" + pageno);
+                console.log(result.notifications);
                 printNotification(result.notifications);
                 printPagination(result);
             } catch (err) {
@@ -60,7 +74,7 @@
                 const no = $(this).data("no");
                 try {
                     await $.ajax({
-                        url: "/rest/notification/read/" + no,
+                        url: "/api/v1/notification/read?notificationNo=" + no,
                         type: "PUT"
                     });
                     // 읽음 여부를 업데이트한 후의 작업을 수행
@@ -84,7 +98,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>번호</th><th>제목</th><th>글쓴이</th><th>작성일</th><th>읽기</th>
+                    <th></th><th>내용</th><th>확인</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">

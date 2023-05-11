@@ -3,9 +3,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.global.dao.NotificationDao">
 
-    <insert id="save" parameterType="Notification">
+    <insert id="save" parameterType="Notification" keyProperty="notificationNo">
+        <selectKey keyProperty="notificationNo" order="BEFORE" resultType="java.lang.Integer">
+            select NOTIFICATION_SEQ_NOTIFICATION_NO.nextval from dual
+        </selectKey>
     insert into NOTIFICATION(NOTIFICATION_no,member_no,NOTIFICATION_content,NOTIFICATION_link,NOTIFICATION_read_enabled)
-    values (#{notificationNo},#{memberNo},#{notificationContent},#{notificationLink},#{notificationReadEnabled})
+    values (#{notificationNo},#{memberNo},#{notificationContent},#{notificationLink},0)
     </insert>
 
     <select id="count" resultType="int">
@@ -20,21 +23,22 @@
                         select
                             notification_no, notification_content, notification_link, notification_read_enabled
                         from notification where member_no =#{memberNo}
+                        order by NOTIFICATION_NO desc
                     ) a
                 where rownum&lt;=#{endRownum}
             )
         where rnum&gt;=#{startRownum}
     </select>
 
-    <update id="notificationRead" parameterType="int">
-        update notification set notification_read_enabled =1 where notification_no=#{no}
+    <update id="update" parameterType="int">
+        update notification set notification_read_enabled =1 where notification_no=#{notificationNo}
     </update>
-    <select id="quikMenu" resultType="kr.kro.namohagae.global.dto.NotificationDto$FindAll">
+    <select id="findByNotificationReadEnabled" resultType="kr.kro.namohagae.global.dto.NotificationDto$FindAll">
 
                  SELECT NOTIFICATION_NO, NOTIFICATION_CONTENT, NOTIFICATION_LINK, NOTIFICATION_READ_ENABLED
                  FROM notification
                  WHERE member_no = #{memberNo} AND NOTIFICATION_READ_ENABLED = 0 and ROWNUM &lt;= 5
-                 ORDER BY NOTIFICATION_NO DESC
+                 ORDER BY NOTIFICATION_NO desc
     </select>
 </mapper>
 

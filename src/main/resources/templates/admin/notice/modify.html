@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/main.css">
+  <title>메인</title>
+
+</head>
+<style>
+
+  .layout {
+    width : 500px;
+    margin : 0 auto;
+    margin-top : 40px;
+  }
+
+  .layout input {
+    width : 100%;
+    box-sizing : border-box
+  }
+
+  .layout textarea {
+    width : 100%;
+    margin-top : 10px;
+    min-height : 300px;
+  }
+
+</style>
+<body>
+<header th:replace="~{/fragment/header.html}"> </header>
+
+</header>
+<main>
+  <aside th:replace="~{/fragment/aside.html}">
+
+  </aside>
+  <section>
+    <h1>메인 페이지</h1>
+    <article>
+      <div class="layout">
+        <form th:action="@{/admin/notice/update(boardNoticeNo = ${read.boardNoticeNo})}" method="post">
+          <input name="boardNoticeTitle" type="text" th:value="${read.boardNoticeTitle}">
+          <textarea name="boardNoticeContent" th:text="${read.boardNoticeContent}"></textarea>
+          <button type="submit">수정</button>
+        </form>
+      </div>
+    </article>
+  </section>
+</main>
+<footer th:replace="~{/fragment/footer.html}">
+</footer>
+</body>
+</html>

@@ -18,6 +18,15 @@ public class NoticeDto {
             return BoardNotice.builder().boardNoticeWriter("관리자").boardNoticeTitle(boardNoticeTitle).boardNoticeContent(boardNoticeContent).boardNoticeWriteDate(LocalDateTime.now()).build();
         }
     }
+    @Data
+    public static class Update{
+        private Integer boardNoticeNo;
+        private String boardNoticeTitle;
+        private String boardNoticeContent;
 
+        public BoardNotice toEntity(){
+            return BoardNotice.builder().boardNoticeNo(boardNoticeNo).boardNoticeTitle(boardNoticeTitle).boardNoticeContent(boardNoticeContent).build();
+        }
+    }
 
 }

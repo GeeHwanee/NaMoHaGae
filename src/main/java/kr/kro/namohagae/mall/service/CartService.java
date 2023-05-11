@@ -104,7 +104,6 @@ public class CartService {
 
         cartDetailDao.updateDecrease(cartDetail.getCartDetailNo());
         cartDetail = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo).get();
-        System.out.println(cartDetail + "마이너스값");
         return new CartDetailDto.Update(cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), (cartDetail.getCartDetailCount() * cartDetail.getCartDetailPrice()));
     }
 

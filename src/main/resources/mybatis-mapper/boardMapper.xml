@@ -64,7 +64,11 @@
     <select id="boardSearch">
         SELECT *
         FROM BOARD
-        WHERE BOARD_TITLE LIKE '%#{searchName}%';
+        WHERE BOARD_TITLE LIKE '%#{searchName}%'
+    </select>
+
+    <select id="findByBoardNo" resultType="Board" parameterType="int">
+        select * from BOARD where BOARD_NO = #{boardNo}
     </select>
 
     <update id="goodLike">
@@ -86,5 +90,22 @@
     <select id="isLikeExists" resultType="int">
         SELECT COUNT(*) FROM BOARD_LIKE WHERE member_no = #{memberNo} AND board_no = #{boardNo}
     </select>
+    <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.BoardDto$FindAllByMemberNo">
+        select * from
+            (
+                select rownum as rnum, a.* from
+                    (
+                        select
+                           b.board_no,b.town_no,b.board_title,b.board_read_count,b.board_recommend_count,(select count(*) from board_comment c where c.board_no=b.board_no ) as commentCount, board_write_date
+                        from board b where b.member_no =#{memberNo}
+                    ) a
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+    <select id="countByMemberNo" resultType="Integer">
+        select count(*) from board where member_no=#{memberNo}
+    </select>
+
 </mapper>
 

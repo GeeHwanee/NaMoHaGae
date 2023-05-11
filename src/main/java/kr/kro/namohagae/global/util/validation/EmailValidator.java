@@ -8,6 +8,6 @@ public class EmailValidator implements ConstraintValidator<Email,String> {
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
         if(email == null){return false;}
-        return  email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$");
+        return  email.matches("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$");
     }
 }
