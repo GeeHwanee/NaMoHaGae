@@ -7,13 +7,11 @@ import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.BoardTownDto;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
-import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.board.service.CommentService;
-import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.websocket.WebSocketService;
@@ -29,7 +27,6 @@ import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -186,9 +183,14 @@ public class GlobalController {
     }
 
     @GetMapping("/member/profile")
-    public ModelAndView profile(Integer memberNo, Model model){
+    public ModelAndView profile(Integer memberNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
+        if(memberNo.equals(myUserDetails.getMemberNo())){
+            MemberDto.Read dto = memberService.read(myUserDetails.getMemberNo());
+            return new ModelAndView("/member/information").addObject("member",dto);
+        }
         MemberDto.Read dto = memberService.read(memberNo);
         return new ModelAndView("/member/profile").addObject("member",dto);
+
     }
     @GetMapping("/member/dog/profile")
     public  ModelAndView dogProfile(Integer dogNo){
