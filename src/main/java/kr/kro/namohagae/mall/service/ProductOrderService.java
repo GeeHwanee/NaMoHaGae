@@ -51,6 +51,7 @@ public class ProductOrderService {
 //            // 장바구니에서 제품 삭제
 //            cartDetailDao.delete(cartDetail.getCartDetailNo());
         }
+        System.out.println("서비스타니");
 //        // 주문 정보 저장
 //        OrderDto.Create order = new OrderDto.Create(memberNo, orderTotalPrice, orderItems);
 //        OrderDto.Read savedOrder = orderDao.save(order);
