@@ -38,7 +38,7 @@
                  SELECT NOTIFICATION_NO, NOTIFICATION_CONTENT, NOTIFICATION_LINK, NOTIFICATION_READ_ENABLED
                  FROM notification
                  WHERE member_no = #{memberNo} AND NOTIFICATION_READ_ENABLED = 0 and ROWNUM &lt;= 5
-                 ORDER BY NOTIFICATION_NO
+                 ORDER BY NOTIFICATION_NO desc
     </select>
 </mapper>
 
