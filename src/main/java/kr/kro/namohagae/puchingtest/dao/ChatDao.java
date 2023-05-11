@@ -27,4 +27,10 @@ public interface ChatDao {
 
     public void saveImage(Message message); // 이미지 저장후 messagedata리턴
 
+    public Integer savePuchingMessage(Message message); //메세지 번호를 리턴
+
+    public Integer findPuchingMessageNo(Integer senderNo,Integer receiverNo,String contentType);   //매퍼작성
+
+    public void updatePuchingMessage(Integer messageNo,String contentType,String content);
+
 }

@@ -1,16 +1,15 @@
 package kr.kro.namohagae.puchingtest.entity;
 
-import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 public class Message {

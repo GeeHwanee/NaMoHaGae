@@ -14,6 +14,8 @@ public class PuchingService {
     private Puchingdao dao;
     @Autowired
     private MemberDao mdao;
+    @Autowired
+    private Puchingdao pdao;
 
     public List<PuchingDto.readTown> findAllTown() {
         System.out.println("퍼칭서비스-puchingmap실행");
@@ -31,5 +33,16 @@ public class PuchingService {
 
         return  list;
     }
+
+    public Integer checkpuching(String userEmail,Integer receiverNo){
+        Integer senderNo= mdao.findNoByUsername(userEmail);
+        Integer result=pdao.checkPuching(senderNo,receiverNo);
+
+        return result;
+    }
+    public void cancelPuching(Integer messageNo){
+        pdao.cancelPuching(messageNo,"취소");
+    };
+
 }
 
