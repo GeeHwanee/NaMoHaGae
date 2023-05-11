@@ -128,5 +128,15 @@ footer {
     .icon {
         display:none;
     }
+    aside{
+        display: none;
+    }
 
+
+    #aside{
+        display: none;
+    }
+    #bside {
+        display: none;
+    }
 }
