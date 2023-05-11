@@ -31,12 +31,13 @@ public class FollowService {
 
     public Map<String,Boolean> follow(Integer memberNo, Integer myMemberNo) {
         Member member = memberDao.findByMember(memberNo).get();
+        Member followMember = memberDao.findByMember(myMemberNo).get();
         Boolean alreadyFollow = followDao.existsByMemberNoAndFollowMemberNo(memberNo,myMemberNo);
         Map<String,Boolean> map = new HashMap<>();
         if (alreadyFollow==false) {
             followDao.save(memberNo,myMemberNo);
             map.put("follow", true);
-            notificationService.save(member, "팔로우 신청", NotificationConstants.PROFILE_LINK+myMemberNo);
+            notificationService.save(member,followMember.getMemberNickname()+NotificationConstants.FOLLOW_CONTENT, NotificationConstants.PROFILE_LINK+myMemberNo);
         } else {
             followDao.delete(memberNo,myMemberNo);
             map.put("follow", false);
