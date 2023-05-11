@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dto.AddressDto;
-import kr.kro.namohagae.mall.dto.ProductOrderDto;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import kr.kro.namohagae.mall.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +29,11 @@ public class ProductOrderController {
     // 장바구니 -> 주문 확인 화면 이동
     // 모델 체크
     @PostMapping("/mall/order")
-    public String orderReady(ProductOrderDto.OrderList dto, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpSession session) {
-        List<ProductOrderDetail> items = service.orderDetailList(dto.getList(), myUserDetails.getMemberNo());
-        session.setAttribute("items", items);
+    public String orderReady(@AuthenticationPrincipal MyUserDetails myUserDetails, HttpSession session, Model model) {
+//        List<ProductOrderDetail> items = service.orderReady(dto.getList(), myUserDetails.getMemberNo());
+//        session.setAttribute("items", items);
+        Integer memberNo=myUserDetails.getMemberNo();
+        model.addAttribute("map", service.orderReady(memberNo));
         return "redirect:/mall/order/ready";
     }
 
