@@ -16,12 +16,14 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-       webSocketService.connect(session);
+       if(session.getPrincipal()!=null)
+           webSocketService.connect(session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-       webSocketService.disconnect(session);
+        if(session.getPrincipal()!=null)
+            webSocketService.disconnect(session);
     }
 
     @Override
