@@ -78,7 +78,7 @@
         INNER JOIN PRODUCT_IMAGE pi ON pi.product_no = p.product_no
         INNER JOIN CART_DETAIL cd ON cd.product_no = p.product_no
         INNER JOIN CART c ON c.cart_no = cd.cart_no
-        WHERE c.member_no = #{member_no}
+        WHERE c.member_no = #{memberNo}
         AND cd.product_no IN
         <foreach collection="list" item="item" open="(" close=")" separator=",">
             #{item}
