@@ -2,8 +2,10 @@ package kr.kro.namohagae.mall.service;
 
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.AddressDto;
+import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.ProductOrderDto;
 import kr.kro.namohagae.mall.entity.Address;
+import kr.kro.namohagae.mall.entity.CartDetail;
 import kr.kro.namohagae.mall.entity.ProductOrder;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,13 +26,50 @@ public class ProductOrderService {
     private final AddressDao addressDao;
     private final ProductDao productDao;
 
+    // 결제할 주문 목록 조회 (수정중 -> 장바구니 목록 조회랑 같게)
+    /*
     public List<ProductOrderDetail> orderDetailList(List<Integer> list, Integer memberNo) {
         return cartDetailDao.findWithProduct(list, memberNo);
     }
 
+     */
+
+    
+    // 수정중
+    public ProductOrderDto.Read orderReady(Integer memberNo) {
+        // 장바구니 정보 조회
+        List<CartDetail> carts = cartDetailDao.findCartDetailsByMemberNo(memberNo);
+        // 주문 정보 저장을 위한 리스트 생성
+        List<ProductOrderDto.list> orderItems = new ArrayList<>();
+        int orderTotalPrice = 0;
+
+        for (CartDetail cartDetail : carts) {
+            ProductDto.Read dto = productDao.findByProductNo(cartDetail.getProductNo());
+            ProductOrderDto.list orderItem = new ProductOrderDto.list(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
+            orderItems.add(orderItem);
+            orderTotalPrice += orderItem.getOrderTotalPrice();
+//            // 장바구니에서 제품 삭제
+//            cartDetailDao.delete(cartDetail.getCartDetailNo());
+        }
+//        // 주문 정보 저장
+//        OrderDto.Create order = new OrderDto.Create(memberNo, orderTotalPrice, orderItems);
+//        OrderDto.Read savedOrder = orderDao.save(order);
+//        return savedOrder;
+
+        return new ProductOrderDto.Read(orderItems, orderTotalPrice);
+    }
+
+
+
+
+
+
+
+    // 멤버의 주소 찾기
     public List<AddressDto.Read> findAddress(Integer memberNo) {
         return addressDao.findAll(memberNo);
     }
+
 
     // 주문하기 (만드는중)
     @Transactional
@@ -47,13 +87,16 @@ public class ProductOrderService {
             // 이거 되는지 체크해야함
             productDao.updateOrder(item);
         });
+        // 주문한 상품 제거
         cartDetailDao.removeByCartNo(items, memberNo);
         return productOrder.getProductOrderNo();
     }
 
+
     public List<ProductOrderDto.Read> orderList(Integer memberNo) {
         return productOrderDao.list(memberNo);
     }
+
 
     public ProductOrderDto.Read findById(Integer orderNo) {
         return productOrderDao.read(orderNo);
