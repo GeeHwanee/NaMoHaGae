@@ -33,8 +33,6 @@ public class ChatRestController {
 
     @GetMapping(value="/findchatroom")
     public ResponseEntity<ChatRoomDto.Read> findChatRoomByreceiverNo(Principal principal,String receiverEmail){
-
-
         return ResponseEntity.ok().body(service.findChatRoom(principal.getName(),receiverEmail));
     }
 
@@ -54,9 +52,7 @@ public class ChatRestController {
     };
 
     @PostMapping(value = "/sendpuching")
-    public ResponseEntity<MessageDto.PuchingMessageRead> savePuchingMessage(Principal principal,MessageDto.PuchingMessageSave dto){
-
-
+    public ResponseEntity<Message> savePuchingMessage(Principal principal,MessageDto.PuchingMessageSave dto){
         return ResponseEntity.ok().body(service.savePuchingMessage(dto,principal.getName()));
     };
 

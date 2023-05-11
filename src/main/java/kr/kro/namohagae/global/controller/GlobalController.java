@@ -256,6 +256,11 @@ public class GlobalController {
         model.addAttribute("mymemberNo",myMemberNo);
         model.addAttribute("startuser",receiverEmail);
     }
+    @GetMapping("/puching/locationview")
+    public String locationview(@RequestParam("lat")Double lat,@RequestParam("lng") Double lng){
+
+        return "/puching/locationview.html";
+    };
 
     // [게시판 파트]--------------------------------------------------------------------
 
