@@ -3,8 +3,10 @@ package kr.kro.namohagae.puchingtest.controller;
 import kr.kro.namohagae.puchingtest.dto.PuchingDto;
 import kr.kro.namohagae.puchingtest.service.PuchingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,6 +31,17 @@ public class PuchingRestController {
         System.out.println(userEmail);
         return ResponseEntity.ok().body(service.readUsers(latitude,longitude,pageNum,pageSize,userEmail));
     }
+
+    @GetMapping(value="/puching/checkpuching")
+    public ResponseEntity<Void> checkpuching(Principal principal,Integer receiverNo){
+        System.out.println(principal.getName());
+        System.out.println(receiverNo);
+      Integer result = service.checkpuching(principal.getName(),receiverNo);
+      if (result==0){
+          return ResponseEntity.ok().body(null);
+      }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+    };
 
 
 }

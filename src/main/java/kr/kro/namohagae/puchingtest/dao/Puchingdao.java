@@ -1,6 +1,7 @@
 package kr.kro.namohagae.puchingtest.dao;
 
 import kr.kro.namohagae.puchingtest.dto.PuchingDto;
+import kr.kro.namohagae.puchingtest.entity.Puching;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,4 +18,10 @@ public interface Puchingdao {
     public List<PuchingDto.readTown> findAllTown();
     public List<PuchingDto.readUser> findByUsers(Double latitude,Double longitude,Integer startrownum,Integer endrownum,Integer memberNo);
 
+
+    public Integer checkPuching(Integer senderNo,Integer receiverNo);  // 체크 잘되는지 테스트 필요
+
+    public void savePuching(Puching puching);
+
+    public void cancelPuching(Integer messageNo,String puchingStatus);
 }
