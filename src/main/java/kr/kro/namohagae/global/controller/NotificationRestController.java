@@ -1,5 +1,6 @@
 package kr.kro.namohagae.global.controller;
 
+import kr.kro.namohagae.global.dto.NotificationDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -27,9 +30,9 @@ public class NotificationRestController {
     }
 
     @GetMapping("/notification/aside/list")
-    public ResponseEntity<?> printAside(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+    public ResponseEntity<List<NotificationDto.FindAll>> printNotificationList(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         if (myUserDetails != null) {
-            return ResponseEntity.ok(service.printAside(myUserDetails.getMemberNo()));
+            return ResponseEntity.ok(service.printNotificationList(myUserDetails.getMemberNo()));
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 
