@@ -1,11 +1,10 @@
 package kr.kro.namohagae.member.service;
 
-import kr.kro.namohagae.mall.dto.FavoriteDto;
 import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.FollowDao;
-import kr.kro.namohagae.member.dto.FollowDto;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.dto.FollowDto;
 import kr.kro.namohagae.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class FollowService {
         if (alreadyFollow==false) {
             followDao.save(memberNo,myMemberNo);
             map.put("follow", true);
-            notificationService.save(member, "팔로우 신청", NotificationConstants.PROFILE_LINK+memberNo);
+            notificationService.save(member, "팔로우 신청", NotificationConstants.PROFILE_LINK+myMemberNo);
         } else {
             followDao.delete(memberNo,myMemberNo);
             map.put("follow", false);
