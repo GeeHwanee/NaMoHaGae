@@ -23,6 +23,7 @@
                         select
                             notification_no, notification_content, notification_link, notification_read_enabled
                         from notification where member_no =#{memberNo}
+                        order by NOTIFICATION_NO desc
                     ) a
                 where rownum&lt;=#{endRownum}
             )
