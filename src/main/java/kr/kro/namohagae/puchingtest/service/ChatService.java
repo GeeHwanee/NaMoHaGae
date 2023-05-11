@@ -10,6 +10,7 @@ import kr.kro.namohagae.puchingtest.dao.Puchingdao;
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
 import kr.kro.namohagae.puchingtest.dto.MessageDto;
 import kr.kro.namohagae.puchingtest.entity.Message;
+import kr.kro.namohagae.puchingtest.entity.Puching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,10 +45,12 @@ public class ChatService {
         Integer receiverNo=member.getMemberNo();
         Message message =  new MessageDto.MessageSave(senderNo,receiverNo,messageContent).toEntity(messageType);
             cdao.saveMessage(message);
+
         Boolean a= cdao.existsByChatRoom(senderNo,receiverNo);
         System.out.println(a);
         System.out.println("12312312312313131232131231232131");
         notificationService.save(member,NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
+
         if(cdao.existsByChatRoom(senderNo,receiverNo)==false){
 
             cdao.saveChatRoom(senderNo,receiverNo);
@@ -100,16 +103,50 @@ public class ChatService {
     return message;
     }
 
-    public MessageDto.PuchingMessageRead savePuchingMessage(MessageDto.PuchingMessageSave dto,String senderEmail){
+    public Message savePuchingMessage(MessageDto.PuchingMessageSave dto,String senderEmail){
         Integer senderNo=mdao.findNoByUsername(senderEmail);
         Integer receiverNo= mdao.findNoByUsername(dto.getReceiverUsername());
-        String content=""; //태그 포함 저장
+        String day=dto.getDay();
+        String time=dto.getTime();
+        String address=dto.getAddress();
+        Double latValue= dto.getLat();
+        Double lngValue= dto.getLng();
+        String currentTime = day+" "+time;
+
+
+        String content = "<div class=\"puching-info\">";
+        content += "<span class=\"puching-title\">퍼칭</span>";
+        content += "<span class=\"puching-description\">" + currentTime + "</span>";
+        content += "<span class=\"puching-description\">장소: " + address + "</span>";
+        content += "<button class=\"location-button\" data-lat=\"" + latValue + "\" data-lng=\"" + lngValue + "\">장소보기</button>";
+        content += "<button class=\"accept-button\">수락하기</button>";
+        content += "<button class=\"disaccept-button\">취소하기</button>";
+        content += "<button class=\"review-button\">리뷰쓰기</button>";
+        content += "</div>";
+        System.out.println(content);
         Message message=dto.toEntity(senderNo,receiverNo,content);
-        //Integer messageNo=cdao.savePuchingMessage(message);
-        //Integer puchingNo=pdao.savePuchingReq(messageNo);
+        Integer messageNo= cdao.savePuchingMessage(message);
+        System.out.println(message.getMessageNo());
+        System.out.println("@@@@@@@@@@@@@@#@!#@!!@#12321321321");
+        Puching puching=dto.toEntity(message.getMessageNo()); //객체를 따로 생성해서 쓰자
+        pdao.savePuching(puching);
 
 
-        //MessageDto.PuchingMessageRead readDto= new MessageDto.PuchingMessageRead(content,messageNo);
-        return null;//readDto; //퍼칭 메세지를 저장후 메세지 번호를 리턴한걸 퍼칭도 저장후 퍼칭번호에 메세진 번호 넣어서 저장 후 퍼칭번호를 리턴
+
+        return message;//readDto; //퍼칭 메세지를 저장후 메세지 번호를 리턴한걸 퍼칭도 저장후 퍼칭번호에 메세진 번호 넣어서 저장 후 퍼칭번호를 리턴
     };
+
+    public Integer cancelPuchingMessage(String senderEmail,String receiverEmail,String content){
+        Integer senderNo=mdao.findNoByUsername(senderEmail);
+        Integer receiverNo=mdao.findNoByUsername(receiverEmail);
+        Integer messageNo= cdao.findPuchingMessageNo(senderNo,receiverNo,"puching");
+
+        cdao.updatePuchingMessage(messageNo,"text",content); //텍스트내용과 타입을 바꿔야함메세지 내용 바꾸는 sql
+
+        return messageNo;
+    }
+
+
+
+
 }
