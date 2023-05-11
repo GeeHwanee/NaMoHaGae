@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dto.AddressDto;
+import kr.kro.namohagae.mall.dto.ProductOrderDto;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import kr.kro.namohagae.mall.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,30 @@ import java.util.Map;
 public class ProductOrderController {
     private final ProductOrderService service;
 
-    // 장바구니 -> 주문 확인 화면 이동
-    // 모델 체크
+    // 장바구니 -> 주문 확인 이동
     @PostMapping("/mall/order")
     public String orderReady(@AuthenticationPrincipal MyUserDetails myUserDetails, HttpSession session, Model model) {
-//        List<ProductOrderDetail> items = service.orderReady(dto.getList(), myUserDetails.getMemberNo());
-//        session.setAttribute("items", items);
         Integer memberNo=myUserDetails.getMemberNo();
-        model.addAttribute("map", service.orderReady(memberNo));
+        ProductOrderDto.Read order = service.orderReady(memberNo);
+        model.addAttribute("orderItems", order.getOrderItems());
+        model.addAttribute("orderTotalPrice", order.getOrderTotalPrice());
+
+        session.setAttribute("orderItems", order.getOrderItems());
+        session.setAttribute("orderTotalPrice", order.getOrderTotalPrice());
+
+       System.out.println("컨트롤러 타니");
+       System.out.println(service.orderReady(memberNo).toString());
+
         return "redirect:/mall/order/ready";
     }
 
+
     // 주문 확인
+    /*
     @GetMapping("/mall/order/ready")
     public ModelAndView orderDetailList(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         // 주문 정보를 세션에 저장하므로 어느정도 시간이 지난 다음 리프레시하면 내용이 없다...이 경우 /mall/cart/list로 이동시킨다
-        if(session.getAttribute("items")==null)
+        if(session.getAttribute("orderItems")==null)
             return new ModelAndView("redirect:/mall/cart/list");
 
         // 장바구니에서 주문 넣은 값들
@@ -53,7 +62,34 @@ public class ProductOrderController {
         map.put("addresses", addresses);
         return new ModelAndView("/mall/order/ready").addObject("map", map);
     }
-    
+     */
+
+    @GetMapping("/mall/order/ready")
+    public ModelAndView orderDetailList(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        ProductOrderDto.Read order = service.orderReady(myUserDetails.getMemberNo());
+        List<AddressDto.Read> addresses = service.findAddress(myUserDetails.getMemberNo());
+
+        if(session.getAttribute("orderItems")==null)
+            return new ModelAndView("redirect:/mall/cart/list");
+
+        Map<String, Object> map = new HashMap<>();
+//        map.put("order", order);
+        map.put("orderItems", order.getOrderItems());
+        map.put("orderTotalPrice", order.getOrderTotalPrice());
+        // addresses 값이 안찍힘!
+        map.put("addresses", addresses);
+
+        System.out.println("orderItems from session: " + order);
+        System.out.println("map: " + map);
+
+        return new ModelAndView("/mall/order/ready").addObject("map", map);
+    }
+
+
+
+
+
+
     // 주문하기
     @PostMapping("/order/check")
     public String checkOrderInformation(Integer addressNo, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpSession session, RedirectAttributes ra) {
@@ -63,6 +99,7 @@ public class ProductOrderController {
         ra.addFlashAttribute("orderNo", orderNo);
         return "redirect:/mall/order/success";
     }
+
 
     // 주문 결과 보기
     @GetMapping("/mall/order/success")
