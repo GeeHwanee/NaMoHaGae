@@ -1,27 +1,29 @@
 package kr.kro.namohagae.mall.dto;
 
-import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class ProductOrderDto {
     @Data
-    public static class OrderList {
-        List<Integer> list;
+    @AllArgsConstructor
+    public static class list {
+        private Integer productNo;
+        private String productImage;
+        private String productName;
+        private Integer cartDetailCount;
+        private Integer cartDetailPrice;
+        private Integer orderTotalPrice;
     }
 
     @Data
+    @AllArgsConstructor
     public static class Read {
-        private Integer productOrderNo;
-        private Integer memberNo;
-        private Integer addressNo;
-        private Integer productOrderTotalPrice;
-        private LocalDateTime productOrderDate;
-        private List<ProductOrderDetail> orderDetailList;
+        private List<ProductOrderDto.list> orderItems;
+        private Integer orderTotalPrice;
     }
 }
