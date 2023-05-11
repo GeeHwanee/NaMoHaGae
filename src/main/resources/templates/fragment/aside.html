@@ -39,11 +39,11 @@
 		const member = "member";
 		const board = "board";
 		const admin	= "admin";
-		function printNotification(result) {
+		function printAsideNotification(result) {
 			const $notification = $('#notification');
 			result.forEach(n => {
 				const tpl = `
-            		 <li><a href="${n.notificationLink}" id="read" data-notificaion-no="${n.notificationNo}">${n.notificationContent}</a></li>
+            		 <li><a href="${n.notificationLink}" id="read" data-notification-no="${n.notificationNo}">${n.notificationContent}</a></li>
        			 `;
 				$notification.append(tpl);
 			});
@@ -131,17 +131,18 @@
 				var position = $(window).scrollTop();
 				$(".quickmenu").stop().animate({"top":position+currentPosition+"px"},1000);
 			});
+
 			try {
 				const result = await $.ajax("/api/v1/notification/aside/list");
-				printNotification(result);
+				printAsideNotification(result);
 			}catch (err){
 				console.log(err)
 			}
-			$(document).on("click", "#read", async function () {
-				const notificationNo = $(this).data("notification-no");
+			$('#notification').on("click", "#read", async function () {
+				const $notificationNo = $(this).data('notification-no');
 				try {
 					await $.ajax({
-						url: "/api/v1/notification/read?notificationNo=" + notificationNo,
+						url: "/api/v1/notification/read?notificationNo=" + $notificationNo,
 						type: "PUT"
 					});
 					// 읽음 여부를 업데이트한 후의 작업을 수행
