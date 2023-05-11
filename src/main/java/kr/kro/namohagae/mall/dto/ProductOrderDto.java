@@ -17,7 +17,7 @@ public class ProductOrderDto {
 
     @Data
     public static class Read {
-        private Integer product_order_no;
+        private Integer productOrderNo;
         private Integer memberNo;
         private Integer addressNo;
         private Integer productOrderTotalPrice;
