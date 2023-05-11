@@ -4,17 +4,17 @@ package kr.kro.namohagae.global.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import kr.kro.namohagae.board.dto.BoardTownDto;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
-import kr.kro.namohagae.board.entity.Board;
-//import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
-import kr.kro.namohagae.global.dto.ReportDto;
+import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
+import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
@@ -72,11 +72,15 @@ public class GlobalController {
     private AddressService addressService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private WebSocketService webSocketService;
 
     @Autowired
     private BoardService boardService;
     @Autowired
     private BoardTownService boardTownService;
+    @Autowired
+    private CommentService commentService;
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -179,9 +183,14 @@ public class GlobalController {
     }
 
     @GetMapping("/member/profile")
-    public ModelAndView profile(Integer memberNo, Model model){
+    public ModelAndView profile(Integer memberNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
+        if(memberNo.equals(myUserDetails.getMemberNo())){
+            MemberDto.Read dto = memberService.read(myUserDetails.getMemberNo());
+            return new ModelAndView("/member/information").addObject("member",dto);
+        }
         MemberDto.Read dto = memberService.read(memberNo);
         return new ModelAndView("/member/profile").addObject("member",dto);
+
     }
     @GetMapping("/member/dog/profile")
     public  ModelAndView dogProfile(Integer dogNo){
@@ -208,9 +217,15 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address")
     public void address(){}
-    @GetMapping("/member/mall/addressCreate")
-    public void addressCreate(){}
-    @PostMapping("/member/mall/addAddress")
+    @GetMapping("/kakaoLogin")
+    public void kakaoLogin(){}
+
+    @GetMapping("/member/mall/address/add")
+    public String addressCreate(){
+        return "/member/mall/addressCreate";
+    }
+
+    @PostMapping("/member/mall/address/add")
     public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
         Integer memberNo = myUserDetails.getMemberNo();
         addressService.save(memberNo,dto);
@@ -266,22 +281,34 @@ public class GlobalController {
         return "board/notice/list";
     }
 
-    @GetMapping("board/town/write")
+    @GetMapping("/board/town/write")
     public String boardTownWrite() {
 
         return "board/town/write";
     }
     @PostMapping("/board/town/writepro")
-    public String boardTownWritePro(Board board){
+    public String boardTownWritePro(BoardTownDto.write boardTownDto, Principal principal){
 
 
-        boardTownService.boardTownInsertData(board);
+        boardTownService.boardTownInsertData(boardTownDto,principal.getName());
+
         return "redirect:/board/town/list";
     }
     @GetMapping("/board/town/read")
-    public String boardTownRead(Model model, Integer boardNo) {
+    public String boardTownRead(Model model, Integer boardNo,Principal principal) {
 
         boardTownService.townReadCnt(boardNo);
+
+        boolean isLiked;
+        isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
+
+        if(isLiked){
+            model.addAttribute("good","좋아요취소");
+        } else {
+            model.addAttribute("good","좋아요");
+        }
+        model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
+        model.addAttribute("comment", commentService.commentList(boardNo));
         model.addAttribute("board",boardTownService.boardTownRead(boardNo));
 
 
@@ -328,6 +355,37 @@ public class GlobalController {
     public String adminNoticeWrite(NoticeDto.Add dto){
         boardNoticeService.addNotice(dto);
 
+        return "redirect:/admin/notice/list";
+    }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/read")
+    public String adminNoticeRead(Model model,Integer boardNoticeNo) {
+
+        boardNoticeService.increaseReadCnt(boardNoticeNo);
+        model.addAttribute("read", boardNoticeService.read(boardNoticeNo));
+        return "admin/notice/read";
+    }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/delete")
+    public String adminNoticeDelete(Integer boardNoticeNo){
+
+        boardNoticeService.delete(boardNoticeNo);
+        return "redirect:/admin/notice/list";
+    }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/modify")
+    public String adminNoticeModify(Model model,Integer boardNoticeNo){
+
+        model.addAttribute("read",boardNoticeService.read(boardNoticeNo));
+
+        return "admin/notice/modify";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/notice/update")
+    public String adminNoticeUpdate(Model model,NoticeDto.Update noticeDto) {
+        System.out.println(noticeDto);
+        boardNoticeService.update(noticeDto);
         return "redirect:/admin/notice/list";
     }
 

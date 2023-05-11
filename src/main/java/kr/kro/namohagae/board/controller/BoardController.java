@@ -8,9 +8,11 @@ import kr.kro.namohagae.board.dto.BoardLikeDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
+import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +54,13 @@ public class BoardController {
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page ,Model model,Principal principal) {
         boardService.increaseReadCnt(boardNo);
+        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
+
+        if(isLiked){
+            model.addAttribute("good","좋아요취소");
+        } else {
+            model.addAttribute("good","좋아요");
+        }
 
         model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
         model.addAttribute("comment", commentService.commentList(boardNo));
@@ -93,6 +102,7 @@ public class BoardController {
             boardService.removeLike(boardNo,memberNo);
             boardService.badLike(boardNo);
 
+
         } else {
             boardService.insertLike(boardNo,memberNo);
             boardService.goodLike(boardNo);
@@ -113,4 +123,11 @@ public class BoardController {
 //
 //
 //    }
+
+    @GetMapping("/member/List")
+    public ResponseEntity<?> memberList(@RequestParam(defaultValue="1")Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails){
+        Integer memberNo = myUserDetails.getMemberNo();
+        return  ResponseEntity.ok(boardService.memberList(pageno,memberNo));
+
+    }
 }

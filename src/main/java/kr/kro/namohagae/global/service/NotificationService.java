@@ -2,6 +2,9 @@ package kr.kro.namohagae.global.service;
 
 import kr.kro.namohagae.global.dao.NotificationDao;
 import kr.kro.namohagae.global.dto.NotificationDto;
+import kr.kro.namohagae.global.entity.Notification;
+import kr.kro.namohagae.global.websocket.WebSocketService;
+import kr.kro.namohagae.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +13,17 @@ import java.util.List;
 public class NotificationService {
     @Autowired
     private NotificationDao notificationDao;
+    @Autowired
+    private WebSocketService webSocketService;
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
+
+    public void save(Member member, String notificationContent, String notificationLink){
+        Notification notification = Notification.builder().memberNo(member.getMemberNo()).notificationContent(notificationContent).notificationLink(notificationLink).build();
+        notificationDao.save(notification);
+        NotificationDto.FindAll notificationRead = new NotificationDto.FindAll(notification.getNotificationNo(),notification.getNotificationContent(),notification.getNotificationLink(),false);
+        webSocketService.sendMessage(member.getMemberEmail(), notificationRead);
+    }
 
     public NotificationDto.Pagination findAll(Integer pageno, Integer memberNo) {
         Integer countOfProduct = notificationDao.count(memberNo);
@@ -37,12 +49,12 @@ public class NotificationService {
 
     }
 
-    public void read (Integer bno){
-        notificationDao.notificationRead(bno);
+    public void read (Integer notificationNo){
+        notificationDao.update(notificationNo);
     }
 
-    public List<NotificationDto.FindAll> quikmenu(Integer memberNo){
-        return notificationDao.quikMenu(memberNo);
+    public List<NotificationDto.FindAll> printNotificationList(Integer memberNo){
+        return notificationDao.findByNotificationReadEnabled(memberNo);
     }
 
 

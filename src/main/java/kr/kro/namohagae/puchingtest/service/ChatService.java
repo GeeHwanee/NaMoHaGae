@@ -1,7 +1,10 @@
 package kr.kro.namohagae.puchingtest.service;
 
+import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.entity.Member;
 import kr.kro.namohagae.puchingtest.dao.ChatDao;
 import kr.kro.namohagae.puchingtest.dao.Puchingdao;
 import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
@@ -25,6 +28,8 @@ public class ChatService {
     private Puchingdao pdao;
     @Autowired
     private MemberDao mdao;
+    @Autowired
+    private NotificationService notificationService;
 
 
 
@@ -36,9 +41,15 @@ public class ChatService {
     //나중에 파라미터 값을 멤버 넘버로 받도록 고치자
     public Integer saveTextMessage(String senderEmail, String receiverEmail, String messageContent,String messageType){
         Integer senderNo=mdao.findNoByUsername(senderEmail);
-        Integer receiverNo=mdao.findNoByUsername(receiverEmail);
+        Member member = mdao.findByUsername(receiverEmail).get();
+        Integer receiverNo=member.getMemberNo();
         Message message =  new MessageDto.MessageSave(senderNo,receiverNo,messageContent).toEntity(messageType);
             cdao.saveMessage(message);
+
+        Boolean a= cdao.existsByChatRoom(senderNo,receiverNo);
+        System.out.println(a);
+        System.out.println("12312312312313131232131231232131");
+        notificationService.save(member,NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
 
         if(cdao.existsByChatRoom(senderNo,receiverNo)==false){
 

@@ -1,6 +1,6 @@
 package kr.kro.namohagae.global.config;
 
-import kr.kro.namohagae.global.hander.NotificationWebSocketHander;
+import kr.kro.namohagae.global.hander.NotificationWebSocketHandler;
 import kr.kro.namohagae.puchingtest.websocket.ChatPuchingWebsocketHandler;
 import kr.kro.namohagae.puchingtest.websocket.ChatWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private ChatPuchingWebsocketHandler chatImageWebsocketHandler;
     @Autowired
-    private NotificationWebSocketHander notificationWebSocketHander;
+    private NotificationWebSocketHandler notificationWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // 소켓연결 주소와 소켓접근가능 도메안 설정
         registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("http://localhost:8081");
         registry.addHandler(chatImageWebsocketHandler,"/puching").setAllowedOrigins(("http://localhost:8081:"));
-        registry.addHandler(notificationWebSocketHander, "/notification").setAllowedOrigins("http://localhost:8081:");
+        registry.addHandler(notificationWebSocketHandler, "/notification").setAllowedOrigins("http://localhost:8081");
     }
 }

@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 public class MemberRestController {
     @Autowired
     private MemberService memberService;
@@ -21,12 +24,33 @@ public class MemberRestController {
         // email은 중복 여부를 확인해야 한다 -> 중복되지 않는 경우 업데이트
         // 사진 + 이메일 -> 이메일이 겹치면 실패 -> 409를 보낸다
 			// 기존 내 이메일과 일치한다면 false 리턴
-		if (!memberService.checkNickanme(memberNo, nickname)) {
+		if (!memberService.checkUpdateNickanme(memberNo, nickname)) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 		}
         Boolean result = memberService.update(profile,nickname,memberNo,password,phone,townNo);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
+    @PatchMapping("/member/sendAudenticationCode")
+    public ResponseEntity<String> sendmail(String email){
+        memberService.sendAuthenticationCode(email);
+        return ResponseEntity.ok("이메일로 인증코드를 보냈습니다");
+    }
+
+    @GetMapping("/member/checkAudenticationCode")
+    public ResponseEntity<String> checkCode(String code){
+        Boolean a=memberService.checkAuthenticationCode(code);
+        return a?ResponseEntity.ok("인증되었습니다"):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+    }
+    @GetMapping("/member/checkEmail")
+    public ResponseEntity<String> checkEmail(String email){
+        Boolean a = memberService.checkEmail(email);
+        return  a?ResponseEntity.ok("사용 가능한 이메일 입니다"):ResponseEntity.status(HttpStatus.CONFLICT).body("중복입니다");
+    }
+    @GetMapping("/member/checkNickname")
+    public ResponseEntity<String> checkNickname(String nickname){
+        Boolean a = memberService.checkEmail(nickname);
+        return  a?ResponseEntity.ok("사용 가능한 별밍 입니다"):ResponseEntity.status(HttpStatus.CONFLICT).body("중복입니다");
+    }
 
 }
