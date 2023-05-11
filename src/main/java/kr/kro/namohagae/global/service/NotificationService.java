@@ -53,7 +53,7 @@ public class NotificationService {
         notificationDao.update(notificationNo);
     }
 
-    public List<NotificationDto.FindAll> printAside(Integer memberNo){
+    public List<NotificationDto.FindAll> printNotificationList(Integer memberNo){
         return notificationDao.findByNotificationReadEnabled(memberNo);
     }
 
