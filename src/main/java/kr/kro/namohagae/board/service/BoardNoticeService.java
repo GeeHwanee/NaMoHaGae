@@ -19,9 +19,28 @@ public class BoardNoticeService {
 
 
     }
-
-
     public List<BoardNotice> list() {
         return boardNoticeDao.findAll();
+    }
+
+    public BoardNotice read(Integer boardNoticeNo) {
+
+        return boardNoticeDao.read(boardNoticeNo);
+    }
+    public Integer delete(Integer boardNoticeNo){
+
+        return boardNoticeDao.delete(boardNoticeNo);
+    }
+
+    public Integer increaseReadCnt(Integer boardNoticeNo){
+
+        return boardNoticeDao.increaseReadCnt(boardNoticeNo);
+    }
+
+    public void update(NoticeDto.Update noticeDto){
+
+        BoardNotice boardNotice = noticeDto.toEntity();
+
+        boardNoticeDao.update(boardNotice);
     }
 }

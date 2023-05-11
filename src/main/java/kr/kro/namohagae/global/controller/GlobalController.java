@@ -29,6 +29,7 @@ import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -345,6 +346,37 @@ public class GlobalController {
     public String adminNoticeWrite(NoticeDto.Add dto){
         boardNoticeService.addNotice(dto);
 
+        return "redirect:/admin/notice/list";
+    }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/read")
+    public String adminNoticeRead(Model model,Integer boardNoticeNo) {
+
+        boardNoticeService.increaseReadCnt(boardNoticeNo);
+        model.addAttribute("read", boardNoticeService.read(boardNoticeNo));
+        return "admin/notice/read";
+    }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/delete")
+    public String adminNoticeDelete(Integer boardNoticeNo){
+
+        boardNoticeService.delete(boardNoticeNo);
+        return "redirect:/admin/notice/list";
+    }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/notice/modify")
+    public String adminNoticeModify(Model model,Integer boardNoticeNo){
+
+        model.addAttribute("read",boardNoticeService.read(boardNoticeNo));
+
+        return "admin/notice/modify";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/notice/update")
+    public String adminNoticeUpdate(Model model,NoticeDto.Update noticeDto) {
+        System.out.println(noticeDto);
+        boardNoticeService.update(noticeDto);
         return "redirect:/admin/notice/list";
     }
 
