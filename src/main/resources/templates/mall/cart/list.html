@@ -79,6 +79,7 @@
             }
         });
 
+
         // 장바구니 개수 감소
         $('.lower').on('click', '.minus', async function(){
             const productNo = $(this).attr("data-productNo");
@@ -91,6 +92,7 @@
                 alert(err.responseText);
             }
         });
+
 
         // 장바구니의 삭제 버튼을 클릭해 해당 장바구니 상품을 삭제
         $('.delete').click(function() {
@@ -120,6 +122,7 @@
         });
 
 
+        /*
         // 상품들을 선택해 주문 페이지로 이동
         $('#order').click(function() {
             // 선택한 장바구니 상품이 없으면 처리 중단
@@ -131,16 +134,37 @@
             const $form = $('<form>').attr("action","/mall/order").attr("method","post").appendTo($('#formArea'));
             $.each($('.productNo'), function(idx, element) {
                 if($(this).prop('checked')==true)
-                    $form.append($('<input>').attr('type','hidden').attr('name','list').val($(this).attr("data-productNo")));
+                    $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val($(this).attr("data-productNo")));
             });
             $form.submit();
         });
+         */
+
+
+        $('#order').click(function() {
+            // 선택한 장바구니 상품이 없으면 처리 중단
+            if($('.productNo:checked').length == 0) {
+                alert("구매할 상품을 선택해주세요");
+                return;
+            }
+
+            // 기존에 생성된 폼이 있다면 삭제
+            $('#checkedProductNosForm').remove();
+
+            const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/order").attr("method","post").appendTo($('#formArea'));
+            $.each($('.productNo:checked'), function(idx, element) {
+                $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val($(this).attr("data-productNo")));
+            });
+            $form.submit();
+        });
+
 
         // 상품 전체 선택
         $('#check_all').click(function() {
             $('.productNo').prop('checked', !$('.productNo').prop('checked'));
         })
 
+        
         $('#kakaoPay').click(function(){
             location.href='/pay';
         })
