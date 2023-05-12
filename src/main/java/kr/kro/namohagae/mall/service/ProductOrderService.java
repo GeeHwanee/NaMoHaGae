@@ -55,31 +55,6 @@ public class ProductOrderService {
     }
 
 
-    /*
-    // 주문하기 (만드는중)
-    @Transactional
-    public Integer placeOrder(List<ProductOrderDetail> items, Integer memberNo, Integer addressNo) {
-        Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
-
-        System.out.println(address.getAddressNo() + "주소보이냐");
-
-        // 총가격 (첫번째 단가 * 첫번째 가격) <- 이거 나중에 처리할 때 주의할것,
-        ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(),
-                items.get(0).getProductOrderDetailPrice() * items.get(0).getProductOrderDetailCount(), LocalDateTime.now());
-        productOrderDao.save(productOrder);
-        items.forEach(item->{
-            productOrderDetailDao.save(item, productOrder.getProductOrderNo(), memberNo);
-
-            // 판매를 했으면 해당 상품 재고-1 처리해줘야지. <- 카트서비스에서 카트담은수량과 재고수량 비교했던거처럼 만들어, 재고-1 하는 메서드 만들어서 해결.
-            // 이거 되는지 체크해야함
-            productDao.updateOrder(item);
-        });
-        // 주문한 상품 제거
-        cartDetailDao.removeByCartNo(items, memberNo);
-        return productOrder.getProductOrderNo();
-    }
-     */
-
     // 주문하기
     @Transactional
     public Integer placeOrder(List<ProductOrderDetail> items, Integer memberNo, Integer addressNo) {
@@ -98,14 +73,17 @@ public class ProductOrderService {
         // 상품 주문 정보 저장 및 재고 처리
         for (ProductOrderDetail item : items) {
             // 상품 주문 정보 저장
-            productOrderDetailDao.save(item, productOrder.getProductOrderNo(), item.getProductNo());
-
-            System.out.println(item.getProductNo());
+            productOrderDetailDao.save(item);
+            Integer productStock = productDao.findInformationByProductNo(item.getProductNo());
             // 상품 재고 처리
-            Product product = productDao.updateStockByProductNo(item.getProductNo());
-            if (product.getProductStock() >= item.getProductOrderDetailCount()) {
-                product.setProductStock(product.getProductStock() - item.getProductOrderDetailCount());
-                productDao.save(product);
+            if (productStock >= item.getProductOrderDetailCount()) {
+                productDao.updateStockByProductNo(item.getProductNo(),item.getProductOrderDetailNo());
+
+
+                // 재고 업데이트 리스트로 다시 잡을것. (단건결제는 성공)
+                // 상품페이지에서 결제 되는지 체크
+
+
             } else {
                 throw new RuntimeException("재고가 부족합니다.");
             }
@@ -116,6 +94,11 @@ public class ProductOrderService {
 
         return productOrder.getProductOrderNo();
     }
+
+
+
+
+    // 0512 아래부터 수정해야함
 
 
     public List<ProductOrderDto.Read> orderList(Integer memberNo) {

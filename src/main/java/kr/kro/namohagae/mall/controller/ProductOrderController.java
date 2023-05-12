@@ -68,57 +68,13 @@ public class ProductOrderController {
         return new ModelAndView("/mall/order/ready").addObject("map", map);
     }
 
-    /*
-    // 주문하기
-    @PostMapping("/order/check")
-    public String placeOrder(Integer addressNo, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpSession session, RedirectAttributes ra) {
-        List<ProductOrderDetail> items =(List<ProductOrderDetail>)session.getAttribute("items");
-        Integer orderNo = service.checkOrderInformation(items, addressNo, myUserDetails.getMemberNo());
-        // 주문 결과는 1회성이므로 세션이 아니라 RedirectAttributes을 이용
-        ra.addFlashAttribute("orderNo", orderNo);
-        return "redirect:/mall/order/success";
-    }
-
-    @PostMapping("/order/check")
-    public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails, RedirectAttributes ra,
-                             @RequestParam(name = "addressNo") Integer addressNo) {
-        Integer[] checkedProductNos = (Integer[]) session.getAttribute("checkedProductNos");
-
-        if (checkedProductNos == null) {
-            return "redirect:/mall/cart/list";
-        }
-
-        List<CartDetail> carts = new ArrayList<>();
-        for (Integer productNo : checkedProductNos) {
-            CartDetail cartDetail = cartDetailDao.findByMemberNoAndProductNo(myUserDetails.getMemberNo(), productNo).orElse(null);
-            if (cartDetail != null) {
-                carts.add(cartDetail);
-            }
-        }
-
-        List<ProductOrderDetail> orderDetails = new ArrayList<>();
-        for (CartDetail cartDetail : carts) {
-            ProductDto.Read product = productDao.findByProductNo(cartDetail.getProductNo());
-            ProductOrderDetail orderDetail = new ProductOrderDetail(product.getProductNo(), product.getProductName(), product.getProductPrice(), cartDetail.getCartDetailCount());
-            orderDetails.add(orderDetail);
-        }
-
-        AddressDto.Read address = service.findAddressByNo(addressNo);
-        Integer orderNo = service.placeOrder(myUserDetails.getMemberNo(), orderDetails, address);
-
-        session.removeAttribute("checkedProductNos");
-        ra.addFlashAttribute("orderNo", orderNo);
-        return "redirect:/mall/order/success";
-    }
-
-     */
-
 
     // 주문하기
     @PostMapping("/order/check")
     public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
                              @RequestParam Integer addressNo) {
         Integer[] checkedProductNos = (Integer[]) session.getAttribute("checkedProductNos");
+
         // 선택한 상품들 조회
         List<CartDetail> cartDetails = cartDetailDao.findByMemberNoAndProductNos(myUserDetails.getMemberNo(), checkedProductNos);
 
@@ -139,24 +95,16 @@ public class ProductOrderController {
         }
 
         session.removeAttribute("checkedProductNos");
-        return "redirect:/mall/order/success";
+        return "/mall/order/success";
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    // 0512 아래부터 수정해야함
+    
+    
+    
+    
     // 주문 결과 보기
     @GetMapping("/mall/order/success")
     public String orderSuccess(Model model, HttpServletRequest req, RedirectAttributes ra) {
