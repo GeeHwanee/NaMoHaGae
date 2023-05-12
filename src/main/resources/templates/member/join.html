@@ -19,7 +19,6 @@
     <!--기타 삽입-->
     <script src="/script/validation.js"></script>                                                               <!--validation-->
     <script src="/script/profile.js"></script>                                                                  <!--profile-->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <style >
         .hidden{ display: none;}
@@ -30,83 +29,6 @@
             alert(msg);
     </script>
     <script>
-        function sample4_execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete : function(data) {
-                    var roadAddr = data.roadAddress;
-                    var extraRoadAddr = '';
-
-                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                        extraRoadAddr += data.bname;
-                    }
-                    if (data.buildingName !== '' && data.apartment === 'Y') {
-                        extraRoadAddr += (extraRoadAddr !== '' ? ', '	+ data.buildingName : data.buildingName);
-                    }
-                    if (extraRoadAddr !== '') {
-                        extraRoadAddr = ' (' + extraRoadAddr + ')';
-                    }
-
-                    document.getElementById('sample4_postcode').value = data.zonecode;
-                    document.getElementById("sample4_roadAddress").value = roadAddr;
-                    document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
-
-                    if (roadAddr !== '') {
-                        document.getElementById("sample4_extraAddress").value = extraRoadAddr;
-                    } else {
-                        document.getElementById("sample4_extraAddress").value = '';
-                    }
-
-                    var guideTextBox = document.getElementById("guide");
-                    if (data.autoRoadAddress) {
-                        var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                        guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                        guideTextBox.style.display = 'block';
-                    } else if (data.autoJibunAddress) {
-                        var expJibunAddr = data.autoJibunAddress;
-                        guideTextBox.innerHTML = '(예상 지번 주소 : '		+ expJibunAddr + ')';
-                        guideTextBox.style.display = 'block';
-                    } else {
-                        guideTextBox.innerHTML = '';
-                        guideTextBox.style.display = 'none';
-                    }
-                }
-            }).open();
-
-        }
-
-        const apiUrl = 'https://dapi.kakao.com/v2/local/search/address.json';
-        const headers = { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' };
-        const address = document.getElementById("sample4_roadAddress").value();
-
-    </script>
-    <script>
-        $(document).ready(function(){
-
-            $('#join').click(async function (){
-                $.ajax({
-                    url:'https://dapi.kakao.com/v2/local/search/address.json?query='+encodeURIComponent(document.getElementById("sample4_roadAddress").value),
-                    type:'GET',
-                    headers: { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' },
-                    dataType: 'json',
-                    success: function(data){
-                        const latitude = data.documents[0].road_address.x;
-                        const longitude = data.documents[0].road_address.y;
-                        const gu = data.documents[0].address.region_2depth_name;
-                        const dong = data.documents[0].address.region_3depth_h_name;
-                        document.getElementById("memberDong").value = dong;
-                        document.getElementById("memberGu").value = gu;
-                        document.getElementById("memberLatitude").value = longitude;
-                        document.getElementById("memberLongitude").value = latitude;
-                        $('#join_form').submit();
-                    },error: function(xhr, status, error){
-                        console.log(error);
-                    }
-
-
-                })
-            })
-
-        })
     </script>
 
 
@@ -121,9 +43,6 @@
         <section>
             <h1>회원 가입</h1>
             <form id="join_form" method="post" action="/member/join" enctype="multipart/form-data">
-                <div class="mb-3 mt-3">
-                    <input type="file" name="memberProfileImage" id="memberProfileImage" class="form-control">
-                </div>
                 <div class="mb-3 mt-3">
                     <label for="memberEmail">이메일:</label>
                     <div>
@@ -157,31 +76,6 @@
                     <input type="text" name="memberPhone" id="memberPhone" class="form-control" maxlength="13">
                     <span id="memberPhone_msg"></span>
                 </div>
-                <div class="mb-3 mt-3">
-                    <label for="memberIntroduce">자기 소개:</label>
-                    <input type="text" name="memberIntroduce" id="memberIntroduce" class="form-control">
-                    <span id="memberIntroduce_msg"></span>
-                </div>
-                <div class="mb-3 mt-3">
-                        <div class="mb-3 mt-3">
-                            <input type="text" class="form-control" id="sample4_postcode" placeholder="우편번호" name="zipcode">
-                            <input type="button" class="btn btn-outline-primary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
-                        </div>
-                        <div class="mb-3 mt-3">
-                            <input type="text" class="form-control" id="sample4_roadAddress" placeholder="도로명주소" name="address1">
-                        </div>
-                        <input type="text" id="sample4_jibunAddress" placeholder="지번주소" style="display:none;">
-                        <span id="guide" style="color: #999; display: none"></span>
-                        <div class="mb-3 mt-3">
-                            <input type="text" class="form-control" id="sample4_detailAddress" placeholder="상세주소" name="address2">
-                        </div>
-                        <input type="text" id="sample4_extraAddress" placeholder="참고항목" style="display:none;">
-                    <span id="address_msg"></span>
-                </div>
-                    <input type="hidden" id="memberLatitude" name="memberLatitude">
-                    <input type="hidden" id="memberLongitude" name="memberLongitude">
-                    <input type="hidden" id="memberDong" name="townDong">
-                    <input type="hidden" id="memberGu" name="townGu">
                 <div class="mb-3 mt-3 d-grid">
                     <button id="join" type="button" disabled="disabled" class="btn btn-primary btn-block">가입</button>
                 </div>
