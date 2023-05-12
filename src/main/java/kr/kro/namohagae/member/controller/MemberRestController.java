@@ -33,8 +33,8 @@ public class MemberRestController {
 
     @PatchMapping("/member/sendAudenticationCode")
     public ResponseEntity<String> sendmail(String email){
-        memberService.sendAuthenticationCode(email);
-        return ResponseEntity.ok("이메일로 인증코드를 보냈습니다");
+      Boolean a = memberService.sendAuthenticationCode(email);
+        return a?ResponseEntity.ok("이메일로 인증코드를 보냈습니다"):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
     @GetMapping("/member/checkAudenticationCode")
@@ -43,14 +43,14 @@ public class MemberRestController {
         return a?ResponseEntity.ok("인증되었습니다"):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
     @GetMapping("/member/checkEmail")
-    public ResponseEntity<String> checkEmail(String email){
+    public ResponseEntity<Boolean> checkEmail(String email){
         Boolean a = memberService.checkEmail(email);
-        return  a?ResponseEntity.ok("사용 가능한 이메일 입니다"):ResponseEntity.status(HttpStatus.CONFLICT).body("중복입니다");
+        return  ResponseEntity.ok(a);
     }
     @GetMapping("/member/checkNickname")
-    public ResponseEntity<String> checkNickname(String nickname){
+    public ResponseEntity<Boolean> checkNickname(String nickname){
         Boolean a = memberService.checkEmail(nickname);
-        return  a?ResponseEntity.ok("사용 가능한 별밍 입니다"):ResponseEntity.status(HttpStatus.CONFLICT).body("중복입니다");
+        return  ResponseEntity.ok(a);
     }
 
 }
