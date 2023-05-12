@@ -11,74 +11,230 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>         <!--SweetAlert2-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>               <!--Toastr-->
     <!--CSS 링크-->
-    <link rel="stylesheet" href="/css/main.css">                                                                <!--MainCSS-->
+    <!--<link rel="stylesheet" href="/css/main.css">-->                                                         <!--MainCSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <!--FontAwesome-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">      <!--BootStrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">     <!--SweetAlert2-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">       <!--Toastr-->
     <!--기타 삽입-->
-
-    <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>나 뭐하개?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
+    <!------------------------------------------------------------------------------------------------------------------------------>
+    <title>Sign in example • Pico.css</title>
+    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
 
     <script>
-       $(document).ready(function (){
-           Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
+        $(document).ready(function () {
+            Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
+            function loginWithKakao() {
+                Kakao.Auth.authorize({
+                    redirectUri: 'http://localhost:8081'
+                });
+            }
 
+            $('#kakao-btn').click(function (){
 
-           document.getElementById('login-btn').addEventListener('click', function() {
-               Kakao.Auth.login({
-                   success: function(authObj) {
-                       console.log(authObj);
-                   },
-                   fail: function(error) {
-                       console.log(error);
-                   },
-                   redirectUri: 'http://localhost:8081'
-               });
-           });
+            })
+                $('#form_button').click(function () {
+                    console.log($('#username'));
+                    console.log($('#password'));
+                    $('#form').submit();
 
-           $('#delete').click(function (){
-               Kakao.Auth.login({
-                   success: function(authObj) {
-                       // 로그인 성공 시 액세스 토큰 값을 가져옴
-                       const accessToken = authObj.access_token;
+                })
 
-                       // 로그아웃 요청을 보냄
-                       const xhr = new XMLHttpRequest();
-                       xhr.open('POST', 'https://kapi.kakao.com/v1/user/logout');
-                       xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-                       xhr.onreadystatechange = function() {
-                           if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                               // 로그아웃 성공 시 로직 처리
-                               console.log('로그아웃 완료');
-                           }
-                       };
-                       xhr.send();
-                   },
-                   fail: function(error) {
-                       console.log(error);
-                   },
-               });
-           });
-       })
+            });
+            function createHiddenLoginForm(kakaoid){
+                var form = document.createElement("form");
+                form.setAttribute("method", "post");
+                form.setAttribute("action", "/api/v1/login"); // 여기에 컨트롤러 주소를 입력하세요
+                var input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "kakaoid");
+                input.setAttribute("value", kakaoid);
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
     </script>
-</head>
 
+</head>
+<style>
+    /* Grid */
+
+
+    .no > a {
+        margin-right:6px;
+        list-style: none;
+        text-decoration: none;
+        color: var(--muted-color);
+    }
+    body>main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: calc(100vh - 7rem);
+        padding: 1rem 0;
+    }
+    .kakao {
+        float:right;
+        width:50%;
+    }
+    article {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    article div {
+        padding: 1rem;
+    }
+
+    @media (min-width: 576px) {
+        body>main {
+            padding: 1.25rem 0;
+
+        }
+
+
+        article div {
+            padding: 1.25rem;
+        }
+
+    }
+    @media(max-width: 768px) {
+
+    }
+
+    @media (min-width: 768px) {
+        body>main {
+            padding: 1.5rem 0;
+        }
+
+        article div {
+            padding: 1.5rem;
+
+        }
+
+        span > a {
+            display:inline-block;
+            font-size:16px;
+            line-height:40px;
+
+
+        }
+
+    }
+
+
+    @media (min-width: 992px) {
+        body>main {
+            padding: 1.75rem 0;
+        }
+        span > a {
+            display:inline-block;
+            line-height:0;
+        }
+        article div {
+            padding: 1.75rem;
+        }
+
+    }
+
+    @media (min-width: 1200px) {
+        body>main {
+            padding: 2rem 0;
+        }
+
+        article div {
+            padding: 2rem;
+        }
+    }
+
+
+
+    /* Hero Image */
+    article div:nth-of-type(2) {
+        display: none;
+        background-color: #374956;
+        background-image: url("img/alessio-soggetti-8jeWeKdygfk-unsplash-1000x1200.jpg");
+        background-position: center;
+        background-size: cover;
+    }
+
+    @media (min-width: 992px) {
+        .grid>div:nth-of-type(2) {
+            display: block;
+
+        }
+
+    }
+
+    /* Footer */
+    body>footer {
+        padding: 1rem 0;
+    }
+</style>
 <body>
-<header th:replace="~{/fragment/header.html}"> </header>
-<nav th:replace="~{/fragment/nav.html}"></nav>
-<main>
-    <aside th:replace="~{/fragment/aside.html}"></aside>
-    <section>
-        <h1>메인 페이지</h1>
-        <article></article>
-        <button id="login-btn">Kakao Login</button>
-        <button id="delete">삭제</button>
-    </section>
+<!-- Nav -->
+
+
+<!-- Main -->
+<main class="container">
+    <article class="grid">
+        <div>
+            <hgroup>
+                <h1>Sign in</h1>
+                <h2>A minimalist layout for Login pages</h2>
+            </hgroup>
+<!--            <form id="form" action="/api/v1/login" method="post">-->
+
+                <label for="username">ID: </label>
+                <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        placeholder="Login"
+                />
+
+                <label for="password">PW: </label>
+                <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                />
+
+                <fieldset class="box">
+
+                    <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
+
+                    <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
+                    <button id="kakao-btn"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></button>
+                </fieldset>
+
+<!--                <button id="form_button" type="button" class="contrast">Login</button>-->
+
+<!--            </form>-->
+        </div>
+        <div style="color:white">산책하는 사진이나 나 모하개 소개
+            <a href="/">메인으로</a>
+        </div>
+    </article>
 </main>
-<footer th:replace="~{/fragment/footer.html}"></footer>
+<!-- ./ Main -->
+
+<!-- Footer -->
+<footer class="container-fluid">
+    <small>
+        <span>박지환</span>
+        <span>김현욱</span>
+        <span>강문채</span>
+        <span>신동훈</span>
+        <span>최준휘</span>
+        <span>여기는 각자맡은파트나 깃허브주소 그런거 올리면될듯요</span>
+    </small>
+</footer>
+
 </body>
 </html>

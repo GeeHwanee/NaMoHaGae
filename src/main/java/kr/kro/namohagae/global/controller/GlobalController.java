@@ -35,9 +35,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -130,16 +128,22 @@ public class GlobalController {
     public void join(){}
 
     @PostMapping("/member/join")
-    public String join(@Valid MemberDto.Join dto, BindingResult br, RedirectAttributes ra){
+    public String join(@Valid MemberDto.Join dto, BindingResult br, RedirectAttributes ra,Model model){
         if(br.hasErrors()) {
             // ra의 값은 이동후 뷰페이지까지 유지된다. 그 다음에 제거
             String msg = br.getAllErrors().get(0).getDefaultMessage();
             ra.addFlashAttribute("msg", msg);
             return "redirect:/member/join";
         }
-        memberService.join(dto);
-        return "redirect:/login";
+            model.addAttribute("dto",dto);
+        return "member/addJoin";
     }
+    @PostMapping("/member/addJoin")
+    public String addJoin(MemberDto.Join dto){
+        memberService.join(dto);
+        return "redirect:/";
+    }
+
 
     @PostMapping("/dog/registeration")
     public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, DogDto.registeration dto){
