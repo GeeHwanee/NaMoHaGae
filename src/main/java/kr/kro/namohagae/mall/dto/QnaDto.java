@@ -52,7 +52,8 @@ public class QnaDto {
     public static class Read{
        private Integer qnaNo;
         private String productName;
-        private String qnaWriter;
+        private Integer qnaWriter;
+        private String memberNickname;
         private String qnaContent;
         private LocalDateTime qnaWriteDate;
     }
@@ -61,10 +62,11 @@ public class QnaDto {
     @Data
     public static class Put{
         private Integer qnaNo;
+        private Integer qnaWriter;
         private String qnaAnswerContent;
 
         public Qna toEntity(){
-           return Qna.builder().qnaAnswerContent(qnaAnswerContent).qnaNo(qnaNo).qnaAnswerWriteDate(LocalDateTime.now()).build();
+           return Qna.builder().qnaWriter(qnaWriter).qnaAnswerContent(qnaAnswerContent).qnaNo(qnaNo).qnaAnswerWriteDate(LocalDateTime.now()).build();
         }
     }
 }
