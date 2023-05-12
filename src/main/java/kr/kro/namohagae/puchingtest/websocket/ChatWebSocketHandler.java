@@ -48,6 +48,7 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         responseJson.put("message", messageContent);
 
         Integer haveChatRoom= service.saveTextMessage(sendusername,receiverUsername,messageContent,"text"); //메세지 저장 실패하면 리턴값이
+
         responseJson.put("haveChatRoom",haveChatRoom);
 
         if (receiverUsername != null) {
