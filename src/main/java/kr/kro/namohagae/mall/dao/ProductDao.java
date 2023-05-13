@@ -7,6 +7,7 @@ import kr.kro.namohagae.mall.entity.ProductReview;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Mapper
@@ -24,7 +25,8 @@ public interface ProductDao {
     public ProductDto.Read findByProductNo(Integer productNo);
 
     // 상품 번호 찾아서 재고 업데이트
-    public Integer updateStockByProductNo(Integer productNo, Integer productOrderDetailNo);
+    //public void updateStockByProductNo(List<Integer> productNos, Integer productOrderDetailNo);
+    public void updateStockByProductNo(Map<String, Object> params);
 
     // 상품 번호로 상품 정보 불러오기
     public Integer findInformationByProductNo(Integer productNo);
