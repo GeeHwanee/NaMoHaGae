@@ -75,15 +75,31 @@
     </select>
 
     <!-- 상품 번호 찾아서 재고 업데이트 -->
-    <update id="updateStockByProductNo" parameterType="int">
+    <update id="updateStockByProductNo" parameterType="java.util.Map">
         UPDATE PRODUCT p
         SET product_stock = product_stock - (
             SELECT pod.product_order_detail_count
             FROM PRODUCT_ORDER_DETAIL pod
-            WHERE pod.product_no = p.product_no and rownum=1 and pod.product_order_detail_no=#{productOrderDetailNo}
+            WHERE pod.product_no = p.product_no and pod.product_order_detail_no=#{productOrderDetailNo}
         )
         WHERE p.product_no = #{productNo}
     </update>
+
+    <!--
+    <update id="updateStockByProductNo" parameterType="java.util.List">
+    UPDATE PRODUCT p
+    SET product_stock = product_stock - (
+        SELECT pod.product_order_detail_count
+        FROM PRODUCT_ORDER_DETAIL pod
+        WHERE pod.product_no = p.product_no and pod.product_order_detail_no=#{item.productOrderDetailNo}
+    )
+    WHERE p.product_no in (
+        <foreach collection="items" item="item" open="(" close=")" separator=",">
+            #{item.productNo}
+        </foreach>
+    )
+    </update>
+    -->
 
     <!-- 상품 번호로 상품 정보 불러오기 -->
     <select id="findInformationByProductNo" resultType="int">
