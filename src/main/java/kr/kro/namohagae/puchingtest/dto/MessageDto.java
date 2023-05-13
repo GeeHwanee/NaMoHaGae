@@ -70,7 +70,6 @@ public class MessageDto {
             String dateTimeStr = day + " " + time;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime puchingPromiseDate = LocalDateTime.parse(dateTimeStr, formatter);
-
             return Puching.builder().messageNo(messageNo).puchingLatitude(lat).puchingLongitude(lng).puchingStatus("신청")
                     .puchingApplyDate(LocalDateTime.now()).puchingCreatedDate(LocalDateTime.now()).puchingDeadlineDate(LocalDateTime.now())
                     .puchingPromiseDate(puchingPromiseDate).build();
