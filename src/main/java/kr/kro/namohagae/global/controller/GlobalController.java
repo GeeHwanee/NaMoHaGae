@@ -262,6 +262,13 @@ public class GlobalController {
         return "/puching/locationview.html";
     };
 
+    @GetMapping("/puching/reviewwrite")
+    public void reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo){
+        System.out.println(receiverNo);
+        System.out.println(puchingNo);
+
+    }
+
     // [게시판 파트]--------------------------------------------------------------------
 
     @GetMapping("/board/free/list")

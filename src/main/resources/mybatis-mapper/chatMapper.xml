@@ -64,7 +64,9 @@
         update MESSAGE SET MESSAGE_CONTENT=#{content},MESSAGE_CONTENT_TYPE=#{contentType} WHERE MESSAGE_NO=#{messageNo}
     </update>
 
+    <update id="replacePuchingMessage">
+        UPDATE MESSAGE SET MESSAGE_CONTENT=REPLACE(MESSAGE_CONTENT,#{removeString},#{addString}) WHERE MESSAGE_NO=#{messageNo}
+    </update>
 
 
-
-</mapper>
+        </mapper>

@@ -33,4 +33,6 @@ public interface ChatDao {
 
     public void updatePuchingMessage(Integer messageNo,String contentType,String content);
 
+    public void replacePuchingMessage(Integer messageNo,String removeString,String addString);
+
 }
