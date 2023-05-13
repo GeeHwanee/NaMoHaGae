@@ -23,5 +23,11 @@ public interface Puchingdao {
 
     public void savePuching(Puching puching);
 
-    public void cancelPuching(Integer messageNo,String puchingStatus);
+    public void updatePuchingStatus(Integer messageNo,String puchingStatus);
+
+    public Integer checkWritePuchingReviewBysenderNo(Integer senderNo,Integer messageNo);
+
+    public String checkPuchingStatus(Integer messageNo);
+
+    public Integer findPuchingNoBySenderNoAndReceiverNo(Integer senderNo,Integer receiverNo);
 }
