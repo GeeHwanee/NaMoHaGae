@@ -4,14 +4,19 @@ import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.ProductOrderDto;
-import kr.kro.namohagae.mall.entity.*;
+import kr.kro.namohagae.mall.entity.Address;
+import kr.kro.namohagae.mall.entity.CartDetail;
+import kr.kro.namohagae.mall.entity.ProductOrder;
+import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -71,26 +76,33 @@ public class ProductOrderService {
         productOrderDao.save(productOrder);
 
         // 상품 주문 정보 저장 및 재고 처리
+        List<Integer> productNos = new ArrayList<>();
         for (ProductOrderDetail item : items) {
             // 상품 주문 정보 저장
             productOrderDetailDao.save(item);
-            Integer productStock = productDao.findInformationByProductNo(item.getProductNo());
+
+            // 상품 번호 추출
+            Integer productNo = item.getProductNo();
+            productNos.add(productNo);
+
             // 상품 재고 처리
+            Integer productStock = productDao.findInformationByProductNo(productNo);
             if (productStock >= item.getProductOrderDetailCount()) {
-                productDao.updateStockByProductNo(item.getProductNo(),item.getProductOrderDetailNo());
-
-
-                // 재고 업데이트 리스트로 다시 잡을것. (단건결제는 성공)
-                // 상품페이지에서 결제 되는지 체크
-
-
+//                productDao.updateStockByProductNo(productNos,item.getProductOrderDetailNo());
+                Map<String, Object> params = new HashMap<>();
+                params.put("productNo", productNo);
+                params.put("productOrderDetailNo", item.getProductOrderDetailNo());
+                System.out.println(productNo.toString() + "들어온 상품들");
+                productDao.updateStockByProductNo(params);
             } else {
                 throw new RuntimeException("재고가 부족합니다.");
             }
         }
 
         // 주문한 상품 제거
-        cartDetailDao.removeByCartNo(items, memberNo);
+        if (!productNos.isEmpty()) {
+            cartDetailDao.removeByCartNo(productNos, memberNo);
+        }
 
         return productOrder.getProductOrderNo();
     }
