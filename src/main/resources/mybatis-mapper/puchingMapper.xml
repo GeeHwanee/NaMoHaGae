@@ -15,4 +15,37 @@
         )
         WHERE RNUM &gt;=#{startrownum} and memberNo!=#{memberNo}
     </select>
+
+    <select id="checkPuching" resultType="java.lang.Integer">
+        select count(*) from PUCHING p,MESSAGE m where m.message_no=p.message_no and m.message_content_type='puching' and (p.puching_status='신청' or p.puching_status='수락')
+        and ((m.message_sender=#{senderNo} and m.message_receiver=#{receiverNo}) or (m.message_sender=#{receiverNo} and m.message_receiver=#{senderNo}))
+        and rownum=1
+    </select>
+
+    <insert id="savePuching">
+        INSERT INTO PUCHING(puching_no,message_no,puching_created_date,puching_status
+            ,puching_promise_date,puching_latitude,puching_longitude,puching_apply_date,puching_deadline_date)
+            VALUES(puching_seq_puching_no.nextval,#{messageNo},#{puchingCreatedDate},#{puchingStatus},
+                #{puchingPromiseDate},#{puchingLatitude},#{puchingLongitude},#{puchingApplyDate},#{puchingDeadlineDate})
+    </insert>
+
+    <update id="updatePuchingStatus">
+        update PUCHING set PUCHING_STATUS=#{puchingStatus} WHERE MESSAGE_NO=#{messageNo}
+    </update>
+
+    <select id="checkWritePuchingReviewBysenderNo" resultType="Integer">
+        SELECT count(*) FROM PUCHING p,PUCHING_REVIEW pr WHERE p.PUCHING_NO=pr.PUCHING_NO and p.MESSAGE_NO=#{messageNo}
+                                                           and pr.PUCHING_REVIEW_WRITER=#{senderNo}
+
+    </select>
+    <select id="checkPuchingStatus" resultType="String">
+        SELECT PUCHING_STATUS FROM PUCHING WHERE MESSAGE_NO=#{messageNo}
+    </select>
+
+    <select id="findPuchingNoBySenderNoAndReceiverNo" resultType="Integer">
+        SELECT PUCHING_NO FROM PUCHING WHERE MESSAGE_NO=
+           (SELECT MESSAGE_NO FROM MESSAGE WHERE ((MESSAGE_SENDER=#{senderNo} and MESSAGE_RECEIVER=#{receiverNo}) or (MESSAGE_SENDER=#{receiverNo} and MESSAGE_RECEIVER=#{senderNo})) and MESSAGE_CONTENT_TYPE='puching')
+            and PUCHING_STATUS='수락'
+    </select>
+
 </mapper>

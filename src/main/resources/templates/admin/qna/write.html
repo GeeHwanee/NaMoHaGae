@@ -32,12 +32,13 @@
     <section>
         <div>
             <div>
-                <p th:text="${qna.qnaWriter}"></p>
+                <p th:text="${qna.memberNickname}"></p>
                 <p th:text="${qna.qnaContent}"></p>
                 <p th:text="${qna.qnaWriteDate}"></p>
             </div>
             <form action="/admin/qna/write" method="post">
                 <input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
+                <input type="hidden" name="qnaWriter" th:value="${qna.qnaWriter}">
                 <textarea name="qnaAnswerContent"></textarea>
                 <button >답변 작성하기</button>
             </form>

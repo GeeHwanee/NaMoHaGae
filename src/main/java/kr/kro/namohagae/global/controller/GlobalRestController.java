@@ -56,6 +56,9 @@ public class GlobalRestController {
         return ResponseEntity.ok(townService.findTownDongByGu(townGu));
     }
 
-
+    @GetMapping(value = "/town/gulist",produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>guList(){
+        return  ResponseEntity.ok(townService.findGu());
+    }
 
 }

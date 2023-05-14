@@ -25,7 +25,8 @@
         select
             QNA_NO,
             p.PRODUCT_NAME,
-            m.MEMBER_NICKNAME as qna_writer,
+            qna_writer,
+            MEMBER_NICKNAME,
             QNA_CONTENT, QNA_WRITE_DATE
         from QNA
                  join PRODUCT P on P.PRODUCT_NO = QNA.PRODUCT_NO
@@ -51,7 +52,8 @@
         select
             QNA_NO,
             p.PRODUCT_NAME,
-            m.MEMBER_NICKNAME as qna_writer,
+            qna_writer,
+            MEMBER_NICKNAME,
            QNA_CONTENT, QNA_WRITE_DATE
         from QNA
             join PRODUCT P on P.PRODUCT_NO = QNA.PRODUCT_NO
