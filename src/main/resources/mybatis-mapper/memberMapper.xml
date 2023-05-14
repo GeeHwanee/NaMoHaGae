@@ -70,11 +70,11 @@
         select member_email from member where member_nickname=#{nickname} and member_phone=#{phone}
     </select>
 
-    <select id="existsByEmail" resultType="int">
+    <select id="existsByEmail" resultType="Boolean">
         select count(*) from member where member_email=#{email} and rownum=1
     </select>
 
-    <select id="existsByNickname" resultType="int">
+    <select id="existsByNickname" resultType="Boolean">
         select count(*) from member where member_nickname=#{nickname} and rownum=1
     </select>
 

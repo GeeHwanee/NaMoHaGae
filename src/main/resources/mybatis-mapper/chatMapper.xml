@@ -46,4 +46,27 @@
         INSERT INTO MESSAGE(MESSAGE_NO,MESSAGE_SENDER,MESSAGE_RECEIVER,MESSAGE_CONTENT,MESSAGE_CONTENT_TYPE,MESSAGE_WRITE_DATE)
         VALUES (message_seq_message_no.nextval,#{messageSender},#{messageReceiver},#{messageContent},#{messageContentType},#{messageWriteDate})
     </insert>
-</mapper>
+
+    <insert id="savePuchingMessage" parameterType="kr.kro.namohagae.puchingtest.entity.Message">
+        <selectKey keyProperty="messageNo" resultType="java.lang.Integer" order="BEFORE">
+            SELECT message_seq_message_no.NEXTVAl FROM DUAL
+        </selectKey>
+        INSERT INTO MESSAGE(MESSAGE_NO,MESSAGE_SENDER,MESSAGE_RECEIVER,MESSAGE_CONTENT,MESSAGE_CONTENT_TYPE,MESSAGE_WRITE_DATE)
+        VALUES (#{messageNo},#{messageSender},#{messageReceiver},#{messageContent},#{messageContentType},#{messageWriteDate})
+    </insert>
+
+    <select id="findPuchingMessageNo" resultType="Integer">
+        SELECT MESSAGE_NO FROM MESSAGE WHERE ((MESSAGE_SENDER=#{senderNo} and MESSAGE_RECEIVER=#{receiverNo}) or
+            (MESSAGE_SENDER=#{receiverNo} and MESSAGE_RECEIVER=#{senderNo})) and MESSAGE_CONTENT_TYPE=#{contentType}
+    </select>
+
+    <update id="updatePuchingMessage">
+        update MESSAGE SET MESSAGE_CONTENT=#{content},MESSAGE_CONTENT_TYPE=#{contentType} WHERE MESSAGE_NO=#{messageNo}
+    </update>
+
+    <update id="replacePuchingMessage">
+        UPDATE MESSAGE SET MESSAGE_CONTENT=REPLACE(MESSAGE_CONTENT,#{removeString},#{addString}) WHERE MESSAGE_NO=#{messageNo}
+    </update>
+
+
+        </mapper>

@@ -2,11 +2,13 @@ package kr.kro.namohagae.puchingtest.dto;
 
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.puchingtest.entity.Message;
+import kr.kro.namohagae.puchingtest.entity.Puching;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MessageDto {
 
@@ -64,12 +66,14 @@ public class MessageDto {
             return Message.builder().messageSender(senderNo).messageReceiver(receiverNo).messageContent(messageContent)
                     .messageContentType("puching").messageWriteDate(LocalDateTime.now()).build();
         };
+        public Puching toEntity(Integer messageNo){
+            String dateTimeStr = day + " " + time;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime puchingPromiseDate = LocalDateTime.parse(dateTimeStr, formatter);
+            return Puching.builder().messageNo(messageNo).puchingLatitude(lat).puchingLongitude(lng).puchingStatus("신청")
+                    .puchingApplyDate(LocalDateTime.now()).puchingCreatedDate(LocalDateTime.now()).puchingDeadlineDate(LocalDateTime.now())
+                    .puchingPromiseDate(puchingPromiseDate).build();
+        };
     }
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PuchingMessageRead{
-      private String content;
-      private Integer MessageNo;
-    };
+
 }

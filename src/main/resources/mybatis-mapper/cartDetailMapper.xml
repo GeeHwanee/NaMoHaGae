@@ -62,6 +62,17 @@
         select * from CART_DETAIL where member_no = #{memberNo}
     </select>
 
+    <!-- 사용자의 장바구니 중 선택 상품 검색 -->
+    <select id="findByMemberNoAndProductNos" parameterType="map" resultType="CartDetail">
+        select cd.*
+        from CART_DETAIL cd
+        join CART c on cd.cart_no = c.cart_no
+        where c.member_no = #{memberNo} and cd.product_no in
+        <foreach item="item" index="index" collection="productNos" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <!-- 사용자의 장바구니 상품 총 가격 검색 -->
     <select id="findTotalPriceByMemberNo" parameterType="int" resultType="int">
         select sum(cart_detail_price) as cart_total_price from CART_DETAIL where member_no = #{memberNo}

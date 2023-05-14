@@ -40,15 +40,23 @@ public class ChatWebSocketHandler implements WebSocketHandler {
         JSONObject jsonPayload = new JSONObject(payload);
         String receiverUsername = jsonPayload.getString("receiverUsername");
         String messageContent = jsonPayload.getString("message");
-
+        String messageType= jsonPayload.getString("messageType");
 
         JSONObject responseJson = new JSONObject();
         responseJson.put("sendername", sendusername);
         responseJson.put("receivername", receiverUsername);
         responseJson.put("message", messageContent);
 
-        Integer haveChatRoom= service.saveTextMessage(sendusername,receiverUsername,messageContent,"text"); //메세지 저장 실패하면 리턴값이
-        responseJson.put("haveChatRoom",haveChatRoom);
+
+        if(messageType.equals("text")){
+         Integer haveChatRoom= service.saveTextMessage(sendusername,receiverUsername,messageContent,"text"); //메세지 저장 실패하면 리턴값이
+            responseJson.put("haveChatRoom",haveChatRoom);
+        }
+        if(messageType.equals("image") || messageType.equals("puching")){
+           Integer haveChatRoom= service.existByChatRoom(sendusername,receiverUsername);
+            responseJson.put("haveChatRoom",haveChatRoom);
+        }
+
 
         if (receiverUsername != null) {
             // 수신자가 지정된 경우, 수신자에게만 메시지를 전송합니다.

@@ -127,9 +127,9 @@ public class MemberService {
     }
 
 
-    public Boolean checkNickanme(Integer memberNo, String nickname) {
+    public Boolean checkUpdateNickanme(Integer memberNo, String nickname) {
         Member member = memberDao.findByMember(memberNo).get();
-        Boolean resultDB = memberDao.existsByNickname(nickname)==1;                                // 기존 DB에 이메일이 있다면 false 리턴
+        Boolean resultDB = memberDao.existsByNickname(nickname);                                // 기존 DB에 이메일이 있다면 false 리턴
         Boolean resultUser = !member.getMemberNickname().equals(nickname);
         System.out.println(nickname);
        if(resultDB==false){
@@ -143,12 +143,13 @@ public class MemberService {
         return true;
     }
 
-    public void sendAuthenticationCode(String email) {
+    public Boolean sendAuthenticationCode(String email) {
         try {
                 authenticationCode  = RandomStringUtils.random(5, true, true).toUpperCase();
             sendMail("aaa@aa.com", email, "인증코드", authenticationCode);
+            return true;
         } catch(NoSuchElementException e) {
-            throw e;
+            return false;
         }
     }
     public Boolean checkAuthenticationCode(String code){
@@ -158,4 +159,13 @@ public class MemberService {
     public void mailTest() {
         sendMail("admin@zmall.com","dlswh6289@gmail.com","안녕하세요","이메일입니다");
     }
+
+    public Boolean checkEmail(String email){
+     return memberDao.existsByEmail(email);
+    }
+    public Boolean checkNickname(String nickname){
+        return memberDao.existsByNickname(nickname);
+    }
+
 }
+

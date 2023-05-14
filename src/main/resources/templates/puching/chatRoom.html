@@ -90,13 +90,15 @@
         }
 
         .puching-info {
-            display: flex;
+            display: inline-block;
             flex-direction: column;
             justify-content: center;
             margin-left: 10px;
+
         }
 
         .puching-title {
+            display: inline-block;
             font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 5px;
@@ -105,6 +107,7 @@
         }
 
         .puching-description {
+            display: inline-block;
             font-size: 0.9em;
             margin-bottom: 5px;
         }
@@ -128,15 +131,22 @@
         }
 
         .location-button:hover,
-        .accept-button:hover {
+        .accept-button:hover,
+        .disaccept-button:hover{
             background-color: #dfaa8b;
         }
 
         .location-button:focus,
-        .accept-button:focus {
+        .accept-button:focus,
+        .disaccept-button:focus{
             outline: none;
             box-shadow: 0 0 0 2px #dfaa8b;
         }
+
+        .sent_msg .accept-button{
+            display: none;
+        }
+
 
     </style>
     <!--채팅방 스타일-->
@@ -348,27 +358,7 @@
                     <div class="mesgs">
                         <div class="msg_history">
 
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="http://localhost:8081/api/v1/image/chat/default.jpg" alt="sunil"> </div>
-                                <p>퍼칭메세지테스트</p>
-                                <div class="received_msg">
 
-                                    <div class="received_withd_msg">
-                                        <p>
-                                        <div class="puching-info">
-                                            <span class="puching-title">퍼칭</span>
-                                            <span class="puching-description">2023-05-03 10:19</span>
-                                            <span class="puching-description">장소 : 인천시 미추홀구 주안역 101-2</span>
-                                            <button class="location-button" data-puchingno="">장소보기</button>
-                                            <button class="accept-button" data-puchingno="" data-senderNo="senderNo">수락하기</button>
-                                            <button class="disaccept-button" data-puchingno="">취소하기</button>
-
-                                    </div></p>
-                                        <span class="time_date">현재시간:분:초</span>
-                                    </div>
-                                </div>
-
-                            </div>
 
                         </div>
                         <div class="type_msg">
@@ -389,6 +379,8 @@
         <div class="main-content">
             <button id="openPopupButton">퍼칭 신청</button>
         </div>
+        <button class="review-button">리뷰쓰기</button>
+
         <div class="popup-background">
             <div class="popup-content">  <!--퍼칭 신청 화면-->
                 <h2>퍼칭신청</h2>
@@ -428,7 +420,24 @@
 
     // Open the popup when the button is clicked
     //
-    openPopupButton.addEventListener("click", function() {
+    openPopupButton.addEventListener("click", async function() {
+
+        if(!nowChatUser){
+           alert('채팅상대를 지정해주새요')
+            return;
+        }
+        try {
+           await $.ajax({
+                url:'/api/v1/puching/checkpuching',
+                type:'GET',
+                data:{"receiverNo":nowChatUser}
+            })
+
+        }catch (err){
+            alert('이미 퍼칭이 진행중입니다')
+            return;
+        }
+
         popupBackground.style.display = "flex";
 
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -480,7 +489,6 @@
             var now_Centerlat=roundLatlong(center.Ma,7);
             var now_Centerlng=roundLatlong(center.La,7);
             var nowPos=new kakao.maps.LatLng(now_Centerlat,now_Centerlng)
-            console.log('지도의 중심 좌표는 ' + nowPos + ' 입니다.');
 
             marker.setMap(null);
             marker = new kakao.maps.Marker({
@@ -593,7 +601,7 @@
 
         // 수신된 메시지를 화면에 표시하는 코드를 작성합니다.
         var $content= `<div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="`+nowChatImage+`" alt="sunil"> </div>
+                                <div class="incoming_msg_img"> <img src="`+nowChatImage+`" alt="profile"> </div>
                                 <p>`+nowChatNick+`</p>
                                 <div class="received_msg">
                                     <div class="received_withd_msg">
@@ -626,7 +634,8 @@
 
         var messageToSend = {
             "message": message,
-            "receiverUsername": nowChatEmail  //상대이메일
+            "receiverUsername": nowChatEmail,//상대이메일
+            "messageType":'text'
         };
         var jsonData=JSON.stringify(messageToSend)
 
@@ -677,7 +686,8 @@
             console.log(imageMessage)
             var imageMessageToSend = {
                 "message": imageMessage,
-                "receiverUsername": nowChatEmail  //상대이메일
+                "receiverUsername": nowChatEmail,//상대이메일
+                "messageType":'image'
             };
             var jsonData=JSON.stringify(imageMessageToSend)
             socket.send(jsonData);
@@ -765,6 +775,7 @@
                         $('.msg_history').append(receiveContent)
                         // 메시지를 화면에 표시하는 코드를 작성합니다.
                     }
+
                 }
                 $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
             },
@@ -788,6 +799,28 @@
    //퍼칭상태가 실시간으로 변경되는 작업은 여기에서 하자
    puchingSocket.onmessage=function (event){
         console.log(event)
+       //퍼칭 취소 메세지를 받는경우
+       var message = event.data;
+       var json = JSON.parse(message);
+       var receiverUsername = json.receivername;
+       var messageContent = json.message;
+       var senderUsername= json.sendername;
+
+       if(senderUsername!=nowChatEmail){   //여기다가 채팅방을 바꿔주는 css효과 넣고 누를시 없애주는 작업해야함
+           return;
+       }
+       //퍼칭취소요청일 경우
+       if(messageContent=='cancel'){
+           var content=`<span class="puching-title">퍼칭이 취소 되었습니다</span>`
+           $('.puching-info').empty().append(content);
+       }
+       //퍼칭수락요청일 경우
+       if(messageContent=='accept'){
+           var content=`<span class="puching-description">퍼칭성공!</span>;`
+           $('.puching-info .accept-button').remove()
+           $('.puching-info .disaccept-button').remove()
+           $('.puching-info').append(content);
+       }
 
    }
    puchingSocket.onerror=function (error){
@@ -798,8 +831,9 @@
 
    }
   async function sendPuching() {
-       //현재 퍼칭상태라면 못보내게 막자
+       //현재 퍼칭상태라면 못보내게 막자  상대와 자신과의 퍼칭 기록중 퍼칭상태가 취소나 리뷰작성완료인 사람인것만 제외하고
        //현재 신청걸려는 사람과 내가 퍼칭중 인지 체크
+
        var $day=$('#day').val()
        var $time=$('#time').val()
         var date=$day+" "+$time
@@ -837,24 +871,35 @@
               type:'POST',
               data:param
           }).done(function(data){
-              console.log('성공')
+              alert(nowChatNick+'님에게 퍼칭신청을 보냈습니다!')
+              popupBackground.style.display = "none";
               console.log(data)
               //content링 messageNo를 이용해서 append시키고 전송
+              var puchingMessage=data.messageContent;
+              console.log(puchingMessage)
+              var puchingMessageToSend = {
+                  "message": puchingMessage,
+                  "receiverUsername": nowChatEmail,  //상대이메일
+                  "messageType":'puching'
+              };
+              var jsonData=JSON.stringify(puchingMessageToSend)
+              socket.send(jsonData);
+
+              //자기거에 띄우는 코드
+              var content = ` <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>`+puchingMessage+`</p>
+                                    <span class="time_date"> `+getCurrentTime()+`</span> </div>
+                            </div>`
+
+
+              $('.msg_history').append(content)
+              $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
           })
       }catch (err){
            console.log(err)
-
+          alert('퍼칭신청을 보내지 못했습니다')
       }
-
-
-
-
-   }
-   function acceptPuching(){
-
-   }
-   function cancelPuching(){
-
    }
 
 </script>
@@ -948,6 +993,73 @@
         }
         return +(Math.round(num + "e+" + n)  + "e-" + n);
     }
+</script>
+<!--퍼칭메세지 이벤트 함수-->
+<script>
+    $(document).on('click','.location-button',function(){
+        var lat= $(this).data('lat')
+        var lng= $(this).data('lng')
+        window.open('/puching/locationview?lat=' + lat + '&lng=' + lng,'장소보기','width=600,height=600')
+    });
+    $(document).on('click','.disaccept-button',async function(){
+        try {
+            var cancelParam={
+                message:"cancel",
+                receiverUsername:nowChatEmail
+            }
+            var jsondata=JSON.stringify(cancelParam)
+            puchingSocket.send(jsondata)
+            var content=`<span class="puching-title">퍼칭이 취소 되었습니다</span>`
+
+            $(this).parent().empty().append(content);
+
+        }catch (err){
+            alert('퍼칭신청을 취소하지 못했습니다')
+        }
+
+    });
+    $(document).on('click','.accept-button',async function(){
+        try{
+            var acceptParam={
+                message:"accept",
+                receiverUsername:nowChatEmail
+            }
+            var jsondata=JSON.stringify(acceptParam)
+            puchingSocket.send(jsondata)
+            //파칭수락한거 바로 어펜드 시키는 로직
+            var content=`<span class="puching-description">퍼칭성공!</span>;`
+            $('.puching-info .accept-button').remove()
+            $('.puching-info .disaccept-button').remove()
+            $('.puching-info').append(content);
+        }catch (err){
+            alert('퍼칭신청을 수락하지 못했습니다')
+        }
+
+    });
+    $(document).on('click','.review-button',async function(){
+        if (!nowChatEmail) {
+            alert('리뷰를 작성할 상대의 채팅방을 클릭해주세요');
+            return;
+        }
+
+        try {
+            var data = await $.ajax({
+                url: '/api/v1/puching/checkreviewpuching',
+                type: 'GET',
+                data: { receiverNo: nowChatUser }
+            });
+            console.log(data);
+            console.log(data.puchingNo)
+            var puchingNo = data.puchingNo;
+            location.href = '/puching/reviewwrite?receiverNo=' + nowChatUser + '&puchingNo=' + puchingNo;
+            console.log('리뷰작성으로 넘어가 버리기')
+        } catch (err) {
+            console.log(err);
+            alert('해당 유저에게 작성할 퍼칭 리뷰가 없습니다');
+        }
+
+
+    });
 </script>
 <script>
     $(document).ready(function(){
