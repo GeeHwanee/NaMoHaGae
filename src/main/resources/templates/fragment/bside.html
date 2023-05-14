@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!------------------------------------------------------------------------------------------------------------------------------>
+	<!--스크립트 태그-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>                    <!--jQuery-->
+	<script src="https://kit.fontawesome.com/a606a1a405.js" crossorigin="anonymous"></script>                   <!--FontAwesome-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>        <!--BootStrap-->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>         <!--SweetAlert2-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>               <!--Toastr-->
+	<!--CSS 링크-->
+	<link rel="stylesheet" href="/css/main.css">                                                                <!--MainCSS-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <!--FontAwesome-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">      <!--BootStrap-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">     <!--SweetAlert2-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">       <!--Toastr-->
+	<!--기타 삽입-->
+
+	<!------------------------------------------------------------------------------------------------------------------------------>
+	<title>bside</title>
+	<style>
+		.quickMenu {position:absolute;width:100%;top:50%;right:10px;background:#fff;}
+		.quickMenu ul {width:100%;border:1px solid #ddd;}
+		.quickMenu ul li {float:right;width:100%;border-bottom:1px solid #ddd;text-align:center;display:inline-block;*display:inline;}
+		.quickMenu ul li a {position:relative;float:right;width:100%;height:30px;line-height:30px;text-align:center;color:#999;font-size:9.5pt; text-decoration: none;}
+		.quickMenu ul li a:hover {color:#000;}
+		.quickMenu ul li:last-child {border-bottom:0;}
+
+
+	</style>
+	<script>
+		function printBsideNotification(result) {
+			const $notification = $('#notification');
+			result.forEach(n => {
+				const tpl = `
+            		 <li><a href="${n.notificationLink}" id="read" data-notification-no="${n.notificationNo}">${n.notificationContent}</a></li>
+       			 `;
+				$notification.append(tpl);
+			});
+		}
+
+	</script>
+
+	<script>
+		$(document).ready(async function(){
+			const socket = new WebSocket('ws://localhost:8081/notification');
+
+			socket.addEventListener('open', function (event) {
+				// 연결이 성공한 경우 실행되는 코드
+				console.log('socket open');
+			});
+
+			socket.addEventListener('message', function (event) {
+				// 메시지를 받은 경우 실행되는 코드
+				const data = event.data;
+				const notification = JSON.parse(data).notification;
+				let $li = `<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`;
+				$('#notification').prepend($li);
+			});
+
+			socket.addEventListener('close', function (event) {
+				console.log('socket close');
+				// 연결이 종료된 경우 실행되는 코드
+			});
+
+			socket.addEventListener('error', function (event) {
+				console.log('socket error');
+				// 에러가 발생한 경우 실행되는 코드
+			});
+
+			let currentPosition = parseInt($(".quickMenu").css("top"));
+			$(window).scroll(function() {
+				const position = $(window).scrollTop();
+				$(".quickMenu").stop().animate({"top":position+currentPosition+"px"},1000);
+			});
+
+			try {
+				const result = await $.ajax("/api/v1/notification/aside/list");
+				printBsideNotification(result);
+			}catch (err){
+				console.log(err)
+			}
+			$('#notification').on("click", "#read", async function () {
+				const $notificationNo = $(this).data('notification-no');
+				try {
+					await $.ajax({
+						url: "/api/v1/notification/read?notificationNo=" + $notificationNo,
+						type: "PUT"
+					});
+					// 읽음 여부를 업데이트한 후의 작업을 수행
+				} catch (err) {
+					console.log(err);
+				}
+			})
+
+		})
+
+
+	</script>
+</head>
+<body>
+<aside id="bside">
+	<div class="quickMenu">
+		<ul id="notification"></ul>
+	</div>
+</aside>
+</body>
+</html>
