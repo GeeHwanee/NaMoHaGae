@@ -44,12 +44,19 @@
     </select>
 
     <!-- 주문 완료 후 장바구니에서 상품 삭제 -->
-    <delete id="removeByCartNo">
-        delete from CART_DETAIL where product_no in
-        <foreach collection="items" item="item" open="(" close=")" separator=",">
-            #{item.productNo}
+    <delete id="removeByCartNo" parameterType="java.util.Map">
+        DELETE FROM CART_DETAIL
+        WHERE product_no IN (
+        SELECT product_no
+        FROM CART_DETAIL cd
+        INNER JOIN CART c ON cd.cart_no = c.cart_no
+        WHERE c.member_no = #{memberNo}
+        AND cd.product_no IN (
+        <foreach collection="productNos" item="productNo" separator=",">
+            #{productNo}
         </foreach>
-        and cart_no = #{cartNo}
+        )
+        )
     </delete>
 
     <!-- 사용자의 장바구니 상품 총 개수 검색 -->

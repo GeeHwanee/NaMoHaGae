@@ -12,11 +12,11 @@
 
     <!-- 내가 쓴 리뷰 -->
     <select id="findByOrderDetailNo" resultType="ProductOrderDetail" parameterType="Integer">
-        select * from PRODUCT_ORDER_DETAIL where product_order_detail_no=#{OrderDetailNo} and rownum=1
+        select * from PRODUCT_ORDER_DETAIL where product_order_detail_no=#{productOrderDetailNo} and rownum=1
     </select>
 
     <!-- 리뷰 작성 완료 -->
     <update id="updateReview" parameterType="Integer">
-        update PRODUCT_ORDER_DETAIL set product_order_detail_review_enabled=0 where product_order_detail_no=#{OrderDetailNo}
+        update PRODUCT_ORDER_DETAIL set product_order_detail_review_enabled=0 where product_order_detail_no=#{productOrderDetailNo}
     </update>
 </mapper>

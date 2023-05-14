@@ -300,6 +300,15 @@
         });
 
 
+        // 주문하기
+        $('#buy').click(async function() {
+            const productNo = $('#productNo').text();
+            const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/product/order").attr("method","post").appendTo($('body'));
+            $form.append($('<input>').attr('type','hidden').attr('name','productNo').val(productNo));
+            $form.submit();
+        });
+
+
         // 품절시 버튼 변경
         const stock = document.getElementById('productStock').value;
         const buyButton = document.getElementById('buy');
@@ -355,6 +364,8 @@
                     <button class="btn btn-secondary" id="cart" th:disabled="${product.productStock == 0}">장바구니</button>
                     <button class="btn btn-secondary" id="favorite"><span id="favorite_text">찜하기</span></button>
                 </div>
+            </div>
+            <div id="formArea">
             </div>
             <div id="content" th:utext="${product.productContent}"></div>
 

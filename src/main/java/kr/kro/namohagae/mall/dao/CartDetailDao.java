@@ -31,7 +31,7 @@ public interface CartDetailDao {
     public Optional<CartDetail> findByMemberNoAndProductNo(Integer memberNo, Integer productNo);
 
     // 주문 완료 후 장바구니에서 상품 삭제
-    public void removeByCartNo(List<ProductOrderDetail> list, Integer cartNo);
+    public void removeByCartNo(List<Integer> productNos, Integer memberNo);
 
     // 사용자의 장바구니 상품 총 개수 검색
     public Integer findCountByMemberNo(Integer memberNo);
