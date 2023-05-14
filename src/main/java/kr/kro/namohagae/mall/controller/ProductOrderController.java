@@ -241,7 +241,7 @@ public class ProductOrderController {
     // 상품페이지 -> 주문하기
     @PostMapping("/product/order/check")
     public String placeOrderFromProduct(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
-                                        @RequestParam(required=false) Integer addressNo) {
+                                        @RequestParam Integer addressNo) {
         Integer productNo = (Integer) session.getAttribute("productNo");
         if (productNo == null) {
             return "redirect:/mall/main";
@@ -262,7 +262,7 @@ public class ProductOrderController {
         item.setProductOrderNo(productOrderNo);
 
         session.removeAttribute("productNo");
-        return "redirect:/mall/product/order/success";
+        return "mall/product/order/success";
     }
 
 

@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
@@ -9,6 +10,8 @@ import kr.kro.namohagae.mall.entity.CartDetail;
 import kr.kro.namohagae.mall.entity.ProductOrder;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,6 +122,11 @@ public class ProductOrderService {
     // 주문하기(상품페이지)
     @Transactional
     public Integer placeOrderFromProduct(Integer memberNo, Integer productNo, Integer addressNo) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) auth.getPrincipal();
+        memberNo = userDetails.getMemberNo();
+
+
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
         if (address == null) {
             throw new RuntimeException("주소를 찾을 수 없습니다.");
@@ -143,16 +151,14 @@ public class ProductOrderService {
 
         Integer productStock = productDao.findInformationByProductNo(productNo);
         if (productStock >= item.getProductOrderDetailCount()) {
+//            productDao.updateStockByOrderFromProduct(productNo, item.getProductOrderDetailNo());
             Map<String, Object> params = new HashMap<>();
             params.put("productNo", productNo);
             params.put("productOrderDetailNo", item.getProductOrderDetailNo());
-            productDao.updateStockByProductNo(params);
+            productDao.updateStockByOrderFromProduct(params);
         } else {
             throw new RuntimeException("재고가 부족합니다.");
         }
-
-        // 주문한 상품 제거
-        cartDetailDao.removeByCartNo(Collections.singletonList(productNo), memberNo);
 
         return productOrder.getProductOrderNo();
     }
