@@ -74,6 +74,11 @@
         where p.product_no=#{productNo}
     </select>
 
+    <!-- 사용자가 구매하기 선택한 상품 검색
+    <select id="findByMemberNoAndProductNo" resultType="">
+
+    </select>
+    -->
     <!-- 상품 번호 찾아서 재고 업데이트 -->
     <update id="updateStockByProductNo" parameterType="java.util.Map">
         UPDATE PRODUCT p
@@ -100,6 +105,16 @@
     )
     </update>
     -->
+
+    <!-- 상품 상세 보기에서 주문시 재고 업데이트 -->
+    <update id="updateStockByOrderFromProduct" parameterType="java.util.Map">
+        UPDATE PRODUCT p
+        SET p.product_stock = p.product_stock - (SELECT pod.product_order_detail_count
+            FROM PRODUCT_ORDER_DETAIL pod
+            WHERE pod.product_no = p.product_no and pod.product_order_detail_no=#{productOrderDetailNo}
+            )
+        where p.product_no = #{productNo}
+    </update>
 
     <!-- 상품 번호로 상품 정보 불러오기 -->
     <select id="findInformationByProductNo" resultType="int">
