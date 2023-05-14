@@ -27,12 +27,10 @@
 </style>
 <body>
 <header th:replace="~{/fragment/header.html}"> </header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 
-</header>
 <main>
-    <aside th:replace="~{/fragment/aside.html}">
-
-    </aside>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
         <h1>멤버 메인(내 정보 페이지)</h1>
         <article><a href="/member/notification">알림함</a></article>
@@ -42,6 +40,7 @@
         <article><a href="/member/puching/follow">팔로우 목록</a></article>
         <article><a href="/member/mall/favorite">찜목록</a></article>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>

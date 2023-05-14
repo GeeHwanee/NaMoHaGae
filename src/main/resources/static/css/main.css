@@ -1,92 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');  /*나눔 고딕(font-family: 'Nanum Gothic', sans-serif;)*/
+@import url('https://fonts.googleapis.com/css2?family=Dongle&display=swap');        /*Dongle(font-family: 'Dongle', sans-serif;)*/
 *{
     font-family: 'Nanum Gothic', sans-serif;
+    font-size: 16px;
     list-style: none;
     text-decoration: none;
     margin:0;
     padding:0;
 }
-a {
+header {
+    height:120px;
+    display:flex;
+    border-top: 3px solid #dfaa8b;
+    border-bottom: 3px solid #dfaa8b;
+    margin: 10px 20px;
+}
+
+.header_logo {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width:50%;
+    text-align:center;
+    line-height:86px;
+    margin: 3px 0;
+}
+.header_team, .header_icon{
+    display: flex;
+    align-items: flex-end;
+    width: 15%;
+    padding: 10px;
+}
+
+.header_icon{
+    justify-content: flex-end;
+}
+
+.header_team > a, .header_icon > a{
+    margin: 5px;
+    color: #ed9e71;
+}
+.header_team > a :hover, .header_icon > a :hover{
+    color: #dc7f64;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #c9dc92;
+    border-bottom: 1px solid #c9dc92;
+    margin: 10px 20px;
+}
+nav > a {
+    font-size:2.5em;
+    font-family: 'Dongle', sans-serif;
     text-decoration: none;
     color: black;
 }
-
-header {
-    height:86px;
-    display:flex;
-}
-
-.nav_logo {
-    width:16%;
-
-    text-align:center;
-    line-height:86px;
-    position:relative;
-}
-.border1 {
-    position:absolute;
-    width:1px;
-    height:76px;
-
-    background-color: #e3e3e3;
-    right:0;
-    top:0;
-}
-.border2 {
-    position:absolute;
-
-    height:1px;
-    width:15.5vw;
-    background-color: #e3e3e3;
-    bottom:0;
-}
-nav {
-    width:84%;
-    position:relative;
-}
-.nav_bar {
-    display:flex;
-    width:80%;
-    margin-left:50px;
-
-}
-.border3 {
-    position:absolute;
-    width:99.5%;
-    height:1px;
-    border-bottom:1px solid #e3e3e3;
-    right:0;
-    bottom:0;
-}
-.nav_bar > li {
-    flex:1;
-
-    text-align: center;
-    padding-top:25px;
-
-}
-.nav_bar > li > a {
-    font-size:24px;
-    font-weight:bold;
-    color:#000;
-}
-.icon {
-
-    position:relative;
-    float:right;
-    right:10px;
-    top:-26px;
-}
-nav > div > a {
+nav > a :hover{
     color: #ed9e71;
 }
 
-nav > div > a :hover{
-    color: #dfaa8b;
-}
 main {
     display:flex;
+    justify-content: center;
     overflow: hidden;
+    margin: 10px 20px;
 }
 aside {
     width:16%;
@@ -108,35 +87,60 @@ aside {
     font-weight:bold;
     color:#000;
 }
-.border4 {
-    width:1px;
-    height:692px;
-    background-color: #e3e3e3;
-    position:absolute;
-    right:0;
-    bottom:0;
-}
-section {
-    width:84%;
-    min-height:970px;
 
+section {
+    width:70%;
+    min-height:700px;
+    border-left: 3px solid #dfaa8b;
+    border-right: 3px solid #dfaa8b;
 }
 footer {
-
+    display: flex;
+    border-top: 1px solid #c9dc92;
+    justify-content: center;
+    align-content: center;
+    margin: 10px 20px;
+    text-align: center;
+    height: 100px;
 }
+footer > div{
+    display: inline-block;
+    height: auto;
+}
+footer > div > span {
+    font-family: 'Dongle', sans-serif;
+    font-size: 1.2em;
+}
+
 @media (max-width: 800px) {
-    .icon {
+   header{
+       justify-content: center;
+   }
+    header > div > div > h1{
+
+    }
+    header > div > div > img{
+        height: 50%;
+    }
+
+    .header_icon, .header_team {
         display:none;
     }
     aside{
         display: none;
     }
 
-
     #aside{
         display: none;
     }
     #bside {
         display: none;
+    }
+}
+@media screen and (min-width: 800px) {
+    header{ justify-content: space-between;}
+
+    header > div > div > img{
+        height: 100%;
     }
 }
