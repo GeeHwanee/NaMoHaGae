@@ -112,6 +112,11 @@ footer > div > span {
     font-size: 1.2em;
 }
 
+.fa-heart{
+    color: red;
+}
+
+
 @media (max-width: 800px) {
    header{
        justify-content: center;
