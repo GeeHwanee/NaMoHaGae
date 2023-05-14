@@ -42,9 +42,6 @@
     <aside th:replace="~{/fragment/aside.html}">
     </aside>
     <section>
-        <p>주문레디</p>
-        <!-- map에 들은 값 체크중 -->
-
         <div class="container mt-3">
             <h2>주문 상품</h2>
             <div th:each="i:${map.orderItems}" class="card">
@@ -64,7 +61,6 @@
                 </div>
             </div>
         </div>
-
         <hr>
         <h2>배송지</h2>
         <div th:each="a:${map.addresses}" class="container mt-3">
@@ -84,8 +80,6 @@
         <div class="mb-3 mt-3 d-grid">
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
         </div>
-
-
     </section>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
