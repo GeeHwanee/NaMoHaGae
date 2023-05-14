@@ -27,34 +27,32 @@
 				$('<form>').attr("action","/logout").attr("method","post")
 						.appendTo($('body')).submit();
 			})
+			$('.header_logo').click(function (){
+				location.href='/';
+			})
 		})
 	</script>
 </head>
 <body>
 <header>
-	<h1 class="nav_logo">
-		<a href="/"><img width="133px" src="http://localhost:8081/api/v1/image/embeded?name=logoSample.jpg"></a>
-		<div class="border1"></div>
-		<div class="border2"></div>
-	</h1>
-
-	<nav>
-		<ul class="nav_bar">
-			<li><a sec:authorize="hasRole('ROLE_USER')" href="/puching/main">퍼칭 메인</a></li>
-			<li><a sec:authorize="hasRole('ROLE_USER')" href="/mall/main">몰 메인</a></li>
-			<li><a sec:authorize="hasRole('ROLE_USER')" href="/board/main">게시판 메인</a></li>
-
-		</ul>
-		<div class="icon">
-			<a href="/login" sec:authorize="isAnonymous()">로그인</a>
-			<button type="button" sec:authorize="isAuthenticated()" id="logout">로그아웃</button>
-			<a sec:authorize="hasRole('ROLE_USER')" href="/member/main"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
-			<a sec:authorize="hasRole('ROLE_USER')" href="/mall/cart/list"><i class="fa-solid fa-cart-shopping fa-2xl"></i></a>
-			<a sec:authorize="hasRole('ROLE_USER')" href="/puching/chatroom"><i class="fa-solid fa-comment fa-2xl"></i></a>
+	<div class="header_team">
+		<a href='https://www.notion.so/dogtype/DOGTYPE-8f42f515d4b64ce7b329e33df661dbdf?pvs=4' target='_blank'><i class="fa-solid fa-n fa-2xl"></i></a>
+		<a href='https://github.com/GeeHwanee/NaMoHaGae' target='_blank'><i class="fa-brands fa-square-git fa-2xl"></i></a>
+		<a href='/api-docs' target='_blank'><i class="fa-solid fa-o fa-2xl"></i></a>
+	</div>
+	<div class="header_logo">
+		<div>
+			<h1 style="font-family: 'Dongle', sans-serif; display: inline-block; margin: 0">나 뭐하개?</h1>
+			<img src="http://localhost:8081/api/v1/image/embeded?name=logoSample.png" alt="logo">
 		</div>
-		<div class="border3"></div>
-	</nav>
+	</div>
+	<div class="header_icon">
+		<a sec:authorize="hasRole('ROLE_USER')" href="/member/main"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
+		<a sec:authorize="hasRole('ROLE_USER')" href="/mall/cart/list"><i class="fa-solid fa-cart-shopping fa-2xl"></i></a>
+		<a sec:authorize="hasRole('ROLE_USER')" href="/puching/chatroom"><i class="fa-solid fa-comment fa-2xl"></i></a>
+		<a href="/login" sec:authorize="isAnonymous()"><i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i></a>
+		<a style="color: #ed9e71;" id="logout" sec:authorize="isAuthenticated()"><i class="fa-solid fa-arrow-right-from-bracket fa-2xl"></i></a>
+	</div>
 </header>
-
 </body>
 </html>
