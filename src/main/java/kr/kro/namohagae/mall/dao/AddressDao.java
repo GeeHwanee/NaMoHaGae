@@ -14,5 +14,5 @@ public interface AddressDao {
 
     public Boolean delete(Integer addressNo);
 
-    public Address findByMemberNoAndAddressNo(Integer memberNo, Integer AddressNo);
+    public Address findByMemberNoAndAddressNo(Integer memberNo, Integer addressNo);
 }
