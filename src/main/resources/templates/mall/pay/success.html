@@ -27,6 +27,7 @@
 </style>
 <body>
 <header th:replace="~{/fragment/header.html}"> </header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
     <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
@@ -34,6 +35,7 @@
         <a href="/">메인으로</a>
         <a href="/mall/cart/list">장바구니로</a>
     </section>
+<aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}"></footer>
 </body>

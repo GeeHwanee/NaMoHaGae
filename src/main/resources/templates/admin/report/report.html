@@ -19,9 +19,20 @@
     <!--기타 삽입-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-<title>회원 신고 페이지</title>
+    <title>회원 신고 페이지</title>
 </head>
 <body>
-
+<header th:replace="~{/fragment/header.html}"> </header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
+<main>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
+    <section>
+        <h1>회원 신고 페이지</h1>
+        <article></article>
+    </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
+</main>
+<footer th:replace="~{/fragment/footer.html}">
+</footer>
 </body>
 </html>

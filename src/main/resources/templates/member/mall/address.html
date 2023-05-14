@@ -79,10 +79,8 @@
 </head>
 <body>
 <div id="page">
-    <header th:replace="~{/fragment/header.html}">
-    </header>
-    <nav th:replace="~{/fragment/nav.html}">
-    </nav>
+    <header th:replace="~{/fragment/header.html}"></header>
+    <nav th:replace="~{/fragment/nav.html}"></nav>
     <main>
         <aside th:replace="~{/fragment/aside.html}">
         </aside>
@@ -93,6 +91,7 @@
             </table>
             <button type="button" class="btn btn-primary btn-block" ><a href="/member/mall/address/add" style="color: white;">배송지 추가</a></button>
         </section>
+        <aside th:replace="~{/fragment/bside.html}"></aside>
     </main>
     <footer th:replace="~{/fragment/footer.html}">
     </footer>

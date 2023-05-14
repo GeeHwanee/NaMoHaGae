@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -34,14 +36,25 @@ public class PuchingRestController {
 
     @GetMapping(value="/puching/checkpuching")
     public ResponseEntity<Void> checkpuching(Principal principal,Integer receiverNo){
-        System.out.println(principal.getName());
-        System.out.println(receiverNo);
+
       Integer result = service.checkpuching(principal.getName(),receiverNo);
       if (result==0){
           return ResponseEntity.ok().body(null);
       }
         return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     };
+
+    @GetMapping(value = "/puching/checkreviewpuching")
+    public ResponseEntity<Map<String,Integer>> checkPuchingReviewWrite(Principal principal, Integer receiverNo){
+        Integer result=service.checkAcceptPuching(principal.getName(),receiverNo);
+            Map<String,Integer> map=new ConcurrentHashMap<>();
+        if(result==0) {
+            Integer puchingNo=service.findPuchingNo(principal.getName(),receiverNo);
+            map.put("puchingNo",puchingNo);
+            return ResponseEntity.ok().body(map);
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+    }
 
 
 }

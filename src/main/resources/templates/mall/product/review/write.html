@@ -72,13 +72,10 @@
   })
 </script>
 <body>
-<header th:replace="~{/fragment/header.html}">
-</header>
-<nav th:replace="~{/fragment/nav.html}">
-</nav>
+<header th:replace="~{/fragment/header.html}"></header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
-  <aside th:replace="~{/fragment/aside.html}">
-  </aside>
+  <aside th:replace="~{/fragment/aside.html}">  </aside>
   <section>
     <h1>리뷰쓰기 페이지</h1>
     <hr>
@@ -102,6 +99,7 @@
       <button id="write" class="btn btn-primary">작성</button>
     </div>
   </section>
+  <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>
