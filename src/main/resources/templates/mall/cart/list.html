@@ -140,7 +140,7 @@
         });
          */
 
-
+        // 상품들을 선택해 주문 페이지로 이동
         $('#order').click(function() {
             // 선택한 장바구니 상품이 없으면 처리 중단
             if($('.productNo:checked').length == 0) {
@@ -159,10 +159,21 @@
         });
 
 
+        /*
         // 상품 전체 선택
         $('#check_all').click(function() {
             $('.productNo').prop('checked', !$('.productNo').prop('checked'));
         })
+         */
+
+        // 상품 전체 선택(품절 제외)
+        $('#check_all').click(function() {
+            $('.productNo').each(function() {
+                if(!$(this).attr('disabled')) {
+                    $(this).prop('checked', !$(this).prop('checked'));
+                }
+            });
+        });
 
         
         $('#kakaoPay').click(function(){
