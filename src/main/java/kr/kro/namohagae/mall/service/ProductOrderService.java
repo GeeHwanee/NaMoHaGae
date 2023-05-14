@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RequiredArgsConstructor
@@ -28,8 +25,8 @@ public class ProductOrderService {
     private final AddressDao addressDao;
     private final ProductDao productDao;
 
-    // 결제할 주문 목록 조회
-    public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos) {
+    // 결제할 주문 목록 조회(장바구니)
+    public ProductOrderDto.Read orderReadyFromCart(Integer memberNo, List<Integer> checkedProductNos) {
         // 선택한 상품만 장바구니에 담기
         List<CartDetail> carts = new ArrayList<>();
         for (Integer productNo : checkedProductNos) {
@@ -41,7 +38,7 @@ public class ProductOrderService {
 
         // 주문 정보 저장을 위한 리스트 생성
         List<ProductOrderDto.list> orderItems = new ArrayList<>();
-        int orderTotalPrice = 0;
+        Integer orderTotalPrice = 0;
 
         for (CartDetail cartDetail : carts) {
             ProductDto.Read dto = productDao.findByProductNo(cartDetail.getProductNo());
@@ -54,19 +51,31 @@ public class ProductOrderService {
     }
 
 
+    // 결제할 주문 목록 조회(상품페이지)
+    public ProductOrderDto.Read orderReadyFromProduct(Integer memberNo, Integer productNo) {
+        ProductDto.Read dto = productDao.findByProductNo(productNo);
+        ProductOrderDto.list orderItem = new ProductOrderDto.list(productNo, dto.getProductImages().get(0), dto.getProductName(), 1, dto.getProductPrice(), dto.getProductPrice());
+        List<ProductOrderDto.list> orderItems = Collections.singletonList(orderItem);
+        Integer orderTotalPrice = orderItem.getOrderTotalPrice();
+
+        System.out.println(orderItems + "오더저장되었나");
+
+        return new ProductOrderDto.Read(orderItems, orderTotalPrice);
+    }
+
+
     // 멤버의 주소 찾기
     public List<AddressDto.Read> findAddress(Integer memberNo) {
         return addressDao.findAll(memberNo);
     }
 
 
-    // 주문하기
+    // 주문하기(장바구니)
     @Transactional
-    public Integer placeOrder(List<ProductOrderDetail> items, Integer memberNo, Integer addressNo) {
+    public Integer placeOrderFromCart(List<ProductOrderDetail> items, Integer memberNo, Integer addressNo) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
 
-        // 총가격
-        int orderTotalPrice = 0;
+        Integer orderTotalPrice = 0;
         for (ProductOrderDetail item : items) {
             orderTotalPrice += item.getProductOrderDetailPrice() * item.getProductOrderDetailCount();
         }
@@ -92,7 +101,6 @@ public class ProductOrderService {
                 Map<String, Object> params = new HashMap<>();
                 params.put("productNo", productNo);
                 params.put("productOrderDetailNo", item.getProductOrderDetailNo());
-                System.out.println(productNo.toString() + "들어온 상품들");
                 productDao.updateStockByProductNo(params);
             } else {
                 throw new RuntimeException("재고가 부족합니다.");
@@ -108,9 +116,52 @@ public class ProductOrderService {
     }
 
 
+    // 주문하기(상품페이지)
+    @Transactional
+    public Integer placeOrderFromProduct(Integer memberNo, Integer productNo, Integer addressNo) {
+        Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
+        if (address == null) {
+            throw new RuntimeException("주소를 찾을 수 없습니다.");
+        }
+
+        // 상품 정보 조회
+        ProductDto.Read dto = productDao.findByProductNo(productNo);
+
+        // 주문 상품 정보 생성
+        ProductOrderDto.list orderItem = new ProductOrderDto.list(productNo, dto.getProductImages().get(0), dto.getProductName(), 1, dto.getProductPrice(), dto.getProductPrice());
+        //List<ProductOrderDto.list> orderItems = Collections.singletonList(orderItem);
+        //Integer orderTotalPrice = dto.getProductPrice();
+
+        // 주문 정보 저장
+        ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), dto.getProductPrice(), LocalDateTime.now());
+        productOrderDao.save(productOrder);
+
+        // 상품 주문 정보 저장 및 재고 처리
+        ProductOrderDetail item =
+                new ProductOrderDetail(null, productOrder.getProductOrderNo(), productNo, orderItem.getCartDetailCount(), dto.getProductPrice(), true);
+        productOrderDetailDao.save(item);
+
+        Integer productStock = productDao.findInformationByProductNo(productNo);
+        if (productStock >= item.getProductOrderDetailCount()) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("productNo", productNo);
+            params.put("productOrderDetailNo", item.getProductOrderDetailNo());
+            productDao.updateStockByProductNo(params);
+        } else {
+            throw new RuntimeException("재고가 부족합니다.");
+        }
+
+        // 주문한 상품 제거
+        cartDetailDao.removeByCartNo(Collections.singletonList(productNo), memberNo);
+
+        return productOrder.getProductOrderNo();
+    }
 
 
-    // 0512 아래부터 수정해야함
+
+
+
+    // 아래부터 수정해야함 (dto 잘못만든듯)
 
 
     public List<ProductOrderDto.Read> orderList(Integer memberNo) {
