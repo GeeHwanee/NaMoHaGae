@@ -115,7 +115,7 @@
 </script>
 <body>
 <header th:replace="~{/fragment/header.html}"></header>
-
+<nav th:replace="~{/fragment/nav.html}"></nav>
 
 <main>
     <aside th:replace="~{/fragment/aside.html}">
@@ -151,6 +151,7 @@
             <a class="card-link" th:href="@{/board/town/write}">글쓰기</a>
         </article>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>
