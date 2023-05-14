@@ -98,10 +98,8 @@
 <body>
 <div th:text="${member}"></div>
 <div id="page">
-    <header th:replace="~{/fragment/header.html}">
-    </header>
-    <nav th:replace="~{/fragment/nav.html}">
-    </nav>
+    <header th:replace="~{/fragment/header.html}"></header>
+    <nav th:replace="~{/fragment/nav.html}"></nav>
     <main>
         <aside th:replace="~{/fragment/aside.html}">
         </aside>
@@ -150,6 +148,7 @@
             <button id="update" type="button" class="btn btn-warning">변경</button>
             <button id="resign" type="button" class="btn btn-danger">탈퇴</button>
         </section>
+        <aside th:replace="~{/fragment/bside.html}"></aside>
         <input type="hidden" id="memberNo" th:value="${member.memberNo}">
     </main>
     <footer th:replace="~{/fragment/footer.html}">

@@ -21,10 +21,27 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>퍼칭 리뷰 작성페이지</title>
     <style>
-        .page{
-            width: 800px;
-            height: 800px;
-            background-color: #ea986b;
+        .rating {
+            font-size: 30px;
+        }
+        .star {
+            display: inline-block;
+            cursor: pointer;
+            color: gray;
+        }
+        .star.active {
+            color: gold;
+        }
+        .review-form {
+            margin-top: 20px;
+        }
+        .review-form textarea {
+            width: 100%;
+            height: 100px;
+            resize: vertical;
+        }
+        .review-form button {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -35,15 +52,55 @@
   </aside>
   <section>
 
-<script>
+      <div class="rating">
+          <span class="star" data-value="0.5">&#9733;</span>
+          <span class="star" data-value="1.0">&#9733;</span>
+          <span class="star" data-value="1.5">&#9733;</span>
+          <span class="star" data-value="2.0">&#9733;</span>
+          <span class="star" data-value="2.5">&#9733;</span>
+      </div>
+
+      <div class="review-form">
+          <textarea id="review-text" placeholder="리뷰 작성 내용"></textarea>
+          <button id="submit-review">리뷰 작성</button>
+      </div>
 
 
+      <script>
+          const stars = document.querySelectorAll('.star');
+          const reviewText = document.getElementById('review-text');
+          const submitButton = document.getElementById('submit-review');
 
-</script>
+          stars.forEach(star => {
+              star.addEventListener('click', () => {
+                  const value = parseFloat(star.getAttribute('data-value'));
 
+                  stars.forEach(star => {
+                      const starValue = parseFloat(star.getAttribute('data-value'));
+                      if (starValue <= value) {
+                          star.classList.add('active');
+                      } else {
+                          star.classList.remove('active');
+                      }
+                  });
+              });
+          });
 
+          submitButton.addEventListener('click', () => {
+              const rating = Array.from(stars).filter(star => star.classList.contains('active')).length;
+              const review = reviewText.value;
 
+              // 여기에서 서버로 별점과 리뷰 내용을 전송하는 AJAX 요청을 추가하세요
+              // 예를 들어, 서버 API '/api/v1/reviews'로 POST 요청을 보낼 수 있습니다
+
+              // 전송 후에는 원하는 동작을 수행하세요
+              alert('리뷰가 작성되었습니다!');
+              reviewText.value = '';
+              stars.forEach(star => star.classList.remove('active'));
+          });
+      </script>
   </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>

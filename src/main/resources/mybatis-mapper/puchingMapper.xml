@@ -29,7 +29,23 @@
                 #{puchingPromiseDate},#{puchingLatitude},#{puchingLongitude},#{puchingApplyDate},#{puchingDeadlineDate})
     </insert>
 
-    <update id="cancelPuching">
+    <update id="updatePuchingStatus">
         update PUCHING set PUCHING_STATUS=#{puchingStatus} WHERE MESSAGE_NO=#{messageNo}
     </update>
+
+    <select id="checkWritePuchingReviewBysenderNo" resultType="Integer">
+        SELECT count(*) FROM PUCHING p,PUCHING_REVIEW pr WHERE p.PUCHING_NO=pr.PUCHING_NO and p.MESSAGE_NO=#{messageNo}
+                                                           and pr.PUCHING_REVIEW_WRITER=#{senderNo}
+
+    </select>
+    <select id="checkPuchingStatus" resultType="String">
+        SELECT PUCHING_STATUS FROM PUCHING WHERE MESSAGE_NO=#{messageNo}
+    </select>
+
+    <select id="findPuchingNoBySenderNoAndReceiverNo" resultType="Integer">
+        SELECT PUCHING_NO FROM PUCHING WHERE MESSAGE_NO=
+           (SELECT MESSAGE_NO FROM MESSAGE WHERE ((MESSAGE_SENDER=#{senderNo} and MESSAGE_RECEIVER=#{receiverNo}) or (MESSAGE_SENDER=#{receiverNo} and MESSAGE_RECEIVER=#{senderNo})) and MESSAGE_CONTENT_TYPE='puching')
+            and PUCHING_STATUS='수락'
+    </select>
+
 </mapper>

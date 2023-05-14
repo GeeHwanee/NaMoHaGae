@@ -160,10 +160,10 @@
                     <span  th:classappend="${p.favoriteEnabled ? 'hide':''}" th:data-productNo="${p.productNo}" class="product-favorite">찜하기</span>
                     -->
                         <span th:classappend="${p.favoriteEnabled ? '' : 'hide'}" th:data-productNo="${p.productNo}" class="product-favorite">
-                            <i class="fa fa-heart" aria-hidden="true"></i> 찜하기 취소
+                           <i class="fa-solid fa-heart fa-xl"></i> 찜하기 취소
                         </span>
                         <span th:classappend="${p.favoriteEnabled ? 'hide' : ''}" th:data-productNo="${p.productNo}" class="product-favorite">
-                            <i class="fa fa-heart-o" aria-hidden="true"></i> 찜하기
+                            <i class="fa-regular fa-heart fa-xl"></i> 찜하기
                         </span>
                     </div>
                 </div>
@@ -184,6 +184,7 @@
             </li>
         </ul>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>

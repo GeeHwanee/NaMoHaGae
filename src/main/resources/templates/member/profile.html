@@ -105,13 +105,10 @@
 <body>
 <div th:text="${member}"></div>
 <div id="page">
-  <header th:replace="~{/fragment/header.html}">
-  </header>
-  <nav th:replace="~{/fragment/nav.html}">
-  </nav>
+  <header th:replace="~{/fragment/header.html}"></header>
+  <nav th:replace="~{/fragment/nav.html}"></nav>
   <main>
-    <aside th:replace="~{/fragment/aside.html}">
-    </aside>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
       <table class ="table table-hover">
         <colgroup>
@@ -150,6 +147,7 @@
       <button id="chat" type="button" class="btn btn-danger"><a th:href="@{/puching/chatroom(receiverEmail=${member.memberEmail})}">채팅하기</a></button>
       <button id="report" type="button" class="btn btn-primary"><a th:href="@{/member/report(memberNo=${member.memberNo})}" target="_blank" style="color: white;">신고하기</a></button>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
   </main>
   <footer th:replace="~{/fragment/footer.html}">
   </footer>

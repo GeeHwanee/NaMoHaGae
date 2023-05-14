@@ -22,6 +22,10 @@
 <title>nav</title>
 </head>
 <body>
-
+    <nav>
+        <a sec:authorize="hasRole('ROLE_USER')" href="/puching/main">퍼칭</a>
+        <a sec:authorize="hasRole('ROLE_USER')" href="/mall/main">뼈다귀 몰</a>
+        <a sec:authorize="hasRole('ROLE_USER')" href="/board/main">커뮤니티</a>
+    </nav>
 </body>
 </html>

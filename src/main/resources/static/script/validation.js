@@ -32,24 +32,6 @@ function password2Check() {
         return false;
     }
 }
-function addressCheck(gu) {
-    $('#address_msg').text("");
-    let a = null;
-    const value =$('#sample4_jibunAddress').val();
-    if(value=="")	{
-        $('#address_msg').text("필수입력입니다").attr("class","fail");
-        return false;
-    }
-    for (let i = 0; i < gu.length; i++) {
-        a=$('#memberGu').matches(gu.get(i).townGu);
-        if (a==false){
-            break;
-        $('#address_msg').text("서비스하지 않는 지역입니다").attr("class","fail");
-            }
-        }
-    return a;
-    }
-
 
 
 function irumCheck() {
@@ -70,11 +52,9 @@ $(document).ready(function() {
             const url = "/member/sendAudenticationCode?email=" + $("#memberEmail").val();
             // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
             // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
-            if (!email) {
-                throw new Error("Email is empty or null");
-            }
-            const result = await $.ajax({url:url, method:"patch"});
-            alert(result)
+            const result = await $.ajax({url:url, method:"patch"})
+            alert(result);
+            $("#memberEmail_msg").text(result).attr("class","fail");
             $('#checkCodeArea').removeClass('hidden');
         } catch(err) {
             $("#memberEmail_msg").text("이메일을 찾지 못했습니다").attr("class","fail");
@@ -97,10 +77,15 @@ $(document).ready(function() {
         if(emailCheck()==false)
             return false;
         try {
-            await $.ajax('/api/v1/member/checkEmail?email=' + $('#memberEmail').val());
+            const result = await $.ajax('/member/checkEmail?email=' + $('#memberEmail').val());
+            if (result==false){
             $("#memberEmail_msg").text("사용 가능한 이메일 입니다").attr("class","success");
-        } catch(err) {
+            }
+            else {
             $("#memberEmail_msg").text("사용중입니다").attr("class","fail");
+            }
+        } catch(err) {
+            console.log(err);
         }
     });
 
@@ -109,31 +94,29 @@ $(document).ready(function() {
         if(irumCheck()==false)
             return false;
         try {
-            await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#memberNickname').val());
-            $("#memberNickname_msg").text("사용 가능한 별명합니다").attr("class","success");
-        } catch(err) {
+          const result= await $.ajax('/member/checkNickname?nickname=' + $('#memberNickname').val());
+          if (result==false){
+          $("#memberNickname_msg").text("사용 가능한 별명입니다").attr("class","success");
+          }  else {
             $("#memberNickname_msg").text("사용중입니다").attr("class","fail");
+          }
+        } catch(err) {
+        console.log(err);
         }
     });
-    $
+
 
 
     $('#join').click(async function() {
-        try {
-            const result = await $.ajax("/api/v1//town/gulist");
-           const a = addressCheck(result);
-        }catch (err){
-            console.log(err)
-        }
-        alert("1111111")
+
         //  필수입력에 대한 널 체크, 패턴 체크 수행
         const result = emailCheck() && passwordCheck() && password2Check() && irumCheck() && emailCheck() && a;
         if(result==false)
             return false;
 
         try {
-            await $.ajax('/api/v1/member/checkEmail?email=' + $('#email').val());
-            await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#memberNickname').val());
+            await $.ajax('/member/checkEmail?email=' + $('#memberEmail').val());
+            await $.ajax('/member/checkNickname?nickname=' + $('#memberNickname').val());
             $('#join_form').submit();
         } catch(err) {
             console.log(err);

@@ -20,7 +20,6 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>신고</title>
-
     <script>
         $(document).ready(function (){
 
@@ -60,7 +59,8 @@
     </script>
 </head>
 <body>
-<header th:replace="~{/fragment/header.html}"> </header>
+<header th:replace="~{/fragment/header.html}"></header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
     <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
@@ -83,6 +83,7 @@
                 <button id="report" type="button" class="btn btn-primary btn-block">가입</button>
             </div>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}"></footer>
 </body>

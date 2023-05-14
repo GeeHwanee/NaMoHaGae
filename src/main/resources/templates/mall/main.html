@@ -27,12 +27,9 @@
 </style>
 <body>
 <header th:replace="~{/fragment/header.html}"> </header>
-
-</header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
-    <aside th:replace="~{/fragment/aside.html}">
-
-    </aside>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
         <h1>몰 메인</h1>
         <button type="button" class="btn btn-primary" onclick="location.href='http://localhost:8081/mall/product/list?categoryNo=1'">사료/간식</button>
@@ -41,6 +38,7 @@
         <button type="button" class="btn btn-primary" onclick="location.href='http://localhost:8081/mall/product/list?categoryNo=4'">기타</button>
         <article></article>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>

@@ -143,12 +143,13 @@ public class MemberService {
         return true;
     }
 
-    public void sendAuthenticationCode(String email) {
+    public Boolean sendAuthenticationCode(String email) {
         try {
                 authenticationCode  = RandomStringUtils.random(5, true, true).toUpperCase();
             sendMail("aaa@aa.com", email, "인증코드", authenticationCode);
+            return true;
         } catch(NoSuchElementException e) {
-            throw e;
+            return false;
         }
     }
     public Boolean checkAuthenticationCode(String code){

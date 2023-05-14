@@ -34,13 +34,10 @@
 </script>
 </head>
 <body>
-<header th:replace="~{/fragment/header.html}">
-</header>
-<nav th:replace="~{/fragment/nav.html}">
-</nav>
+<header th:replace="~{/fragment/header.html}"></header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
-    <aside th:replace="~{/fragment/aside.html}">
-    </aside>
+    <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
         <div class="container mt-3">
             <h2>주문 상품</h2>
@@ -81,6 +78,7 @@
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
         </div>
     </section>
+    <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>
