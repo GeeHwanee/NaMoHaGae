@@ -27,4 +27,8 @@ public interface QnaDao {
 
     public QnaDto.Read findByQnaNo(Integer qnaNo);
 
+    public List<QnaDto.FindByMemberNo> findByMemberNo(Integer startRowNum, Integer endRowNum,Integer memberNo);
+
+    public Integer countMe(Integer memberNo);
+
 }
