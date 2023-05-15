@@ -12,7 +12,7 @@
         values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, 0,#{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint})
     </insert>
 
-    <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeDto$List">
+    <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$List">
         select * from
             (
                 select rownum as rnum, a.* from
@@ -31,7 +31,7 @@
         select count(*) from KNOWLEDGE_QUESTION
     </select>
 
-    <select id="findByKnowledgeQuestionNo" resultType="kr.kro.namohagae.board.dto.KnowledgeDto$Read">
+    <select id="findByKnowledgeQuestionNo" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$Read">
         select KNOWLEDGE_QUESTION_NO, KNOWLEDGE_QUESTION.MEMBER_NO, m.MEMBER_NICKNAME, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT
         from KNOWLEDGE_QUESTION join MEMBER M on M.MEMBER_NO = KNOWLEDGE_QUESTION.MEMBER_NO
         where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo}
