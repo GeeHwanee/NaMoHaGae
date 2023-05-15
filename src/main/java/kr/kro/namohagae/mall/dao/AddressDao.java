@@ -15,4 +15,11 @@ public interface AddressDao {
     public Boolean delete(Integer addressNo);
 
     public Address findByMemberNoAndAddressNo(Integer memberNo, Integer addressNo);
+
+    public List<Address> findByMemberNo(Integer memberNo);
+
+    public Integer resetDefault(Integer memberNo);
+
+    public Integer setDefault(Integer addressNo);
+
 }
