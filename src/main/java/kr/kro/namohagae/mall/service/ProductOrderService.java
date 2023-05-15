@@ -1,6 +1,5 @@
 package kr.kro.namohagae.mall.service;
 
-import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
@@ -10,8 +9,6 @@ import kr.kro.namohagae.mall.entity.CartDetail;
 import kr.kro.namohagae.mall.entity.ProductOrder;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,12 +118,7 @@ public class ProductOrderService {
 
     // 주문하기(상품페이지)
     @Transactional
-    public Integer placeOrderFromProduct(Integer memberNo, Integer productNo, Integer addressNo) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetails userDetails = (MyUserDetails) auth.getPrincipal();
-        memberNo = userDetails.getMemberNo();
-
-
+    public Integer placeOrderFromProduct(Integer productNo, Integer memberNo, Integer addressNo) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
         if (address == null) {
             throw new RuntimeException("주소를 찾을 수 없습니다.");
@@ -167,15 +159,15 @@ public class ProductOrderService {
 
 
 
-    // 아래부터 수정해야함 (dto 잘못만든듯)
+    // 아래부터 수정해야함 (dto 수정했고, 매퍼 수정)
 
 
-    public List<ProductOrderDto.Read> orderList(Integer memberNo) {
+    public List<ProductOrderDto.OrderResult> orderList(Integer memberNo) {
         return productOrderDao.list(memberNo);
     }
 
 
-    public ProductOrderDto.Read findById(Integer orderNo) {
+    public ProductOrderDto.OrderResult findById(Integer orderNo) {
         return productOrderDao.read(orderNo);
     }
 
