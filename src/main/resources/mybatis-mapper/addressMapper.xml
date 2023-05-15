@@ -5,16 +5,31 @@
 
 <mapper namespace="kr.kro.namohagae.mall.dao.AddressDao">
     <insert id="save">
-        insert into address(address_no,member_no,address_name,address_postcode,address_address,address_address_detail)
-        values (address_seq_address_no.nextval,#{memberNo},#{addressName},#{addressPostcode},#{addressAddress},#{addressAddressDetail})
+        insert into address(address_no,member_no,address_name,address_postcode,address_address,address_address_detail,default_address_enabled)
+        values (address_seq_address_no.nextval,#{memberNo},#{addressName},#{addressPostcode},#{addressAddress},#{addressAddressDetail},#{defaultAddressEnabled})
     </insert>
+
     <select id="findAll" resultType="kr.kro.namohagae.mall.dto.AddressDto$Read">
         select address_no,address_name,address_postcode,address_address,address_address_detail from address where member_no=#{memberNo}
     </select>
+
     <delete id="delete">
         delete from address where address_no=#{addressNo}
     </delete>
+
     <select id="findByMemberNoAndAddressNo" resultType="Address">
         select * from address where member_no=#{memberNo} and address_no=#{addressNo} and rownum=1
     </select>
+
+    <select id="findByMemberNo" resultType="address">
+        select * from address where member_no=#{memberNo} order by default_address_enabled desc
+    </select>
+
+    <update id="resetDefault">
+        update address set default_address_enabled=0 where memberNo=#{memberNo}
+    </update>
+
+    <update id="setDefault">
+        update address set default_address_enabled=1 where address_no=#{addressNo} and rownum=1
+    </update>
 </mapper>
