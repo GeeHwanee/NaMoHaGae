@@ -223,6 +223,7 @@ public class GlobalController {
     @GetMapping("/member/puching/follow")
     public void follow(){}
 
+
     // [회원 파트]------[쇼핑몰]------------------------------------------------------
     @GetMapping("/member/mall/favorite")
     public void favorite(){}
@@ -247,6 +248,10 @@ public class GlobalController {
         return "redirect:/member/mall/address";
     }
 
+    @GetMapping("/member/mall/qna")
+    public void qnaList(){
+
+    }
 
 
 
