@@ -21,10 +21,10 @@
 	<!------------------------------------------------------------------------------------------------------------------------------>
 	<title>bside</title>
 	<style>
-		.quickMenu {position:absolute;width:100%;top:50%;right:10px;background:#fff;}
-		.quickMenu ul {width:100%;border:1px solid #ddd;}
-		.quickMenu ul li {float:right;width:100%;border-bottom:1px solid #ddd;text-align:center;display:inline-block;*display:inline;}
-		.quickMenu ul li a {position:relative;float:right;width:100%;height:30px;line-height:30px;text-align:center;color:#999;font-size:9.5pt; text-decoration: none;}
+		.quickMenu {position:absolute;width:100%;top:25%;background:#fff;text-align: center}
+		.quickMenu ul {width:100%;}
+		.quickMenu ul li {width:100%;text-align:center;}
+		.quickMenu ul li a {width:100%;border-bottom:1px solid #c9dc92;padding-bottom:3px;height:30px;line-height:30px;text-align:center;color:#999;font-size:9.5pt; text-decoration: none;}
 		.quickMenu ul li a:hover {color:#000;}
 		.quickMenu ul li:last-child {border-bottom:0;}
 
@@ -56,8 +56,12 @@
 				// 메시지를 받은 경우 실행되는 코드
 				const data = event.data;
 				const notification = JSON.parse(data).notification;
-				let $li = `<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`;
+				let $li = $(`<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`);
+				$li.css('background-color', '#c9dc92');
 				$('#notification').prepend($li);
+				setTimeout(function(){
+					$li.css('background-color', '');
+				},2000);
 			});
 
 			socket.addEventListener('close', function (event) {
@@ -103,6 +107,7 @@
 <body>
 <aside id="bside">
 	<div class="quickMenu">
+		<h4 style="font-family: 'Dongle', sans-serif; font-size: 2em; border-bottom: 1px solid #c9dc92; margin-bottom: 0; display: inline-block">읽지 않은 알림</h4>
 		<ul id="notification"></ul>
 	</div>
 </aside>

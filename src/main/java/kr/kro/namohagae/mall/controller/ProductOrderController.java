@@ -36,9 +36,9 @@ public class ProductOrderController {
     // 장바구니 -> 주문 확인 이동
     @PostMapping("/mall/order")
     public String orderCart(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
-                             @RequestParam(value = "checkedProductNos") Integer[] checkedProductNos) {
+                             @RequestParam(value = "checkedProductNos") List<Integer> checkedProductNos) {
         Integer memberNo = myUserDetails.getMemberNo();
-        ProductOrderDto.Read order = service.orderReadyFromCart(memberNo, Arrays.asList(checkedProductNos));
+        ProductOrderDto.Read order = service.orderReadyFromCart(memberNo, checkedProductNos);
 
         session.setAttribute("checkedProductNos", checkedProductNos);
         session.setAttribute("orderItems", order.getOrderItems());
@@ -101,13 +101,13 @@ public class ProductOrderController {
     // 장바구니 -> 주문 확인
     @GetMapping("/mall/order/ready")
     public ModelAndView orderCartList(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Integer[] checkedProductNos = (Integer[]) session.getAttribute("checkedProductNos");
+        List<Integer> checkedProductNos = (List<Integer>) session.getAttribute("checkedProductNos");
 
         if (checkedProductNos == null) {
             return new ModelAndView("redirect:/mall/cart/list");
         }
 
-        ProductOrderDto.Read order = service.orderReadyFromCart(myUserDetails.getMemberNo(), Arrays.asList(checkedProductNos));
+        ProductOrderDto.Read order = service.orderReadyFromCart(myUserDetails.getMemberNo(), checkedProductNos);
         List<AddressDto.Read> addresses = service.findAddress(myUserDetails.getMemberNo());
 
         Map<String, Object> map = new HashMap<>();
@@ -211,7 +211,7 @@ public class ProductOrderController {
     @PostMapping("/order/check")
     public String placeOrderFromCart(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
                              @RequestParam Integer addressNo, RedirectAttributes ra) {
-        Integer[] checkedProductNos = (Integer[]) session.getAttribute("checkedProductNos");
+        List<Integer> checkedProductNos = (List<Integer>) session.getAttribute("checkedProductNos");
 
         // 선택한 상품들 조회
         List<CartDetail> cartDetails = cartDetailDao.findByMemberNoAndProductNos(myUserDetails.getMemberNo(), checkedProductNos);

@@ -32,7 +32,7 @@
 			let sideBar = location.href.slice(22);
 			console.log(sideBar);
 
-			const $title = $('#title');
+			const $title = $('#aside_title');
 			const $side_bar = $('#side_bar');
 			$title.text("");
 			$side_bar.empty();
@@ -43,32 +43,28 @@
 				$side_bar.append('<li><a href="/mall/product/list?categoryNo=3">산책용품</a></li>');
 				$side_bar.append('<li><a href="/mall/product/list?categoryNo=4">기타</a></li>');
 			}else if(sideBar.startsWith(member)){
-				$title.append('<li><a href="/member/main">내 정보 메인</a></li>');
-				$side_bar.append('<li><h2>내 정보</h2></li>');
+				$title.append('<li><a href="/member/main">내 정보</a></li>');
 				$side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
-				$side_bar.append('<li><h2>퍼칭</h2></li>');
 				$side_bar.append('<li><a href="/member/review">내게 쓴 리뷰</a></li>');
 				$side_bar.append('<li><a href="/member/follow">팔로우 목록</a></li>');
-				$side_bar.append('<li><h2>쇼핑몰</h2></li>');
 				$side_bar.append('<li><a href="/member/mall/order">결제 내역</a></li>');
 				$side_bar.append('<li><a href="/member/mall/address">배송지</a></li>');
 				$side_bar.append('<li><a href="/member/mall/favorite">찜 목록</a></li>');
-				$side_bar.append('<li><h2>게시판</h2></li>');
 				$side_bar.append('<li><a href="/member/board/post">내가 작성한 게시물</a></li>');
 				$side_bar.append('<li><a href="/member/board/comment">내가 작성한 댓글</a></li>');
 				$side_bar.append('<li><a href="/member/board/question">내가 작성한 질문</a></li>');
 				$side_bar.append('<li><a href="/member/board/answer">내가 작성한 답변</a></li>');
 			}else if(sideBar.startsWith(puching)){
-				$title.append('<li><a href="/puching/main">퍼칭 메인</a></li>');
+				$title.append('<li><a href="/puching/main">퍼칭</a></li>');
 				$side_bar.append('<li><a href="/puching/chatroom">채팅방</a></li>');
 			}else if(sideBar.startsWith(board)){
-				$title.append('<li><a href="/board/main">게시판 메인</a></li>');
+				$title.append('<li><a href="/board/main">커뮤니티</a></li>');
 				$side_bar.append('<li><a href="/board/notice/list">공지사항</a></li>');
 				$side_bar.append('<li><a href="/board/free/list">자유 게시판</a></li>');
 				$side_bar.append('<li><a href="/board/town/list">동네 게시판</a></li>');
 				$side_bar.append('<li><a href="/board/knowledge/list">지식인</a></li>');
 			}else if(sideBar.startsWith(admin)){
-				$title.append('<li><a href="/admin/main">관리자 메인</a></li>');
+				$title.append('<li><a href="/admin/main">관리자</a></li>');
 				$side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
 				$side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
 				$side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
@@ -87,9 +83,7 @@
 </head>
 <body>
 <aside id="aside">
-	<ul>
-		<h1 id="title">
-		</h1>
+	<ul id="aside_title">
 	</ul>
 	<ul id="side_bar" class="side_bar">
 	</ul>

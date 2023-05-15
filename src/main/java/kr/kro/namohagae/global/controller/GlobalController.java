@@ -5,13 +5,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.BoardTownDto;
+import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.BoardList;
-import kr.kro.namohagae.board.service.BoardNoticeService;
-import kr.kro.namohagae.board.service.BoardService;
-import kr.kro.namohagae.board.service.BoardTownService;
-import kr.kro.namohagae.board.service.CommentService;
+import kr.kro.namohagae.board.service.*;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.websocket.WebSocketService;
@@ -29,6 +27,7 @@ import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.dto.ReviewDto;
 import kr.kro.namohagae.puchingtest.service.ChatService;
 import kr.kro.namohagae.puchingtest.service.ReviewService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -49,6 +48,7 @@ import java.util.List;
 
 */
 
+@RequiredArgsConstructor
 @Controller
 public class GlobalController {
     @Autowired
@@ -68,7 +68,7 @@ public class GlobalController {
     @Autowired
     private BoardNoticeService boardNoticeService;
 
-
+    private final KnowledgeService knowledgeService;
 
     @Autowired
     private AddressService addressService;
@@ -142,9 +142,20 @@ public class GlobalController {
             model.addAttribute("dto",dto);
         return "member/addJoin";
     }
+
+    @PostMapping("/member/kakaoJoin")
+    public String kakao(String kakaoEmail,String kakaoName,Model model){
+        model.addAttribute("dto",memberService.kakaoJoin(kakaoEmail,kakaoName));
+        System.out.println("여기인가?");
+        return "member/addJoin";
+    }
+
     @PostMapping("/member/addJoin")
     public String addJoin(MemberDto.Join dto){
+        System.out.println("아니면 여기?");
         memberService.join(dto);
+        System.out.println(dto.getMemberEmail());
+        System.out.println("");
         return "redirect:/";
     }
 
@@ -216,6 +227,7 @@ public class GlobalController {
     @GetMapping("/member/puching/follow")
     public void follow(){}
 
+
     // [회원 파트]------[쇼핑몰]------------------------------------------------------
     @GetMapping("/member/mall/favorite")
     public void favorite(){}
@@ -240,6 +252,10 @@ public class GlobalController {
         return "redirect:/member/mall/address";
     }
 
+    @GetMapping("/member/mall/qna")
+    public void qnaList(){
+
+    }
 
 
 
@@ -349,8 +365,26 @@ public class GlobalController {
     }
 
     @GetMapping("/board/knowledge/list")
-    public String knowledgeList(){
+    public String knowledgeList(@RequestParam(defaultValue="1")Integer pageNo, Model model){
+       model.addAttribute("list",knowledgeService.questionFindAll(pageNo));
         return "/board/knowledge/list";
+    }
+
+    @GetMapping("/board/knowledge/write")
+    public String knowledgeWrite(){
+        return "/board/knowledge/write";
+    }
+
+    @PostMapping("/board/knowledge/write")
+    public String knowledgeWrite(KnowledgeQuestionDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
+       Integer result = knowledgeService.questionSave(dto, myUserDetails.getMemberNo());
+        return "redirect:/board/knowledge/read?knowledgeQuestionNo="+result;
+    }
+
+    @GetMapping("/board/knowledge/read")
+    public String knowledgeRead(Integer knowledgeQuestionNo, Model model){
+        model.addAttribute("question", knowledgeService.questionRead(knowledgeQuestionNo));
+        return "/board/knowledge/read";
     }
 
     // [쇼핑몰 파트]--------------------------------------------------------------------
@@ -448,7 +482,6 @@ public class GlobalController {
        }else{
            return "redirect:/admin/main";
        }
-
 
     }
 
