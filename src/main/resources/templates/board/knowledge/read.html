@@ -21,6 +21,44 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
 <title>지식인 게시판 읽기 페이지</title>
 </head>
+<script>
+
+    function printKnowledgeAnswer(){
+        const $questionNo = $('#question_no').text();
+
+        $.ajax({
+            url:'/api/v1/knowledge/answer/list?questionNo='+$questionNo,
+            type:'get',
+            success(res){
+                console.log(res);
+                alert(res);
+            },
+            error(error){
+                console.log(error);
+            }
+        })
+    }
+
+    $(document).ready(function (){
+
+
+        $('#answer_write').click(function(){
+            const formData = $('#answer_form').serialize();
+            $.ajax({
+                url:'/api/v1/knowledge/answer/write',
+                type:'post',
+                data: formData,
+                success(res){
+                    console.log(res);
+                    alert(res);
+                },
+                error(error){
+                    console.log(error);
+                }
+            })
+        })
+    })
+</script>
 <body>
 <header th:replace="~{/fragment/header.html}"> </header>
 <nav th:replace="~{/fragment/nav.html}"></nav>
@@ -31,9 +69,9 @@
         <a href="/board/knowledge/list">목록으로</a>
 
         <article>
-            <div>
+            <div id="qusetion">
                 <ul>
-                    <li th:text="${question.knowledgeQuestionNo}"></li>
+                    <li id="question_no" th:text="${question.knowledgeQuestionNo}"></li>
                     <li th:text="${question.memberNo}"></li>
                     <li th:text="${question.memberNickname}"></li>
                     <li th:text="${question.knowledgeQuestionReadCount}"></li>
@@ -43,8 +81,17 @@
                     <li th:text="${question.knowledgeQuestionPoint}"></li>
                 </ul>
             </div>
-
         </article>
+        <article>
+            <div id="answer">
+
+            </div>
+        </article>
+        <form action="/api/v1/knowledge/answer/write" method="post" id="answer_form">
+            <input type="hidden" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
+            <textarea name="knowledgeAnswerContent"></textarea>
+            <button type="button" id="answer_write">답변 작성</button>
+        </form>
     </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
