@@ -11,15 +11,24 @@ import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -166,6 +175,11 @@ public class MemberService {
     public Boolean checkNickname(String nickname){
         return memberDao.existsByNickname(nickname);
     }
+
+    public MemberDto.Join kakaoJoin(String kakaoEmail,String kakaoName){
+        return MemberDto.Join.builder().memberPassword(kakaoEmail).memberEmail(kakaoEmail).memberNickname(kakaoName).build();
+    }
+
 
 }
 
