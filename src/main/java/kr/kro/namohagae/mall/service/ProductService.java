@@ -162,8 +162,6 @@ public class ProductService {
 
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-        //dto.setProductReviews(productReviewDao.findByProductNo(productNo)); // 리뷰+페이징 같이 ajax로 뿌리기 수정중
-        //dto.setQnas(qnaDao.findByProductNo(productNo));
         return dto;
     }
 
