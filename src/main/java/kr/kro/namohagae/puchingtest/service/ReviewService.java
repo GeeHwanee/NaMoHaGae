@@ -47,7 +47,7 @@ public class ReviewService {
         }
         return new ReviewDto.PaginationProfie(pageno, prev, start, end, next, review);
     }
-    public ReviewDto.PaginationImfo findContentByWriterNo(Integer pageno,Integer memberNo) {
+    public ReviewDto.PaginationInfo findContentByWriterNo(Integer pageno,Integer memberNo) {
         Integer countOfProduct = reviewDao.countWriter(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
@@ -57,7 +57,7 @@ public class ReviewService {
 
         Integer startRownum = (pageno-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<ReviewDto.Imformation> review = reviewDao.findContentByWriterNo(startRownum, endRownum,memberNo);
+        List<ReviewDto.Information> review = reviewDao.findContentByWriterNo(startRownum, endRownum,memberNo);
         // 리스트 log로 찍어
         Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
@@ -67,7 +67,7 @@ public class ReviewService {
             end = countOfPage;
             next = 0;
         }
-        return new ReviewDto.PaginationImfo(pageno, prev, start, end, next, review);
+        return new ReviewDto.PaginationInfo(pageno, prev, start, end, next, review);
     }
 
     public ReviewDto.writeview findWriteViewInfo(String userEmail,Integer receiverNo,Integer puchingNo){
@@ -75,7 +75,7 @@ public class ReviewService {
         ReviewDto.writeview dto = reviewDao.reviewWriteInfo(userNo,receiverNo,puchingNo);
 
         return dto;
-    };
+    }
 
 
     public void saveReview(String username,ReviewDto.write dto){
@@ -91,5 +91,5 @@ public class ReviewService {
             reviewDao.updateMessageContentType(dto.getPuchingNo());
         }
 
-    };
+    }
 }
