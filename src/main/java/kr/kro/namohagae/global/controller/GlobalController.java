@@ -5,13 +5,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.BoardTownDto;
+import kr.kro.namohagae.board.dto.KnowledgeDto;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.BoardList;
-import kr.kro.namohagae.board.service.BoardNoticeService;
-import kr.kro.namohagae.board.service.BoardService;
-import kr.kro.namohagae.board.service.BoardTownService;
-import kr.kro.namohagae.board.service.CommentService;
+import kr.kro.namohagae.board.service.*;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.websocket.WebSocketService;
@@ -27,6 +25,7 @@ import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
 import kr.kro.namohagae.puchingtest.service.ChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -47,6 +46,7 @@ import java.util.List;
 
 */
 
+@RequiredArgsConstructor
 @Controller
 public class GlobalController {
     @Autowired
@@ -64,7 +64,7 @@ public class GlobalController {
     @Autowired
     private BoardNoticeService boardNoticeService;
 
-
+    private final KnowledgeService knowledgeService;
 
     @Autowired
     private AddressService addressService;
@@ -338,8 +338,26 @@ public class GlobalController {
     }
 
     @GetMapping("/board/knowledge/list")
-    public String knowledgeList(){
+    public String knowledgeList(@RequestParam(defaultValue="1")Integer pageNo, Model model){
+       model.addAttribute("list",knowledgeService.findAll(pageNo));
         return "/board/knowledge/list";
+    }
+
+    @GetMapping("/board/knowledge/write")
+    public String knowledgeWrite(){
+        return "/board/knowledge/write";
+    }
+
+    @PostMapping("/board/knowledge/write")
+    public String knowledgeWrite(KnowledgeDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
+       Integer result = knowledgeService.save(dto, myUserDetails.getMemberNo());
+        return "redirect:/board/knowledge/read?knowledgeQuestionNo="+result;
+    }
+
+    @GetMapping("/board/knowledge/read")
+    public String knowledgeRead(Integer knowledgeQuestionNo, Model model){
+        model.addAttribute("question", knowledgeService.read(knowledgeQuestionNo));
+        return "/board/knowledge/read";
     }
 
     // [쇼핑몰 파트]--------------------------------------------------------------------
@@ -437,7 +455,6 @@ public class GlobalController {
        }else{
            return "redirect:/admin/main";
        }
-
 
     }
 
