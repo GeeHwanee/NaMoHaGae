@@ -10,12 +10,19 @@
         values (#{productOrderNo},#{memberNo},#{addressNo},#{productOrderTotalPrice},#{productOrderDate})
     </insert>
 
-    <resultMap id="readMap" type="kr.kro.namohagae.mall.dto.ProductOrderDto$Read">
+    <resultMap id="readMap" type="kr.kro.namohagae.mall.dto.ProductOrderDto$OrderResult">
         <result property="product_order_no" column="productOrderNo" />
-        <result property="member_no" column="memberNo" />
-        <result property="address_no" column="addressNo" />
         <result property="product_order_total_price" column="productOrderTotalPrice" />
         <result property="product_order_date" column="productOrderDate" />
+        <result property="member_no" column="memberNo" />
+        <result property="product_image_filename" column="productImage" />
+        <result property="product_name" column="productName" />
+        <result property="address_no" column="addressNo" />
+        <result property="address_postcode" column="addressPostcode" />
+        <result property="address_address" column="addressAddress" />
+        <result property="address_address_detail" column="addressAddressDetail" />
+
+        <!-- 이미지, 상품명 주문상세리스트에서 같이 굴려야함(dto랑 컬렉션, 매퍼 수정) -->
         <collection property="orderDetailList" javaType="list" ofType="productOrderDetail">
             <result property="product_order_detail_no" column="productOrderDetailNo" />
             <result property="product_order_detail_count" column="productOrderDetailCount" />

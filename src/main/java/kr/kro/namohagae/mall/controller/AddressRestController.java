@@ -1,6 +1,7 @@
 package kr.kro.namohagae.mall.controller;
 
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.entity.Address;
 import kr.kro.namohagae.mall.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,6 +26,10 @@ public class AddressRestController {
     @PostMapping("/address/delete")
     public ResponseEntity<Boolean> delete(Integer addressNo){
         return ResponseEntity.ok(service.delete(addressNo));
+    }
+
+    public ResponseEntity<List<Address>> setDefault(Integer addressNo, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        return ResponseEntity.ok(service.setDefault(addressNo, myUserDetails.getMemberNo()));
     }
 
 }
