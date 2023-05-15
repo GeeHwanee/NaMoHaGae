@@ -21,6 +21,33 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>퍼칭 리뷰 작성페이지</title>
     <style>
+        .review-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .profile{
+            width: 200px;
+            height: 200px;
+            margin: 50px;
+            padding: 0;
+
+        }
+        .profile img{
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            border-radius: 200px;
+            border: 2px solid #ea986b;
+        }
+        .profile-container{
+            width: 620px;
+            height: 320px;
+            display: flex;
+        }
+
         .rating {
             font-size: 30px;
         }
@@ -30,18 +57,21 @@
             color: gray;
         }
         .star.active {
-            color: gold;
+            color: #ea986b;
         }
         .review-form {
             margin-top: 20px;
+
         }
         .review-form textarea {
             width: 100%;
             height: 100px;
             resize: vertical;
+            border-radius: 3%;
         }
         .review-form button {
             margin-top: 10px;
+
         }
     </style>
 </head>
@@ -51,19 +81,38 @@
   <aside th:replace="~{/fragment/aside.html}">
   </aside>
   <section>
+<div class="review-container" th:each="l:${list}">
 
+    <div class="profile-container">
+        <div class="profile">
+            <img th:src="${l.myImage}"  alt="my-profile-image">
+            <span class="profile-name" th:text="${l.myNickName}"></span>
+        </div>
+        <div class="profile">
+            <img th:src="${l.receiverImage}" alt="receiver-profile-image">
+            <span class="profile-name" th:text="${l.receiverNickName}"></span>
+        </div>
+    </div>
+    <input type="hidden" th:data-lat="${l.latitude}" th:data-lng="${l.longitude}">
+    <span>  퍼칭장소</span>
+    <div id="map"></div>
+    <div class="promise-time">
+        <h2>약속시간</h2>
+        <span class="time" th:text="${l.promiseDate}" th:data-time="${l.promiseDate}"></span>
+    </div>
       <div class="rating">
-          <span class="star" data-value="0.5">&#9733;</span>
-          <span class="star" data-value="1.0">&#9733;</span>
-          <span class="star" data-value="1.5">&#9733;</span>
-          <span class="star" data-value="2.0">&#9733;</span>
-          <span class="star" data-value="2.5">&#9733;</span>
+          <span class="star" data-value="-4">&#9733;</span>
+          <span class="star" data-value="-2">&#9733;</span>
+          <span class="star" data-value="0">&#9733;</span>
+          <span class="star" data-value="2">&#9733;</span>
+          <span class="star" data-value="4">&#9733;</span>
       </div>
 
       <div class="review-form">
-          <textarea id="review-text" placeholder="리뷰 작성 내용"></textarea>
+          <textarea id="review-text" placeholder="리뷰 작성 내용" maxlength="150"></textarea>
           <button id="submit-review">리뷰 작성</button>
       </div>
+</div>
 
 
       <script>
@@ -90,14 +139,65 @@
               const rating = Array.from(stars).filter(star => star.classList.contains('active')).length;
               const review = reviewText.value;
 
-              // 여기에서 서버로 별점과 리뷰 내용을 전송하는 AJAX 요청을 추가하세요
-              // 예를 들어, 서버 API '/api/v1/reviews'로 POST 요청을 보낼 수 있습니다
+                const promiseDate=$('.time').data('time');
+                const urlParam=new URLSearchParams(window.location.search);
+                const receiverNo=urlParam.get('receiverNo')
+                const puchingNo=urlParam.get('puchingNo')
 
-              // 전송 후에는 원하는 동작을 수행하세요
-              alert('리뷰가 작성되었습니다!');
-              reviewText.value = '';
-              stars.forEach(star => star.classList.remove('active'));
+
+              //현재시간이랑 퍼칭약속시간 비교해서 작성 못하게 하는 if문
+              if(!rating){
+                  alert('별점을 눌러주세요!')
+                  return;
+              }
+
+              // if(compareTime(promiseDate)==true){
+              //     alert('아직 약속시간이 지나지 않았습니다.')
+              //     return;
+              // }
+
+                const param={
+                    receiverNo:receiverNo,
+                    puchingNo:puchingNo,
+                    content:review,
+                    starPoint:rating
+                }
+
+
+                $.ajax({
+                    url:'/puching/reviewwrite',
+                    type:'POST',
+                    data:param
+                }).done(function(){
+                    alert('리뷰가 작성되었습니다!');
+                    location.href='/puching/chatroom';
+                    // reviewText.value = '';
+                    // stars.forEach(star => star.classList.remove('active'));
+                }).fail(function(){
+                    alert('리뷰작성을 실패 했습니다.')
+                });
+              //퍼칭 작성완료하고 퍼칭리뷰를 인서트 및 상대 receiver등급에 +등급해주는 로직 ajax
+
           });
+      </script>
+      <!--시간 비교하는 함수-->
+      <script>
+          function compareTime(targetTime) {
+              // 현재 시간 구하기
+              var currentTime = new Date();
+
+              // 주어진 시간을 Date 객체로 변환
+              var targetDateTime = new Date(targetTime);
+
+              // 주어진 시간이 현재 시간보다 이후인지 확인
+              if (targetDateTime > currentTime) {
+                  console.log("주어진 시간은 현재 시간보다 이후입니다.");
+                  return true;
+              } else {
+                  console.log("주어진 시간은 현재 시간보다 이전입니다.");
+                  return false;
+              }
+          }
       </script>
   </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>
