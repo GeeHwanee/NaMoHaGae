@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class KnowledgeDto {
+public class KnowledgeQuestionDto {
     @Data
     public static class Write{
         private String knowledgeQuestionTitle;
@@ -50,7 +50,7 @@ public class KnowledgeDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private java.util.List<KnowledgeDto.List> questions;
+        private java.util.List<KnowledgeQuestionDto.List> questions;
     }
 
 }
