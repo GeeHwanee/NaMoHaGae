@@ -61,9 +61,9 @@
         <hr>
         <h2>배송지</h2>
         <div th:each="a:${map.addresses}" class="container mt-3">
-            <div th:class="${a.addressNo==true} ? 'card bg-secondary text-white' : 'card'">
+            <div th:class="${a.defaultAddressEnabled==true} ? 'card bg-secondary text-white' : 'card'">
                 <div class="card-body">
-                    <input type="radio" class="form-check-input addressNo" th:checked="${a.addressNo}" th:value="${a.addressNo}" name="address">
+                    <input type="radio" class="form-check-input addressNo" th:checked="${a.defaultAddressEnabled}" th:value="${a.addressNo}" name="address">
                     (<span th:text="${a.addressName}"></span>)
                     <span th:text="${a.addressAddress}"></span>
                     <span th:text="${a.addressAddressDetail}"></span>
