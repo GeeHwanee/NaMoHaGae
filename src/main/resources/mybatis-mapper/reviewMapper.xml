@@ -10,27 +10,30 @@
                 select rownum as rnum, r.* from
                     (
                         select
-                            (select member_nickname from member where member_no= r.puching_review_writer) reviewWriter,puching_review_content as reviewContent
-                        from PUCHING_REVIEW r where #{memberNo}=member_no
+                            (select member_nickname from member where member_no= review.puching_review_writer) reviewWriter,puching_review_content as reviewContent
+                        from PUCHING_REVIEW review where puching_review_receiver=#{memberNo}
                     ) r
                 where rownum&lt;=#{endRownum}
             )
         where rnum&gt;=#{startRownum}
     </select>
-    <select id="findContentByWriterNo" resultType="kr.kro.namohagae.puchingtest.dto.ReviewDto$profile">
+    <select id="findContentByWriterNo" resultType="kr.kro.namohagae.puchingtest.dto.ReviewDto$Imformation">
         select * from
             (
                 select rownum as rnum, r.* from
                     (
                         select
-                            (select member_nickname from member where member_no= r.puching_review_recei) reviewWriter,puching_review_content as reviewContent
-                        from PUCHING_REVIEW r where #{memberNo}=member_no
+                            puching_review_receiver,(select member_nickname from member where member_no= review.puching_review_receiver) reviewReceiver,puching_review_content as reviewContent
+                        from PUCHING_REVIEW review where puching_review_writer = #{memberNo}
                     ) r
                 where rownum&lt;=#{endRownum}
             )
         where rnum&gt;=#{startRownum}
     </select>
-    <select id="count" resultType="int">
-        select count(puching_review_no) from PUCHING_REVIEW where puching_review_receiver = #{receiverNo}
+    <select id="countReceiver" resultType="int">
+        select count(puching_review_no) from PUCHING_REVIEW where puching_review_receiver = #{memberNo}
+    </select>
+    <select id="countWriter" resultType="int">
+        select count(puching_review_no) from PUCHING_REVIEW where puching_review_writer = #{memberNo}
     </select>
 </mapper>
