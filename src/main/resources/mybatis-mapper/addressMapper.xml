@@ -21,7 +21,7 @@
         select * from address where member_no=#{memberNo} and address_no=#{addressNo} and rownum=1
     </select>
 
-    <select id="findByMemberNo" resultType="address">
+    <select id="findByMemberNo" resultType="Address">
         select * from address where member_no=#{memberNo} order by default_address_enabled desc
     </select>
 
