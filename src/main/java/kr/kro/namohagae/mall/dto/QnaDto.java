@@ -69,4 +69,24 @@ public class QnaDto {
            return Qna.builder().qnaWriter(qnaWriter).qnaAnswerContent(qnaAnswerContent).qnaNo(qnaNo).qnaAnswerWriteDate(LocalDateTime.now()).build();
         }
     }
+    @Data
+    public static class FindByMemberNo{
+        private String productImage;
+        private Integer qnaNo;
+        private String productName;
+        private Integer checkAnswer;
+        private LocalDateTime qnaWriteDay;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class PaginationMyQna {
+        private Integer pageNo;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private List<QnaDto.FindByMemberNo> qna;
+
+
+    }
 }
