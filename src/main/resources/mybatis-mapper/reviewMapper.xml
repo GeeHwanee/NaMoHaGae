@@ -17,7 +17,7 @@
             )
         where rnum&gt;=#{startRownum}
     </select>
-    <select id="findContentByWriterNo" resultType="kr.kro.namohagae.puchingtest.dto.ReviewDto$Imformation">
+    <select id="findContentByWriterNo" resultType="kr.kro.namohagae.puchingtest.dto.ReviewDto$Information">
         select * from
             (
                 select rownum as rnum, r.* from
