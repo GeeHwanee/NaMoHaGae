@@ -28,7 +28,23 @@
     <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
         <h1>지식인 게시판 읽기 페이지</h1>
-        <article></article>
+        <a href="/board/knowledge/list">목록으로</a>
+
+        <article>
+            <div>
+                <ul>
+                    <li th:text="${question.knowledgeQuestionNo}"></li>
+                    <li th:text="${question.memberNo}"></li>
+                    <li th:text="${question.memberNickname}"></li>
+                    <li th:text="${question.knowledgeQuestionReadCount}"></li>
+                    <li th:text="${question.knowledgeQuestionWriteDate}"></li>
+                    <li th:text="${question.knowledgeQuestionTitle}"></li>
+                    <li th:text="${question.knowledgeQuestionContent}"></li>
+                    <li th:text="${question.knowledgeQuestionPoint}"></li>
+                </ul>
+            </div>
+
+        </article>
     </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
