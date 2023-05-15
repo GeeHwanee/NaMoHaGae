@@ -12,8 +12,8 @@ public interface ProductOrderDao {
     public Integer save(ProductOrder productOrder);
 
     // 주문 목록 보기
-    public List<ProductOrderDto.Read> list(Integer memberNo);
+    public List<ProductOrderDto.OrderResult> list(Integer memberNo);
 
     // 주문 상세 보기
-    public ProductOrderDto.Read read(Integer orderNo);
+    public ProductOrderDto.OrderResult read(Integer productOrderNo);
 }
