@@ -1,7 +1,11 @@
 package kr.kro.namohagae.puchingtest.service;
 
+import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.puchingtest.dao.ChatDao;
+import kr.kro.namohagae.puchingtest.dao.Puchingdao;
 import kr.kro.namohagae.puchingtest.dao.ReviewDao;
 import kr.kro.namohagae.puchingtest.dto.ReviewDto;
+import kr.kro.namohagae.puchingtest.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +15,13 @@ import java.util.List;
 public class ReviewService {
     @Autowired
     private ReviewDao reviewDao;
+    @Autowired
+    private MemberDao memberDao;
+    @Autowired
+    private ChatDao chatDao;
+    @Autowired
+    private Puchingdao puchingdao;
+
 
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
@@ -37,4 +48,27 @@ public class ReviewService {
         return new ReviewDto.Pagination(pageno, prev, start, end, next, review);
 
     }
+
+    public ReviewDto.writeview findWriteViewInfo(String userEmail,Integer receiverNo,Integer puchingNo){
+        Integer userNo=memberDao.findNoByUsername(userEmail);
+        ReviewDto.writeview dto = reviewDao.reviewWriteInfo(userNo,receiverNo,puchingNo);
+
+        return dto;
+    };
+
+
+    public void saveReview(String username,ReviewDto.write dto){
+        Integer memberNo=memberDao.findNoByUsername(username);
+        Review review= dto.toEntity(memberNo);
+        Integer bonePoint=300;
+        System.out.println(review);
+            reviewDao.save(review);
+            reviewDao.updateMemberPoint(bonePoint,memberNo);
+            reviewDao.updateMemberGrade(dto.getStarPoint(),dto.getReceiverNo());
+        if(reviewDao.checkCountReviewByPuchingNo(dto.getPuchingNo())>=2) {  //   퍼칭번호로 작성된 리뷰글 숫자 체크 이거의 여부에 따라 리뷰작성후 상태랑 콘텐트타입을 바꾼다
+            reviewDao.updatePuchingStatus(dto.getPuchingNo());
+            reviewDao.updateMessageContentType(dto.getPuchingNo());
+        }
+
+    };
 }

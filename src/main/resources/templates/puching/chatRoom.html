@@ -358,12 +358,10 @@
                     <div class="mesgs">
                         <div class="msg_history">
 
-
-
                         </div>
                         <div class="type_msg">
                             <div class="input_msg_write">
-                                <input type="text" id="message" class="write_msg" placeholder="Type a message" />
+                                <input type="text" id="message" class="write_msg" placeholder="Type a message" maxlength="150" />
                                 <button onclick="sendMessage()" class="msg_send_btn" type="button" disabled><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                             </div>
                         </div>
@@ -813,14 +811,14 @@
        //퍼칭취소요청일 경우
        if(messageContent=='cancel'){
            var content=`<span class="puching-title">퍼칭이 취소 되었습니다</span>`
-           $('.puching-info').empty().append(content);
+           $('.msg_history .puching-info').last().empty().append(content);
        }
        //퍼칭수락요청일 경우
        if(messageContent=='accept'){
            var content=`<span class="puching-description">퍼칭성공!</span>;`
            $('.puching-info .accept-button').remove()
            $('.puching-info .disaccept-button').remove()
-           $('.puching-info').append(content);
+           $('.msg_history .puching-info').last().append(content);
        }
 
    }
@@ -1031,7 +1029,7 @@
             var content=`<span class="puching-description">퍼칭성공!</span>;`
             $('.puching-info .accept-button').remove()
             $('.puching-info .disaccept-button').remove()
-            $('.puching-info').append(content);
+            $('.msg_history .puching-info').last().append(content);
         }catch (err){
             alert('퍼칭신청을 수락하지 못했습니다')
         }
@@ -1049,8 +1047,6 @@
                 type: 'GET',
                 data: { receiverNo: nowChatUser }
             });
-            console.log(data);
-            console.log(data.puchingNo)
             var puchingNo = data.puchingNo;
             location.href = '/puching/reviewwrite?receiverNo=' + nowChatUser + '&puchingNo=' + puchingNo;
             console.log('리뷰작성으로 넘어가 버리기')

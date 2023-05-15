@@ -53,7 +53,7 @@ public class PuchingService {
             String status=pdao.checkPuchingStatus(messageNo);                       //퍼칭상태가 수락상태인지 확인하는거
             Integer result=pdao.checkWritePuchingReviewBysenderNo(senderNo,messageNo); //내가 해당퍼칭에 리뷰를 작성했는지 확인하는거
              System.out.println(result);
-            if(status.equals("수락") || result==0){
+            if(status.equals("수락") && result==0){
                 //수락상태인 퍼칭메세지를 가지고 있고 그퍼칭번호로 작성한 리뷰중에 내가 작성한게 없으면 작성이 가능한 상태다
                 return 0;
             }
