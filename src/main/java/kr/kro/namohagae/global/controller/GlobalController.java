@@ -138,9 +138,20 @@ public class GlobalController {
             model.addAttribute("dto",dto);
         return "member/addJoin";
     }
+
+    @PostMapping("/member/kakaoJoin")
+    public String kakao(String kakaoEmail,String kakaoName,Model model){
+        model.addAttribute("dto",memberService.kakaoJoin(kakaoEmail,kakaoName));
+        System.out.println("여기인가?");
+        return "member/addJoin";
+    }
+
     @PostMapping("/member/addJoin")
     public String addJoin(MemberDto.Join dto){
+        System.out.println("아니면 여기?");
         memberService.join(dto);
+        System.out.println(dto.getMemberEmail());
+        System.out.println("");
         return "redirect:/";
     }
 

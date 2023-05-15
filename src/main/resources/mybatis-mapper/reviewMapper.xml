@@ -10,8 +10,21 @@
                 select rownum as rnum, r.* from
                     (
                         select
-                            (select member_nickname from member where #{memberNo}=puching_review_writer) reviewWriter,puching_review_content as reviewContent
-                        from PUCHING_REVIEW
+                            (select member_nickname from member where member_no= r.puching_review_writer) reviewWriter,puching_review_content as reviewContent
+                        from PUCHING_REVIEW r where #{memberNo}=member_no
+                    ) r
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+    <select id="findContentByWriterNo" resultType="kr.kro.namohagae.puchingtest.dto.ReviewDto$profile">
+        select * from
+            (
+                select rownum as rnum, r.* from
+                    (
+                        select
+                            (select member_nickname from member where member_no= r.puching_review_recei) reviewWriter,puching_review_content as reviewContent
+                        from PUCHING_REVIEW r where #{memberNo}=member_no
                     ) r
                 where rownum&lt;=#{endRownum}
             )
