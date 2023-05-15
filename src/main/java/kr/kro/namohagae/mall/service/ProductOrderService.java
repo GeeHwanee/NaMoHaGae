@@ -69,8 +69,8 @@ public class ProductOrderService {
         return addressDao.findAll(memberNo);
     }
 
-
-    // 주문하기(장바구니)
+    /*
+    // 주문하기(장바구니) 수정전
     @Transactional
     public Integer placeOrderFromCart(List<ProductOrderDetail> items, Integer memberNo, Integer addressNo) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
@@ -98,6 +98,55 @@ public class ProductOrderService {
             Integer productStock = productDao.findInformationByProductNo(productNo);
             if (productStock >= item.getProductOrderDetailCount()) {
 //                productDao.updateStockByProductNo(productNos,item.getProductOrderDetailNo());
+                Map<String, Object> params = new HashMap<>();
+                params.put("productNo", productNo);
+                params.put("productOrderDetailNo", item.getProductOrderDetailNo());
+                productDao.updateStockByProductNo(params);
+            } else {
+                throw new RuntimeException("재고가 부족합니다.");
+            }
+        }
+
+        // 주문한 상품 제거
+        if (!productNos.isEmpty()) {
+            cartDetailDao.removeByCartNo(productNos, memberNo);
+        }
+
+        return productOrder.getProductOrderNo();
+    }
+     */
+
+    // 주문하기(장바구니) 수정중1
+    @Transactional
+    public Integer placeOrderFromCart(List<ProductOrderDetail> items, Integer memberNo, Integer addressNo) {
+        Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
+
+        Integer orderTotalPrice = items.stream()
+                .mapToInt(item -> item.getProductOrderDetailPrice() * item.getProductOrderDetailCount())
+                .sum();
+
+        // 주문 정보 저장
+        ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), orderTotalPrice, LocalDateTime.now());
+        productOrderDao.save(productOrder);
+        Integer productOrderNo = productOrder.getProductOrderNo();
+        System.out.println(productOrder.getProductOrderNo() + "order 보여줘");
+
+        // 상품 주문 정보 저장 및 재고 처리
+        List<Integer> productNos = new ArrayList<>();
+        for (ProductOrderDetail item : items) {
+            // 상품 주문 정보 저장
+            item.setProductOrderNo(productOrderNo);
+            //ProductOrderDetail.builder().productOrderNo(productOrderNo).build();
+            System.out.println(item.getProductOrderNo() + "저장 order 보여줘");
+            productOrderDetailDao.save(item);
+
+            // 상품 번호 추출
+            Integer productNo = item.getProductNo();
+            productNos.add(productNo);
+
+            // 상품 재고 처리
+            Integer productStock = productDao.findInformationByProductNo(productNo);
+            if (productStock >= item.getProductOrderDetailCount()) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("productNo", productNo);
                 params.put("productOrderDetailNo", item.getProductOrderDetailNo());
@@ -161,7 +210,6 @@ public class ProductOrderService {
 
     // 아래부터 수정해야함 (dto 수정했고, 매퍼 수정)
 
-
     public List<ProductOrderDto.OrderResult> orderList(Integer memberNo) {
         return productOrderDao.list(memberNo);
     }
@@ -170,5 +218,4 @@ public class ProductOrderService {
     public ProductOrderDto.OrderResult findById(Integer orderNo) {
         return productOrderDao.read(orderNo);
     }
-
 }
