@@ -18,7 +18,7 @@ public class ReviewDto {
     }
 
     @Data
-    public static class Imformation {
+    public static class Information {
         private Integer receiverNo;
         private String reviewReceiver;
         private String reviewContent;
@@ -67,17 +67,17 @@ public class ReviewDto {
                     .puchingReviewWriter(senderNo).puchingReviewWriteDate(LocalDateTime.now()).puchingReviewStar((starPoint * 2) - 6).build();
         }
 
-        ;
+    }
 
         @ToString
         @AllArgsConstructor
-        public static class PaginationImfo {
+        @Data
+        public static class PaginationInfo {
             private Integer pageno;
             private Integer prev;
             private Integer start;
             private Integer end;
             private Integer next;
-            private List<ReviewDto.Imformation> review;
+            private List<ReviewDto.Information> review;
         }
     }
-}
