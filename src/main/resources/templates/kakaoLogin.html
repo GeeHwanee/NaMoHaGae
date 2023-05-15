@@ -25,37 +25,60 @@
     <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
 
     <script>
+
+        function loginWithKakao() {
+            Kakao.Auth.loginForm({
+                success: function(authObj) {
+                    // save access token in local storage
+                    localStorage.setItem('accessToken', authObj.access_token);
+                    // retrieve user information from Kakao API server
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', 'https://kapi.kakao.com/v2/user/me');
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + authObj.access_token);
+                    xhr.onreadystatechange = async function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
+                            // extract email and name from the response
+                            const email = response.kakao_account.email;
+                            const name = response.properties.nickname;
+                            // send email and name to Spring Boot controller
+                            const result = await $.ajax('/member/checkEmail?email=' + email);
+                            if(result==true){
+                                document.getElementById("username").value = email;
+                                document.getElementById("password").value = email;
+                                $('#login').attr('action','/api/v1/login').attr('method','post').submit();
+                            }else{
+                            document.getElementById("kakaoEmail").value = email;
+                            document.getElementById("kakaoName").value = name;
+                            $('#kakaoJoin').attr('action','/member/kakaoJoin').attr('method','post').submit();
+                            }
+                            // redirect to a page after successful login and data submission
+                        } else if (xhr.readyState === 4) {
+                            console.log('Failed to retrieve user information from Kakao:', xhr.status);
+                        }
+                    };
+                    xhr.send();
+                },
+                fail: function(err) {
+                    console.log('Failed to log in with Kakao:', err);
+                }
+            });
+        }
         $(document).ready(function () {
             Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
-            function loginWithKakao() {
-                Kakao.Auth.authorize({
-                    redirectUri: 'http://localhost:8081'
-                });
-            }
 
             $('#kakao-btn').click(function (){
+                loginWithKakao();
+            })
+
+
+            $('#form_button').click(function () {
+                console.log($('#username'));
+                console.log($('#password'));
+                $('#form').submit();
 
             })
-                $('#form_button').click(function () {
-                    console.log($('#username'));
-                    console.log($('#password'));
-                    $('#form').submit();
 
-                })
-
-            });
-            function createHiddenLoginForm(kakaoid){
-                var form = document.createElement("form");
-                form.setAttribute("method", "post");
-                form.setAttribute("action", "/api/v1/login"); // 여기에 컨트롤러 주소를 입력하세요
-                var input = document.createElement("input");
-                input.setAttribute("type", "hidden");
-                input.setAttribute("name", "kakaoid");
-                input.setAttribute("value", kakaoid);
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            }
         });
     </script>
 
@@ -187,35 +210,41 @@
                 <h1>Sign in</h1>
                 <h2>A minimalist layout for Login pages</h2>
             </hgroup>
-<!--            <form id="form" action="/api/v1/login" method="post">-->
+            <!--            <form id="form" action="/api/v1/login" method="post">-->
 
-                <label for="username">ID: </label>
-                <input
-                        id="username"
-                        type="text"
-                        name="username"
-                        placeholder="Login"
-                />
+            <form id="login">
+            <label for="username">ID: </label>
+            <input
+                    id="username"
+                    type="text"
+                    name="username"
+                    placeholder="Login"
+            />
 
-                <label for="password">PW: </label>
-                <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                />
+            <label for="password">PW: </label>
+            <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+            />
+            </form>
+            <fieldset class="box">
 
-                <fieldset class="box">
 
-                    <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
+                <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
 
-                    <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
-                    <button id="kakao-btn"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></button>
-                </fieldset>
+                <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
+                <button id="kakao-btn"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></button>
+                <form id="kakaoJoin">
+                    <input type="hidden" id="kakaoEmail" name="kakaoEmail">
+                    <input type="hidden" id="kakaoName" name="kakaoName">
+                </form>
+            </fieldset>
 
-<!--                <button id="form_button" type="button" class="contrast">Login</button>-->
+            <!--                <button id="form_button" type="button" class="contrast">Login</button>-->
 
-<!--            </form>-->
+            <!--            </form>-->
         </div>
         <div style="color:white">산책하는 사진이나 나 모하개 소개
             <a href="/">메인으로</a>
