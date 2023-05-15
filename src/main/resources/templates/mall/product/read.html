@@ -303,7 +303,7 @@
         // 주문하기
         $('#buy').click(async function() {
             const productNo = $('#productNo').text();
-            const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/product/order").attr("method","post").appendTo($('body'));
+            const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/order").attr("method","post").appendTo($('body'));
             $form.append($('<input>').attr('type','hidden').attr('name','productNo').val(productNo));
             $form.submit();
         });
