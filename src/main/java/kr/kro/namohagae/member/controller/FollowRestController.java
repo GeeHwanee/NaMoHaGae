@@ -1,7 +1,6 @@
 package kr.kro.namohagae.member.controller;
 
 import kr.kro.namohagae.global.security.MyUserDetails;
-import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.member.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class FollowRestController {
     @Autowired
     private FollowService service;
-    @Autowired
-    private WebSocketService webSocketService;
 
 
     @PatchMapping("/member/follow")

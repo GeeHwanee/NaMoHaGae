@@ -224,7 +224,7 @@ public class GlobalController {
         return "/member/puching/review";
     }
 
-    @GetMapping("/member/puching/follow")
+    @GetMapping("/member/follow")
     public void follow(){}
 
 
