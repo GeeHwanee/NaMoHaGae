@@ -24,7 +24,50 @@
   <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
 
   <script>
+    function loginWithKakao() {
+      Kakao.Auth.loginForm({
+        success: function(authObj) {
+          // save access token in local storage
+          localStorage.setItem('accessToken', authObj.access_token);
+          // retrieve user information from Kakao API server
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', 'https://kapi.kakao.com/v2/user/me');
+          xhr.setRequestHeader('Authorization', 'Bearer ' + authObj.access_token);
+          xhr.onreadystatechange = async function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              // extract email and name from the response
+              const email = response.kakao_account.email;
+              const name = response.properties.nickname;
+              // send email and name to Spring Boot controller
+              const result = await $.ajax('/member/checkEmail?email=' + email);
+              if(result==true){
+                document.getElementById("username").value = email;
+                document.getElementById("password").value = email;
+                $('#form').submit();
+              }else{
+                document.getElementById("kakaoEmail").value = email;
+                document.getElementById("kakaoName").value = name;
+                $('#kakaoJoin').attr('action','/member/kakaoJoin').attr('method','post').submit();
+              }
+              // redirect to a page after successful login and data submission
+            } else if (xhr.readyState === 4) {
+              console.log('Failed to retrieve user information from Kakao:', xhr.status);
+            }
+          };
+          xhr.send();
+        },
+        fail: function(err) {
+          console.log('Failed to log in with Kakao:', err);
+        }
+      });
+    }
   $(document).ready(function (){
+    Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
+
+    $('#kakao-btn').click(function (){
+      loginWithKakao();
+    })
     $('#form_button').click(function (){
       $('#form').submit();
 
@@ -185,7 +228,11 @@
           <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
 
           <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
-          <a href="#"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></a>
+          <button id="kakao-btn"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></button>
+          <form id="kakaoJoin">
+            <input type="hidden" id="kakaoEmail" name="kakaoEmail">
+            <input type="hidden" id="kakaoName" name="kakaoName">
+          </form>
         </fieldset>
 
         <button id="form_button" type="button" class="contrast">Login</button>
