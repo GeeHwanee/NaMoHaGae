@@ -11,4 +11,11 @@
         insert into KNOWLEDGE_ANSWER(KNOWLEDGE_QUESTION_NO, KNOWLEDGE_ANSWER_NO, MEMBER_NO, KNOWLEDGE_ANSWER_CONTENT, KNOWLEDGE_ANSWER_WRITE_DATE, KNOWLEDGE_ANSWER_SELECTION_ENABLED, KNOWLEDGE_ANSWER_RECOMMEND)
         VALUES(#{knowledgeQuestionNo},#{knowledgeAnswerNo}, #{memberNo},#{knowledgeAnswerContent}, #{knowledgeAnswerWriteDate}, 0, 0)
     </insert>
+
+    <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeAnswerDto$Read">
+        select knowledge_answer_no, knowledge_answer.member_no, m.member_nickname, knowledge_answer_content,
+               knowledge_answer_Write_date, knowledge_answer_selection_enabled, knowledge_answer_recommend
+        from knowledge_answer join member m on knowledge_answer.member_no = m.member_no
+        where knowledge_question_no = #{questionNo}
+    </select>
 </mapper>

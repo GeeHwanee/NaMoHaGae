@@ -24,14 +24,34 @@
 <script>
 
     function printKnowledgeAnswer(){
-        const $questionNo = $('#question_no').text();
+        const $questionNo = $('#question_no').val();
 
         $.ajax({
             url:'/api/v1/knowledge/answer/list?questionNo='+$questionNo,
             type:'get',
-            success(res){
-                console.log(res);
-                alert(res);
+            success(result){
+                if(result.length>0){
+                const $answer_select = $('#answer_select');
+                const $answer = $('#answer').empty();
+                    for (const answer of result) {
+                        const tpl = `
+                            <div style="text-align: left">
+                                <i class="fa-solid fa-user fa-lg"></i>  <span>${answer.memberNickname}</span> |
+                                <i class="fa-regular fa-thumbs-up fa-lg"></i>   <span >${answer.knowledgeAnswerRecommend}</span> |
+                                <i class="fa-regular fa-calendar fa-lg"></i>  <span>${answer.knowledgeAnswerWriteDate}</span>
+                            </div>
+                            <div >
+                                <div>${answer.knowledgeAnswerContent}</div>
+                            </div>
+                        `;
+                        if(answer.knowledgeAnswerSelectionEnabled===true){
+                            $answer_select.empty().append(tpl);
+                        }else {
+                            $answer.append(tpl);
+                        }
+                    }
+
+                }
             },
             error(error){
                 console.log(error);
@@ -40,7 +60,7 @@
     }
 
     $(document).ready(function (){
-
+        printKnowledgeAnswer();
 
         $('#answer_write').click(function(){
             const formData = $('#answer_form').serialize();
@@ -48,9 +68,8 @@
                 url:'/api/v1/knowledge/answer/write',
                 type:'post',
                 data: formData,
-                success(res){
-                    console.log(res);
-                    alert(res);
+                success(result){
+                    printKnowledgeAnswer();
                 },
                 error(error){
                     console.log(error);
@@ -67,28 +86,34 @@
     <section>
         <h1>지식인 게시판 읽기 페이지</h1>
         <a href="/board/knowledge/list">목록으로</a>
-
-        <article>
-            <div id="qusetion">
-                <ul>
-                    <li id="question_no" th:text="${question.knowledgeQuestionNo}"></li>
-                    <li th:text="${question.memberNo}"></li>
-                    <li th:text="${question.memberNickname}"></li>
-                    <li th:text="${question.knowledgeQuestionReadCount}"></li>
-                    <li th:text="${question.knowledgeQuestionWriteDate}"></li>
-                    <li th:text="${question.knowledgeQuestionTitle}"></li>
-                    <li th:text="${question.knowledgeQuestionContent}"></li>
-                    <li th:text="${question.knowledgeQuestionPoint}"></li>
-                </ul>
+<hr>
+        <article id="question">
+            <h2 th:text="${question.knowledgeQuestionTitle}"></h2>
+            <div id="question_header" style="text-align: right">
+                <i class="fa-solid fa-bone fa-lg"></i>  <span th:text="${question.knowledgeQuestionPoint}"></span> |
+                <i class="fa-solid fa-user fa-lg"></i>  <span th:text="${question.memberNickname}"></span> |
+                <i class="fa-solid fa-eye fa-lg"></i>   <span th:text="${question.knowledgeQuestionReadCount}"></span> |
+                <i class="fa-regular fa-calendar fa-lg"></i>  <span th:text="${#temporals.format(question.knowledgeQuestionWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+            <div id="question_body">
+                <div th:text="${question.knowledgeQuestionContent}"></div>
             </div>
         </article>
+        <hr>
+        <article>
+            <div id="answer_select">
+                채택된 답변이 없습니다
+            </div>
+        </article>
+        <hr>
         <article>
             <div id="answer">
-
+                등록된 답변이 없습니다
             </div>
         </article>
+        <hr>
         <form action="/api/v1/knowledge/answer/write" method="post" id="answer_form">
-            <input type="hidden" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
+            <input type="hidden" id="question_no" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
             <textarea name="knowledgeAnswerContent"></textarea>
             <button type="button" id="answer_write">답변 작성</button>
         </form>

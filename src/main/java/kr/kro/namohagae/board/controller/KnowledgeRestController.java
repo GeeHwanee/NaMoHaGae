@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
@@ -29,8 +31,7 @@ public class KnowledgeRestController {
     }
 
     @GetMapping("/knowledge/answer/list")
-    public ResponseEntity<KnowledgeAnswerDto.Pagination>answerList(Integer questionNo){
-        knowledgeService.answerFindAll(questionNo);
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<KnowledgeAnswerDto.Read>>answerList(Integer questionNo){
+        return ResponseEntity.ok(knowledgeService.answerFindAll(questionNo));
     }
 }

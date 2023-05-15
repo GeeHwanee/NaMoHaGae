@@ -32,25 +32,4 @@ public class KnowledgeAnswerDto {
         private Integer knowledgeAnswerRecommend;
     }
 
-    @Data
-    public static class List{
-        private Integer knowledgeQuestionNo;
-        private String memberNickname;
-        private String knowledgeQuestionTitle;
-        private Integer knowledgeQuestionReadCount;
-        private LocalDateTime knowledgeQuestionWriteDate;
-        private Integer knowledgeQuestionPoint;
-    }
-
-    @Data
-    @AllArgsConstructor
-    public static class Pagination {
-        private Integer pageNo;
-        private Integer prev;
-        private Integer start;
-        private Integer end;
-        private Integer next;
-        private java.util.List<KnowledgeAnswerDto.List> answers;
-    }
-
 }
