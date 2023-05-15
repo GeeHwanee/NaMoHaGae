@@ -34,6 +34,8 @@
                 const $answer_select = $('#answer_select');
                 const $answer = $('#answer').empty();
                     for (const answer of result) {
+
+                        // 내 추천 여부 확인 안했고, 채택 박는거 아직 안했고
                         const tpl = `
                             <div style="text-align: left">
                                 <i class="fa-solid fa-user fa-lg"></i>  <span>${answer.memberNickname}</span> |
