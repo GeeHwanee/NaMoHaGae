@@ -19,19 +19,83 @@
     <!--기타 삽입-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-<title>내 퍼칭 리뷰 페이지</title>
+    <title>리뷰</title>
+    <style>
+        #page_ul {
+            width: 300px;
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        function printNotification(review) {
+            const $tbody = $('#tbody');
+            review.forEach(r => {
+                    const tpl = `<tr>
+                    <td>
+                        <a href="http://localhost:8081/member/profile?memberNo=${r.receiverNo}">${r.reviewReceiver}</a>
+                    </td>
+                    <td>${r.reviewContent}</td>
+			    </tr>`;
+                    $tbody.append(tpl);
+                }
+            )
+        }
+
+
+        function printPagination({prev, start, end, next, pageno}) {
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/puching/review?pageno=${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+				<li class='page-item ${pageno==i? "active":""}'>
+					<a class='page-link' href='/member/puching/review?pageno=${i}'>${i}</a>
+				</li>
+			`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='/member/puching/review?pageno=${next}'>다음</a></li>`)
+        }
+
+        $(document).ready(async function() {
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            try {
+                const result = await $.ajax("/api/v1/review/imfo?pageno=" + pageno);
+                console.log(result.review);
+                printNotification(result.review);
+                printPagination(result);
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
 </head>
 <body>
-<header th:replace="~{/fragment/header.html}"> </header>
-<nav th:replace="~{/fragment/nav.html}"></nav>
-<main>
-    <aside th:replace="~{/fragment/aside.html}"></aside>
-    <section>
-        <h1>내 퍼칭 리뷰 페이지</h1>
-        <article></article>
-    </section>
-    <aside th:replace="~{/fragment/bside.html}"></aside>
-</main>
-<footer th:replace="~{/fragment/footer.html}"></footer>
+<div id="page">
+    <header th:replace="~{/fragment/header.html}"></header>
+    <nav th:replace="~{/fragment/nav.html}"></nav>
+    <main>
+        <aside th:replace="~{/fragment/aside.html}">
+        </aside>
+        <section>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>이름</th><th>내용</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+            <ul class="pagination" id="page_ul">
+            </ul>
+        </section>
+        <aside th:replace="~{/fragment/bside.html}"></aside>
+    </main>
+    <footer th:replace="~{/fragment/footer.html}">
+    </footer>
+</div>
 </body>
 </html>
