@@ -26,7 +26,9 @@ import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.DogService;
 import kr.kro.namohagae.member.service.MemberService;
+import kr.kro.namohagae.puchingtest.dto.ReviewDto;
 import kr.kro.namohagae.puchingtest.service.ChatService;
+import kr.kro.namohagae.puchingtest.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -53,6 +55,8 @@ public class GlobalController {
     private ChatService chatService;
     @Autowired
     private MemberDao memberDao;
+    @Autowired
+    private ReviewService puchingReviewService;
     @Autowired
     private QnaService qnaService;
     @Autowired
@@ -267,10 +271,17 @@ public class GlobalController {
     };
 
     @GetMapping("/puching/reviewwrite")
-    public void reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo){
+    public void reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
         System.out.println(receiverNo);
         System.out.println(puchingNo);
+        ReviewDto.writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
+        model.addAttribute("list",dto);
 
+    }
+    @PostMapping(value="/puching/reviewwrite")
+    public void write(ReviewDto.write dto, Principal principal) {
+        System.out.println(dto);
+        puchingReviewService.saveReview(principal.getName(),dto);
     }
 
     // [게시판 파트]--------------------------------------------------------------------
