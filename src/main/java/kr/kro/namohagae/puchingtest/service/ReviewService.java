@@ -14,8 +14,8 @@ public class ReviewService {
 
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
-    public ReviewDto.Pagination findContent(Integer pageno,Integer memberNo) {
-        Integer countOfProduct = reviewDao.count(memberNo);
+    public ReviewDto.PaginationProfie findContentByReceiverNo(Integer pageno,Integer memberNo) {
+        Integer countOfProduct = reviewDao.countReceiver(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
         pageno = Math.abs(pageno);
@@ -34,7 +34,28 @@ public class ReviewService {
             end = countOfPage;
             next = 0;
         }
-        return new ReviewDto.Pagination(pageno, prev, start, end, next, review);
+        return new ReviewDto.PaginationProfie(pageno, prev, start, end, next, review);
+    }
+    public ReviewDto.PaginationImfo findContentByWriterNo(Integer pageno,Integer memberNo) {
+        Integer countOfProduct = reviewDao.countWriter(memberNo);
+        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
+        pageno = Math.abs(pageno);
+        if(pageno>countOfPage)
+            pageno = countOfPage;
+
+        Integer startRownum = (pageno-1)*PAGESIZE + 1;
+        Integer endRownum = startRownum + PAGESIZE - 1;
+        List<ReviewDto.Imformation> review = reviewDao.findContentByWriterNo(startRownum, endRownum,memberNo);
+        // 리스트 log로 찍어
+        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ReviewDto.PaginationImfo(pageno, prev, start, end, next, review);
     }
 }

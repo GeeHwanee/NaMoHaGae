@@ -67,4 +67,20 @@ public class QnaService {
     public QnaDto.Read print(Integer qnaNo) {
         return qnaDao.findByQnaNo(qnaNo);
     }
+    public QnaDto.PaginationMyQna listMyQna(Integer pageNo, Integer memberNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<QnaDto.FindByMemberNo> qna =  qnaDao.findByMemberNo(startRowNum, endRowNum, memberNo);
+        Integer countOfQna = qnaDao.countMe(memberNo);
+        Integer countOfPage = (countOfQna-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new QnaDto.PaginationMyQna(pageNo, prev, start, end, next, qna);
+    }
 }
