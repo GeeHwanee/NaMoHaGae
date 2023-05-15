@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.board.dao.KnowledgeAnswerDao">
+    <insert id="save" keyProperty="knowledgeAnswerNo" parameterType="KnowledgeAnswer">
+        <selectKey keyProperty="knowledgeAnswerNo" order="BEFORE" resultType="java.lang.Integer">
+            select KNOWLEDGE_ANSWER_SEQ_KNOWLEDGE_ANSWER_NO.nextval from dual
+        </selectKey>
+        insert into KNOWLEDGE_ANSWER(KNOWLEDGE_QUESTION_NO, KNOWLEDGE_ANSWER_NO, MEMBER_NO, KNOWLEDGE_ANSWER_CONTENT, KNOWLEDGE_ANSWER_WRITE_DATE, KNOWLEDGE_ANSWER_SELECTION_ENABLED, KNOWLEDGE_ANSWER_RECOMMEND)
+        VALUES(#{knowledgeQuestionNo},#{knowledgeAnswerNo}, #{memberNo},#{knowledgeAnswerContent}, #{knowledgeAnswerWriteDate}, 0, 0)
+    </insert>
+</mapper>
