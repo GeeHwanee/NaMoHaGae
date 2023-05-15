@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberDto {
 
     @Data
+    @Builder
     public static class Join{
-        @Town
         private String townGu;
         private String townDong;
         @Email
