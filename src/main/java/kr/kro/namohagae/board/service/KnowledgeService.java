@@ -59,7 +59,7 @@ public class KnowledgeService {
     }
 
 
-    public void answerFindAll(Integer questionNo) {
-
+    public List<KnowledgeAnswerDto.Read> answerFindAll(Integer questionNo) {
+        return knowledgeAnswerDao.findAll(questionNo);
     }
 }
