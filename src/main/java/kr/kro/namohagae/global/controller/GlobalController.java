@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.BoardTownDto;
-import kr.kro.namohagae.board.dto.KnowledgeDto;
+import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
 import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.BoardList;
@@ -350,7 +350,7 @@ public class GlobalController {
 
     @GetMapping("/board/knowledge/list")
     public String knowledgeList(@RequestParam(defaultValue="1")Integer pageNo, Model model){
-       model.addAttribute("list",knowledgeService.findAll(pageNo));
+       model.addAttribute("list",knowledgeService.questionFindAll(pageNo));
         return "/board/knowledge/list";
     }
 
@@ -360,14 +360,14 @@ public class GlobalController {
     }
 
     @PostMapping("/board/knowledge/write")
-    public String knowledgeWrite(KnowledgeDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
-       Integer result = knowledgeService.save(dto, myUserDetails.getMemberNo());
+    public String knowledgeWrite(KnowledgeQuestionDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
+       Integer result = knowledgeService.questionSave(dto, myUserDetails.getMemberNo());
         return "redirect:/board/knowledge/read?knowledgeQuestionNo="+result;
     }
 
     @GetMapping("/board/knowledge/read")
     public String knowledgeRead(Integer knowledgeQuestionNo, Model model){
-        model.addAttribute("question", knowledgeService.read(knowledgeQuestionNo));
+        model.addAttribute("question", knowledgeService.questionRead(knowledgeQuestionNo));
         return "/board/knowledge/read";
     }
 
