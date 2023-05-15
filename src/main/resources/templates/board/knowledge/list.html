@@ -28,7 +28,35 @@
     <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
         <h1>지식인 게시판 목록 페이지</h1>
+        <a href="/board/knowledge/write">새 질문</a>
         <article></article>
+        <h2>답변을 기다리는 질문</h2>
+        <table class="table table-hover table-striped text-center">
+            <thead>
+            <tr>
+                <th>글번호</th>
+                <th>제목</th>
+                <th>글쓴이</th>
+                <th>글쓴시간</th>
+                <th>조회수</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="question : ${list.questions}">
+                    <td th:text="${question.knowledgeQuestionNo}">1</td>
+                    <td>
+                        <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${question.knowledgeQuestionNo})}" th:text="${question.knowledgeQuestionTitle}"></a>
+                    </td>
+                    <td th:text="${question.memberNickname}"></td>
+                    <td th:text="${#temporals.format(question.knowledgeQuestionWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${question.knowledgeQuestionReadCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <h2></h2>
+
+
     </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>

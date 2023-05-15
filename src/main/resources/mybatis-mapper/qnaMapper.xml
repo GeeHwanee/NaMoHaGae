@@ -68,4 +68,21 @@
         QNA_ANSWER_WRITE_DATE = #{qnaAnswerWriteDate}
         where QNA_NO = #{qnaNo}
     </update>
+    <select id="findByMemberNo" resultType="kr.kro.namohagae.mall.dto.QnaDto$FindByMemberNo">
+        select * from
+            (
+                select rownum as rnum, q.* from
+                    (
+                        select
+                            (select product_image_filename from product_image where product_no=q.product_no and rownum=1) profileImage,q.qna_no,(select product_name from product where product_no=q.product_no),
+                            (select count(*) from qna where qna_answer_content is not null),qna_write-date
+                        from QNA q where qna_writer=#{memberNo} order by qna_no desc
+                    ) q
+                where rownum&lt;=#{endRowNum}
+            )
+        where rnum&gt;=#{startRowNum}
+    </select>
+    <select id="countMe" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select count(*) from QNA where qna_writer = #{memberNo}
+    </select>
 </mapper>

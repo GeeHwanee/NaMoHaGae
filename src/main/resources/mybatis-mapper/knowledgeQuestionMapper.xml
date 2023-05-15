@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.board.dao.KnowledgeQuestionDao">
+    <insert id="save" keyProperty="knowledgeQuestionNo" parameterType="KnowledgeQuestion">
+        <selectKey keyProperty="knowledgeQuestionNo" order="BEFORE" resultType="java.lang.Integer">
+            select KNOWLEDGE_QUESTION_SEQ_KNOWLEDGE_QUESTION_NO.nextval from dual
+        </selectKey>
+        insert into KNOWLEDGE_QUESTION(KNOWLEDGE_QUESTION_NO, MEMBER_NO, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT)
+        values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, 0,#{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint})
+    </insert>
+
+    <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$List">
+        select * from
+            (
+                select rownum as rnum, a.* from
+                    (
+                        select
+                            KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_NO, M.MEMBER_Nickname, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE
+                        from KNOWLEDGE_QUESTION
+                            join MEMBER M on KNOWLEDGE_QUESTION.MEMBER_NO = M.MEMBER_NO
+                        order by KNOWLEDGE_QUESTION_NO desc
+                    ) a
+                where rownum&lt;=#{endRowNum}
+            )
+        where rnum&gt;=#{startRowNum}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from KNOWLEDGE_QUESTION
+    </select>
+
+    <select id="findByKnowledgeQuestionNo" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$Read">
+        select KNOWLEDGE_QUESTION_NO, KNOWLEDGE_QUESTION.MEMBER_NO, m.MEMBER_NICKNAME, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT
+        from KNOWLEDGE_QUESTION join MEMBER M on M.MEMBER_NO = KNOWLEDGE_QUESTION.MEMBER_NO
+        where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo}
+
+    </select>
+    <update id="update">
+        update KNOWLEDGE_QUESTION set KNOWLEDGE_QUESTION_READ_COUNT= KNOWLEDGE_QUESTION_READ_COUNT+1 where KNOWLEDGE_QUESTION_NO =#{knowledgeQuestionNo}
+    </update>
+</mapper>

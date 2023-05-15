@@ -24,7 +24,6 @@ public class AddressDto {
         private String addressPostcode;
         private String addressAddress;
         private String addressAddressDetail;
-
+        private boolean defaultAddressEnabled;
     }
-
 }

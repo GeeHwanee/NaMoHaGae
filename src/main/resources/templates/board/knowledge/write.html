@@ -28,7 +28,15 @@
     <aside th:replace="~{/fragment/aside.html}"></aside>
     <section>
         <h1>지식인 게시판 쓰기 페이지</h1>
-        <article></article>
+        <article>
+            <form action="/board/knowledge/write" method="post">
+               제목 <input type="text" name="knowledgeQuestionTitle"><br>
+               내용 <textarea name="knowledgeQuestionContent"></textarea><br>
+               포인트 <input type="number" min="100" name="knowledgeQuestionPoint"><br>
+                    <button type="submit" >작성</button>
+            </form>
+
+        </article>
     </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>

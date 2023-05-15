@@ -10,7 +10,9 @@ import java.util.List;
 public interface ReviewDao {
 
     public List<ReviewDto.profile> findContentByReceiverNo(Integer startRownum, Integer endRownum,Integer memberNo);
-
+    public List<ReviewDto.Imformation>findContentByWriterNo(Integer startRownum, Integer endRownum,Integer memberNo);
+    public Integer countReceiver(Integer memberNo);
+    public Integer countWriter(Integer memberNo);
     public Integer count(Integer receiverNo);
 
     public ReviewDto.writeview reviewWriteInfo(Integer senderNo,Integer receiverNo,Integer puchingNo);

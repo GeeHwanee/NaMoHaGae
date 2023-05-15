@@ -23,7 +23,13 @@ public class ReviewRestController {
     @GetMapping(value="/review/list", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,Integer memberNo) {
         System.out.println(memberNo);
-        return ResponseEntity.ok(reviewService.findContent(pageno,memberNo));
+        return ResponseEntity.ok(reviewService.findContentByReceiverNo(pageno,memberNo));
+    }
+    @GetMapping(value="/api/v1/review/imfo", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        Integer memberNo = myUserDetails.getMemberNo();
+        System.out.println(memberNo);
+        return ResponseEntity.ok(reviewService.findContentByWriterNo(pageno,memberNo));
     }
 
 

@@ -3,7 +3,6 @@ package kr.kro.namohagae.mall.service;
 import kr.kro.namohagae.mall.dao.AddressDao;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.entity.Address;
-import kr.kro.namohagae.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +32,11 @@ public class AddressService {
 
     public Boolean delete(Integer addressNo){
         return dao.delete(addressNo);
+    }
+
+    public List<Address> setDefault(Integer addressNo, Integer memberNo) {
+        dao.resetDefault(memberNo);
+        dao.setDefault(addressNo);
+        return dao.findByMemberNo(memberNo);
     }
 }

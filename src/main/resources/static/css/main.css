@@ -73,6 +73,34 @@ aside {
     position:relative;
 
 }
+
+
+#aside > ul, #notification{
+    margin: 0;
+    padding: 0;
+}
+#aside_title{
+    text-align: center;
+}
+#aside_title > li > a{
+    font-family: 'Dongle', sans-serif;
+    font-size: 2em;
+    text-decoration: none;
+    color: black;
+    border-bottom: 2px solid #c9dc92;
+
+}
+#bside > div, #bside > div > li {
+    text-align: center;
+}
+#side_bar > li > a{
+    font-family: 'Nanum Gothic', sans-serif;
+    font-size: 1.1em;
+    text-decoration: none;
+    color: black;
+}
+
+
 .title > li{ text-align: center;}
 .title > li > a { text-align: center; font-size: 15px; font-weight:bold; color:black;}
 .side_bar {
@@ -81,11 +109,6 @@ aside {
 .side_bar > li > h2{ font-size: 15px; color: darkblue;}
 .side_bar > li {
     margin-top:20px;
-}
-.side_bar > li > a {
-    font-size:14px;
-    font-weight:bold;
-    color:#000;
 }
 
 section {
@@ -96,10 +119,10 @@ section {
 }
 footer {
     display: flex;
-    border-top: 1px solid #c9dc92;
+    border-top: 3px solid #dfaa8b;
     justify-content: center;
     align-content: center;
-    margin: 10px 20px;
+    margin: 20px 20px;
     text-align: center;
     height: 100px;
 }
