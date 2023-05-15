@@ -75,12 +75,11 @@ aside {
 }
 
 
-#aside > ul{
+#aside > ul, #notification{
     margin: 0;
     padding: 0;
 }
 #aside_title{
-
     text-align: center;
 }
 #aside_title > li > a{
@@ -89,6 +88,10 @@ aside {
     text-decoration: none;
     color: black;
     border-bottom: 2px solid #c9dc92;
+
+}
+#bside > div, #bside > div > li {
+    text-align: center;
 }
 #side_bar > li > a{
     font-family: 'Nanum Gothic', sans-serif;
@@ -106,11 +109,6 @@ aside {
 .side_bar > li > h2{ font-size: 15px; color: darkblue;}
 .side_bar > li {
     margin-top:20px;
-}
-.side_bar > li > a {
-    font-size:14px;
-    font-weight:bold;
-    color:#000;
 }
 
 section {
