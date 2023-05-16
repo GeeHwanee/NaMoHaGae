@@ -68,11 +68,11 @@ public class CartService {
     // 장바구니 목록 조회
     public CartDetailDto.Read list(Integer memberNo) {
         List<CartDetail> carts = cartDetailDao.findCartDetailsByMemberNo(memberNo);
-        List<CartDetailDto.list> items = new ArrayList<>();
+        List<CartDetailDto.CartDetailList> items = new ArrayList<>();
         int totalPrice = 0;
         for (CartDetail cartDetail : carts) {
             ProductDto.Read dto = productDao.findByProductNo(cartDetail.getProductNo());
-            CartDetailDto.list item = new CartDetailDto.list(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), dto.getProductStock(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
+            CartDetailDto.CartDetailList item = new CartDetailDto.CartDetailList(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), dto.getProductStock(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
             items.add(item);
             totalPrice += item.getCartTotalPrice();
         }

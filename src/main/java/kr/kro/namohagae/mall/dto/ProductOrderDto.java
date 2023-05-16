@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductOrderDto {
     @Data
     @AllArgsConstructor
-    public static class list {
+    public static class OrderList {
         private Integer productNo;
         private String productImage;
         private String productName;
@@ -27,7 +27,7 @@ public class ProductOrderDto {
     @Data
     @AllArgsConstructor
     public static class Read {
-        private List<list> orderItems;
+        private List<OrderList> orderItems;
         private Integer orderTotalPrice;
     }
 
@@ -42,6 +42,7 @@ public class ProductOrderDto {
         private String addressAddress;
         private String addressAddressDetail;
         // private String productImage;
+        // 오더디테일디티오에서 상품명, 상품이미지,디테일리스트 끌고오기
         private List<ProductImage> productImageList;
         private List<Product> productList;
         private List<ProductOrderDetail> orderDetailList;

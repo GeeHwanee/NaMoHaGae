@@ -20,7 +20,7 @@ public class FavoriteService {
     public FavoriteDto.Pagination list(Integer pageNo, Integer productNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<FavoriteDto.list> favorites =  favoriteDao.findListByMemberNo(startRowNum, endRowNum, productNo);
+        List<FavoriteDto.FavoriteList> favorites =  favoriteDao.findListByMemberNo(startRowNum, endRowNum, productNo);
         Integer countOfFavorite = favoriteDao.count(productNo);
         Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
