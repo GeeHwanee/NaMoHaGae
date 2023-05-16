@@ -16,7 +16,7 @@
             )
     </insert>
 
-    <select id="commentList" resultType="kr.kro.namohagae.board.dto.CommentListDto">
+    <select id="commentList" resultType="kr.kro.namohagae.board.dto.CommentDto$CommentList">
         SELECT bc.member_no,bc.board_no,bc.comment_no, m.member_nickname, bc.comment_content, bc.comment_write_date
         FROM board b
                  JOIN board_comment bc ON b.board_no = bc.board_no
@@ -33,6 +33,18 @@
             delete board_comment where comment_no = #{comment_no}
 
     </delete>
+
+    <select id="myCommentList" resultType="kr.kro.namohagae.board.dto.CommentDto$MyCommentList">
+        select * from
+            (
+                select rownum as rnum, c.* from
+                    (
+                       select board_no,comment_content,comment_write_date from board_comment where member_no=#{memberNo} and comment_enabled=0
+                    ) c
+                where rownum&lt;=#{endRowNum}
+            )
+        where rnum&gt;=#{startRowNum}
+    </select>
 
 </mapper>
 
