@@ -1,6 +1,7 @@
 package kr.kro.namohagae.mall.controller;
 
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.entity.Address;
 import kr.kro.namohagae.mall.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +33,9 @@ public class AddressRestController {
         return ResponseEntity.ok(service.setDefault(addressNo, myUserDetails.getMemberNo()));
     }
 
+    @PostMapping("/member/mall/address/add")
+    public ResponseEntity<Boolean> save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
+        Integer memberNo = myUserDetails.getMemberNo();
+        return ResponseEntity.ok(service.save(memberNo,dto));
+    }
 }

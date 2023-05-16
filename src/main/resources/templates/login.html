@@ -19,11 +19,13 @@
   <!--기타 삽입-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>
   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
   <!------------------------------------------------------------------------------------------------------------------------------>
   <title>Sign in example • Pico.css</title>
   <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
 
   <script>
+
     function loginWithKakao() {
       Kakao.Auth.loginForm({
         success: function(authObj) {
@@ -44,7 +46,7 @@
               if(result==true){
                 document.getElementById("username").value = email;
                 document.getElementById("password").value = email;
-                $('#form').submit();
+                $('#login').attr('action','/api/v1/login').attr('method','post').submit();
               }else{
                 document.getElementById("kakaoEmail").value = email;
                 document.getElementById("kakaoName").value = name;
@@ -62,19 +64,19 @@
         }
       });
     }
-  $(document).ready(function (){
-    Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
+    $(document).ready(function () {
+      Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
 
-    $('#kakao-btn').click(function (){
-      loginWithKakao();
-    })
-    $('#form_button').click(function (){
-      $('#form').submit();
+      $('#kakao-btn').click(function (){
+        loginWithKakao();
+      })
 
-    })
 
-  });
+      $('#form_button').click(function (){
+        $('#login').attr('action','/api/v1/login').attr('method','post').submit();
+      })
 
+    });
   </script>
 
 </head>
@@ -205,39 +207,42 @@
         <h1>Sign in</h1>
         <h2>A minimalist layout for Login pages</h2>
       </hgroup>
-      <form id="form" action="/api/v1/login" method="post">
+      <!--            <form id="form" action="/api/v1/login" method="post">-->
 
+      <form id="login">
         <label for="username">ID: </label>
         <input
-                  id="username"
-                  type="text"
-                  name="username"
-                  placeholder="이메일을 입력하세요."
-          />
+                id="username"
+                type="text"
+                name="username"
+                placeholder="Login"
+        />
 
         <label for="password">PW: </label>
         <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="비밀번호를 입력하세요."
-          />
-
-        <fieldset class="box">
-
-          <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
-
-          <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
-          <button id="kakao-btn"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></button>
-          <form id="kakaoJoin">
-            <input type="hidden" id="kakaoEmail" name="kakaoEmail">
-            <input type="hidden" id="kakaoName" name="kakaoName">
-          </form>
-        </fieldset>
-
-        <button id="form_button" type="button" class="contrast">Login</button>
-
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Password"
+        />
       </form>
+      <fieldset class="box">
+
+
+        <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
+
+        <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
+        <button id="kakao-btn"><img src="http://localhost:8081/api/v1/image/embeded?name=kakao_login_large_wide.png" class="kakao"></button>
+        <button id="form_button" type="button" class="contrast">Login</button>
+        <form id="kakaoJoin">
+          <input type="hidden" id="kakaoEmail" name="kakaoEmail">
+          <input type="hidden" id="kakaoName" name="kakaoName">
+        </form>
+      </fieldset>
+
+      <!--                <button id="form_button" type="button" class="contrast">Login</button>-->
+
+      <!--            </form>-->
     </div>
     <div style="color:white">산책하는 사진이나 나 모하개 소개
       <a href="/">메인으로</a>
