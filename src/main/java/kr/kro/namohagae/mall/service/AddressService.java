@@ -12,7 +12,7 @@ import java.util.List;
 public class AddressService {
     @Autowired
     private AddressDao dao;
-    public void save(Integer memberNo,AddressDto.save dto){
+    public Boolean save(Integer memberNo,AddressDto.save dto){
         String name = "";
         if (dto.getAddressName()!=null){
             name=dto.getAddressName();
@@ -23,7 +23,7 @@ public class AddressService {
         System.out.println(address.getAddressName());
         System.out.println(address.getMemberNo());
         System.out.println(address.getAddressPostcode());
-        dao.save(address);
+        return dao.save(address);
     }
 
     public List<AddressDto.Read> printAddressAll(Integer memberNo){
