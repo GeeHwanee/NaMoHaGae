@@ -26,6 +26,42 @@
             display:inline-block;
         }
     </style>
+    <script>
+        function redirect() {
+            var previousAddress = document.referrer;
+            if (previousAddress !== '') {
+                window.location.href = previousAddress;
+            } else {
+                // Handle the case when the previous address is not available
+                // You can redirect to a default page or display an error message
+                alert('Previous address not found!');
+            }
+        }
+        $(document).ready(function (){
+            $('#addCreate').click(function (){
+                const formData = new FormData();
+
+                formData.append('addressName', $('#name').val());
+                formData.append('addressPostcode', $('#sample4_postcode').val());
+                formData.append('addressAddress', $('#sample4_roadAddress').val());
+                formData.append('addressAddressDetail', $('#sample4_detailAddress').val());
+                try{
+                    $.ajax({
+                        url: "/api/v1/member/mall/address/add",
+                        method:'post',
+                        data: formData,
+                        processData:false, 	// urlencoded 자동 변환 옵션
+                        contentType:false 	// Multipart-formdata 지정 옵션
+                    });
+                    setTimeout(function(){
+                        redirect();
+                    }, 1000);
+                }catch(err){
+                    alert('신고 불가');
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <header th:replace="~{/fragment/header.html}"></header>
@@ -34,7 +70,6 @@
         <aside th:replace="~{/fragment/aside.html}"></aside>
         <section>
             <h2>배송지 추가</h2>
-            <form action="/member/mall/address/add" method="post">
                 <div class="mb-3 mt-3">
                     <input type="text" class="form-control" id="name" placeholder="배송지 이름" name="addressName">
                 </div>
@@ -52,9 +87,8 @@
                 </div>
                 <input type="text" id="sample4_extraAddress" placeholder="참고항목" style="display:none;">
                 <div class="d-grid">
-                    <button class="btn btn-primary btn-block">추가하기</button>
+                    <button id="addCreate" class="btn btn-primary btn-block">추가하기</button>
                 </div>
-            </form>
         </section>
         <aside th:replace="~{/fragment/bside.html}"></aside>
     </main>
