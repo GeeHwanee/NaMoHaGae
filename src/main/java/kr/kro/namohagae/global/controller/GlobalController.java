@@ -13,7 +13,6 @@ import kr.kro.namohagae.board.service.*;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.websocket.WebSocketService;
-import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
 import kr.kro.namohagae.mall.service.AddressService;
@@ -161,7 +160,7 @@ public class GlobalController {
 
 
     @PostMapping("/dog/registeration")
-    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, DogDto.registeration dto){
+    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, DogDto.Registeration dto){
         Integer memberNo = myUserDetails.getMemberNo();
         dogService.save(dto,memberNo);
         return "redirect:/member/main";
@@ -284,12 +283,12 @@ public class GlobalController {
     public void reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
         System.out.println(receiverNo);
         System.out.println(puchingNo);
-        ReviewDto.writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
+        ReviewDto.Writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
         model.addAttribute("list",dto);
 
     }
     @PostMapping(value="/puching/reviewwrite")
-    public void write(ReviewDto.write dto, Principal principal) {
+    public void write(ReviewDto.Write dto, Principal principal) {
         System.out.println(dto);
         puchingReviewService.saveReview(principal.getName(),dto);
     }
