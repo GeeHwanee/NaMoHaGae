@@ -15,7 +15,4 @@ public class ProductOrderDetail {
     private Integer productOrderDetailPrice;
     private Boolean productOrderDetailReviewEnabled;
 
-    public void setProductOrderNo(Integer productOrderNo) {
-        this.productOrderNo= productOrderNo;
-    }
 }
