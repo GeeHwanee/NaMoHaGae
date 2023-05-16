@@ -37,10 +37,11 @@ public class ProductOrderDto {
         private Integer productOrderTotalPrice;
         private LocalDateTime productOrderDate;
         private Integer memberNo;
-        private Integer addressNo;
+        //private Integer addressNo;
         private String addressPostcode;
         private String addressAddress;
         private String addressAddressDetail;
+        // private String productImage;
         private List<ProductImage> productImageList;
         private List<Product> productList;
         private List<ProductOrderDetail> orderDetailList;
