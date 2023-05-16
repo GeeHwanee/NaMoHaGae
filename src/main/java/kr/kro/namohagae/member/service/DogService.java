@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 public class DogService {
     @Autowired
     private DogDao dogDao;
-    public void save(DogDto.registeration dto, Integer memberNo) {
+    public void save(DogDto.Registeration dto, Integer memberNo) {
         String memberIntroduce = " ";
         String profileName = "default.jpg";
         if(dto.getDogIntroduce()!=null){
@@ -97,9 +97,9 @@ public class DogService {
         }
     }
 
-    public List<DogDto.dogList> dogList(Integer memberNo) {
+    public List<DogDto.DogList> dogList(Integer memberNo) {
         System.out.println("9807");
-        List<DogDto.dogList> dogList = dogDao.findDogList(memberNo);
+        List<DogDto.DogList> dogList = dogDao.findDogList(memberNo);
         dogList.get(0).setDogProfile(ImageConstants.IMAGE_DOG_URL+dogList.get(0).getDogProfile());
         dogList.get(1).setDogProfile(ImageConstants.IMAGE_DOG_URL+dogList.get(1).getDogProfile());
         return dogList;
