@@ -22,6 +22,7 @@ public class ProductOrderDetailDto {
         private Integer productNo;
         private String productName;
         private String productImage;
+        private Integer productOrderNo;
         private Integer productOrderDetailNo;
         private Boolean productOrderDetailReviewEnabled;
     }
