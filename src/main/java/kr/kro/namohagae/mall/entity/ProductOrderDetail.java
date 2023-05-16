@@ -16,5 +16,6 @@ public class ProductOrderDetail {
     private Boolean productOrderDetailReviewEnabled;
 
     public void setProductOrderNo(Integer productOrderNo) {
+        this.productOrderNo= productOrderNo;
     }
 }
