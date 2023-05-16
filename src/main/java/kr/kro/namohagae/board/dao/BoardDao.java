@@ -14,7 +14,7 @@ public interface BoardDao {
 
 
     public void boardFreeInsertData(Board board);
-    public List<Board> boardFreeList();
+
 
     public Board boardFreeReadData(Integer boardNo);
 
@@ -22,7 +22,8 @@ public interface BoardDao {
 
     public void boardUpdateData(Board board);
 
-    List<BoardList> pagingList(@Param("start") int start, @Param("limit") int limit);
+    List<BoardList> pagingList(@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
+
     public int boardCount();
 
     public Integer increaseReadCnt(Integer boardNo);

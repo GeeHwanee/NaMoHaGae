@@ -83,6 +83,7 @@ public class GlobalController {
     private BoardTownService boardTownService;
     @Autowired
     private CommentService commentService;
+
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
     public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -298,11 +299,14 @@ public class GlobalController {
 
     @GetMapping("/board/free/list")
     public String paging(Model model,
-                         @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,
+                         @RequestParam(value ="searchName", defaultValue = "") String searchName) {
 
-        List<BoardList> pagingList = boardService.pagingList(page);
+        List<BoardList> pagingList = boardService.pagingList(searchName,page);
         PageDto pageDTO = boardService.pagingParam(page);
-
+        if (searchName != null && !searchName.isEmpty()) {
+            model.addAttribute("searchName", searchName);
+        }
         model.addAttribute("list", pagingList);
         model.addAttribute("paging", pageDTO);
         return "board/free/list";
@@ -354,7 +358,9 @@ public class GlobalController {
     }
 
     @GetMapping("/board/town/list")
-    public String townList(){
+    public String townList(String townGu){
+
+
         return "/board/town/list";
     }
 

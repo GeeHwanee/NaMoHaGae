@@ -33,10 +33,7 @@
             m.member_no = #{memberNo}
     </insert>
 
-    <select id="boardFreeList" resultType="kr.kro.namohagae.board.entity.Board">
-        select * from board where town_no = 0
 
-    </select>
 
     <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.Board" parameterType="int">
         select * from board where board_no = #{boardNo}
@@ -54,6 +51,7 @@
         SELECT b.*, m.member_nickname AS memberNickname
         FROM board b
                  JOIN member m ON b.member_No = m.member_No
+        WHERE b.board_title LIKE '%' || #{searchName} || '%'
         ORDER BY b.board_No DESC
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
@@ -61,10 +59,13 @@
         SELECT COUNT(BOARD_NO) FROM BOARD
     </select>
 
-    <select id="boardSearch">
-        SELECT *
-        FROM BOARD
-        WHERE BOARD_TITLE LIKE '%#{searchName}%'
+    <select id="boardSearch" resultType="kr.kro.namohagae.board.entity.BoardList">
+        SELECT b.*, m.member_nickname AS memberNickname
+        FROM board b
+                 JOIN member m ON b.member_No = m.member_No
+        WHERE b.board_title LIKE '%' || #{searchName} || '%'
+        ORDER BY b.board_No DESC
+        OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
     <select id="findByBoardNo" resultType="Board" parameterType="int">

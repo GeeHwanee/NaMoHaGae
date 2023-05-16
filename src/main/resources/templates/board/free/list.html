@@ -64,37 +64,41 @@
                             <th:block th:if="${board.townNo == 0}">
                             <td th:text="${board.boardNo}">1</td>
                             <td>
-                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page})}" th:text="${board.boardTitle}">게시물 제목</a>
+                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName})}" th:text="${board.boardTitle}">게시물 제목</a>
                             </td>
                             <td th:text="${board.memberNickname}"></td>
                             <td th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${board.boardReadCount}"></td>
                             </th:block>
+
                         </tr>
                     </tbody>
                 </table>
-
+            <form th:action="@{/board/free/list}" method="get">
+                <input type="text" name="searchName">
+                <button type="submit">검색</button>
+            </form>
             <div class="layout2">
                 <ul>
                     <li th:if="${paging.page <= 1}">
                         <span>[이전]</span>
                     </li>
                     <li th:if="${paging.page > 1}">
-                        <a th:href="@{/board/free/list(page=${paging.page - 1})}">[이전]</a>
+                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName})}">[이전]</a>
                     </li>
                     <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
                         <div th:if="${i eq paging.page}">
                             <span th:text="${i}"></span>
                         </div>
                         <div th:if="${i != paging.page}">
-                            <a th:href="@{/board/free/list(page=${i})}" th:text="${i}"></a>
+                            <a th:href="@{/board/free/list(page=${i}, searchName=${searchName})}" th:text="${i}"></a>
                         </div>
                     </li>
                     <li th:if="${paging.page >= paging.maxPage}">
                         <span>[다음]</span>
                     </li>
                     <li th:if="${paging.page < paging.maxPage}">
-                        <a th:href="@{/board/free/list(page=${paging.page + 1})}">[다음]</a>
+                        <a th:href="@{/board/free/list(page=${paging.page + 1}, searchName=${searchName})}">[다음]</a>
                     </li>
                 </ul>
             </div>
