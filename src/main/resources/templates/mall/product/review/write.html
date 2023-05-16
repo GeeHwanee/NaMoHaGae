@@ -36,6 +36,7 @@
   }
 </style>
 <script>
+  const productOrderNo = [[${item.productOrderNo}]]
   const productOrderDetailNo = [[${item.productOrderDetailNo}]]
   const productNo =  [[${item.productNo}]]
 </script>
@@ -63,6 +64,7 @@
 
       const productReviewContent = $('#content').val();
       const $form = $('<form>').attr('method','post').attr('action','/mall/product/review/write');
+      $("<input type='hidden'>").attr('name','productOrderNo').val(productOrderNo).appendTo($form);
       $("<input type='hidden'>").attr('name','productOrderDetailNo').val(productOrderDetailNo).appendTo($form);
       $("<input type='hidden'>").attr('name','productNo').val(productNo).appendTo($form);
       $("<input type='hidden'>").attr('name','productReviewContent').val(productReviewContent).appendTo($form);
