@@ -20,7 +20,7 @@ header {
     display: flex;
     align-content: center;
     justify-content: center;
-    width:50%;
+    width:40%;
     text-align:center;
     line-height:86px;
     margin: 3px 0;
@@ -28,7 +28,7 @@ header {
 .header_team, .header_icon{
     display: flex;
     align-items: flex-end;
-    width: 15%;
+    width: 20%;
     padding: 10px;
 }
 
