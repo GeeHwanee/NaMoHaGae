@@ -31,6 +31,29 @@
   </aside>
   <section>
     <p>주문성공</p>
+    <div class="container mt-3">
+      <h2>주문이 완료되었습니다</h2>
+      <div class="card bg-success text-white">
+        주문일:<span th:text="${order.productOrderDate}"></span>
+        배송지:<span th:text="${order.addressPostcode} ${order.addressAddress} ${order.addressAddressDetail}"></span>
+      </div>
+      <table>
+        <tr>
+          <td>주문일</td>
+          <td>배송지</td>
+          <td>배송상태</td>
+        </tr>
+        <!-- <tr th:each="item:${order.orderDetailList}"> -->
+        <tr>
+          <td>
+            <img th:src="${order.productImageList}" width="100px">
+          </td>
+          <td>
+            <span th:text="${order.productList}"></span>
+          </td>
+        </tr>
+      </table>
+    </div>
   </section>
   <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
