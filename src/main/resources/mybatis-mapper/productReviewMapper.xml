@@ -32,13 +32,4 @@
         )
         where rnum&gt;=#{startRowNum}
     </select>
-
-    <!-- 리뷰 쓴 상품 찾기 -->
-    <select id="findInformationByProductNo" resultType="kr.kro.namohagae.mall.dto.ProductReviewDto$Write">
-        SELECT pr.PRODUCT_NO, p.product_name,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        FROM PRODUCT_REVIEW pr
-                 JOIN PRODUCT p ON pr.product_no = p.product_no
-                 JOIN PRODUCT_IMAGE pi ON pr.product_no = pi.product_no
-    </select>
 </mapper>
