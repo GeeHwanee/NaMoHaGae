@@ -10,13 +10,13 @@ import java.time.LocalDate;
 public class DogDto {
     @Data
     @ToString
-    public static class dogList {
+    public static class DogList {
         private Integer dogNo;
         private String dogProfile;
         private String dogName;
     }
     @Data
-    public static class registeration{
+    public static class Registeration {
         private String dogCategory;
         private String dogName;
         private String dogIntroduce;

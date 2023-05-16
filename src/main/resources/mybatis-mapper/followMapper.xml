@@ -10,7 +10,7 @@
         delete from follow where follow_member_no=#{memberNo} and member_no=#{myMemberNo}
     </delete>
 
-    <select id="findFollowList" resultType="kr.kro.namohagae.member.dto.FollowDto$list">
+    <select id="findFollowList" resultType="kr.kro.namohagae.member.dto.FollowDto$FollowList">
         select * from
             (
                 select rownum as rnum, a.* from

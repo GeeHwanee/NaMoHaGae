@@ -19,7 +19,7 @@
     </trim>
    where dog_no = #{dogNo} and rownum=1
 </update>
-<select id="findDogList" resultType="kr.kro.namohagae.member.dto.DogDto$dogList">
+<select id="findDogList" resultType="kr.kro.namohagae.member.dto.DogDto$DogList">
     select dog_no,dog_profile,dog_name from dog where member_no = #{memberNo}
 </select>
 <select id="findByDog" resultType="Dog">
