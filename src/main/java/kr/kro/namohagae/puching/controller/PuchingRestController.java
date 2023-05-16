@@ -1,7 +1,7 @@
-package kr.kro.namohagae.puchingtest.controller;
+package kr.kro.namohagae.puching.controller;
 
-import kr.kro.namohagae.puchingtest.dto.PuchingDto;
-import kr.kro.namohagae.puchingtest.service.PuchingService;
+import kr.kro.namohagae.puching.dto.PuchingDto;
+import kr.kro.namohagae.puching.service.PuchingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

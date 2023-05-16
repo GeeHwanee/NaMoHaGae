@@ -181,7 +181,7 @@
             width: 40%; border-right:1px solid #c4c4c4;
         }
         .inbox_msg {
-            border: 1px solid #c4c4c4;
+            border: 3px solid #ea986b;
             clear: both;
             overflow: hidden;
             border-radius: 3%;
@@ -717,14 +717,12 @@
     var nowChatNick=undefined;
     var nowChatImage=undefined;
 
-    $(document).on('click','a',async function (){
-        $('.msg_history').empty();
-        $('.msg_send_btn').prop('disabled', false);
-        $('.chat_list').removeClass('active_chat');
-
-        $(this).parent().addClass('active_chat')
+    $(document).on('click','#userclick',async function (){
 
         var userclickvalue = $(this).data("userno")
+        if(nowChatUser==userclickvalue){
+            return;
+        }
         nowChatUser = userclickvalue;
         var userclickemailvalue=$(this).data("useremail")
         nowChatEmail =userclickemailvalue;
@@ -732,10 +730,20 @@
         nowChatNick=userclicknickvalue;
         var userclickimagevalue=$(this).data("userimage")
         nowChatImage=userclickimagevalue;
-        console.log("a태그 클릭")
         var $nowchatusernick=$('#nowchatusernick')
         $nowchatusernick.text('')
         $nowchatusernick.append(nowChatNick);
+
+
+
+
+        $('.msg_history').empty();
+        $('.msg_send_btn').prop('disabled', false);
+        $('.chat_list').removeClass('active_chat');
+
+        $(this).parent().addClass('active_chat')
+
+
 
         //nowChatUser와의 채팅 기록 불러오가
         var chatLog = [];
@@ -780,6 +788,7 @@
             },
             error: function(xhr, status, error) {
                 console.log("Error while getting chat log: " + error);
+                alert('채팅기록을 못 불러왔습니다.')
             }
         });
 
@@ -1053,6 +1062,7 @@
         } catch (err) {
             console.log(err);
             alert('해당 유저에게 작성할 퍼칭 리뷰가 없습니다');
+
         }
 
 

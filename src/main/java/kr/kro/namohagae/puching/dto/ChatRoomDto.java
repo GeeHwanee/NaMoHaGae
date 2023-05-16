@@ -1,10 +1,6 @@
-package kr.kro.namohagae.puchingtest.dto;
+package kr.kro.namohagae.puching.dto;
 
-import kr.kro.namohagae.puchingtest.entity.ChatRoom;
-import kr.kro.namohagae.puchingtest.entity.Message;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 public class ChatRoomDto {
 

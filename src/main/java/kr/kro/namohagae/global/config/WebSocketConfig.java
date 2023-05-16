@@ -1,8 +1,8 @@
 package kr.kro.namohagae.global.config;
 
 import kr.kro.namohagae.global.hander.NotificationWebSocketHandler;
-import kr.kro.namohagae.puchingtest.websocket.ChatPuchingWebsocketHandler;
-import kr.kro.namohagae.puchingtest.websocket.ChatWebSocketHandler;
+import kr.kro.namohagae.puching.websocket.ChatPuchingWebsocketHandler;
+import kr.kro.namohagae.puching.websocket.ChatWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
