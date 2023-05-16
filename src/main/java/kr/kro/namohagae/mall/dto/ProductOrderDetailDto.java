@@ -16,4 +16,13 @@ public class ProductOrderDetailDto {
         private Integer productOrderDetailPrice;
         private Boolean productOrderDetailReviewEnabled;
     }
+
+    @Data
+    public static class OrderInformation {
+        private Integer productNo;
+        private String productName;
+        private String productImage;
+        private Integer productOrderDetailNo;
+        private Boolean productOrderDetailReviewEnabled;
+    }
 }

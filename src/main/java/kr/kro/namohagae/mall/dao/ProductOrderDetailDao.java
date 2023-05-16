@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.dao;
 
+import kr.kro.namohagae.mall.dto.ProductOrderDetailDto;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -9,10 +10,10 @@ public interface ProductOrderDetailDao {
     public Integer save(ProductOrderDetail productOrderDetail);
 
     // 내가 쓴 리뷰
-    public ProductOrderDetail findByOrderDetailNo(Integer orderDetailNo);
+    public ProductOrderDetailDto.OrderInformation findByOrderDetailNo(Integer productOrderDetailNo);
 
     // 리뷰 작성 완료
-    public Integer updateReview(Integer orderDetailNo);
+    public Integer updateReview(Integer productOrderDetailNo);
 
 
 }
