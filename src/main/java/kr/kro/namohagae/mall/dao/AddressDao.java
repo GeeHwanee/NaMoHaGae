@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface AddressDao {
-    public Integer save(Address address);
+    public Boolean save(Address address);
 
     public List<AddressDto.Read> findAll(Integer memberNo);
 

@@ -245,12 +245,6 @@ public class GlobalController {
         return "/member/mall/addressCreate";
     }
 
-    @PostMapping("/member/mall/address/add")
-    public String save(@AuthenticationPrincipal MyUserDetails myUserDetails, AddressDto.save dto){
-        Integer memberNo = myUserDetails.getMemberNo();
-        addressService.save(memberNo,dto);
-        return "redirect:/member/mall/address";
-    }
 
     @GetMapping("/member/mall/qna")
     public void qnaList(){

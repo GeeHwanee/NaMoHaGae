@@ -12,7 +12,7 @@ public class AddressDto {
         private String addressAddressDetail;
 
         public Address toEntity(Integer memberNo,String name){
-            return Address.builder().addressAddress(addressAddress).addressName(name).addressAddressDetail(addressAddressDetail).addressPostcode(addressPostcode).memberNo(memberNo).build();
+            return Address.builder().addressAddress(addressAddress).addressName(name).addressAddressDetail(addressAddressDetail).addressPostcode(addressPostcode).memberNo(memberNo).defaultAddressEnabled(false).build();
         }
     }
 
