@@ -1,5 +1,7 @@
 package kr.kro.namohagae.mall.dto;
 
+import kr.kro.namohagae.mall.entity.Product;
+import kr.kro.namohagae.mall.entity.ProductImage;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -35,12 +37,13 @@ public class ProductOrderDto {
         private Integer productOrderTotalPrice;
         private LocalDateTime productOrderDate;
         private Integer memberNo;
-        private String productImage;
-        private String productName;
-        private Integer addressNo;
+        //private Integer addressNo;
         private String addressPostcode;
         private String addressAddress;
         private String addressAddressDetail;
+        // private String productImage;
+        private List<ProductImage> productImageList;
+        private List<Product> productList;
         private List<ProductOrderDetail> orderDetailList;
     }
 }
