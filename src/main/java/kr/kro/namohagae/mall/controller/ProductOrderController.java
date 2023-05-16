@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,7 @@ public class ProductOrderController {
     }
 
     // 주문 결과 보기
+    /*
     @GetMapping("/mall/order/success")
     public String orderSuccess(Model model, HttpServletRequest req, RedirectAttributes ra) {
         Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
@@ -83,11 +85,30 @@ public class ProductOrderController {
             return "redirect:/mall/main";
         }
     }
+     */
+    @GetMapping("/mall/order/success")
+    public String orderSuccess(Model model, HttpServletRequest req, RedirectAttributes ra) {
+        Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
+        if (paramMap != null) {
+            Integer orderNo = (Integer) paramMap.get("orderNo");
+            ProductOrderDto.OrderResult order = service.findById(orderNo);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String productOrderDate = order.getProductOrderDate().format(formatter);
+
+            model.addAttribute("order", order);
+            model.addAttribute("productOrderDate", productOrderDate);
+            return "/mall/order/success";
+        } else {
+            ra.addFlashAttribute("msg", "잘못된 작업입니다");
+            return "redirect:/mall/main";
+        }
+    }
 
     // 주문 목록 보기
-    @GetMapping("/member/order/list")
+    @GetMapping("/mall/order/list")
     public void orderList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        service.orderList(myUserDetails.getMemberNo()).forEach(a->System.out.println(a));
+        //service.orderList(myUserDetails.getMemberNo()).forEach(a->System.out.println(a));
         model.addAttribute("orders", service.orderList(myUserDetails.getMemberNo()));
     }
 }

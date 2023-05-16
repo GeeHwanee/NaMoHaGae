@@ -12,10 +12,8 @@ import java.util.List;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class ProductReviewDto {
 
-    // 상품read에서 페이징 처리 때문에 5/4추가
     @Data
     public static class ReviewList {
-        // 별점 내용 작성자 작성일
         private Integer productReviewStar;
         private String productReviewContent;
         private Integer productReviewWriter;
@@ -38,19 +36,16 @@ public class ProductReviewDto {
     // 리뷰 쓰기
     @Data
     public static class Write {
-        private String productName;
-        private String productImage;
-        //
         private Integer productNo;
-        private Integer orderDetailNo;
+        private Integer productOrderNo;
+        private Integer productOrderDetailNo;
         private Integer productReviewWriter;
         private String productReviewContent;
         private Integer productReviewStar;
 
         public ProductReview toEntity(Integer memberNo) {
-            return ProductReview.builder().productNo(productNo).orderDetailNo(orderDetailNo).productReviewWriter(memberNo).
+            return ProductReview.builder().productNo(productNo).productOrderNo(productOrderNo).productOrderDetailNo(productOrderDetailNo).productReviewWriter(memberNo).
                     productReviewContent(productReviewContent).productReviewStar(productReviewStar).productReviewWriteDate(LocalDateTime.now()).build();
         }
     }
-
 }

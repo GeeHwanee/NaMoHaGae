@@ -3,8 +3,8 @@ package kr.kro.namohagae.mall.service;
 import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dao.ProductOrderDetailDao;
 import kr.kro.namohagae.mall.dao.ProductReviewDao;
+import kr.kro.namohagae.mall.dto.ProductOrderDetailDto;
 import kr.kro.namohagae.mall.dto.ProductReviewDto;
-import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import kr.kro.namohagae.mall.entity.ProductReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,16 +26,18 @@ public class ProductReviewService {
     public void write(ProductReviewDto.Write dto, Integer memberNo) {
         ProductReview productReview = dto.toEntity(memberNo);
         productReviewDao.save(productReview);
-        productOrderDetailDao.updateReview(dto.getOrderDetailNo());
-        productDao.updateReview(productReview);
+        productOrderDetailDao.updateReview(dto.getProductOrderDetailNo());
+        //productDao.updateReview(productReview);
     }
 
-    public ProductOrderDetail read(Integer orderDetailNo) {
-        return productOrderDetailDao.findByOrderDetailNo(orderDetailNo);
+    // 수정중 0517
+    /*
+    public ProductOrderDetail read(Integer productOrderDetailNo) {
+        return productOrderDetailDao.findByOrderDetailNo(productOrderDetailNo);
     }
-
-    public List<ProductReviewDto.Write> findInformationByProductNo(Integer productNo) {
-        return productReviewDao.findInformationByProductNo(productNo);
+     */
+    public ProductOrderDetailDto.OrderInformation read(Integer productOrderDetailNo) {
+        return productOrderDetailDao.findByOrderDetailNo(productOrderDetailNo);
     }
 
     public ProductReviewDto.Pagination list(Integer pageNo, Integer productNo) {

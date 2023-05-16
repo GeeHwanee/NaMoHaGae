@@ -6,8 +6,8 @@
         <selectKey keyProperty="productReviewNo" order="BEFORE" resultType="int">
             select product_review_seq_product_review_no.nextval from dual
         </selectKey>
-        insert into PRODUCT_REVIEW (product_review_no, product_no, order_no, order_detail_no, product_review_writer, product_review_content, product_review_star, product_review_write_date)
-        values (#{productReviewNo}, #{productNo}, #{orderNo}, #{orderDetailNo}, #{productReviewWriter}, #{productReviewContent}, #{productReviewStar}, #{productReviewWriteDate})
+        insert into PRODUCT_REVIEW (product_review_no, product_no, product_order_no, product_order_detail_no, product_review_writer, product_review_content, product_review_star, product_review_write_date)
+        values (#{productReviewNo}, #{productNo}, #{productOrderNo}, #{productOrderDetailNo}, #{productReviewWriter}, #{productReviewContent}, #{productReviewStar}, #{productReviewWriteDate})
     </insert>
 
     <!-- 특정 상품의 리뷰 개수를 조회 -->
@@ -31,14 +31,5 @@
         where rownum&lt;=#{endRowNum}
         )
         where rnum&gt;=#{startRowNum}
-    </select>
-
-    <!-- 리뷰 쓴 상품 찾기 -->
-    <select id="findInformationByProductNo" resultType="kr.kro.namohagae.mall.dto.ProductReviewDto$Write">
-        SELECT pr.PRODUCT_NO, p.product_name,
-        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
-        FROM PRODUCT_REVIEW pr
-                 JOIN PRODUCT p ON pr.product_no = p.product_no
-                 JOIN PRODUCT_IMAGE pi ON pr.product_no = pi.product_no
     </select>
 </mapper>
