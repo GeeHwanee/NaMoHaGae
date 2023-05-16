@@ -26,7 +26,7 @@
     </select>
 
     <update id="resetDefault">
-        update address set default_address_enabled=0 where memberNo=#{memberNo}
+        update address set default_address_enabled=0 where member_no=#{memberNo}
     </update>
 
     <update id="setDefault">

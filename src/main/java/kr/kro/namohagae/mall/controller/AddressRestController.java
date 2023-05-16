@@ -29,6 +29,7 @@ public class AddressRestController {
         return ResponseEntity.ok(service.delete(addressNo));
     }
 
+    @PostMapping("/address/default")
     public ResponseEntity<List<Address>> setDefault(Integer addressNo, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         return ResponseEntity.ok(service.setDefault(addressNo, myUserDetails.getMemberNo()));
     }

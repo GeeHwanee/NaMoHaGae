@@ -39,12 +39,14 @@
             address.forEach(a => {
                 const tpl = `<tr>
 				<td><pre>주소이름       주소          상세주소<br>    ${a.addressName}   ${a.addressAddress}  ${a.addressAddressDetail}</pre></td>
-				<td><button type="button" value="${a.addressNo}" id="delete" class="btn btn-primary btn-block">삭제</button></td>
+				<td>
+				<button type="button" value="${a.addressNo}" id="delete" class="btn btn-primary btn-block">삭제</button>
+				<button type="button" value="${a.addressNo}" id="setDefault" class="btn btn-primary btn-block">기본 배송지 설정</button>
+				</td>
 			</tr>`;
                 $tbody.append(tpl);}
             )
         }
-
 
 
         $(document).ready(async function() {
@@ -55,6 +57,7 @@
             } catch (err) {
                 console.log(err);
             }
+
             $(document).on("click", "#delete", async function () {
                 const no = $(this).val();
                 try {
@@ -73,7 +76,19 @@
                 } catch (err) {
                     console.log(err);
                 }
-            })
+            });
+
+            $(document).on("click", "#setDefault", async function () {
+                const no = $(this).val();
+                try {
+                    await $.ajax({
+                        url: "/api/v1/address/default?addressNo=" + no,
+                        type: "POST"
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
+            });
         });
     </script>
 </head>
