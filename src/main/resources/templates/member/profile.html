@@ -23,6 +23,7 @@
   <title>내 정보</title>
   <script>
     function printBoard(review) {
+      $('#review').empty();
       const $tbody = $('#review');
       for(const r of review) {
         const tpl = `<tr>
@@ -33,6 +34,7 @@
       }
     }
     function printPagination({prev, start, end, next, pageno}) {
+      $('#page_ul').empty();
       const $ul = $('#page_ul');
       if(prev>0)
         $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
@@ -61,6 +63,7 @@
 
         // Add a click event listener to the pagination links
         $('#page_ul').on('click', '.page-link', async function (e) {
+          $('#review').remove();
           e.preventDefault();
           const pageNum = $(this).data('page-no');
           const result = await $.ajax("/api/v1/review/list?pageno=" + pageNum);
