@@ -48,6 +48,7 @@ public class CommentController {
         commentService.commentDelete(commentNo);
         return ResponseEntity.ok(null);
     }
+    @GetMapping("/member/comment/list")
     public ResponseEntity<?> commentList(Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails){
         Integer memberNo= myUserDetails.getMemberNo();
       return ResponseEntity.ok(commentService.myCommentList(pageno,memberNo));
