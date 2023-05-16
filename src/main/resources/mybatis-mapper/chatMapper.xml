@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.kro.namohagae.puchingtest.dao.ChatDao">
+<mapper namespace="kr.kro.namohagae.puching.dao.ChatDao">
 
-    <select id="findAllChatRoom" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
+    <select id="findAllChatRoom" resultType="kr.kro.namohagae.puching.dto.ChatRoomDto$Read">
         select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,'http://localhost:8081/api/v1/image/profile?name=' || m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
         from CHATROOM c,MEMBER m
         WHERE m.MEMBER_NO=c.CHATROOM_RECEIVER_NO and c.MEMBER_NO=#{memberNo}
@@ -16,7 +16,7 @@
         INSERT INTO MESSAGE(MESSAGE_NO,MESSAGE_SENDER,MESSAGE_RECEIVER,MESSAGE_CONTENT,MESSAGE_CONTENT_TYPE,MESSAGE_WRITE_DATE)
         VALUES (message_seq_message_no.nextval,#{messageSender},#{messageReceiver},#{messageContent},#{messageContentType},#{messageWriteDate})
     </insert>
-    <select id="findAllMessageByReceiverNo" resultType="kr.kro.namohagae.puchingtest.dto.MessageDto$MessageRead">
+    <select id="findAllMessageByReceiverNo" resultType="kr.kro.namohagae.puching.dto.MessageDto$MessageRead">
         select MESSAGE_SENDER as messageSenderNo,MESSAGE_RECEIVER as messageReceiverNo,MESSAGE_CONTENT as messageContent
              ,MESSAGE_CONTENT_TYPE as messageContentType,MESSAGE_WRITE_DATE as messageWriteDate from
             (select *from MESSAGE where (MESSAGE_SENDER=#{senderNo} and MESSAGE_RECEIVER=#{receiverNo}) or (MESSAGE_SENDER=#{receiverNo} and MESSAGE_RECEIVER=#{senderNo})
@@ -29,14 +29,14 @@
             (MEMBER_NO=#{receiverNo} and CHATROOM_RECEIVER_NO=#{memberNo})) and rownum=1
     </select>
 
-    <select id="findChatRoom" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
+    <select id="findChatRoom" resultType="kr.kro.namohagae.puching.dto.ChatRoomDto$Read">
         select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,'http://localhost:8081/api/v1/image/profile?name=' || m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
         from CHATROOM c,MEMBER m
         WHERE m.MEMBER_NO=c.CHATROOM_RECEIVER_NO and c.MEMBER_NO=#{memberNo} and c.CHATROOM_RECEIVER_NO=#{receiverNo}
 
     </select>
 
-    <select id="findChatRoomByReceiverNo" resultType="kr.kro.namohagae.puchingtest.dto.ChatRoomDto$Read">
+    <select id="findChatRoomByReceiverNo" resultType="kr.kro.namohagae.puching.dto.ChatRoomDto$Read">
         select MEMBER_NO as chatRoomReceiverNo,MEMBER_NICKNAME as memberNickName,'http://localhost:8081/api/v1/image/profile?name=' || MEMBER_PROFILE_IMAGE as memberImage,
                MEMBER_EMAIL as memberEmail
          from MEMBER WHERE MEMBER_NO=#{receiverNo}
@@ -47,7 +47,7 @@
         VALUES (message_seq_message_no.nextval,#{messageSender},#{messageReceiver},#{messageContent},#{messageContentType},#{messageWriteDate})
     </insert>
 
-    <insert id="savePuchingMessage" parameterType="kr.kro.namohagae.puchingtest.entity.Message">
+    <insert id="savePuchingMessage" parameterType="kr.kro.namohagae.puching.entity.Message">
         <selectKey keyProperty="messageNo" resultType="java.lang.Integer" order="BEFORE">
             SELECT message_seq_message_no.NEXTVAl FROM DUAL
         </selectKey>

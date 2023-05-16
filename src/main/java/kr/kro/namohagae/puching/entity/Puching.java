@@ -1,4 +1,4 @@
-package kr.kro.namohagae.puchingtest.entity;
+package kr.kro.namohagae.puching.entity;
 
 
 import lombok.AllArgsConstructor;

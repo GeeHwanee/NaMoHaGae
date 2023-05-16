@@ -1,8 +1,8 @@
-package kr.kro.namohagae.puchingtest.dto;
+package kr.kro.namohagae.puching.dto;
 
 import kr.kro.namohagae.global.util.constants.ImageConstants;
-import kr.kro.namohagae.puchingtest.entity.Message;
-import kr.kro.namohagae.puchingtest.entity.Puching;
+import kr.kro.namohagae.puching.entity.Message;
+import kr.kro.namohagae.puching.entity.Puching;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -21,6 +21,69 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
 <title>퍼칭 리뷰 페이지</title>
 </head>
+<style>
+    .loader-container{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-decoration: none;
+    }
+    .loader-box{
+        height: 200px;
+        width: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+    }
+    .loader{
+        position: relative;
+        overflow: hidden;
+        box-shadow: -5px -5px -5px
+        rgba(255,255,255,0.1),
+        10px 10px 10px rgba(0,0,0,0.4),
+        inset -5px -5px -5px rgba(255,255,255,0.2),
+        inset 10px 10px 10px rgba(0,0,0,0.4);
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+    }
+    .loader:before{
+        position: absolute;
+        content: '';
+        z-index: 10;
+        opacity: 10;
+        top:18px;
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        box-shadow: -5px -5px -5px
+        rgba(255,255,255,0.1),
+        10px 10px 10px rgba(0,0,0,0.4),
+        inset -5px -5px -5px rgba(255,255,255,0.2),
+        inset 10px 10px 10px rgba(0,0,0,0.4);
+    }
+    .loader span{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        filter: blur(20px);
+        border-radius: 50%;
+        background: linear-gradient(#e37a40, #ffffff, #ffffff);
+        animation: loader 0.6s linear infinite;
+    }
+    @keyframes loader {
+        0%{
+            transform: rotate(0deg);
+        }
+        100%{
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
 <body>
 <header th:replace="~{/fragment/header.html}"> </header>
 <main>
@@ -28,6 +91,14 @@
 
     </aside>
     <section>
+
+
+<div class="loader">
+    <span></span>
+</div>
+
+
+
 
     </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>

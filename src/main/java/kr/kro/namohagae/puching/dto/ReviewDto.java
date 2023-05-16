@@ -1,6 +1,6 @@
-package kr.kro.namohagae.puchingtest.dto;
+package kr.kro.namohagae.puching.dto;
 
-import kr.kro.namohagae.puchingtest.entity.Review;
+import kr.kro.namohagae.puching.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

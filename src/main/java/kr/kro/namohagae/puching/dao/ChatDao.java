@@ -1,9 +1,8 @@
-package kr.kro.namohagae.puchingtest.dao;
+package kr.kro.namohagae.puching.dao;
 
-import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
-import kr.kro.namohagae.puchingtest.dto.MessageDto;
-import kr.kro.namohagae.puchingtest.entity.ChatRoom;
-import kr.kro.namohagae.puchingtest.entity.Message;
+import kr.kro.namohagae.puching.dto.ChatRoomDto;
+import kr.kro.namohagae.puching.dto.MessageDto;
+import kr.kro.namohagae.puching.entity.Message;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
