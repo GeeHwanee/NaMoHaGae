@@ -25,7 +25,7 @@ public class ProductOrderService {
     // 결제할 주문 목록 조회(장바구니)
     public ProductOrderDto.Read orderReadyFromCart(Integer memberNo, List<Integer> checkedProductNos) {
         // 선택한 상품만 장바구니에 담기
-        List<ProductOrderDto.list> orderItems = new ArrayList<>();
+        List<ProductOrderDto.OrderList> orderItems = new ArrayList<>();
         Integer orderTotalPrice = 0;
         for (Integer productNo : checkedProductNos) {
             Optional<CartDetail> result = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo);
@@ -36,7 +36,7 @@ public class ProductOrderService {
             } else{
                 cartDetail = new CartDetail(null,memberNo,null,productNo,1,product.getProductPrice());
             }
-                ProductOrderDto.list orderItem = new ProductOrderDto.list(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
+                ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
                 orderItems.add(orderItem);
                 orderTotalPrice += orderItem.getOrderTotalPrice();
         }
@@ -48,8 +48,8 @@ public class ProductOrderService {
     // 결제할 주문 목록 조회(상품페이지)
     public ProductOrderDto.Read orderReadyFromProduct(Integer memberNo, Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
-        ProductOrderDto.list orderItem = new ProductOrderDto.list(productNo, dto.getProductImages().get(0), dto.getProductName(), 1, dto.getProductPrice(), dto.getProductPrice());
-        List<ProductOrderDto.list> orderItems = Collections.singletonList(orderItem);
+        ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(productNo, dto.getProductImages().get(0), dto.getProductName(), 1, dto.getProductPrice(), dto.getProductPrice());
+        List<ProductOrderDto.OrderList> orderItems = Collections.singletonList(orderItem);
         Integer orderTotalPrice = orderItem.getOrderTotalPrice();
 
         System.out.println(orderItems + "오더저장되었나");
@@ -171,7 +171,7 @@ public class ProductOrderService {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
 
         // 주문 상품 정보 생성
-        ProductOrderDto.list orderItem = new ProductOrderDto.list(productNo, dto.getProductImages().get(0), dto.getProductName(), 1, dto.getProductPrice(), dto.getProductPrice());
+        ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(productNo, dto.getProductImages().get(0), dto.getProductName(), 1, dto.getProductPrice(), dto.getProductPrice());
         //List<ProductOrderDto.list> orderItems = Collections.singletonList(orderItem);
         //Integer orderTotalPrice = dto.getProductPrice();
 
@@ -213,13 +213,13 @@ public class ProductOrderService {
         return productOrderDao.read(orderNo);
     }
 
-    public Integer saveOrder(List<ProductOrderDto.list> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo) {
+    public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
         ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), orderTotalPrice, LocalDateTime.now());
         productOrderDao.save(productOrder);
         Integer productOrderNo = productOrder.getProductOrderNo();
         List<Integer> productNos = new ArrayList<>();
-        for (ProductOrderDto.list item:orderItems) {
+        for (ProductOrderDto.OrderList item:orderItems) {
             ProductOrderDetail productOrderDetail = ProductOrderDetail.builder().productOrderNo(productOrderNo).productNo(item.getProductNo()).productOrderDetailCount(item.getCartDetailCount()).productOrderDetailPrice(item.getCartDetailPrice()).build();
             productOrderDetailDao.save(productOrderDetail);
 

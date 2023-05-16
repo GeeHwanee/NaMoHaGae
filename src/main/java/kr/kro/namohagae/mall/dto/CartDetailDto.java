@@ -22,7 +22,7 @@ public class CartDetailDto {
 
     @Data
     @AllArgsConstructor
-    public static class list {
+    public static class CartDetailList {
         private Integer productNo;
         private String productImage;
         private String productName;
@@ -35,7 +35,7 @@ public class CartDetailDto {
     @Data
     @AllArgsConstructor
     public static class Read {
-        private List<CartDetailDto.list> items;
+        private List<CartDetailList> items;
         private Integer cartTotalPrice;
     }
 

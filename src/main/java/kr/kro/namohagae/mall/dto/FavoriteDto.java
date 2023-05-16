@@ -11,7 +11,7 @@ import java.util.List;
 public class FavoriteDto {
 
     @Data
-    public static class list{
+    public static class FavoriteList {
         private Integer productNo;
         private String productName;
         private Integer productPrice;
@@ -26,6 +26,6 @@ public class FavoriteDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private List<FavoriteDto.list> favorites;
+        private List<FavoriteList> favorites;
     }
 }
