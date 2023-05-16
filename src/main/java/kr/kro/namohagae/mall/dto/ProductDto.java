@@ -69,8 +69,8 @@ public class ProductDto {
         private Integer productStock;
         //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
-        private List<ProductReviewDto.list> productReviews;
-        private List<QnaDto.list> qnas;
+        private List<ProductReviewDto.ReviewList> productReviews;
+        private List<QnaDto.QnaList> qnas;
 
 
     }

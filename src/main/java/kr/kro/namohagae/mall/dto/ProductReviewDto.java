@@ -14,7 +14,7 @@ public class ProductReviewDto {
 
     // 상품read에서 페이징 처리 때문에 5/4추가
     @Data
-    public static class list {
+    public static class ReviewList {
         // 별점 내용 작성자 작성일
         private Integer productReviewStar;
         private String productReviewContent;
@@ -32,7 +32,7 @@ public class ProductReviewDto {
         private Integer end;
         private Integer next;
         private Integer productNo;
-        private List<ProductReviewDto.list> review;
+        private List<ReviewList> review;
     }
     
     // 리뷰 쓰기
