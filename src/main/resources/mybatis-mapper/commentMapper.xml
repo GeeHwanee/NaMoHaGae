@@ -37,10 +37,10 @@
     <select id="myCommentList" resultType="kr.kro.namohagae.board.dto.CommentDto$MyCommentList">
         select * from
             (
-                select rownum as rnum, c.* from
+                select rownum as rnum, a.* from
                     (
-                       select board_no,comment_content,comment_write_date from board_comment where member_no=#{memberNo} and comment_enabled=0
-                    ) c
+                       select (select b.board_title from board b where b.board_no=c.board_no) as boardTitle,(select b.town_no from board b where b.board_no=c.board_no) as townNo,board_no,comment_content,comment_write_date from board_comment c where member_no=#{memberNo} and comment_enabled=0
+                    ) a
                 where rownum&lt;=#{endRowNum}
             )
         where rnum&gt;=#{startRowNum}
