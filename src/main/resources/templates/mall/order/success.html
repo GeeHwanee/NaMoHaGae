@@ -34,7 +34,8 @@
     <div class="container mt-3">
       <h2>주문이 완료되었습니다</h2>
       <div class="card bg-success text-white">
-        주문일:<span th:text="${order.productOrderDate}"></span>
+        <!--주문일:<span th:text="${order.productOrderDate}"></span>-->
+        주문일:<span th:text="${productOrderDate}"></span>
         배송지:<span th:text="${order.addressPostcode+order.addressAddress+order.addressAddressDetail}"></span>
       </div>
       <table>
