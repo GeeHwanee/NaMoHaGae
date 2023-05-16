@@ -20,8 +20,54 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
 <title>상품 주문상세 페이지</title>
+    <script th:inline="javascript">
+        const data = [[${map}]];
+    </script>
 <script>
+    let productName = undefined;
+    let cartDetailCount = undefined;
+    let cartTotalPrice = undefined;
+    let taxFreeAmount = undefined;
     $(document).ready(function() {
+        console.log(data);
+           const orderItems = data.orderItems;
+           const orderTotalPrice = data.orderTotalPrice;
+            console.log(orderItems);
+            console.log(orderTotalPrice);
+        $('#kaobtn').click(function() {
+            productName = '';
+            cartDetailCount = 0;
+            if(data.orderItems.length==1){
+                productName = data.orderItems[0].productName;
+                cartDetailCount = data.orderItems[0].cartDetailCount;
+                cartTotalPrice = data.orderTotalPrice;
+                taxFreeAmount = Math.round(cartTotalPrice/10);
+            }else{
+                let i=0;
+                for (const item of data.items) {
+                    cartDetailCount += data.items[i].cartDetailCount;
+                    i++;
+                }
+                cartTotalPrice = data.orderTotalPrice;
+                taxFreeAmount = Math.round(cartTotalPrice/10);
+                productName = data.orderItems[0].productName+ ' 외 '+((data.orderItems.length)-1)+'건';
+            }
+            $.ajax({
+                type:'get',
+                url:'/pay/start',
+                data: {
+                    item_name : productName,
+                    quantity : cartDetailCount,
+                    total_amount : cartTotalPrice,
+                    tax_free_amount : taxFreeAmount
+                },
+                success:function(res) {
+                    location.href = res.next_redirect_pc_url;
+                }
+            })
+        })
+
+
         $("#order").click(function() {
             const $form = $('<form>').attr('action', "/order/check").attr('method','post');
             $.each($(".addressNo"), function(idx, element) {
@@ -76,6 +122,7 @@
         <hr>
         <div class="mb-3 mt-3 d-grid">
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
+            <button id="kaobtn">카카오페이</button>
         </div>
     </section>
     <aside th:replace="~{/fragment/bside.html}"></aside>
