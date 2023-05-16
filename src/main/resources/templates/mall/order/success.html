@@ -35,7 +35,7 @@
       <h2>주문이 완료되었습니다</h2>
       <div class="card bg-success text-white">
         주문일:<span th:text="${order.productOrderDate}"></span>
-        배송지:<span th:text="${order.addressPostcode} ${order.addressAddress} ${order.addressAddressDetail}"></span>
+        배송지:<span th:text="${order.addressPostcode+order.addressAddress+order.addressAddressDetail}"></span>
       </div>
       <table>
         <tr>
@@ -43,13 +43,12 @@
           <td>배송지</td>
           <td>배송상태</td>
         </tr>
-        <!-- <tr th:each="item:${order.orderDetailList}"> -->
-        <tr>
+        <tr th:each="item:${order.orderDetailList}">
           <td>
-            <img th:src="${order.productImageList}" width="100px">
+            <img th:src="${item.productImage}" width="100px">
           </td>
           <td>
-            <span th:text="${order.productList}"></span>
+            <span th:text="${item.productName}"></span>
           </td>
         </tr>
       </table>
