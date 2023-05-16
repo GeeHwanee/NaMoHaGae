@@ -27,7 +27,7 @@
         }
     </style>
     <script>
-        function printNotification(review) {
+        function printReview(review) {
             const $tbody = $('#tbody');
             review.forEach(r => {
                     const tpl = `<tr>
@@ -35,6 +35,7 @@
                         <a href="http://localhost:8081/member/profile?memberNo=${r.receiverNo}">${r.reviewReceiver}</a>
                     </td>
                     <td>${r.reviewContent}</td>
+                    <td>${r.puchingPromiseDate}</td>
 			    </tr>`;
                     $tbody.append(tpl);
                 }
