@@ -22,6 +22,7 @@ public class ReviewDto {
         private Integer receiverNo;
         private String reviewReceiver;
         private String reviewContent;
+        private LocalDateTime puchingPromiseDate;
     }
 
     @Data
@@ -40,7 +41,7 @@ public class ReviewDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class writeview {
+    public static class Writeview {
         private String myImage;
         private String receiverImage;
         private String myNickName;
@@ -55,7 +56,7 @@ public class ReviewDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class write {
+    public static class Write {
         private Integer receiverNo;
         private Integer puchingNo;
         private String content;
