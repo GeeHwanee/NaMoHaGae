@@ -1,11 +1,11 @@
-package kr.kro.namohagae.puchingtest.controller;
+package kr.kro.namohagae.puching.controller;
 
 
 
-import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
-import kr.kro.namohagae.puchingtest.dto.MessageDto;
-import kr.kro.namohagae.puchingtest.entity.Message;
-import kr.kro.namohagae.puchingtest.service.ChatService;
+import kr.kro.namohagae.puching.dto.ChatRoomDto;
+import kr.kro.namohagae.puching.dto.MessageDto;
+import kr.kro.namohagae.puching.entity.Message;
+import kr.kro.namohagae.puching.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
