@@ -44,7 +44,7 @@ public class ProductOrderController {
         session.removeAttribute("checkedProductNos");
         ProductOrderDto.Read order;
         if (checkedProductNos != null) {
-            order = service.orderReadyFromCart(myUserDetails.getMemberNo(), checkedProductNos);
+            order = service.orderReady(myUserDetails.getMemberNo(), checkedProductNos);
         } else {
             return new ModelAndView("redirect:/mall/main");
         }
