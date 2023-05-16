@@ -19,40 +19,45 @@
   <!--기타 삽입-->
 
   <!------------------------------------------------------------------------------------------------------------------------------>
-  <title>상품 주문완료 페이지</title>
+  <title>상품 조회 페이지</title>
 </head>
 <body>
-<header th:replace="~{/fragment/header.html}">
-</header>
-<nav th:replace="~{/fragment/nav.html}">
-</nav>
+<header th:replace="~{/fragment/header.html}"></header>
+<nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
-  <aside th:replace="~{/fragment/aside.html}">
-  </aside>
+  <aside th:replace="~{/fragment/aside.html}"></aside>
   <section>
-    <p>주문성공</p>
     <div class="container mt-3">
-      <h2>주문이 완료되었습니다</h2>
-      <div class="card bg-success text-white">
-        <!--주문일:<span th:text="${order.productOrderDate}"></span>-->
-        주문일:<span th:text="${productOrderDate}"></span>
-        배송지:<span th:text="${order.addressPostcode+order.addressAddress+order.addressAddressDetail}"></span>
+      <h2>주문 조회</h2>
+      <div th:each="order:${orders}">
+        <div class="card bg-success text-white">
+          <div class="card-body" style="overflow:hidden;">
+            <div style="float:left;">
+              배송일:<span th:text="${order.productOrderDate}"></span>
+            </div>
+            <div style="float:right;">
+              배송지:<span th:text="${order.addressPostcode+order.addressAddress+order.addressAddressDetail}"></span>
+            </div>
+          </div>
+        </div>
+        <table class="table table-border">
+          <tr th:each="item:${order.orderDetailList}">
+            <td>
+              <img th:src="${item.productImage}" width="100px">
+            </td>
+            <td>
+              <span th:text="${item.productName}"></span>
+            </td>
+            <td>
+              <span th:text="${item.productOrderDetailCount}"></span>개/
+              <span th:text="${item.productOrderDetailPrice}"></span>원
+            </td>
+            <td>
+              <a type="button" class="btn btn-primary" th:classappend="${item.productOrderDetailReviewEnabled==true}? '':'hide'"  th:href="@{/mall/product/review/write(productOrderDetailNo=${item.productOrderDetailNo})}">리뷰 작성</a>
+            </td>
+          </tr>
+        </table>
       </div>
-      <table>
-        <tr>
-          <td>주문일</td>
-          <td>배송지</td>
-          <td>배송상태</td>
-        </tr>
-        <tr th:each="item:${order.orderDetailList}">
-          <td>
-            <img th:src="${item.productImage}" width="100px">
-          </td>
-          <td>
-            <span th:text="${item.productName}"></span>
-          </td>
-        </tr>
-      </table>
     </div>
   </section>
   <aside th:replace="~{/fragment/bside.html}"></aside>

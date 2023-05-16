@@ -36,7 +36,8 @@
   }
 </style>
 <script>
-  const orderDetailNo = [[${item.orderDetailNo}]]
+  const productOrderNo = [[${item.productOrderNo}]]
+  const productOrderDetailNo = [[${item.productOrderDetailNo}]]
   const productNo =  [[${item.productNo}]]
 </script>
 <script>
@@ -63,7 +64,8 @@
 
       const productReviewContent = $('#content').val();
       const $form = $('<form>').attr('method','post').attr('action','/mall/product/review/write');
-      $("<input type='hidden'>").attr('name','orderDetailNo').val(orderDetailNo).appendTo($form);
+      $("<input type='hidden'>").attr('name','productOrderNo').val(productOrderNo).appendTo($form);
+      $("<input type='hidden'>").attr('name','productOrderDetailNo').val(productOrderDetailNo).appendTo($form);
       $("<input type='hidden'>").attr('name','productNo').val(productNo).appendTo($form);
       $("<input type='hidden'>").attr('name','productReviewContent').val(productReviewContent).appendTo($form);
       $("<input type='hidden'>").attr('name','productReviewStar').val(productReviewStar).appendTo($form);
@@ -79,9 +81,8 @@
   <section>
     <h1>리뷰쓰기 페이지</h1>
     <hr>
-    <!-- 상품이미지,이름 끌어오는중,,, -->
-    <img th:src="${productImage}" width="100px">
-    <span th:text="${productName}"></span>
+    <img th:src="${item.productImage}" width="100px">
+    <span th:text="${item.productName}"></span>
     <hr>
     <div class="star_div">
       <div>
