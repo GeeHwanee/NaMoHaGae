@@ -28,13 +28,13 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if(username.equals("admin")) {
-            return new MyUserDetails(-1, "관리자", username, passwordEncoder.encode("1234"), true, List.of(new SimpleGrantedAuthority(Roles.ADMIN.getRole())));
+            return new MyUserDetails(-1, "관리자",0, username, passwordEncoder.encode("1234"), true, List.of(new SimpleGrantedAuthority(Roles.ADMIN.getRole())));
         }
         try {
             Member member = memberDao.findByUsername(username).get();
             Collection<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(Roles.USER.getRole()));
-            return new MyUserDetails(member.getMemberNo(), member.getMemberNickname(),username, member.getMemberPassword(), member.getMemberEnabled(), authorities);
+            return new MyUserDetails(member.getMemberNo(), member.getMemberNickname(),member.getTownNo(),username, member.getMemberPassword(), member.getMemberEnabled(), authorities);
 
         }catch (NoSuchElementException e) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
