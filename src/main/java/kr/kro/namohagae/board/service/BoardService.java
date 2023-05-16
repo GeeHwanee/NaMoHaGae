@@ -39,11 +39,7 @@ public class BoardService {
         boardDao.boardFreeInsertData(board);
     }
 
-    public List<Board> boardFreeList() {
 
-
-        return boardDao.boardFreeList();
-    }
 
     public Board boardFreeReadData(Integer boardNo) {
 
@@ -64,7 +60,7 @@ public class BoardService {
     int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
     int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
 
-    public List<BoardList> pagingList(int page) {
+    public List<BoardList> pagingList(String searchName,int page) {
 
         /*
         1페이지당 보여지는 글 갯수 5
@@ -75,8 +71,9 @@ public class BoardService {
 
         int pagingStart = (page - 1) * pageLimit;
 
-        return boardDao.pagingList(pagingStart, pageLimit);
+        return boardDao.pagingList(searchName,pagingStart, pageLimit);
     }
+
 
     public PageDto pagingParam(int page) {
         // 전체 글 갯수 조회

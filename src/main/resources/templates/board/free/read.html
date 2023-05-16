@@ -188,8 +188,9 @@
     // 댓글 작성 함수
 
     const listFn = () => {
-        const page =  [[${page}]];
-        location.href = "/board/free/list?page=" + page;
+        const page = [[${page}]];
+        const searchName = "[[${searchName}]]";
+        location.href = "/board/free/list?page=" + page + "&searchName=" + searchName;
     }
 
 
