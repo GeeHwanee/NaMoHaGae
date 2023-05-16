@@ -7,10 +7,7 @@ import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dao.CartDetailDao;
 import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dto.AddressDto;
-import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.ProductOrderDto;
-import kr.kro.namohagae.mall.entity.CartDetail;
-import kr.kro.namohagae.mall.entity.ProductOrderDetail;
 import kr.kro.namohagae.mall.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,25 +67,12 @@ public class ProductOrderController {
 
     // 0515 합친버전 (test 필요)
     @PostMapping("/mall/order")
-    public String order(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
-                         @RequestParam(value = "productNo", required = false) Integer productNo,
-                         @RequestParam(value = "checkedProductNos", required = false) List<Integer> checkedProductNos) {
-        Integer memberNo = myUserDetails.getMemberNo();
-        ProductOrderDto.Read order;
-
-        if (productNo != null) {
-            order = service.orderReadyFromProduct(memberNo, productNo);
-            session.setAttribute("productNo", productNo);
-        } else if (checkedProductNos != null) {
-            order = service.orderReadyFromCart(memberNo, checkedProductNos);
+    public String order(HttpSession session, @RequestParam(value = "checkedProductNos", required = false) List<Integer> checkedProductNos) {
+        if (checkedProductNos != null) {
             session.setAttribute("checkedProductNos", checkedProductNos);
         } else {
             return "redirect:/mall/main";
         }
-
-        session.setAttribute("orderItems", order.getOrderItems());
-        session.setAttribute("orderTotalPrice", order.getOrderTotalPrice());
-
         return "redirect:/mall/order/ready";
     }
 
@@ -141,27 +124,20 @@ public class ProductOrderController {
     //0515 합친버전 (test 필요)
     @GetMapping("/mall/order/ready")
     public ModelAndView orderList(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        List<Integer> checkedProductNos = (List<Integer>) session.getAttribute("checkedProductNos");
-        Integer productNo = (Integer) session.getAttribute("productNo");
-
+        List<Integer> checkedProductNos = (List<Integer>)session.getAttribute("checkedProductNos");
+        session.removeAttribute("checkedProductNos");
         ProductOrderDto.Read order;
-        if (productNo != null) {
-            order = service.orderReadyFromProduct(myUserDetails.getMemberNo(), productNo);
-
-        } else if (checkedProductNos != null) {
+        if (checkedProductNos != null) {
             order = service.orderReadyFromCart(myUserDetails.getMemberNo(), checkedProductNos);
-
         } else {
             return new ModelAndView("redirect:/mall/main");
         }
-
         List<AddressDto.Read> addresses = service.findAddress(myUserDetails.getMemberNo());
-
         Map<String, Object> map = new HashMap<>();
         map.put("orderItems", order.getOrderItems());
         map.put("orderTotalPrice", order.getOrderTotalPrice());
         map.put("addresses", addresses);
-
+        session.setAttribute("map",map);
         return new ModelAndView("/mall/order/ready").addObject("map", map);
     }
 
@@ -260,50 +236,14 @@ public class ProductOrderController {
     @PostMapping("/order/check")
     public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
                              @RequestParam Integer addressNo, RedirectAttributes ra) {
-        List<Integer> checkedProductNos = (List<Integer>) session.getAttribute("checkedProductNos");
-        Integer productNo = (Integer) session.getAttribute("productNo");
-
-        List<ProductOrderDetail> items = new ArrayList<>();
-        Integer productOrderNo = null;
-
-        if (checkedProductNos != null) {
-            // 장바구니에서 주문하기인 경우
-            // 선택한 상품들 조회
-            List<CartDetail> cartDetails = cartDetailDao.findByMemberNoAndProductNos(myUserDetails.getMemberNo(), checkedProductNos);
-
-            // 주문 상품 정보 생성
-            for (CartDetail cartDetail : cartDetails) {
-                ProductDto.Read product = productDao.findByProductNo(cartDetail.getProductNo());
-
-                // productOrderNo 여기를 2로 바꾸면 주문 해결은 되긴해.. 근데 order_no가 2로 고정이되는 문제가,,,
-                ProductOrderDetail item = new ProductOrderDetail(null, 2, cartDetail.getProductNo(), cartDetail.getCartDetailCount(),
-                        product.getProductPrice(), true);
-                items.add(item);
-            }
-
-            // 주문 정보 저장
-            productOrderNo = service.placeOrderFromCart(items, myUserDetails.getMemberNo(), addressNo);
-            session.removeAttribute("checkedProductNos");
-
-        } else if (productNo != null) {
-            // 상품페이지에서 주문하기인 경우
-            ProductDto.Read product = productDao.findByProductNo(productNo);
-            if (product == null) {
-                return "redirect:/mall/main";
-            }
-
-            // 주문 상품 정보 생성
-            ProductOrderDetail item = new ProductOrderDetail(null, productOrderNo, product.getProductNo(), 1, product.getProductPrice(), true);
-            items.add(item);
-
-            // 주문 정보 저장
-            productOrderNo = service.placeOrderFromProduct(product.getProductNo(), myUserDetails.getMemberNo(), addressNo);
-            session.removeAttribute("productNo");
-        }
+        Map<String, Object> map = (Map<String, Object>)session.getAttribute("map");
+        List<ProductOrderDto.list> orderItems = (List<ProductOrderDto.list>)map.get("orderItems");
+        Integer orderTotalPrice = (Integer)map.get("orderTotalPrice");
+        Integer productOrderNo = service.saveOrder(orderItems, orderTotalPrice, myUserDetails.getMemberNo(), addressNo);
 
         ra.addFlashAttribute("orderNo", productOrderNo);
 //        return "redirect:/mall/order/success";
-        return "/mall/order/success";
+        return "redirect:/mall/order/success";
     }
 
 
