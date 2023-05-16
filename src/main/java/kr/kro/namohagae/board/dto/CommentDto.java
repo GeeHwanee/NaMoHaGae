@@ -21,9 +21,11 @@ public class CommentDto {
     }
     @Data
     public static class MyCommentList{
-        private String qnaContent;
-        private String qnaAnswerContent;
-        private LocalDateTime qnaAnswerWriteDate;
+        private String boardTitle;
+        private Integer townNo;
+        private Integer boardNo;
+        private String commentContent;
+        private LocalDateTime commentWriteDate;
     }
     @Data
     @AllArgsConstructor
