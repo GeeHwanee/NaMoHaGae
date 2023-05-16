@@ -48,7 +48,7 @@ public class FollowService {
     public FollowDto.Pagination list(Integer pageNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<FollowDto.list> follow =  followDao.findFollowList(startRowNum, endRowNum, memberNo);
+        List<FollowDto.FollowList> follow =  followDao.findFollowList(startRowNum, endRowNum, memberNo);
         Integer countOfFavorite = followDao.count(memberNo);
         Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
