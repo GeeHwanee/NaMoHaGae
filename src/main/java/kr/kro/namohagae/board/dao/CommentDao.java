@@ -19,5 +19,5 @@ public interface CommentDao {
 
     public void commentDelete(Integer commentNo);
 
-    public List<CommentDto.MyCommentList> myCommentList(Integer staetRownum,Integer endRownum,Integer memberNo);
+    public List<CommentDto.MyCommentList> myCommentList(Integer startRowNum,Integer endRowNum,Integer memberNo);
 }
