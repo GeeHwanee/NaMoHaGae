@@ -1,9 +1,6 @@
-package kr.kro.namohagae.puchingtest.dto;
+package kr.kro.namohagae.puching.dto;
 
-import kr.kro.namohagae.puchingtest.entity.Puching;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 
 
 public class PuchingDto {

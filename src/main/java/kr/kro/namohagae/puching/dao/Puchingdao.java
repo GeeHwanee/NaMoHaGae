@@ -1,7 +1,7 @@
-package kr.kro.namohagae.puchingtest.dao;
+package kr.kro.namohagae.puching.dao;
 
-import kr.kro.namohagae.puchingtest.dto.PuchingDto;
-import kr.kro.namohagae.puchingtest.entity.Puching;
+import kr.kro.namohagae.puching.dto.PuchingDto;
+import kr.kro.namohagae.puching.entity.Puching;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

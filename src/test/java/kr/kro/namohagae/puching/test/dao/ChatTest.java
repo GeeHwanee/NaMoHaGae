@@ -1,9 +1,9 @@
 package kr.kro.namohagae.puching.test.dao;
 
-import kr.kro.namohagae.puchingtest.dao.ChatDao;
-import kr.kro.namohagae.puchingtest.dto.MessageDto;
-import kr.kro.namohagae.puchingtest.entity.Message;
-import kr.kro.namohagae.puchingtest.service.ChatService;
+import kr.kro.namohagae.puching.dao.ChatDao;
+import kr.kro.namohagae.puching.dto.MessageDto;
+import kr.kro.namohagae.puching.entity.Message;
+import kr.kro.namohagae.puching.service.ChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,11 +1,11 @@
-package kr.kro.namohagae.puchingtest.service;
+package kr.kro.namohagae.puching.service;
 
 import kr.kro.namohagae.member.dao.MemberDao;
-import kr.kro.namohagae.puchingtest.dao.ChatDao;
-import kr.kro.namohagae.puchingtest.dao.Puchingdao;
-import kr.kro.namohagae.puchingtest.dao.ReviewDao;
-import kr.kro.namohagae.puchingtest.dto.ReviewDto;
-import kr.kro.namohagae.puchingtest.entity.Review;
+import kr.kro.namohagae.puching.dao.ChatDao;
+import kr.kro.namohagae.puching.dao.Puchingdao;
+import kr.kro.namohagae.puching.dao.ReviewDao;
+import kr.kro.namohagae.puching.dto.ReviewDto;
+import kr.kro.namohagae.puching.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

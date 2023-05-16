@@ -1,16 +1,16 @@
-package kr.kro.namohagae.puchingtest.service;
+package kr.kro.namohagae.puching.service;
 
 import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.entity.Member;
-import kr.kro.namohagae.puchingtest.dao.ChatDao;
-import kr.kro.namohagae.puchingtest.dao.Puchingdao;
-import kr.kro.namohagae.puchingtest.dto.ChatRoomDto;
-import kr.kro.namohagae.puchingtest.dto.MessageDto;
-import kr.kro.namohagae.puchingtest.entity.Message;
-import kr.kro.namohagae.puchingtest.entity.Puching;
+import kr.kro.namohagae.puching.dao.ChatDao;
+import kr.kro.namohagae.puching.dao.Puchingdao;
+import kr.kro.namohagae.puching.dto.ChatRoomDto;
+import kr.kro.namohagae.puching.dto.MessageDto;
+import kr.kro.namohagae.puching.entity.Message;
+import kr.kro.namohagae.puching.entity.Puching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -134,11 +134,8 @@ public class ChatService {
         content += "<button class=\"accept-button\">수락하기</button>";
         content += "<button class=\"disaccept-button\">취소하기</button>";
         content += "</div>";
-        System.out.println(content);
         Message message=dto.toEntity(senderNo,receiverNo,content);
         Integer messageNo= cdao.savePuchingMessage(message);
-        System.out.println(message.getMessageNo());
-        System.out.println("@@@@@@@@@@@@@@#@!#@!!@#12321321321");
         Puching puching=dto.toEntity(message.getMessageNo()); //객체를 따로 생성해서 쓰자
         pdao.savePuching(puching);
 
