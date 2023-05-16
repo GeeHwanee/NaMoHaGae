@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class ProductOrderDetailDto {
     @Data
     public static class OrderDetailList {
+        private Integer productNo;
         private String productImage;
         private String productName;
         private Integer productOrderDetailNo;
