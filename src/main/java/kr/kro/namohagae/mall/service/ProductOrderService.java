@@ -4,10 +4,7 @@ import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.ProductOrderDto;
-import kr.kro.namohagae.mall.entity.Address;
-import kr.kro.namohagae.mall.entity.CartDetail;
-import kr.kro.namohagae.mall.entity.ProductOrder;
-import kr.kro.namohagae.mall.entity.ProductOrderDetail;
+import kr.kro.namohagae.mall.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,23 +25,20 @@ public class ProductOrderService {
     // 결제할 주문 목록 조회(장바구니)
     public ProductOrderDto.Read orderReadyFromCart(Integer memberNo, List<Integer> checkedProductNos) {
         // 선택한 상품만 장바구니에 담기
-        List<CartDetail> carts = new ArrayList<>();
-        for (Integer productNo : checkedProductNos) {
-            CartDetail cartDetail = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo).get();
-            if (cartDetail != null) {
-                carts.add(cartDetail);
-            }
-        }
-
-        // 주문 정보 저장을 위한 리스트 생성
         List<ProductOrderDto.list> orderItems = new ArrayList<>();
         Integer orderTotalPrice = 0;
-
-        for (CartDetail cartDetail : carts) {
-            ProductDto.Read dto = productDao.findByProductNo(cartDetail.getProductNo());
-            ProductOrderDto.list orderItem = new ProductOrderDto.list(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
-            orderItems.add(orderItem);
-            orderTotalPrice += orderItem.getOrderTotalPrice();
+        for (Integer productNo : checkedProductNos) {
+            Optional<CartDetail> result = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo);
+            CartDetail cartDetail;
+            ProductDto.Read product = productDao.findByProductNo(productNo);
+            if (result.isPresent()) {
+                cartDetail = result.get();
+            } else{
+                cartDetail = new CartDetail(null,memberNo,null,productNo,1,product.getProductPrice());
+            }
+                ProductOrderDto.list orderItem = new ProductOrderDto.list(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
+                orderItems.add(orderItem);
+                orderTotalPrice += orderItem.getOrderTotalPrice();
         }
 
         return new ProductOrderDto.Read(orderItems, orderTotalPrice);
@@ -217,5 +211,37 @@ public class ProductOrderService {
 
     public ProductOrderDto.OrderResult findById(Integer orderNo) {
         return productOrderDao.read(orderNo);
+    }
+
+    public Integer saveOrder(List<ProductOrderDto.list> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo) {
+        Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
+        ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), orderTotalPrice, LocalDateTime.now());
+        productOrderDao.save(productOrder);
+        Integer productOrderNo = productOrder.getProductOrderNo();
+        List<Integer> productNos = new ArrayList<>();
+        for (ProductOrderDto.list item:orderItems) {
+            ProductOrderDetail productOrderDetail = ProductOrderDetail.builder().productOrderNo(productOrderNo).productNo(item.getProductNo()).productOrderDetailCount(item.getCartDetailCount()).productOrderDetailPrice(item.getCartDetailPrice()).build();
+            productOrderDetailDao.save(productOrderDetail);
+
+            // 상품 번호 추출
+            Integer productNo = item.getProductNo();
+            productNos.add(productNo);
+
+            // 상품 재고 처리
+            Integer productStock = productDao.findInformationByProductNo(productNo);
+            if (productStock >= item.getCartDetailCount()) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("productNo", productNo);
+                params.put("productOrderDetailNo", productOrderDetail.getProductOrderDetailNo());
+                productDao.updateStockByProductNo(params);
+            } else {
+                throw new RuntimeException("재고가 부족합니다.");
+            }
+        }
+        if (!productNos.isEmpty()) {
+            cartDetailDao.removeByCartNo(productNos, memberNo);
+        }
+        return productOrder.getProductOrderNo();
+
     }
 }

@@ -26,43 +26,9 @@
 		th {text-align: center}
 	</style>
 	<script>
-		let productName = undefined;
-		let cartDetailCount = undefined;
-		let cartTotalPrice = undefined;
-		let taxFreeAmount = undefined;
+
 		$(document).ready(function(){
-			$('#kaobtn').click(function() {
-				productName = '';
-				cartDetailCount = 0;
-				if(data.items.length==1){
-					productName = data.items[0].productName;
-					cartDetailCount = data.items[0].cartDetailCount;
-					cartTotalPrice = data.cartTotalPrice;
-					taxFreeAmount = Math.round(cartTotalPrice/10);
-				}else{
-					let i=0;
-					for (const item of data.items) {
-						cartDetailCount += data.items[i].cartDetailCount;
-						i++;
-					}
-					cartTotalPrice = data.cartTotalPrice;
-					taxFreeAmount = Math.round(cartTotalPrice/10);
-					productName = data.items[0].productName+ ' 외 '+((data.items.length)-1)+'건';
-				}
-				$.ajax({
-					type:'get',
-					url:'/pay/start',
-					data: {
-						item_name : productName,
-						quantity : cartDetailCount,
-						total_amount : cartTotalPrice,
-						tax_free_amount : taxFreeAmount
-					},
-					success:function(res) {
-						location.href = res.next_redirect_pc_url;
-					}
-				})
-			})
+
 
 		})
 	</script>
@@ -87,7 +53,7 @@
 			<th><span>상품 정보</span></th>
 			<th><span>금액</span></th>
 		</tr>
-		<tr th:each="item:${map.items}">
+		<tr th:each="item:${map.orderItems}">
 			<td style="width:20%;">
 				<img th:src="${item.productImage}" width="100px;" >
 			</td>
@@ -105,7 +71,7 @@
 		</tr>
 	</table>
 	<div style="text-align: center">
-		결제 총 금액: <span th:text="${map.cartTotalPrice}"></span>원<br>
+		결제 총 금액: <span th:text="${map.orderTotalPrice}"></span>원<br>
 		<button id="kaobtn">카카오페이</button>
 	</div>
 		</section>
