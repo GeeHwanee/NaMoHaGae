@@ -108,7 +108,7 @@ public class ProductOrderController {
     // 주문 목록 보기
     @GetMapping("/mall/order/list")
     public void orderList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        service.orderList(myUserDetails.getMemberNo()).forEach(a->System.out.println(a));
+        //service.orderList(myUserDetails.getMemberNo()).forEach(a->System.out.println(a));
         model.addAttribute("orders", service.orderList(myUserDetails.getMemberNo()));
     }
 }
