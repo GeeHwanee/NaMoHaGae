@@ -23,8 +23,8 @@ public class QnaService {
     private final MemberDao memberDao;
     private final NotificationService notificationService;
 
-    private final Integer PAGESIZE = 10;
-    private final Integer BLOCKSIZE = 5;
+    private Integer PAGESIZE = 10;
+    private Integer BLOCKSIZE = 5;
 
     @Transactional
     public void write(QnaDto.Write dto, Integer memberNo) {
@@ -68,6 +68,8 @@ public class QnaService {
         return qnaDao.findByQnaNo(qnaNo);
     }
     public QnaDto.PaginationMyQna listMyQna(Integer pageNo, Integer memberNo) {
+        PAGESIZE = 5;
+        BLOCKSIZE = 3;
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<QnaDto.FindByMemberNo> qna =  qnaDao.findByMemberNo(startRowNum, endRowNum, memberNo);
@@ -82,5 +84,9 @@ public class QnaService {
             next = 0;
         }
         return new QnaDto.PaginationMyQna(pageNo, prev, start, end, next, qna);
+    }
+
+    public QnaDto.MyQnA findAnswerByQnaNo(Integer qnaNo){
+        return qnaDao.findAnswerByQnaNo(qnaNo);
     }
 }
