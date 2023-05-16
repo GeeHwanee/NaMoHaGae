@@ -28,9 +28,9 @@ public class ProductService {
     private final Integer PAGESIZE = 9;
     private final Integer BLOCKSIZE = 5;
 
-    public List<ProductCategory> findAll() {
-        return productCategoryDao.findAll();
-    }
+//    public List<ProductCategory> findAll() {
+//        return productCategoryDao.findAll();
+//    }
 
     @Transactional
     public Integer add(ProductDto.Add dto) {
