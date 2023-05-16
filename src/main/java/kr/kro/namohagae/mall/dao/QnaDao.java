@@ -31,4 +31,6 @@ public interface QnaDao {
 
     public Integer countMe(Integer memberNo);
 
+    public QnaDto.MyQnA findAnswerByQnaNo(Integer qnaNo);
+
 }
