@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class ProductReview {
     private Integer productReviewNo;
     private Integer productNo;
-    private Integer orderNo;
-    private Integer orderDetailNo;
+    private Integer productOrderNo;
+    private Integer productOrderDetailNo;
     private Integer productReviewWriter;
     private String productReviewContent;
     private Integer productReviewStar;
