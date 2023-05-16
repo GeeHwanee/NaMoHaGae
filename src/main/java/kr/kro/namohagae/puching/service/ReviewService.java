@@ -70,15 +70,15 @@ public class ReviewService {
         return new ReviewDto.PaginationInfo(pageno, prev, start, end, next, review);
     }
 
-    public ReviewDto.writeview findWriteViewInfo(String userEmail,Integer receiverNo,Integer puchingNo){
+    public ReviewDto.Writeview findWriteViewInfo(String userEmail, Integer receiverNo, Integer puchingNo){
         Integer userNo=memberDao.findNoByUsername(userEmail);
-        ReviewDto.writeview dto = reviewDao.reviewWriteInfo(userNo,receiverNo,puchingNo);
+        ReviewDto.Writeview dto = reviewDao.reviewWriteInfo(userNo,receiverNo,puchingNo);
 
         return dto;
     }
 
 
-    public void saveReview(String username,ReviewDto.write dto){
+    public void saveReview(String username, ReviewDto.Write dto){
         Integer memberNo=memberDao.findNoByUsername(username);
         Review review= dto.toEntity(memberNo);
         Integer bonePoint=300;
