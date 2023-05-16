@@ -19,7 +19,7 @@ public interface QnaDao {
 
     // 특정 상품의 큐엔에이 목록 조회
 
-    public List<QnaDto.list> findAllByProductNo(Integer startRowNum, Integer endRowNum, Integer productNo);
+    public List<QnaDto.QnaList> findAllByProductNo(Integer startRowNum, Integer endRowNum, Integer productNo);
 
     public List<QnaDto.Read> findAll();
 

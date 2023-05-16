@@ -39,7 +39,7 @@ public class QnaService {
     public QnaDto.Pagination list(Integer pageNo, Integer productNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<QnaDto.list> qna =  qnaDao.findAllByProductNo(startRowNum, endRowNum, productNo);
+        List<QnaDto.QnaList> qna =  qnaDao.findAllByProductNo(startRowNum, endRowNum, productNo);
         Integer countOfQna = qnaDao.count(productNo);
         Integer countOfPage = (countOfQna-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;

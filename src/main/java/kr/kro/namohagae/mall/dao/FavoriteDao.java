@@ -11,7 +11,7 @@ public interface FavoriteDao {
     public Integer save(Integer productNo, Integer memberNo);
 
     // 해당 멤버의 찜리스트
-    public List<FavoriteDto.list> findListByMemberNo(Integer startRowNum, Integer endRowNum, Integer memberNo);
+    public List<FavoriteDto.FavoriteList> findListByMemberNo(Integer startRowNum, Integer endRowNum, Integer memberNo);
 
     // 해당 멤버의 찜 개수를 조회
     public Integer count(Integer memberNo);

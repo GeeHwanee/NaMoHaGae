@@ -7,7 +7,7 @@
     </insert>
 
     <!-- 해당 멤버의 찜리스트 -->
-    <select id="findListByMemberNo" resultType="kr.kro.namohagae.mall.dto.FavoriteDto$list">
+    <select id="findListByMemberNo" resultType="kr.kro.namohagae.mall.dto.FavoriteDto$FavoriteList">
         select * from
         (
         select rownum as rnum, f.* from

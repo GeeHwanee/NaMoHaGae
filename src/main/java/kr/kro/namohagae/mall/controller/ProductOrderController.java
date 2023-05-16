@@ -237,7 +237,7 @@ public class ProductOrderController {
     public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
                              @RequestParam Integer addressNo, RedirectAttributes ra) {
         Map<String, Object> map = (Map<String, Object>)session.getAttribute("map");
-        List<ProductOrderDto.list> orderItems = (List<ProductOrderDto.list>)map.get("orderItems");
+        List<ProductOrderDto.OrderList> orderItems = (List<ProductOrderDto.OrderList>)map.get("orderItems");
         Integer orderTotalPrice = (Integer)map.get("orderTotalPrice");
         Integer productOrderNo = service.saveOrder(orderItems, orderTotalPrice, myUserDetails.getMemberNo(), addressNo);
 
