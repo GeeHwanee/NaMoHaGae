@@ -98,7 +98,7 @@
                     (
                         select
                            b.board_no,b.town_no,b.board_title,b.board_read_count,b.board_recommend_count,(select count(*) from board_comment c where c.board_no=b.board_no ) as commentCount, board_write_date
-                        from board b where b.member_no =#{memberNo}
+                        from board b where b.member_no =#{memberNo} and board_enabled = 0
                     ) a
                 where rownum&lt;=#{endRownum}
             )
