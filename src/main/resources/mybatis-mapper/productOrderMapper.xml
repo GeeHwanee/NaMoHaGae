@@ -15,17 +15,12 @@
         <result column="product_order_total_price" property="productOrderTotalPrice" />
         <result column="product_order_date" property="productOrderDate" />
         <result column="member_no" property="memberNo" />
-        <!-- <result column="address_no" property="addressNo" /> -->
         <result column="address_postcode" property="addressPostcode" />
         <result column="address_address" property="addressAddress" />
         <result column="address_address_detail" property="addressAddressDetail" />
-        <collection property="productImageList" javaType="list" ofType="productImage">
-            <result column="product_image" property="productImageFilename" />
-        </collection>
-        <collection property="productList" javaType="list" ofType="product">
+        <collection property="orderDetailList" javaType="list" ofType="kr.kro.namohagae.mall.dto.ProductOrderDetailDto$OrderDetailList">
+            <result column="product_image" property="productImage" />
             <result column="product_name" property="productName" />
-        </collection>
-        <collection property="orderDetailList" javaType="list" ofType="productOrderDetail">
             <result column="product_order_detail_no" property="productOrderDetailNo" />
             <result column="product_order_detail_count" property="productOrderDetailCount" />
             <result column="product_order_detail_price" property="productOrderDetailPrice" />
@@ -44,7 +39,7 @@
             join product_order_detail pod on po.product_order_no = pod.product_order_no
             join address a on po.address_no = a.address_no
             join product p on pod.product_no = p.product_no
-            join product_image pi on pod.product_no = pi.product_no
+            join product_image pi on pod.product_no = pi.product_no and pi.PRODUCT_IMAGE_NO=1
         where a.member_no = #{memberNo}
     </select>
 
@@ -59,7 +54,7 @@
             join product_order_detail pod on po.product_order_no = pod.product_order_no
             join address a on po.address_no = a.address_no
             join product p on pod.product_no = p.product_no
-            join product_image pi on pod.product_no = pi.product_no
+            join product_image pi on pod.product_no = pi.product_no and pi.PRODUCT_IMAGE_NO=1
         where po.product_order_no = #{productOrderNo}
     </select>
 </mapper>
