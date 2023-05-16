@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.List;
-
 public class FollowDto {
     @Data
-    public static class list{
+    public static class FollowList {
         private Integer followMemberNo;
         private String memberNickname;
         private Double memberGrade;
@@ -23,7 +21,7 @@ public class FollowDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private List<FollowDto.list> follow;
+        private java.util.List<FollowList> follow;
     }
 
 }
