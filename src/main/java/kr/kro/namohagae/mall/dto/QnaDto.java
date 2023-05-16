@@ -75,7 +75,7 @@ public class QnaDto {
         private Integer qnaNo;
         private String productName;
         private Integer checkAnswer;
-        private LocalDateTime qnaWriteDay;
+        private LocalDateTime qnaWriteDate;
     }
     @Data
     @AllArgsConstructor
@@ -86,7 +86,11 @@ public class QnaDto {
         private Integer end;
         private Integer next;
         private List<QnaDto.FindByMemberNo> qna;
-
-
+    }
+    @Data
+    public static class MyQnA{
+        private String qnaContent;
+        private String qnaAnswerContent;
+        private LocalDateTime qnaAnswerWriteDate;
     }
 }
