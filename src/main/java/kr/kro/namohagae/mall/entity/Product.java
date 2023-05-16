@@ -17,7 +17,4 @@ public class Product {
     private Integer productGrade;
     private String productContent;
     private LocalDateTime productWriteDate;
-
-    public void setProductStock(int i) {
-    }
 }
