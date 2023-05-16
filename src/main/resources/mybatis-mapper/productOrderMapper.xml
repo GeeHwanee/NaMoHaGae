@@ -11,39 +11,55 @@
     </insert>
 
     <resultMap id="readMap" type="kr.kro.namohagae.mall.dto.ProductOrderDto$OrderResult">
-        <result property="product_order_no" column="productOrderNo" />
-        <result property="product_order_total_price" column="productOrderTotalPrice" />
-        <result property="product_order_date" column="productOrderDate" />
-        <result property="member_no" column="memberNo" />
-        <result property="product_image_filename" column="productImage" />
-        <result property="product_name" column="productName" />
-        <result property="address_no" column="addressNo" />
-        <result property="address_postcode" column="addressPostcode" />
-        <result property="address_address" column="addressAddress" />
-        <result property="address_address_detail" column="addressAddressDetail" />
-
-        <!-- 이미지, 상품명 주문상세리스트에서 같이 굴려야함(dto랑 컬렉션, 매퍼 수정) -->
+        <id column="product_order_no" property="productOrderNo" />
+        <result column="product_order_total_price" property="productOrderTotalPrice" />
+        <result column="product_order_date" property="productOrderDate" />
+        <result column="member_no" property="memberNo" />
+        <result column="address_no" property="addressNo" />
+        <result column="address_postcode" property="addressPostcode" />
+        <result column="address_address" property="addressAddress" />
+        <result column="address_address_detail" property="addressAddressDetail" />
+        <collection property="productImageList" javaType="list" ofType="productImage">
+            <result column="product_image" property="productImageFilename" />
+        </collection>
+        <collection property="productList" javaType="list" ofType="product">
+            <result column="product_name" property="productName" />
+        </collection>
         <collection property="orderDetailList" javaType="list" ofType="productOrderDetail">
-            <result property="product_order_detail_no" column="productOrderDetailNo" />
-            <result property="product_order_detail_count" column="productOrderDetailCount" />
-            <result property="product_order_detail_price" column="productOrderDetailPrice" />
-            <result property="product_order_detail_review_enabled" column="productOrderDetailReviewEnabled" />
+            <result column="product_order_detail_no" property="productOrderDetailNo" />
+            <result column="product_order_detail_count" property="productOrderDetailCount" />
+            <result column="product_order_detail_price" property="productOrderDetailPrice" />
+            <result column="product_order_detail_review_enabled" property="productOrderDetailReviewEnabled" />
         </collection>
     </resultMap>
 
     <!-- 주문 목록 보기 -->
     <select id="list" resultMap="readMap">
-        select o.product_order_no, o.member_no, o.address_no, o.product_order_total_price, o.product_order_date,
-               od.product_order_detail_no, od.product_order_detail_count, od.product_order_detail_price, od.product_order_detail_review_enabled
-        from PRODUCT_ORDER o join PRODUCT_ORDER_DETAIL od on o.product_order_no = od.product_order_no
-        where o.product_order_no=#{productOrderNo} and rownum=1
+        select po.product_order_no, po.product_order_total_price, po.product_order_date, a.member_no, a.address_no, a.address_postcode,
+               a.address_address, a.address_address_detail,
+               'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+               p.product_name, pod.product_order_detail_no,
+               pod.product_order_detail_count, pod.product_order_detail_price
+        from product_order po
+            join product_order_detail pod on po.product_order_no = pod.product_order_no
+            join address a on po.address_no = a.address_no
+            join product p on pod.product_no = p.product_no
+            join product_image pi on pod.product_no = pi.product_no
+        where a.member_no = #{memberNo}
     </select>
 
     <!-- 주문 상세 보기 -->
     <select id="read" resultMap="readMap">
-        select o.product_order_no, o.member_no, o.address_no, o.product_order_total_price, o.product_order_date,
-               od.product_order_detail_no, od.product_order_detail_count, od.product_order_detail_price
-        from PRODUCT_ORDER o join PRODUCT_ORDER_DETAIL od on o.product_order_no = od.product_order_no
-        where o.product_order_no=#{productOrderNo} and rownum=1
+        select po.product_order_no, po.product_order_total_price, po.product_order_date, a.member_no, a.address_no, a.address_postcode,
+               a.address_address, a.address_address_detail,
+               'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+               p.product_name, pod.product_order_detail_no,
+               pod.product_order_detail_count, pod.product_order_detail_price, pod.product_order_detail_review_enabled
+        from product_order po
+            join product_order_detail pod on po.product_order_no = pod.product_order_no
+            join address a on po.address_no = a.address_no
+            join product p on pod.product_no = p.product_no
+            join product_image pi on pod.product_no = pi.product_no
+        where po.product_order_no = #{productOrderNo}
     </select>
 </mapper>
