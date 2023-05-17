@@ -63,16 +63,13 @@ public class ProductDto {
         private String productName;
         private String productContent;
         private Integer productPrice;
-        private Integer productGrade; // 별점평균
-        //private Integer productReviewTotalStar; // 별점합계
-        //private Integer productReviewTotalCount; // 리뷰개수
+        private Double productGrade; // 별점등급
+        private Integer reviewCount; // 리뷰개수
         private Integer productStock;
         //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
         private List<ProductReviewDto.ReviewList> productReviews;
         private List<QnaDto.QnaList> qnas;
-
-
     }
 
     // 페이지네이션

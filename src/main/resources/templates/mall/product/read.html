@@ -421,8 +421,11 @@
                 </div>
                 <span id="right">
                     <div class="productName" th:text="${product.productName}"></div>
-                    <div class="productGrade">★★★★★ 4.5(2건) (별점출력예정)</div>
-                    <!--<div th:text="${product.productGrade}"></div>-->
+                     <div class="productGrade">
+                        <span th:utext="${'★'.repeat(product.productGrade.intValue()) + (product.productGrade % 1 != 0 ? '★' : '')}"></span>
+                        <span th:text="${product.productGrade}"></span>
+                        <span th:text="' (' + ${product.reviewCount} + '건)'"></span>
+                    </div>
                     <span>
                       <div th:if="${product.productStock == 0}">
                         <span class="productPrice" style="color: red">품절댐</span>
