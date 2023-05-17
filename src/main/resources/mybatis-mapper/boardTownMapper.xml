@@ -39,7 +39,7 @@
         SELECT b.*, m.member_nickname AS memberNickname
         FROM board b
                  JOIN member m ON b.member_No = m.member_No
-        WHERE b.town_no = #{townNo}
+        WHERE b.town_no = #{townNo} AND b.board_title LIKE '%' || #{searchName} || '%'
         ORDER BY b.board_No DESC
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>

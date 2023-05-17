@@ -84,6 +84,21 @@
             }
         });
     }
+    function onSearch() {
+        const searchName = $('#searchName').val();
+        onChangePage(1, searchName);
+    }
+
+    function printSearch(searchName){
+        const $layout3 = $('.layout3');
+        $layout3.empty();
+
+        let tpl = `<input type="text" name="searchName" id="searchName">
+            <button type="submit" onclick="onSearch()">검색</button>`
+
+        $layout3.append(tpl);
+    }
+
     function printPaging(paging) {
         const $layout2 = $('.layout2');
         $layout2.empty();
@@ -124,13 +139,15 @@
             const page = $(this).data('page');
             onChangePage(page);
         });
+
     }
 
     function onSuccess(board) {
         const boardTownListDto = board.boardTownListDto;
         console.log('안녕하세요', board);
         printBoard(boardTownListDto);
-
+        const searchName = "";
+        printSearch(searchName);
         const paging = board.pageDto;
         printPaging(paging);
     }
@@ -139,16 +156,21 @@
         console.log(xhr, status, error);
     }
 
+
     // 페이지 변경시 호출되는 함수
-    function onChangePage(page) {
+    function onChangePage(page,searchName) {
         const townNo = $('select[name="townDong"]').val();
 
         // townNo 값이 선택되지 않은 경우, 요청하지 않음
         if (!townNo) {
             return;
         }
+        let url = `/api/v1/board/town/list?townNo=${townNo}&page=${page}`;
+        if (searchName) {
+            url += `&searchName=${encodeURIComponent(searchName)}`;
+        }
         $.ajax({
-            url: `/api/v1/board/town/list?townNo=${townNo}&page=${page}`,
+            url: url,
             method: 'GET',
             success: onSuccess,
             error: onError
@@ -211,6 +233,9 @@
                 </tbody>
             </table>
             <div class="layout2">
+
+            </div>
+            <div class="layout3">
 
             </div>
             <a class="card-link" th:href="@{/board/town/write}">글쓰기</a>

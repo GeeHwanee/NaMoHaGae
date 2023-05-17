@@ -23,9 +23,10 @@ public class BoardTownController {
     BoardService boardService;
 
     @GetMapping("/board/town/list")
-    public ResponseEntity<?> boardTownList(@RequestParam("townNo") Integer townNo,@RequestParam(value ="page", required = false, defaultValue = "1") int page) {
-        PageDto pageDTO = boardService.pagingParam(page);
-        List<BoardTownListDto> boardTownListDto = boardTownService.boardTownList(townNo,page);
+    public ResponseEntity<?> boardTownList(@RequestParam("townNo") Integer townNo,
+                                           @RequestParam(value ="searchName",  defaultValue = "") String searchName,
+                                           @RequestParam(value ="page", required = false, defaultValue = "1") int page) {        PageDto pageDTO = boardService.pagingParam(page);
+        List<BoardTownListDto> boardTownListDto = boardTownService.boardTownList(townNo,searchName,page);
         ResponseDto responseDto = new ResponseDto(pageDTO,boardTownListDto);
         return ResponseEntity.ok(responseDto);
     }
