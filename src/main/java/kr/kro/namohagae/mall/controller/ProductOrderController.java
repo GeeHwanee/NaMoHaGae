@@ -8,6 +8,7 @@ import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductOrderDto;
 import kr.kro.namohagae.mall.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -110,8 +111,14 @@ public class ProductOrderController {
     }
 
     // 주문 목록 보기
-    @GetMapping("/mall/order/list")
+    @GetMapping(value = "/mall/order/list")
     public void orderList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         model.addAttribute("orders", service.orderList(myUserDetails.getMemberNo()));
+    }
+
+    @GetMapping("/member/order/list")
+    public ResponseEntity<?> myOrderList(@AuthenticationPrincipal MyUserDetails myUserDetails,Integer pageno){
+        Integer memberNo = myUserDetails.getMemberNo();
+        return ResponseEntity.ok(service.listMyOrder(pageno,memberNo));
     }
 }

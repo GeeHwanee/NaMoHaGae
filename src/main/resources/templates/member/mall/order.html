@@ -7,7 +7,115 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>내 주문 조회 페이지</title>
+    <style>
+        #page_ul {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <script>
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            return `${year}-${month}-${day}`;
+        }
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        function printMyQna(myOrderLists) {
+            $('#list').empty();
+            const $list = $('#list');
+            myOrderLists.forEach(o => {
+                const tpl=`
+                    <div class="card bg-success text-white">
+                    <div class="card-body" style="overflow:hidden;">
+                        <div style="float:left;">
+                            배송일:<span>${formatDateAnswer(o.productOrderDate)}</span>
+                        </div>
+
+                        <div style="float:right;">
+                            배송지:<span>${o.addressPostcode} ${o.addressAddress} ${o.addressAddressDetail}</span>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-border">
+                      ${o.orderDetailList.map(item => `
+          <tr>
+            <td>
+              <img src="${item.productImage}" width="100px">
+            </td>
+            <td>
+              <span>${item.productName}</span>
+            </td>
+            <td>
+              <span>${item.productOrderDetailCount}</span>개/
+              <span>${item.productOrderDetailPrice}</span>원
+            </td>
+            <td>
+              <a type="button" class="btn btn-primary" ${item.productOrderDetailReviewEnabled ? '' : 'hide'}
+                href="/mall/product/review/write?productOrderDetailNo=${item.productOrderDetailNo}">리뷰 작성</a>
+            </td>
+          </tr>
+        `).join('')}
+                </table>`
+                    $list.append(tpl);
+                }
+            )
+        }
+
+
+
+        function printPagination({prev, start, end, next, pageno}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+
+        $(document).ready(async function() {
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            console.log("asd");
+            try {
+                const result = await $.ajax("/member/order/list?pageno=" + pageno);
+                console.log(result);
+                printMyQna(result.myOrderLists);
+                printPagination(result)
+
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/member/order/list?pageno=" + pageNum);
+                    console.log(result);
+                    printMyQna(result.myOrderLists);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
+    <title>내 상품 조회 페이지</title>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -15,8 +123,13 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>내 주문 조회 페이지</h1>
-        <article></article>
+        <div class="container mt-3">
+            <h2>내 상품 조회 페이지</h2>
+            <div id="list">
+            </div>
+                <ul class="pagination" id="page_ul">
+                </ul>
+        </div>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
