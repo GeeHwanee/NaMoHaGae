@@ -2,7 +2,7 @@ $(document).ready(async function() {
     // Aside
     printAside();
     // Bside
-    const socket = new WebSocket('ws://localhost:8081/notification');
+    const socket = new WebSocket('ws://www.namohagae.kro.kr/notification');
 
     socket.addEventListener('open', function (event) {
         // 연결이 성공한 경우 실행되는 코드
@@ -73,7 +73,8 @@ const board = "board";
 const admin	= "admin";
 
 function printAside(){
-    let sideBar = location.href.slice(22);
+    let sideBar = location.href.slice(27);
+    console.log(sideBar);
     const $title = $('#aside_title');
     const $side_bar = $('#side_bar');
     $title.text("");
