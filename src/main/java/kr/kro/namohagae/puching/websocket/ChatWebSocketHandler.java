@@ -87,7 +87,6 @@ public class ChatWebSocketHandler implements WebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         String username= session.getPrincipal().getName();
         sessions.remove(username);
-        System.out.println("웹소켓 닫혔다@@@@@@@@@@");
 
     }
 
