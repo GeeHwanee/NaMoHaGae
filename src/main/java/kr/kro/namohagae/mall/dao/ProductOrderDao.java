@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.dao;
 
+import kr.kro.namohagae.mall.dto.ProductOrderDetailDto;
 import kr.kro.namohagae.mall.dto.ProductOrderDto;
 import kr.kro.namohagae.mall.entity.ProductOrder;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +17,9 @@ public interface ProductOrderDao {
 
     // 주문 상세 보기
     public ProductOrderDto.OrderResult read(Integer productOrderNo);
+
+    public Integer countMe(Integer memberNo);
+
+    public List<ProductOrderDto.MyOrderList> myOrderList(Integer startRowNum, Integer endRowNum, Integer memberNo);
+
 }
