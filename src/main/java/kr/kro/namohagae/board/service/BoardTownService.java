@@ -28,10 +28,10 @@ public class BoardTownService {
         boardTownDao.boardTownInsertData(board);
     }
 
-    public List<BoardTownListDto> boardTownList(Integer townNo) {
-
-
-        return boardTownDao.boardTownList(townNo);
+    public List<BoardTownListDto> boardTownList(Integer townNo,int page) {
+        int pageLimit = 10;
+        int pagingStart = (page - 1) * pageLimit;
+        return boardTownDao.boardTownList(townNo,pagingStart, pageLimit);
 
     }
 

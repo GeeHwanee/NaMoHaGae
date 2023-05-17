@@ -43,11 +43,11 @@
     }
 </style>
 <script type="text/javascript">
-    function printBoard(board) {
+    function printBoard(boardTownListDto) {
         const $tbody = $('#tbody');
         $tbody.empty(); // tbody 비우기
 
-        for (const b of board) {
+        for (const b of boardTownListDto) {
             const tpl = `<tr>
                      <td>${b.boardNo}</td>
                      <td>${b.townNo}</td>
@@ -59,6 +59,7 @@
             $tbody.append(tpl);
         }
     };
+
 
     function printTownDong(){
         const $townGu = $('#townGu').val();
@@ -83,6 +84,76 @@
             }
         });
     }
+    function printPaging(paging) {
+        const $layout2 = $('.layout2');
+        $layout2.empty();
+
+        const startPage = paging.startPage;
+        const endPage = paging.endPage;
+        const currentPage = paging.page;
+        const maxPage = paging.maxPage;
+
+        let tpl = '<ul>';
+        if (currentPage <= 1) {
+            tpl += '<li><span>[이전]</span></li>';
+        } else {
+            tpl += `<li><a href="#" data-page="${currentPage - 1}">[이전]</a></li>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i === currentPage) {
+                tpl += `<li><div><span>${i}</span></div></li>`;
+            } else {
+                tpl += `<li><div><a href="#" data-page="${i}">${i}</a></div></li>`;
+            }
+        }
+
+        if (currentPage >= maxPage) {
+            tpl += '<li><span>[다음]</span></li>';
+        } else {
+            tpl += `<li><a href="#" data-page="${currentPage + 1}">[다음]</a></li>`;
+        }
+
+        tpl += '</ul>';
+
+        $layout2.append(tpl);
+
+        // 페이지 링크 클릭 이벤트 등록
+        $layout2.find('a[data-page]').on('click', function (e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            onChangePage(page);
+        });
+    }
+
+    function onSuccess(board) {
+        const boardTownListDto = board.boardTownListDto;
+        console.log('안녕하세요', board);
+        printBoard(boardTownListDto);
+
+        const paging = board.pageDto;
+        printPaging(paging);
+    }
+
+    function onError(xhr, status, error) {
+        console.log(xhr, status, error);
+    }
+
+    // 페이지 변경시 호출되는 함수
+    function onChangePage(page) {
+        const townNo = $('select[name="townDong"]').val();
+
+        // townNo 값이 선택되지 않은 경우, 요청하지 않음
+        if (!townNo) {
+            return;
+        }
+        $.ajax({
+            url: `/api/v1/board/town/list?townNo=${townNo}&page=${page}`,
+            method: 'GET',
+            success: onSuccess,
+            error: onError
+        });
+    }
 
     // select 요소에서 값이 변경될 때마다 호출되는 함수
     function onChangeTownNo() {
@@ -92,23 +163,15 @@
         if (!townNo) {
             return;
         }
-        $.ajax({
-            url: `/api/v1/board/town/list?townNo=${townNo}`,
-            method: 'GET',
-            success: function (board) {
-                // 서버에서 전달한 게시물 리스트를 출력하는 함수 호출
-                printBoard(board);
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr, status, error);
-            }
-        });
+
+        // 페이지를 1로 초기화하고 API 요청
+        onChangePage(1);
     }
 
     $(document).ready(function () {
-        $('#townGu').on('change', function (){
+        $('#townGu').on('change', function () {
             printTownDong();
-        })
+        });
         // select 요소 값 변경 이벤트 등록
         $('select[name="townDong"]').on('change', onChangeTownNo);
     });
@@ -147,7 +210,9 @@
                 <tbody id="tbody">
                 </tbody>
             </table>
+            <div class="layout2">
 
+            </div>
             <a class="card-link" th:href="@{/board/town/write}">글쓰기</a>
         </article>
     </section>

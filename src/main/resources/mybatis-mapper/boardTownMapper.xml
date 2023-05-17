@@ -38,8 +38,10 @@
     <select id="boardTownList" resultType="kr.kro.namohagae.board.dto.BoardTownListDto">
         SELECT b.*, m.member_nickname AS memberNickname
         FROM board b
-                 JOIN member m ON b.member_No = m.member_No where b.town_no = #{townNo}
+                 JOIN member m ON b.member_No = m.member_No
+        WHERE b.town_no = #{townNo}
         ORDER BY b.board_No DESC
+        OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
     <select id="boardTownRead" resultType="kr.kro.namohagae.board.entity.Board">
         select * from board where board_no = #{boardNo}
