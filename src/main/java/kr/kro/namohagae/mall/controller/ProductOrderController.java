@@ -60,7 +60,7 @@ public class ProductOrderController {
         map.put("orderTotalPrice", order.getOrderTotalPrice());
         map.put("addresses", addresses);
         session.setAttribute("map",map);
-        return new ModelAndView("/mall/order/ready").addObject("map", map);
+        return new ModelAndView("mall/order/ready").addObject("map", map);
     }
 
     @PostMapping("/order/check")
@@ -103,7 +103,7 @@ public class ProductOrderController {
 
             model.addAttribute("order", order);
             model.addAttribute("productOrderDate", productOrderDate);
-            return "/mall/order/success";
+            return "mall/order/success";
         } else {
             ra.addFlashAttribute("msg", "잘못된 작업입니다");
             return "redirect:/mall/main";
