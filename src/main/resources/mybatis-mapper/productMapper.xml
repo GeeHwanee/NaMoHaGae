@@ -205,19 +205,6 @@
         where rnum&gt;=#{startRowNum}
     </select>
 
-    <!-- 리뷰등급 update -->
-    <select id="updateReviewGrade" resultType="Integer">
-        SELECT ROUND(SUM(pr.PRODUCT_REVIEW_STAR) / COUNT(pr.product_order_detail_no),1) AS PRODUCT_GRADE,
-               COUNT(pr.product_order_detail_no) AS review_count
-        FROM product p
-                 JOIN PRODUCT_REVIEW pr ON p.product_no = pr.product_no
-        WHERE p.product_no =#{productNo};
-    </select>
-
-    <update id="updateOrder">
-        update PRODUCT set product_stock = product_stock-1 where product_no = #{productNo}
-    </update>
-
     <delete id="delete">
         delete from PRODUCT where PRODUCT_NO= #{productNo} and ROWNUM=1
     </delete>
