@@ -16,4 +16,7 @@ public interface ProductOrderDao {
 
     // 주문 상세 보기
     public ProductOrderDto.OrderResult read(Integer productOrderNo);
+
+    // 주문 완료시 멤버 포인트 지급
+    public void updateMemberPoint(Integer bonePoint,Integer memberNo);
 }
