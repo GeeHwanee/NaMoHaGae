@@ -23,16 +23,16 @@
 </head>
 
 <body>
-<header th:replace="fragment/header :: header"></header>
-<nav th:replace="fragment/nav :: nav"></nav>
+<header th:replace="fragment/header :: html"></header>
+<nav th:replace="fragment/nav :: html"></nav>
 <main>
-    <aside th:replace="fragment/aside :: aside"></aside>
+    <aside th:replace="fragment/aside :: html"></aside>
     <section>
         <h1>메인 페이지</h1>
         <article></article>
     </section>
-    <aside th:replace="fragment/bside :: aside"></aside>
+    <aside th:replace="fragment/bside :: html"></aside>
 </main>
-<footer th:replace="fragment/footer :: footer"></footer>
+<footer th:replace="fragment/footer :: html"></footer>
 </body>
 </html>
