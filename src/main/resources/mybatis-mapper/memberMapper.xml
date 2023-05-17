@@ -85,5 +85,10 @@
     <update id="disabled">
         update member set member_enabled where member_no=#{memberNo} and rownum=1
     </update>
-
+    <select id="findEmailByNicknameAndPhone" resultType="String">
+        select member_email from member where member_nickname=#{nickname} and member_phone=#{phone}
+    </select>
+    <update id="changePassword">
+        update member set member_password=#{memberPassword} where member_email=#{memberEmail}
+    </update>
 </mapper>
