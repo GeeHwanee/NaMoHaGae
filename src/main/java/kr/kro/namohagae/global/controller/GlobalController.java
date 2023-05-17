@@ -250,6 +250,8 @@ public class GlobalController {
     public void qnaList(){
 
     }
+    @GetMapping("/member/mall/review")
+    public void memberReview(){}
 
 
 
