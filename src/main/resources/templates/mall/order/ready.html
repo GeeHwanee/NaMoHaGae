@@ -20,9 +20,57 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
 <title>상품 주문상세 페이지</title>
-    <script th:inline="javascript">
-        const data = [[${map}]];
-    </script>
+<style>
+    #placeOrder {
+        font-weight: bold;
+        font-family: 'Gothic', sans-serif;
+        text-align: center;
+        font-size: 40px;
+    }
+
+    .table td img {
+        margin-right: 40px;
+    }
+
+    .table-container {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .address-container {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .table {
+        width: 100%;
+        margin-left: auto; margin-right: auto;
+    }
+
+    .table th {
+        text-align: center;
+    }
+
+    .productInfo {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .title {
+        font-weight: bold;
+        font-family: 'Gothic', sans-serif;
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .orderDetailTable {
+        border-collapse: collapse;
+        width: 70%;
+    }
+</style>
+<script th:inline="javascript">
+    const data = [[${map}]];
+</script>
 <script>
     let productName = undefined;
     let cartDetailCount = undefined;
@@ -83,49 +131,108 @@
 <header th:replace="~{/fragment/header.html}"></header>
 <nav th:replace="~{/fragment/nav.html}"></nav>
 <main>
-    <aside th:replace="~{/fragment/aside.html}"></aside>
-    <section>
-        <div class="container mt-3">
-            <h2>주문 상품</h2>
-            <div th:each="i:${map.orderItems}" class="card">
-                <div class="card-body">
-                    <div class="product_info" style="overflow:hidden;">
-                        <div style="float:left;">
-                            <img th:src="${i.productImage}" width="100px" >
-                        </div>
-                        <div style="float:left; margin-left:20px;">
-                            <p th:text="${i.productName}"></p>
-                            <p>
-                                <span th:text="${i.cartDetailPrice}"></span>원 /
-                                <span th:text="${i.cartDetailCount}"></span>개
-                            </p>
-                        </div>
+<aside th:replace="~{/fragment/aside.html}"></aside>
+<section>
+    <div class="table-container">
+        <div id="placeOrder">구매하기</div>
+        <br>
+        <table class="table table-hover">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 25%;">
+                <col style="width: 25%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>상품정보</th><th>수량</th><th>상품금액</th>
+                </tr>
+            </thead>
+            <tbody id="orderItems">
+                <tr th:each="i:${map.orderItems}">
+                    <td class="productInfo" style="padding-top: 20px; padding-bottom: 20px;">
+                        <img th:src="${i.productImage}" width="100px" height="100px">
+                        <span th:text="${i.productName}"></span>
+                    </td>
+                    <td class="productInfo"><span th:text="${i.cartDetailCount}" style="font-weight: bold"></span></td>
+                    <td class="productInfo"><span th:text="${#numbers.formatInteger(i.cartDetailPrice,0,'COMMA')}"></span>원</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; text-align: left; padding-top: 20px; padding-bottom: 20px;">주문금액</td>
+                    <td colspan="2" class="productInfo">
+                        <span style="font-weight: bold" th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'")></span>
+                        <span th:text="'(상품가 '+${#numbers.formatInteger(map.orderTotalPrice,0,'COMMA')}+'원+배송비 3,000원)'"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <br>
+
+    <div>
+        <div class="title">배송지정보</div>
+        <br>
+        <div>
+            <div th:each="a:${map.addresses}" class="address-container">
+                <div th:class="${a.defaultAddressEnabled==true} ? 'card bg-secondary text-white' : 'card'">
+                    <div class="card-body">
+                        <input type="radio" class="form-check-input addressNo" th:checked="${a.addressNo}" th:value="${a.addressNo}" name="address">
+                        (<span th:text="${a.addressName}"></span>)
+                        <span th:text="${a.addressAddress}"></span>
+                        <span th:text="${a.addressAddressDetail}"></span>
                     </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <h2>배송지</h2>
-        <div th:each="a:${map.addresses}" class="container mt-3">
-            <div th:class="${a.defaultAddressEnabled==true} ? 'card bg-secondary text-white' : 'card'">
-                <div class="card-body">
-                    <input type="radio" class="form-check-input addressNo" th:checked="${a.addressNo}" th:value="${a.addressNo}" name="address">
-                    (<span th:text="${a.addressName}"></span>)
-                    <span th:text="${a.addressAddress}"></span>
-                    <span th:text="${a.addressAddressDetail}"></span>
-                </div>
+            <div class="mb-3 mt-3" style="width: 60%; margin: 0 auto; text-align: right;">
+                <a type="button" class="btn btn-secondary" href="http://localhost:8081/member/mall/address/add" style="color: white;">배송지 추가</a>
             </div>
         </div>
-        <div class="mb-3 mt-3">
-            <a type="button" class="btn btn-primary" href="http://localhost:8081/member/mall/address/add" style="color: white;">배송지 추가</a>
+        <br>
+    </div>
+
+        <div style="text-align: center">
+            <div class="title">뼈다귀 포인트 사용</div>
+            <br>
+                <div>보유</div>
+                <div>사용</div>
         </div>
-        <hr>
-        <div class="mb-3 mt-3 d-grid">
+    <br>
+    <br>
+
+        <div style="text-align: center">
+            <div class="title">결제상세</div>
+            <br>
+                <div>
+                    <span>주문금액</span>
+                    <span th:text="${#numbers.formatInteger(map.orderTotalPrice,0,'COMMA')}+'원'"></span>
+                </div>
+                <div>
+                    <span>배송비</span>
+                    <span>+3,000원</span>
+                </div>
+                <div>
+                    <span>뼈다귀 포인트 사용</span>
+                    <span></span>
+                </div>
+        </div>
+    <br>
+    <br>
+
+        <div style="text-align: center">
+            <div class="title">결제예정금액</div>
+            <br>
+            <div th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'"></div>
+        </div>
+    <br>
+    <br>
+    <br>
+
+        <div style="text-align: center">
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
-            <button id="kaobtn">카카오페이</button>
+            <button id="kaobtn" type="button" class="btn btn-primary btn-block">카카오페이</button>
         </div>
-    </section>
-    <aside th:replace="~{/fragment/bside.html}"></aside>
+</section>
+<aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
 <footer th:replace="~{/fragment/footer.html}">
 </footer>
