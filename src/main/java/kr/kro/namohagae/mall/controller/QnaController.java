@@ -24,7 +24,7 @@ public class QnaController {
             model.addAttribute("writer", memberNo);
         }
         model.addAttribute("item", product);
-        return "/mall/product/qna/write";
+        return "mall/product/qna/write";
     }
 
     @PostMapping("/mall/product/qna/write")

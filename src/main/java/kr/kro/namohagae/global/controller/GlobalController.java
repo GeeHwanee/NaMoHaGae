@@ -89,39 +89,39 @@ public class GlobalController {
       if(myUserDetails!=null) {
           String username = myUserDetails.getUsername();
           if (username.equals("admin")) {
-              return "/admin/main";
+              return "admin/main";
           }
       }
-        return "main.html";
+        return "main";
     }
 
     @GetMapping("/puching/main")
     public String puchingMain() {
-        return "/puching/main.html";
+        return "puching/main";
     }
 
     @GetMapping("/mall/main")
     public String mallMain(){
-        return "/mall/main.html";
+        return "mall/main";
     }
 
     @GetMapping("/board/main")
     public String boardMain(){
 
-        return "/board/main";
+        return "board/main";
     }
 
     @GetMapping("/member/main")
-    public String memberMain(){ return "/member/main.html";}
+    public String memberMain(){ return "member/main";}
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/main")
-    public String adminMain(){return "/admin/main";}
+    public String adminMain(){return "admin/main";}
 
     @GetMapping("/member/report")
     public String report(Integer memberNo, Model model){
         model.addAttribute("memberNo", memberNo);
-        return "/member/report";
+        return "member/report";
     }
 
     @GetMapping("/login")
@@ -197,7 +197,7 @@ public class GlobalController {
     public ModelAndView information(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
         Integer memberNo = myUserDetails.getMemberNo();
         MemberDto.Read dto = memberService.read(memberNo);
-        return new ModelAndView("/member/information").addObject("member",dto);
+        return new ModelAndView("member/information").addObject("member",dto);
 
     }
 
@@ -208,20 +208,20 @@ public class GlobalController {
             return new ModelAndView("/member/information").addObject("member",dto);
         }
         MemberDto.Read dto = memberService.read(memberNo);
-        return new ModelAndView("/member/profile").addObject("member",dto);
+        return new ModelAndView("member/profile").addObject("member",dto);
 
     }
     @GetMapping("/member/dog/profile")
     public  ModelAndView dogProfile(Integer dogNo){
         DogDto.Read dto = dogService.read(dogNo);
-        return  new ModelAndView("/member/dog/profile").addObject("dog",dto);
+        return  new ModelAndView("member/dog/profile").addObject("dog",dto);
     }
 
 
     // [회원 파트]------[퍼칭]--------------------------------------------------------
     @GetMapping("/member/puching/review")
     public String puchingReview(){
-        return "/member/puching/review";
+        return "member/puching/review";
     }
 
     @GetMapping("/member/follow")
@@ -242,7 +242,7 @@ public class GlobalController {
 
     @GetMapping("/member/mall/address/add")
     public String addressCreate(){
-        return "/member/mall/addressCreate";
+        return "member/mall/addressCreate";
     }
 
 
@@ -250,6 +250,8 @@ public class GlobalController {
     public void qnaList(){
 
     }
+    @GetMapping("/member/mall/review")
+    public void memberReview(){}
 
 
 
@@ -268,31 +270,33 @@ public class GlobalController {
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
-    public void chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
+    public String chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
         Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
         model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
         model.addAttribute("mymemberNo",myMemberNo);
         model.addAttribute("startuser",receiverEmail);
+        return "puching/chatRoom";
     }
     @GetMapping("/puching/locationview")
     public String locationview(@RequestParam("lat")Double lat,@RequestParam("lng") Double lng){
 
-        return "/puching/locationview.html";
+        return "puching/locationview";
     };
 
     @GetMapping("/puching/reviewwrite")
-    public void reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
+    public String reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
         System.out.println(receiverNo);
         System.out.println(puchingNo);
         ReviewDto.Writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
         model.addAttribute("list",dto);
         System.out.println(dto);
-
+        return "puching/reviewwrite";
     }
     @PostMapping(value="/puching/reviewwrite")
-    public void write(ReviewDto.Write dto, Principal principal) {
+    public String write(ReviewDto.Write dto, Principal principal) {
         System.out.println(dto);
         puchingReviewService.saveReview(principal.getName(),dto);
+        return "redirect:/puching/main";
     }
 
     // [게시판 파트]--------------------------------------------------------------------
@@ -361,18 +365,18 @@ public class GlobalController {
     public String townList(){
 
 
-        return "/board/town/list";
+        return "board/town/list";
     }
 
     @GetMapping("/board/knowledge/list")
     public String knowledgeList(@RequestParam(defaultValue="1")Integer pageNo, Model model){
        model.addAttribute("list",knowledgeService.questionFindAll(pageNo));
-        return "/board/knowledge/list";
+        return "board/knowledge/list";
     }
 
     @GetMapping("/board/knowledge/write")
     public String knowledgeWrite(){
-        return "/board/knowledge/write";
+        return "board/knowledge/write";
     }
 
     @PostMapping("/board/knowledge/write")
@@ -384,7 +388,7 @@ public class GlobalController {
     @GetMapping("/board/knowledge/read")
     public String knowledgeRead(Integer knowledgeQuestionNo, Model model){
         model.addAttribute("question", knowledgeService.questionRead(knowledgeQuestionNo));
-        return "/board/knowledge/read";
+        return "board/knowledge/read";
     }
 
     // [쇼핑몰 파트]--------------------------------------------------------------------
