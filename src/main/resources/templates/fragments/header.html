@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="header">
+	<div class="header_team">
+		<a href='https://www.notion.so/dogtype/DOGTYPE-8f42f515d4b64ce7b329e33df661dbdf?pvs=4' target='_blank'><i class="fa-solid fa-n fa-2xl"></i></a>
+		<a href='https://github.com/GeeHwanee/NaMoHaGae' target='_blank'><i class="fa-brands fa-square-git fa-2xl"></i></a>
+		<a href='/api-docs' target='_blank'><i class="fa-solid fa-o fa-2xl"></i></a>
+	</div>
+	<div class="header_logo">
+		<div>
+			<h1 style="font-family: 'Dongle', sans-serif; display: inline-block; margin: 0">나 뭐하개?</h1>
+			<img src="http://localhost:8081/api/v1/image/embeded?name=logoSample.png" alt="logo">
+		</div>
+	</div>
+	<div class="header_icon">
+		<a sec:authorize="hasRole('ROLE_USER')" href="/member/notification"><i class="fa-solid fa-bell fa-2xl"></i></a>
+		<a sec:authorize="hasRole('ROLE_USER')" href="/member/main"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
+		<a sec:authorize="hasRole('ROLE_USER')" href="/mall/cart/list"><i class="fa-solid fa-cart-shopping fa-2xl"></i></a>
+		<a sec:authorize="hasRole('ROLE_USER')" href="/puching/chatroom"><i class="fa-solid fa-comment fa-2xl"></i></a>
+		<a href="/login" sec:authorize="isAnonymous()"><i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i></a>
+		<a style="color: #ed9e71;" id="logout" sec:authorize="isAuthenticated()"><i class="fa-solid fa-arrow-right-from-bracket fa-2xl"></i></a>
+	</div>
+</header>
+</body>
+</html>
