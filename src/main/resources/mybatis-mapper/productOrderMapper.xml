@@ -58,4 +58,11 @@
             join product_image pi on pod.product_no = pi.product_no and pi.PRODUCT_IMAGE_NO=1
         where po.product_order_no = #{productOrderNo}
     </select>
+
+    <!-- 주문 완료시 멤버 포인트 지급 -->
+    <update id="updateMemberPoint">
+        update MEMBER
+        set member_point = member_point + #{bonePoint}
+        where member_no = #{memberNo}
+    </update>
 </mapper>
