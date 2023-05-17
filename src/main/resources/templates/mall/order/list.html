@@ -20,6 +20,11 @@
 
   <!------------------------------------------------------------------------------------------------------------------------------>
   <title>상품 조회 페이지</title>
+  <style>
+    .hide {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 <header th:replace="~{/fragment/header.html}"></header>
@@ -53,7 +58,9 @@
               <span th:text="${item.productOrderDetailPrice}"></span>원
             </td>
             <td>
-              <a type="button" class="btn btn-primary" th:classappend="${item.productOrderDetailReviewEnabled==true}? '':'hide'"  th:href="@{/mall/product/review/write(productOrderDetailNo=${item.productOrderDetailNo})}">리뷰 작성</a>
+              <span th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}">
+              <a type="button" class="btn btn-primary" th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}"  th:href="@{/mall/product/review/write(productOrderDetailNo=${item.productOrderDetailNo})}">리뷰 작성</a>
+              </span>
             </td>
           </tr>
         </table>
