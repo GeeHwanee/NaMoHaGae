@@ -164,18 +164,18 @@
         }
        .inbox_chat :hover{
 
-            background-color: #ebebeb;
+            background-color: #e38d5f;
             cursor: pointer;
         }
        .inbox_chat :active {
            /* 마우스 hover 및 클릭시 적용될 스타일 */
-           background-color: #ea986b;
+           background-color: #e38d5f;
        }
 
         .container{max-width:1000px; margin:auto;}
         img{ max-width:100%;}
         .inbox_people {
-            background: #f8f8f8 none repeat scroll 0 0;
+            background: #ea986b none repeat scroll 0 0;
             float: left;
             overflow: hidden;
             width: 40%; border-right:1px solid #c4c4c4;
@@ -194,25 +194,32 @@
         .headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
 
         .recent_heading h4 {
-            color: #ea986b;
+            color: #ffffff;
             font-size: 21px;
             margin: auto;
         }
 
 
-        .chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+        .chat_ib h5{
+            font-size:18px; color:#464646; margin:5px 0 8px 0;
+            font-family: "Nanum Gothic";
+            font-weight: bold;
+        }
         .chat_ib h5 span{ font-size:13px; float:right;}
         .chat_ib p{ font-size:14px; color:#989898; margin:auto}
         .chat_img {
-            float: left;
+
             width: 21%;
 
-
+        }
+        .chat_img img{
+            border-radius: 60%;
         }
         .chat_ib {
             float: left;
             padding: 0 0 0 15px;
             width: 88%;
+
         }
 
         .chat_people{ overflow:hidden; clear:both;}
@@ -223,7 +230,7 @@
         }
         .inbox_chat { height: 550px; overflow-y: scroll;}
 
-        .active_chat{ background:#ea986b;}
+        .active_chat{ background: #e68550;}
 
         .incoming_msg_img {
             display: inline-block;
@@ -265,8 +272,9 @@
         .received_withd_msg { width: 57%;}
         .mesgs {
             float: left;
-            padding: 30px 15px 0 35px;
+            padding: 20px 15px 0 35px;
             width: 52%;
+            border-right: 1px solid #ea986b;
         }
 
         .sent_msg p {
@@ -296,7 +304,7 @@
             width: 100%;
         }
 
-        .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+        .type_msg {border-top: 1px solid #ea986b;position: relative;}
         .msg_send_btn {
             background: #ea986b none repeat scroll 0 0;
             border: medium none;
@@ -312,13 +320,43 @@
         }
         .messaging {
             padding: 0 0 50px 0;
-            width: 800px;
+            width: 100%;
         }
         .msg_history {
             height: 516px;
             overflow-y: auto;
             overflow-x: hidden;
         }
+        .btn-area{
+            width: 60px;
+            height: 590px;
+            float: right;
+            background-color: #ffffff;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+        }
+        #openPopupButton{
+            position: absolute;
+            top: 60%;
+            right: 35%;
+        }
+        #sendImageButton{
+            position: absolute;
+            top:30%;
+        }
+        #imageLabel{
+            position: absolute;
+            top: 15%;
+        }
+        #imageLabel:hover{
+            cursor: pointer;
+        }
+        .review-button{
+            position: absolute;
+            top: 45%;
+        }
+
     </style>
 </head>
 <body>
@@ -366,24 +404,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="btn-area">
+                        <label id="imageLabel" for="imageInput"><i class="fa-solid fa-image fa-2xl" style="color: #f4984e;"></i> </label>
+                        <input type="file" id="imageInput" style="display: none;">
+                        <a id="sendImageButton"><i class="fa-solid fa-arrow-up-right-from-square fa-2xl" style="color:#f4984e;"></i></a>
+                        <div class="main-content">
+                            <a id="openPopupButton"><i class="fa-solid fa-dog fa-2xl" style="color:#f4984e;"></i></a>
+                        </div>
+                        <a class="review-button"><i class="fa-solid fa-pen-to-square fa-2xl" style="color: #f4984e;"></i></a>
+
+                    </div>
                 </div>
 
             </div></div>
 
-        <label for="imageInput">Image: </label>
-        <input type="file" id="imageInput">
-        <button id="sendImageButton" type="button">SendImage</button>
 
-        <div class="main-content">
-            <button id="openPopupButton">퍼칭 신청</button>
-        </div>
-        <button class="review-button">리뷰쓰기</button>
 
         <div class="popup-background">
             <div class="popup-content">  <!--퍼칭 신청 화면-->
                 <h2>퍼칭신청</h2>
                 <label for="day"></label>
-                <input type="date" id="day"/>
+                <input type="date" id="day">
                 <label for="time"></label>
                 <input type="time" id="time"/>
 
@@ -395,8 +436,6 @@
                         <span id="centerAddr"></span>
                     </div>
                 </div>
-
-
                 <button id="getCurrentPosBtn">현재위치검색</button>
                 <button onclick="sendPuching()">신청하기</button>
                 <button id="closePopupButton">닫기</button>
@@ -664,7 +703,7 @@
         var imageInput=$('#imageInput')[0];
 
         if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
-            console.log('No file selected');
+            alert('이미지를 선택해주세요')
             return;
         }
 
@@ -1062,7 +1101,6 @@
         } catch (err) {
             console.log(err);
             alert('해당 유저에게 작성할 퍼칭 리뷰가 없습니다');
-
         }
 
 

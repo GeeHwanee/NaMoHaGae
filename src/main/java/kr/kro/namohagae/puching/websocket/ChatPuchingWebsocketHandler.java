@@ -84,7 +84,7 @@ public class ChatPuchingWebsocketHandler implements WebSocketHandler{
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
       String username= session.getPrincipal().getName();
         sessions.remove(username);
-        System.out.println(status);
+
     }
 
     @Override

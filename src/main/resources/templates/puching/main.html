@@ -20,6 +20,31 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=660792846d96851836832221cf48b4f7&libraries=services"></script>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>퍼칭 메인화면</title>
+    <!--a태그 아이콘 스타일-->
+    <style>
+        .nowpos:hover{
+            cursor: pointer;
+           background-color: #ded7d7;
+        }
+        .nowpos{
+            display: flex;
+            width: 29px;
+            height: 29px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            position:absolute;
+            right:10px;
+            top:10px;
+            z-index: 1;
+
+        }
+        .item a{
+            float: right;
+        }
+
+    </style>
     <!--로딩div스타일-->
     <style>
         .loader{
@@ -92,6 +117,10 @@
             border-bottom: 2px solid #ea986b;
             padding: 15px 10px 10px;
             height:100px;
+            font-weight: 900;
+            font-family: "Nanum Gothic" ;
+            font-size: 20px;
+            color: #ea986b;
         }
 
         .itemImage{
@@ -103,6 +132,9 @@
             padding: 10px;
             margin:0 auto;
             font-family:"Nanum Gothic";
+            font-size: 18px;
+            font-weight: bold;
+            color: #ea986b;
         }
 
         #townCnt{
@@ -115,7 +147,7 @@
         .map_wrap {position:relative;width:60%;height:500px;
         }
         .title {font-weight:bold;display:block;}
-        .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#ea986b;z-index:1;padding:5px;opacity: 0.7; color: #ffffff;font-weight: bold;}
+        .hAddr {position:absolute;left:10px;top:10px;border-radius: 5px;background:#ea986b;z-index:1;padding:5px;opacity: 0.7; color: #ffffff;font-weight: bold;}
         #centerAddr {display:block;margin-top:2px;font-weight: normal;}
         .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
     </style>
@@ -139,24 +171,21 @@
                     <span class="title">지도중심기준 행정동 주소정보</span>
                     <span id="centerAddr"></span>
                 </div>
+                <div class="nowpos">
+                    <a onclick="getCurrentPosBtn()"><i class="fa-solid fa-location-crosshairs fa-lg" style="color: #f1722a;"></i></a>
+                </div>
             </div>
             <div id="itemList">
-                <div id="loading" class="loader" style="display: none;">
-                    <span></span>
-                </div>
+
             </div>
 
 
         </div>
+            <div id="loading" class="loader" style="display: none;left: 73%">
+                <span></span>
+            </div>
 
-            <button onclick="getCurrentPosBtn()">내위치 받아오기</button>
-            <label>
-                <select>
-                    <option>거리</option>
-                    <option>리뷰</option>
-                    <option>인기</option>
-                </select>
-            </label>
+
             <!--좌표 자리수 맞추는 함수 geoloaction함수 updatelist함수   -->
             <script>
                 var pageNum = 1; // 현재 페이지
@@ -204,20 +233,12 @@
             </script>
             <!-- 유저리스트 페이징    -->
             <script>
-                // 자바스크립트 코드
 
-                    // 초기 데이터 로드
-                    // var pageNum = 1; // 현재 페이지
-                    // var pageSize = 10; // 한 페이지당 아이템 개수
-                    // loadItems(pageNum, pageSize);
                     var $itemList= $('#itemList')
 
                     // 스크롤 이벤트 핸들러 등록
                     $itemList.scroll(function() {
-                        // console.log("스크롤 움직임")
-                        // console.log($itemList.scrollTop())
-                        // console.log($itemList.height())
-                        // console.log($itemList[0].scrollHeight)
+
                         if (($itemList.scrollTop()+20) + $itemList.height() >= $itemList[0].scrollHeight) {
                             // 리스트의 끝까지 도달함
 
@@ -232,7 +253,7 @@
                         }
                     });
 
-                    // 아이템 로드 함수
+                    // 중심좌표에 따른 유저리스트 부르는 함수
                      async function loadItems(pageNum,pageSize,latitude,longitude) {
                          if (!isLoading) {
                              isLoading = true;
@@ -255,7 +276,7 @@
                                      $.each(userdata, function (i, item) {
                                          itemList.append("<div class='item'><img class='itemImage' src='"+item.memberImage+"' alt='profile image'><" +
                                              "span class='itemNickname'>" + item.memberNickName + "</span>" +
-                                             "<a href=http://localhost:8081/member/profile?memberNo="+item.memberNo+">프로필</a>" + '---' + item.distance + "</div>");
+                                             "<a href=http://localhost:8081/member/profile?memberNo="+item.memberNo+"><i class=\"fa-solid fa-circle-user fa-2xl\" style=\"color: #ea986b;\"></i></a>" + item.distance + "KM</div>");
 
                                      });
                                      isLoading = false;

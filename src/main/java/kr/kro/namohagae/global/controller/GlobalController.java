@@ -286,6 +286,7 @@ public class GlobalController {
         System.out.println(puchingNo);
         ReviewDto.Writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
         model.addAttribute("list",dto);
+        System.out.println(dto);
 
     }
     @PostMapping(value="/puching/reviewwrite")

@@ -30,7 +30,6 @@ public class PuchingRestController {
     @GetMapping(value="/puching/userlist")
     public ResponseEntity<List<PuchingDto.readUser>> userList(Double latitude, Double longitude, Integer pageNum, Integer pageSize, Principal principal) { //들어온 숫자 검증
         String userEmail=principal.getName();
-        System.out.println(userEmail);
         return ResponseEntity.ok().body(service.readUsers(latitude,longitude,pageNum,pageSize,userEmail));
     }
 
