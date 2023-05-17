@@ -364,7 +364,7 @@ public class GlobalController {
     }
 
     @GetMapping("/board/town/list")
-    public String townList(String townGu){
+    public String townList(){
 
 
         return "/board/town/list";
