@@ -18,7 +18,7 @@ public class ProductReviewController {
     @GetMapping("/mall/product/review/write")
     public String write(Integer productOrderDetailNo, Model model) {
         model.addAttribute("item", service.read(productOrderDetailNo));
-        return "/mall/product/review/write";
+        return "mall/product/review/write";
     }
 
 

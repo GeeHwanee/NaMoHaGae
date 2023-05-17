@@ -181,5 +181,12 @@ public class MemberService {
     }
 
 
+    public String findEmailByNicknameAndPhone(String nickname, String phone) {
+        return memberDao.findEmailByNicknameAndPhone(nickname,phone);
+    }
+
+    public Boolean changePassword(String memberPassword,String memberEmail) {
+        return memberDao.changePassword(memberPassword,memberEmail);
+    }
 }
 

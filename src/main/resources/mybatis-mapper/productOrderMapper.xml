@@ -65,4 +65,29 @@
         set member_point = member_point + #{bonePoint}
         where member_no = #{memberNo}
     </update>
+    <select id="myOrderList" resultMap="readMap">
+        select * from
+            (
+                select rownum as rnum, q.* from
+                    (
+                        select po.product_order_no, po.product_order_total_price, po.product_order_date, a.member_no, a.address_postcode,
+                               a.address_address, a.address_address_detail,pod.product_no,
+                               'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+                               p.product_name, pod.product_order_detail_no,
+                               pod.product_order_detail_count, pod.product_order_detail_price, pod.product_order_detail_review_enabled
+                        from product_order po
+                                 join product_order_detail pod on po.product_order_no = pod.product_order_no
+                                 join address a on po.address_no = a.address_no
+                                 join product p on pod.product_no = p.product_no
+                                 join product_image pi on pod.product_no = pi.product_no and pi.PRODUCT_IMAGE_NO=1
+                        where a.member_no = #{memberNo}
+                    ) q
+                where rownum&lt;=#{endRowNum}
+            )
+        where rnum&gt;=#{startRowNum}
+    </select>
+
+    <select id="countMe" resultType="Integer">
+        select count(*) from product_order where member_no=#{memberNo}
+    </select>
 </mapper>

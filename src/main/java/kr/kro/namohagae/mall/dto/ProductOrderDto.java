@@ -1,9 +1,6 @@
 package kr.kro.namohagae.mall.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,5 +35,27 @@ public class ProductOrderDto {
         private String addressAddress;
         private String addressAddressDetail;
         private List<ProductOrderDetailDto.OrderDetailList> orderDetailList;
+    }
+    @Data
+    @Builder
+    public static class MyOrderList{
+        private Integer productOrderNo;
+        private Integer productOrderTotalPrice;
+        private LocalDateTime productOrderDate;
+        private Integer memberNo;
+        private String addressPostcode;
+        private String addressAddress;
+        private String addressAddressDetail;
+        private List<ProductOrderDetailDto.OrderDetailList> orderDetailList;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class PaginationOrder {
+       private Integer pageno;
+       private Integer prev;
+       private Integer start;
+       private Integer end;
+       private Integer next;
+       private List<MyOrderList> myOrderLists;
     }
 }

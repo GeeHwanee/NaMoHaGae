@@ -30,7 +30,11 @@ public class MemberRestController {
         Boolean result = memberService.update(profile,nickname,memberNo,password,phone,townNo);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
-
+    @PostMapping("/member/change/password")
+    public ResponseEntity<Void> changePassword(String memberPassword,String memberEmail){
+        Boolean result = memberService.changePassword(memberPassword,memberEmail);
+        return result?ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+    }
     @PatchMapping("/member/sendAudenticationCode")
     public ResponseEntity<String> sendmail(String email){
       Boolean a = memberService.sendAuthenticationCode(email);
@@ -51,6 +55,10 @@ public class MemberRestController {
     public ResponseEntity<Boolean> checkNickname(String nickname){
         Boolean a = memberService.checkEmail(nickname);
         return  ResponseEntity.ok(a);
+    }
+    @GetMapping("/member/findEmail")
+    public ResponseEntity<String> findEmailByNicknameAndPhone(String nickname,String phone){
+        return ResponseEntity.ok(memberService.findEmailByNicknameAndPhone(nickname,phone));
     }
 
 }

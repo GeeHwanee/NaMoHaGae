@@ -93,6 +93,12 @@ aside {
 #bside > div, #bside > div > li {
     text-align: center;
 }
+.quickMenu {position:absolute;width:100%;top:25%;background:#fff;text-align: center}
+.quickMenu ul {width:100%;}
+.quickMenu ul li {width:100%;text-align:center;}
+.quickMenu ul li a {width:100%;border-bottom:1px solid #c9dc92;padding-bottom:3px;height:30px;line-height:30px;text-align:center;color:#999;font-size:9.5pt; text-decoration: none;}
+.quickMenu ul li a:hover {color:#000;}
+.quickMenu ul li:last-child {border-bottom:0;}
 #side_bar > li > a{
     font-family: 'Nanum Gothic', sans-serif;
     text-decoration: none;

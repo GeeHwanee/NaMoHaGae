@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/main.css">
+    <!------------------------------------------------------------------------------------------------------------------------------>
+    <!--기본 CND, Script, CSS 내장 삽입-->
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+
+    <!------------------------------------------------------------------------------------------------------------------------------>
     <title>공지사항 게시판 목록 페이지</title>
-
 </head>
-<style>
-
-</style>
 <body>
-<header th:replace="~{/fragment/header.html}"> </header>
-<nav th:replace="~{/fragment/nav.html}"></nav>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
-    <aside th:replace="~{/fragment/aside.html}"></aside>
+    <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>공지사항 게시판 목록 페이지</h1>
         <a href="/admin/notice/write">게시물 쓰기</a>
@@ -52,8 +50,8 @@
             </tbody>
         </table>
     </section>
-    <aside th:replace="~{/fragment/bside.html}"></aside>
+    <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
-<footer th:replace="~{/fragment/footer.html}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

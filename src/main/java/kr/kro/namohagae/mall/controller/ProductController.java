@@ -30,7 +30,7 @@ public class ProductController {
             model.addAttribute("list", service.list(pageNo, categoryNo, myUserDetails.getMemberNo()));
         }
 
-        return "/mall/product/list";
+        return "mall/product/list";
     }
 
 
@@ -38,7 +38,7 @@ public class ProductController {
     @GetMapping("/mall/product/read")
     public String read(Integer productNo, Model model) {
         model.addAttribute("product", service.read(productNo));
-        return "/mall/product/read";
+        return "mall/product/read";
     }
 
 
