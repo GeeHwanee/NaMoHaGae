@@ -19,4 +19,9 @@ public interface ProductOrderDao {
 
     // 주문 완료시 멤버 포인트 지급
     public void updateMemberPoint(Integer bonePoint,Integer memberNo);
+    public Integer countMe(Integer memberNo);
+
+    public List<ProductOrderDto.MyOrderList> myOrderList(Integer startRowNum, Integer endRowNum, Integer memberNo);
+
+
 }
