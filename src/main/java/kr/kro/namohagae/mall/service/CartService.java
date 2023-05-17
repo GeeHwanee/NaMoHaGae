@@ -28,7 +28,7 @@ public class CartService {
 
 
     // 장바구니에 상품 추가
-    public String add(Integer productNo, Integer memberNo) {
+    public String add(Integer productNo, Integer cartDetailCount, Integer memberNo) {
         Product product = null;
 
         try {
@@ -42,10 +42,11 @@ public class CartService {
             if(cartDetail.getCartDetailCount() >= product.getProductStock()) {
                 return product.getProductStock() + "개까지 구입할 수 있습니다";
             } else {
-                cartDetail.setCartDetailCount(cartDetail.getCartDetailCount() + 1);
-                cartDetail.setCartDetailPrice(product.getProductPrice());
-                cartDetailDao.update(cartDetail);
-                return "장바구니에 " + cartDetail.getCartDetailCount() + "개 담았습니다";
+                cartDetailDao.update(CartDetail.builder().cartDetailNo(cartDetail.getCartDetailNo()).
+                        memberNo(cartDetail.getMemberNo()).cartNo(cartDetail.getCartNo()).productNo(cartDetail.getProductNo())
+                        .cartDetailCount(cartDetail.getCartDetailCount()+cartDetailCount).cartDetailPrice(cartDetail.getCartDetailPrice()).build());
+
+                return "장바구니에 " + cartDetailCount + "개 담았습니다";
             }
 
         } catch(ProductNotFoundException e) {
@@ -60,8 +61,8 @@ public class CartService {
                 cartDao.save(newCart);
                 cartNo = newCart.getCartNo();
             }
-            cartDetailDao.save(CartDetail.builder().memberNo(memberNo).cartNo(cartNo).productNo(productNo).cartDetailCount(1).cartDetailPrice(product.getProductPrice()).build());
-            return "장바구니에 1개 담았습니다";
+            cartDetailDao.save(CartDetail.builder().memberNo(memberNo).cartNo(cartNo).productNo(productNo).cartDetailCount(cartDetailCount).cartDetailPrice(product.getProductPrice()).build());
+            return "장바구니에 " + cartDetailCount + "개 담았습니다";
         }
     }
     
