@@ -268,31 +268,33 @@ public class GlobalController {
 
     // [퍼칭 파트]--------------------------------------------------------------------
     @GetMapping("/puching/chatroom")
-    public void chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
+    public String chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
         Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
         model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
         model.addAttribute("mymemberNo",myMemberNo);
         model.addAttribute("startuser",receiverEmail);
+        return "puching/chatRoom";
     }
     @GetMapping("/puching/locationview")
     public String locationview(@RequestParam("lat")Double lat,@RequestParam("lng") Double lng){
 
-        return "puching/locationview.html";
+        return "puching/locationview";
     };
 
     @GetMapping("/puching/reviewwrite")
-    public void reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
+    public String reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
         System.out.println(receiverNo);
         System.out.println(puchingNo);
         ReviewDto.Writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
         model.addAttribute("list",dto);
         System.out.println(dto);
-
+        return "puching/reviewwrite";
     }
     @PostMapping(value="/puching/reviewwrite")
-    public void write(ReviewDto.Write dto, Principal principal) {
+    public String write(ReviewDto.Write dto, Principal principal) {
         System.out.println(dto);
         puchingReviewService.saveReview(principal.getName(),dto);
+        return "redirect:/puching/main";
     }
 
     // [게시판 파트]--------------------------------------------------------------------
