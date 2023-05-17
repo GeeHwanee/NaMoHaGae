@@ -56,4 +56,24 @@ public class ProductReviewService {
         }
         return new ProductReviewDto.Pagination(pageNo, prev, start, end, next, productNo, review);
     }
+
+    public ProductReviewDto.PaginationMyReview myProductReviewList(Integer pageNo, Integer memberNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductReviewDto.MyReviewList> review =  productReviewDao.findAllByMemberNo(startRowNum,endRowNum,memberNo);
+        System.out.println(review.get(0).getReviewContent());
+        System.out.println(review.get(0).getReviewStar());
+        Integer countOfReview = productReviewDao.countByMemberNo(memberNo);
+        System.out.println(countOfReview);
+        Integer countOfPage = (countOfReview-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductReviewDto.PaginationMyReview(pageNo, prev, start, end, next, review);
+    }
 }
