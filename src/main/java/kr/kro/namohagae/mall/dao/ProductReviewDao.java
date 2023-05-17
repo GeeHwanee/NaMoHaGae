@@ -19,4 +19,8 @@ public interface ProductReviewDao {
     
     // 특정 상품의 리뷰 목록 조회
     public List<ProductReviewDto.ReviewList> findAllByProductNo(Integer startRowNum, Integer endRowNum, Integer productNo);
+
+    public Integer countByMemberNo(Integer memberNo);
+
+    public List<ProductReviewDto.MyReviewList> findAllByMemberNo(Integer startRowNum,Integer endRowNum,Integer memberNo);
 }
