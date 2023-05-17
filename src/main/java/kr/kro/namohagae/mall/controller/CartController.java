@@ -20,7 +20,7 @@ public class CartController {
     public String list(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo=myUserDetails.getMemberNo();
         model.addAttribute("map", service.list(memberNo));
-        return "/mall/cart/list";
+        return "mall/cart/list";
     }
 
     // 장바구니 삭제
