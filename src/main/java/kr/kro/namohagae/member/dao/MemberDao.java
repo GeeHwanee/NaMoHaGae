@@ -44,4 +44,7 @@ public interface MemberDao {
 
     public Integer disabled(Integer memberNo);
 
+    public String findEmailByNicknameAndPhone(String nickname, String phone);
+
+    public Boolean changePassword(String memberPassword,String memberEmail);
 }
