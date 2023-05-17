@@ -30,9 +30,11 @@ public class ProductOrderController {
 
 
     @PostMapping("/mall/order")
-    public String order(HttpSession session, @RequestParam(value = "checkedProductNos", required = false) List<Integer> checkedProductNos) {
+    public String order(HttpSession session, @RequestParam(value = "checkedProductNos", required = false) List<Integer> checkedProductNos,
+                        @RequestParam(value = "productOrderDetailCount", required = false, defaultValue = "1") Integer productOrderDetailCount) {
         if (checkedProductNos != null) {
             session.setAttribute("checkedProductNos", checkedProductNos);
+            session.setAttribute("productOrderDetailCount", productOrderDetailCount);
         } else {
             return "redirect:/mall/main";
         }
@@ -42,10 +44,12 @@ public class ProductOrderController {
     @GetMapping("/mall/order/ready")
     public ModelAndView orderList(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         List<Integer> checkedProductNos = (List<Integer>)session.getAttribute("checkedProductNos");
+        Integer productOrderDetailCount = (Integer)session.getAttribute("productOrderDetailCount");
         session.removeAttribute("checkedProductNos");
+        session.removeAttribute("productOrderDetailCount");
         ProductOrderDto.Read order;
         if (checkedProductNos != null) {
-            order = service.orderReady(myUserDetails.getMemberNo(), checkedProductNos);
+            order = service.orderReady(myUserDetails.getMemberNo(), checkedProductNos, productOrderDetailCount);
         } else {
             return new ModelAndView("redirect:/mall/main");
         }
@@ -108,7 +112,6 @@ public class ProductOrderController {
     // 주문 목록 보기
     @GetMapping("/mall/order/list")
     public void orderList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        //service.orderList(myUserDetails.getMemberNo()).forEach(a->System.out.println(a));
         model.addAttribute("orders", service.orderList(myUserDetails.getMemberNo()));
     }
 }

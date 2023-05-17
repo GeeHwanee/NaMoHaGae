@@ -100,6 +100,10 @@
     .productPrice {
         font-size: 20px;
     }
+
+    .hide {
+        display: none;
+    }
 </style>
 <script>
     // 날짜 yyyy-MM-dd
@@ -306,7 +310,7 @@
         $('#cart').click(async function() {
             console.log("/api/v1/cart/add?productNo=" + $("#productNo").text());
             try {
-                const result = await $.ajax({url: "/api/v1/cart/add?productNo=" + $("#productNo").text(), method:"post"});
+                const result = await $.ajax({url: "/api/v1/cart/add?productNo=" + $("#productNo").text()+"&cartDetailCount="+$('#quantity').text(), method:"post"});
                 const choice = await Swal.fire({
                     title: result,
                     text: "장바구니로 이동하시겠습니까?",
@@ -329,9 +333,11 @@
         $('#buy').click(async function() {
             const checkedProductNos = [];
             const productNo = $('#productNo').text();
+            const productOrderDetailCount = $('#quantity').text();
             checkedProductNos.push(productNo);
             const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/order").attr("method","post").appendTo($('body'));
             $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val(checkedProductNos));
+            $form.append($('<input>').attr('type','hidden').attr('name','productOrderDetailCount').val(productOrderDetailCount));
             $form.submit();
         });
 
@@ -352,6 +358,8 @@
         // 총 상품 금액
         calculateTotalPrice(1);
 
+        // 리뷰 별점 평균 출력
+        printReviewStar([[${product.productGrade}]], [[${product.reviewCount}]]);
 
 
     });
@@ -398,6 +406,29 @@
         totalPriceElement.innerText = totalPrice.toLocaleString() + '원';
     }
 </script>
+<script>
+    function printReviewStar(productGrade, reviewCount) {
+        const fullStars = Math.floor(productGrade);
+        const halfStar = productGrade - fullStars;
+        const emptyStars = 5 - fullStars - (halfStar > 0 ? 1 : 0);
+
+        let starsHTML = '';
+        for (let i = 0; i < fullStars; i++) {
+            starsHTML += '<i class="fa-solid fa-star"></i>';
+        }
+        if (halfStar > 0) {
+            starsHTML += '<i class="fa-solid fa-star-half-stroke"></i>';
+        }
+        for (let i = 0; i < emptyStars; i++) {
+            starsHTML += '<i class="fa-regular fa-star"></i>';
+        }
+
+        const productGradeHTML = starsHTML + ' ' + productGrade.toFixed(1);
+        const reviewCountHTML = '(' + reviewCount + '건)';
+
+        document.querySelector('.productGrade').innerHTML = productGradeHTML + ' ' + reviewCountHTML;
+    }
+</script>
 </head>
 <body>
 <div id="page">
@@ -419,8 +450,13 @@
                 </div>
                 <span id="right">
                     <div class="productName" th:text="${product.productName}"></div>
-                    <div class="productGrade">★★★★★ 4.5(2건) (별점출력예정)</div>
-                    <!--<div th:text="${product.productGrade}"></div>-->
+                    <div th:classappend="${product.reviewCount == 0? 'hide':''}">
+                        <span class="productGrade">
+                            <span class="reviewStar"></span>
+                            <span th:text="${product.productGrade}"></span>
+                            <span th:text="' (' + ${product.reviewCount} + '건)'"></span>
+                        </span>
+                    </div>
                     <span>
                       <div th:if="${product.productStock == 0}">
                         <span class="productPrice" style="color: red">품절댐</span>
