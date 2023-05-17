@@ -347,7 +347,7 @@
         calculateTotalPrice(1);
 
         // 리뷰 별점 평균 출력
-        printReviewStar([[${product.productGrade}]], [[${product.reviewCount}]]);
+         printReviewStar(data.productGrade, data.reviewCount);
 
 
     });
@@ -416,6 +416,9 @@
 
         document.querySelector('.productGrade').innerHTML = productGradeHTML + ' ' + reviewCountHTML;
     }
+</script>
+<script th:inline="javascript">
+    const data =  [[${product}]]
 </script>
 </head>
 <body>
