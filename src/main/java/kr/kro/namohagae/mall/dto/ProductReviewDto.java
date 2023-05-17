@@ -48,4 +48,23 @@ public class ProductReviewDto {
                     productReviewContent(productReviewContent).productReviewStar(productReviewStar).productReviewWriteDate(LocalDateTime.now()).build();
         }
     }
+    @Data
+    public static class MyReviewList{
+        private String reviewContent;
+        private Integer reviewStar;
+        private LocalDateTime reviewWriteDate;
+        private Integer productNo;
+        private String productImage;
+        private String productName;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class PaginationMyReview {
+        private Integer pageno;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private List<MyReviewList> myReviewLists;
+    }
 }

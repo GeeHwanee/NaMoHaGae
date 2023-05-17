@@ -23,6 +23,9 @@ public class ProductOrderService {
     private final CartDetailDao cartDetailDao;
     private final AddressDao addressDao;
     private final ProductDao productDao;
+    private Integer PAGESIZE = 10;
+    private Integer BLOCKSIZE = 5;
+
 
     public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos, Integer productOrderDetailCount) {
         List<ProductOrderDto.OrderList> orderItems = new ArrayList<>();
@@ -91,5 +94,22 @@ public class ProductOrderService {
         productOrderDao.updateMemberPoint(bonePoint, memberNo);
         return productOrder.getProductOrderNo();
 
+    }
+    public ProductOrderDto.PaginationOrder listMyOrder(Integer pageNo, Integer memberNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductOrderDto.MyOrderList> orderLists = productOrderDao.myOrderList(startRowNum,endRowNum,memberNo);
+        System.out.println(orderLists.size());
+        Integer countOfQna = productOrderDao.countMe(memberNo);
+        Integer countOfPage = (countOfQna-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductOrderDto.PaginationOrder(pageNo,prev,start,end,next,orderLists);
     }
 }
