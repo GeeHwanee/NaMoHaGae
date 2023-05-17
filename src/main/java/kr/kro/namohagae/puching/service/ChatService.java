@@ -47,8 +47,6 @@ public class ChatService {
             cdao.saveMessage(message);
 
         Boolean a= cdao.existsByChatRoom(senderNo,receiverNo);
-        System.out.println(a);
-        System.out.println("12312312312313131232131231232131");
         notificationService.save(member,NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
 
         if(cdao.existsByChatRoom(senderNo,receiverNo)==false){
@@ -98,7 +96,6 @@ public class ChatService {
             int postionOfDot = image.getOriginalFilename().lastIndexOf(".");
             String ext = image.getOriginalFilename().substring(postionOfDot);
             String currentDir = System.getProperty("user.dir")+"/";
-            System.out.println(currentDir);
             String imagePath = currentDir+ ImageConstants.IMAGE_CHAT_FOLDER;
             imageName=UUID.randomUUID()+ext;
             File file = new File(imagePath, imageName);
@@ -111,6 +108,7 @@ public class ChatService {
         String img = "image";
         Message message= new MessageDto.ImageMessageSave(senderNo,receiverNo).toEntity(img,imageName);
         cdao.saveImage(message);
+
 
     return message;
     }

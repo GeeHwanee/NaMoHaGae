@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--스크립트 태그-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>                    <!--jQuery-->
+                       <!--jQuery-->
     <script src="https://kit.fontawesome.com/a606a1a405.js" crossorigin="anonymous"></script>                   <!--FontAwesome-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>        <!--BootStrap-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>         <!--SweetAlert2-->
@@ -116,9 +116,17 @@
 
 
       <script>
+
+
+
           const stars = document.querySelectorAll('.star');
           const reviewText = document.getElementById('review-text');
           const submitButton = document.getElementById('submit-review');
+
+          console.log(stars)
+          console.log(reviewText)
+          console.log(submitButton)
+
 
           stars.forEach(star => {
               star.addEventListener('click', () => {
@@ -184,10 +192,10 @@
       <script>
           function compareTime(targetTime) {
               // 현재 시간 구하기
-              var currentTime = new Date();
+              const currentTime = new Date();
 
               // 주어진 시간을 Date 객체로 변환
-              var targetDateTime = new Date(targetTime);
+              const targetDateTime = new Date(targetTime);
 
               // 주어진 시간이 현재 시간보다 이후인지 확인
               if (targetDateTime > currentTime) {
