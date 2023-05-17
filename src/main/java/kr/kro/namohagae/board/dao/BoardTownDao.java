@@ -12,7 +12,7 @@ public interface BoardTownDao {
 
     public void boardTownInsertData(Board board);
 
-    public List<BoardTownListDto> boardTownList(Integer townNo, @Param("start") int start, @Param("limit") int limit);
+    public List<BoardTownListDto> boardTownList(Integer townNo,@Param("searchName") String searchName, @Param("start") int start, @Param("limit") int limit);
 
     public Board boardTownRead(Integer boardNo);
 
