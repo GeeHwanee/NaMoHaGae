@@ -17,8 +17,68 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">     <!--SweetAlert2-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">       <!--Toastr-->
   <!--기타 삽입-->
-
+  <style >
+    .hidden{ display: none;}
+  </style>
   <!------------------------------------------------------------------------------------------------------------------------------>
+  <script>
+    $(document).ready(function (){
+      $('#changePassword').click(function(){
+        const formData = new FormData();
+        formData.append('memberEmail', $('#memberEmail').val());
+        formData.append('memberPassword', $('#memberPassword').val());
+
+        try{
+          $.ajax({
+            url: "/member/update",
+            method:'post',
+            data: formData,
+            processData:false, 	// urlencoded 자동 변환 옵션
+            contentType:false 	// Multipart-formdata 지정 옵션
+          });
+          alert('변경 성공');
+          window.location.href = "http://localhost:8081";
+        }catch(err){
+          alert('변경 실패');
+        }
+      });
+      $('#sendEmail').click(async function (){
+        try {
+          const url = "/member/sendAudenticationCode?email=" + $("#memberEmail").val();
+          // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
+          // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
+          const result = await $.ajax({url:url, method:"patch"})
+          alert(result);
+          $('#checkCodeArea').removeClass('hidden');
+        } catch(err) {
+          alert("이메일을 찾지 못했습니다");
+        }
+      });
+      $('#checkCode').click(async function(){
+        try {
+          const url = "/member/checkAudenticationCode?code=" + $("#code").val();
+          // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
+          // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
+          const result = await $.ajax({url:url, method:"get"});
+          alert(result+"변경할 비밀번호를 입력해주세요")
+          $('#password').removeClass('hidden');
+        }catch (err){
+          $("#memberEmail_msg").text("인증에 실패했습니다").attr("class","fail");
+        }
+      });
+      $('#findEmail').click(async function(){
+        try {
+          const url = "/member/findEmail?nickname=" + $("#nickname").val()+"&phone="+$('#phone').val();
+          // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
+          // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
+          const result = await $.ajax({url:url, method:"get"});
+          alert("회원님의 이메일은"+result+"입니다")
+        }catch (err){
+          alert("입력하신 정보를 찾을 수 없습니다");
+        }
+      });
+    })
+  </script>
   <title>아이디/비밀번호 찾기</title>
 </head>
 <body>
@@ -27,7 +87,27 @@
   <aside th:replace="~{/fragment/aside.html}"></aside>
   <section>
     <h1>아이디/비밀번호 찾기</h1>
-    <article></article>
+    <div>
+      <h2>아이디 찾기</h2>
+    <input type="text" id="nickname" name="nickname">
+    <input type="text" id="phone" name="phone">
+    <button type="button" id="findEmail" class="btn btn-primary btn-block">아이디 찾기</button>
+    </div>
+    <br>
+    <div>
+      <h2>비밀번호 찾기</h2>
+      <input type="text" name="memberEmail" id="memberEmail">
+      <button type="button" id="sendEmail" class="btn btn-primary btn-block">인증요청</button>
+    </div>
+    <div id="checkCodeArea" class="hidden">
+      <input type="text" id="code" name="code" >
+      <button type="button" id="checkCode" class="btn btn-primary btn-block">인증확인</button>
+    </div>
+    <div id="password" class="hidden">
+      <input type="password" id="memberPassword" name="memberPassword">
+      <input type="password" id="memberPassword2" name="memberPassword2">
+      <button type="button" id="changePassword" class="btn btn-primary btn-block">비밀번호 변경</button>
+    </div>
   </section>
   <aside th:replace="~{/fragment/bside.html}"></aside>
 </main>
