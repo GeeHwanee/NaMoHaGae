@@ -35,8 +35,11 @@
 
 
 
-    <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.Board" parameterType="int">
-        select * from board where board_no = #{boardNo}
+    <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.BoardList" parameterType="int">
+        SELECT b.*, m.member_nickname AS memberNickname
+        FROM board b
+                 JOIN member m ON b.member_No = m.member_No
+        WHERE board_no = #{boardNo}
     </select>
     <delete id="boardDeleteData" parameterType="int">
         delete board where board_no = #{boardNo}

@@ -61,7 +61,7 @@
                     <tbody>
 
                         <tr th:each="board : ${list}">
-                            <th:block th:if="${board.townNo == 0}">
+
                             <td th:text="${board.boardNo}">1</td>
                             <td>
                                 <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName})}" th:text="${board.boardTitle}">게시물 제목</a>
@@ -69,7 +69,7 @@
                             <td th:text="${board.memberNickname}"></td>
                             <td th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${board.boardReadCount}"></td>
-                            </th:block>
+
 
                         </tr>
                     </tbody>
