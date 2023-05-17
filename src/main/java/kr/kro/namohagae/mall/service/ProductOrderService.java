@@ -25,7 +25,7 @@ public class ProductOrderService {
     private final ProductDao productDao;
 
     // 결제할 주문 목록 조회(장바구니)
-    public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos) {
+    public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos, Integer productOrderDetailCount) {
         // 선택한 상품만 장바구니에 담기
         List<ProductOrderDto.OrderList> orderItems = new ArrayList<>();
         Integer orderTotalPrice = 0;
@@ -36,7 +36,7 @@ public class ProductOrderService {
             if (result.isPresent()) {
                 cartDetail = result.get();
             } else{
-                cartDetail = new CartDetail(null,memberNo,null,productNo,1,product.getProductPrice());
+                cartDetail = new CartDetail(null,memberNo,null,productNo,productOrderDetailCount,product.getProductPrice());
             }
                 ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
                 orderItems.add(orderItem);

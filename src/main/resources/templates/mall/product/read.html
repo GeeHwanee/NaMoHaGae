@@ -306,7 +306,7 @@
         $('#cart').click(async function() {
             console.log("/api/v1/cart/add?productNo=" + $("#productNo").text());
             try {
-                const result = await $.ajax({url: "/api/v1/cart/add?productNo=" + $("#productNo").text(), method:"post"});
+                const result = await $.ajax({url: "/api/v1/cart/add?productNo=" + $("#productNo").text()+"&cartDetailCount="+$('#quantity').text(), method:"post"});
                 const choice = await Swal.fire({
                     title: result,
                     text: "장바구니로 이동하시겠습니까?",
@@ -329,9 +329,11 @@
         $('#buy').click(async function() {
             const checkedProductNos = [];
             const productNo = $('#productNo').text();
+            const productOrderDetailCount = $('#quantity').text();
             checkedProductNos.push(productNo);
             const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/order").attr("method","post").appendTo($('body'));
             $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val(checkedProductNos));
+            $form.append($('<input>').attr('type','hidden').attr('name','productOrderDetailCount').val(productOrderDetailCount));
             $form.submit();
         });
 

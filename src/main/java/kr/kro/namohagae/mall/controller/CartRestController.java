@@ -19,9 +19,9 @@ public class CartRestController {
 
     // 장바구니 담기
     @PostMapping("/cart/add")
-    public ResponseEntity<String> add(Integer productNo, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+    public ResponseEntity<String> add(Integer productNo, Integer cartDetailCount, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo=myUserDetails.getMemberNo();
-        return ResponseEntity.ok(service.add(productNo, memberNo));
+        return ResponseEntity.ok(service.add(productNo, cartDetailCount, memberNo));
     }
 
     // 장바구니 물품 개수 증가
