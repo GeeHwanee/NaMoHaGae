@@ -86,6 +86,9 @@ public class ProductOrderService {
         if (!productNos.isEmpty()) {
             cartDetailDao.removeByCartNo(productNos, memberNo);
         }
+        // 이거 배송지 + 3000원 들어가는거도 잡아줘야함.
+        Integer bonePoint = (int) (productOrder.getProductOrderTotalPrice() * 0.01);
+        productOrderDao.updateMemberPoint(bonePoint, memberNo);
         return productOrder.getProductOrderNo();
 
     }
