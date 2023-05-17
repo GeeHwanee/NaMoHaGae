@@ -24,9 +24,7 @@ public class ProductOrderService {
     private final AddressDao addressDao;
     private final ProductDao productDao;
 
-    // 결제할 주문 목록 조회(장바구니)
-    public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos) {
-        // 선택한 상품만 장바구니에 담기
+    public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos, Integer productOrderDetailCount) {
         List<ProductOrderDto.OrderList> orderItems = new ArrayList<>();
         Integer orderTotalPrice = 0;
         for (Integer productNo : checkedProductNos) {
@@ -36,7 +34,7 @@ public class ProductOrderService {
             if (result.isPresent()) {
                 cartDetail = result.get();
             } else{
-                cartDetail = new CartDetail(null,memberNo,null,productNo,1,product.getProductPrice());
+                cartDetail = new CartDetail(null,memberNo,null,productNo,productOrderDetailCount,product.getProductPrice());
             }
                 ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
                 orderItems.add(orderItem);
@@ -51,7 +49,6 @@ public class ProductOrderService {
     public List<AddressDto.Read> findAddress(Integer memberNo) {
         return addressDao.findAll(memberNo);
     }
-    // 아래부터 수정해야함 (dto 수정했고, 매퍼 수정)
 
     public List<ProductOrderDto.OrderResult> orderList(Integer memberNo) {
         return productOrderDao.list(memberNo);
@@ -89,6 +86,9 @@ public class ProductOrderService {
         if (!productNos.isEmpty()) {
             cartDetailDao.removeByCartNo(productNos, memberNo);
         }
+        // 이거 배송지 + 3000원 들어가는거도 잡아줘야함.
+        Integer bonePoint = (int) (productOrder.getProductOrderTotalPrice() * 0.01);
+        productOrderDao.updateMemberPoint(bonePoint, memberNo);
         return productOrder.getProductOrderNo();
 
     }

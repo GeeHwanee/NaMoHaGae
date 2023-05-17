@@ -61,17 +61,34 @@
         <result column="product_content" property="productContent" />
         <result column="product_price" property="productPrice" />
         <result column="product_grade" property="productGrade" />
+        <result column="review_count" property="reviewCount" />
         <result column="product_stock" property="productStock" />
         <collection property="productImages" javaType="list" ofType="String">
             <result column="product_image" />
         </collection>
     </resultMap>
 
+    <!--
     <select id="findByProductNo" resultMap="readMap">
         select p.product_no, p.product_name, p.product_content, p.product_price, p.product_grade, p.product_stock,
                'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
         from PRODUCT p left join PRODUCT_IMAGE pi on p.product_no = pi.product_no
         where p.product_no=#{productNo}
+    </select>
+    -->
+    <select id="findByProductNo" resultMap="readMap">
+        SELECT p.product_no, p.product_name, p.product_content, p.product_price,
+               (SELECT ROUND(SUM(pr.PRODUCT_REVIEW_STAR) / COUNT(pr.product_order_detail_no), 1)
+                FROM PRODUCT_REVIEW pr
+                WHERE p.product_no = pr.product_no) AS PRODUCT_GRADE,
+               (SELECT COUNT(pr.product_order_detail_no)
+                FROM PRODUCT_REVIEW pr
+                WHERE p.product_no = pr.product_no) AS review_count,
+               p.product_stock,
+               'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image
+        FROM PRODUCT p
+                 JOIN PRODUCT_IMAGE pi ON p.product_no = pi.product_no and pi.product_image_no=1
+        WHERE p.product_no = #{productNo}
     </select>
 
     <!-- 사용자가 구매하기 선택한 상품 검색
@@ -187,20 +204,6 @@
         )
         where rnum&gt;=#{startRowNum}
     </select>
-
-    <!-- 리뷰 update -->
-    <update id="updateReview">
-        UPDATE product p
-        SET p.product_grade = (
-            SELECT ROUND(AVG(pr.product_review_star), 1)
-            FROM product_review pr
-            WHERE pr.productNo = p.productNo
-        )
-    </update>
-
-    <update id="updateOrder">
-        update PRODUCT set product_stock = product_stock-1 where product_no = #{productNo}
-    </update>
 
     <delete id="delete">
         delete from PRODUCT where PRODUCT_NO= #{productNo} and ROWNUM=1

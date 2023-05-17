@@ -16,11 +16,4 @@ public class CartDetail {
     private Integer productNo;
     private Integer cartDetailCount;
     private Integer cartDetailPrice;
-
-    public void setCartDetailCount(int i) {
-    }
-    public void setCartDetailPrice(int i) {
-    }
-
-
 }

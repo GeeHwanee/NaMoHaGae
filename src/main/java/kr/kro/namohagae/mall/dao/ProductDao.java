@@ -2,8 +2,6 @@ package kr.kro.namohagae.mall.dao;
 
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
-import kr.kro.namohagae.mall.entity.ProductOrderDetail;
-import kr.kro.namohagae.mall.entity.ProductReview;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -51,10 +49,6 @@ public interface ProductDao {
 
     // 필터(이름순) 검색
     public List<ProductDto.ReadAll> findAllByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
-
-    public Integer updateReview(ProductReview productReview);
-
-    public Integer updateOrder(ProductOrderDetail productOrderDetail);
 
     public Integer delete(Integer productNo);
 
