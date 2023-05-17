@@ -2,7 +2,7 @@ $(document).ready(async function() {
     // Aside
     printAside();
     // Bside
-    const socket = new WebSocket('ws://www.namohagae.kro.kr/notification');
+    const socket = new WebSocket('ws://localhost:8081/notification');
 
     socket.addEventListener('open', function (event) {
         // 연결이 성공한 경우 실행되는 코드
@@ -74,17 +74,18 @@ const admin	= "admin";
 
 function printAside(){
     let sideBar = location.href.slice(28);
+    let localSideBar = location.href.slice(22);
     const $title = $('#aside_title');
     const $side_bar = $('#side_bar');
     $title.text("");
     $side_bar.empty();
-    if(sideBar.startsWith(mall)){
+    if(sideBar.startsWith(mall)||localSideBar.startsWith(mall)){
         $title.append('<li><a href="/mall/main">뼈다귀몰</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=1">사료/간식</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=2">장난감</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=3">산책용품</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=4">기타</a></li>');
-    }else if(sideBar.startsWith(member)){
+    }else if(sideBar.startsWith(member)||localSideBar.startsWith(member)){
         $title.append('<li><a href="/member/main">내 정보</a></li>');
         $side_bar.append('<li><a href="/member/notification">알림함</a></li>');
         $side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
@@ -97,16 +98,16 @@ function printAside(){
         $side_bar.append('<li><a href="/member/board/comment">내가 작성한 댓글</a></li>');
         $side_bar.append('<li><a href="/member/board/question">내가 작성한 질문</a></li>');
         $side_bar.append('<li><a href="/member/board/answer">내가 작성한 답변</a></li>');
-    }else if(sideBar.startsWith(puching)){
+    }else if(sideBar.startsWith(puching)||localSideBar.startsWith(puching)){
         $title.append('<li><a href="/puching/main">퍼칭</a></li>');
         $side_bar.append('<li><a href="/puching/chatroom">채팅방</a></li>');
-    }else if(sideBar.startsWith(board)){
+    }else if(sideBar.startsWith(board)||localSideBar.startsWith(board)){
         $title.append('<li><a href="/board/main">커뮤니티</a></li>');
         $side_bar.append('<li><a href="/board/notice/list">공지사항</a></li>');
         $side_bar.append('<li><a href="/board/free/list">자유 게시판</a></li>');
         $side_bar.append('<li><a href="/board/town/list">동네 게시판</a></li>');
         $side_bar.append('<li><a href="/board/knowledge/list">지식인</a></li>');
-    }else if(sideBar.startsWith(admin)){
+    }else if(sideBar.startsWith(admin)||localSideBar.startsWith(admin)){
         $title.append('<li><a href="/admin/main">관리자</a></li>');
         $side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
         $side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
