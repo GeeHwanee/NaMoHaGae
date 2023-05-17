@@ -73,8 +73,7 @@ const board = "board";
 const admin	= "admin";
 
 function printAside(){
-    let sideBar = location.href.slice(27);
-    console.log(sideBar);
+    let sideBar = location.href.slice(28);
     const $title = $('#aside_title');
     const $side_bar = $('#side_bar');
     $title.text("");
