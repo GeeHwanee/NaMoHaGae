@@ -66,7 +66,8 @@ public class MemberService {
         }
         Integer townNo = townDao.findNoByDong(dto.getTownDong());
         String encodedPassword = passwordEncoder.encode(dto.getMemberPassword());
-        Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo);
+        Boolean checkKaKao = dto.getMemberCheckKaKao();
+        Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo,checkKaKao);
         memberDao.save(member);
     }
     private void sendMail(String from, String to, String title, String text) {
