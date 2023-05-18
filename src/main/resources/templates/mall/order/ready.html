@@ -151,7 +151,6 @@
     }
 
     function calculationOrderTotalPrice() {
-        const totalPriceElement = document.getElementById("totalPrice");
         const orderTotalPriceElement = document.getElementById("orderTotalPrice");
         const deliveryFee = 3000;
 
@@ -197,9 +196,6 @@
     window.addEventListener("load", onPageLoad);
 
 
-</script>
-<script th:inline="javascript">
-    const data =  [[${map}]]
 </script>
 </head>
 <body>
