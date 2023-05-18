@@ -46,14 +46,57 @@
         font-size:16px;
 
     }
-    td {
-        font-size:14px;
-        color:#6c757d;
+
+    #comment-list {
+        display:flex;
+        padding:10px;
+        border-top :1px solid #eee;
 
     }
-    .comment-list {
-        max-height:500px;
+    .editCommentContent {
+        width:90%;
+        height:auto;
     }
+    .name_layout {
+        flex:1;
+
+    }
+    .name_layout > span {
+        font-size:13px;
+    }
+    .content_layout {
+        flex:6;
+        position:relative;
+
+    }
+    .commentContent {
+        font-size:13px;
+    }
+    .modify {
+        position:absolute;
+        right:30px;
+        bottom:0;
+        font-size:11px;
+        color : #6c757d;
+    }
+    .delete {
+        position:absolute;
+        right:0;
+        bottom:0;
+        font-size:11px;
+        color : #6c757d;
+    }
+
+
+    .day_layout {
+        flex:1;
+        color:#6c757d;
+        text-align:center;
+    }
+    .day_layout > span {
+        font-size:11px;
+    }
+
     #write_date {
         font-size:14px;
         display:inline-block;
@@ -94,7 +137,9 @@
         right:0;
         top:32px;
     }
-
+    #likeButton {
+        margin-top:30px;
+    }
 
 </style>
 <body>
@@ -122,36 +167,26 @@
                     <p th:text="${board.boardContent}" class="card=text">내용이 들어갈 부분입니다.</p>
 
 
-                    <button id="likeButton" onclick="updateLike(); change()" type="button" th:text="${good}"></button>
+
 
 
                 </div>
             </div>
-            <div id="comment-list">
-                <table>
+            <div id="comment-list" th:each="comment: ${comment}">
+                <span th:text="${comment.commentNo}" class="commentNo" style="display:none;"></span>
+                <div class="name_layout">
+                    <span th:text="${comment.memberNickname}"></span>
+                </div>
+                <div class="content_layout">
+                    <span class="commentContent" th:text="${comment.commentContent}"></span>
+                    <span th:if="${comment.memberNo eq modify}" style="cursor:pointer" onclick="commentEdit(event)" class="modify">수정</span>
+                    <span th:if="${comment.memberNo eq modify}" style="cursor:pointer" onclick="commentDelete(event)" class="delete">삭제</span>
+                    <textarea class="editCommentContent"  style="display: none;"></textarea>
+                </div>
+                <div class="day_layout">
+                    <span th:text="${#temporals.format(comment.commentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
 
-                    <tr th:each="comment: ${comment}">
-                        <td th:text="${comment.commentNo}" class="commentNo" style="display:none;"></td>
-                        <div class="name_layout">
-                        <td th:text="${comment.memberNickname}"></td>
-                        </div>
-                        <div class="content_layout">
-                        <td>
-                            <span class="commentContent" th:text="${comment.commentContent}"></span>
-                            <textarea class="editCommentContent" style="display: none;"></textarea>
-                        </td>
-                        </div>
-                        <div class="day_layout">
-                        <td th:text="${#temporals.format(comment.commentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td th:if="${comment.memberNo eq modify}">
-                            <button onclick="commentEdit(event)">수정</button>
-                        </td>
-                        <td th:if="${comment.memberNo eq modify}">
-                            <button onclick="commentDelete(event)">삭제</button>
-                        </td>
-                        </div>
-                    </tr>
-                </table>
             </div>
             <div class="comment_group">
             <div class="input-group">
@@ -166,6 +201,7 @@
                 <button onclick="listFn()" class="btn btn-primary">목록</button>
                 <a class="btn btn-primary" th:href="@{/board/free/write}" role="button">글쓰기</a>
             </div>
+                <a href="javascript:void(0);" class="btn btn-primary" id="likeButton" onclick="updateLike(); change()" type="button" th:text="${good}"></a>
             </div>
 
         </article>
@@ -177,7 +213,7 @@
 </body>
 <script>
     function commentEdit(event) {
-        const commentRow = event.target.closest("tr");
+        const commentRow = event.target.closest("#comment-list");
         const commentNo = commentRow.querySelector(".commentNo").textContent;
         const commentContent = commentRow.querySelector(".commentContent");
         const editCommentContent = commentRow.querySelector(".editCommentContent");
@@ -222,7 +258,7 @@
     }
 
     function commentDelete(event) {
-        const commentNo = event.target.closest("tr").querySelector(".commentNo").textContent;
+        const commentNo = event.target.closest("#comment-list").querySelector(".commentNo").textContent;
         console.log(commentNo);
         $.ajax({
             type: "POST",
