@@ -4,8 +4,8 @@
 <mapper namespace="kr.kro.namohagae.member.dao.MemberDao">
     <insert id="save" parameterType="Member">
         insert into MEMBER(member_no,town_no,member_email,member_password,member_nickname,member_phone,member_latitude,member_longitude,member_introduce,member_profile_image,member_login_count,member_grade,member_question_select_count,
-                           member_point,member_enabled,member_dog_sign_enabled)
-        values (member_seq_member_no.nextval,#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberLatitude},#{memberLongitude},#{memberIntroduce},#{memberProfileImage},0,365,0,0,1,0)
+                           member_point,member_enabled,member_dog_sign_enabled,member_check_kakao)
+        values (member_seq_member_no.nextval,#{townNo},#{memberEmail},#{memberPassword},#{memberNickname},#{memberPhone},#{memberLatitude},#{memberLongitude},#{memberIntroduce},#{memberProfileImage},0,365,0,0,1,0,#{memberCheckKaKao})
     </insert>
 
     <update id="updateMember">
@@ -15,6 +15,9 @@
         <if test="nickname != null">member_nickname = #{nickname},</if>
         <if test="phone != null">member_phone = #{phone},</if>
         <if test="townNo != null">town_no = #{townNo},</if>
+        <if test="latitude != null">member_latitude = #{latitude},</if>
+        <if test="longitude != null">member_longitude = #{longitude},</if>
+        <if test="introduce != null">member_introduce = #{introduce}</if>
         <if test="profile != null">member_profile_image = #{profile},</if>
         </trim>
         where member_no = #{no} and rownum=1
@@ -42,15 +45,6 @@
 
     <update id="memberEnabled">
         update member set member_enabled = #{enabled} where member_no=#{no} and rownum=1
-    </update>
-
-    <update id="updateLocation">
-        update member
-        <trim prefix="set" suffixOverrides=",">
-            <if test="latitude != null"> member_latitude  = #{latitude},</if>
-            <if test="longitude != null">member_longitude = #{longitude},</if>
-        </trim>
-        where member_no = #{no} and rownum=1
     </update>
 
     <update id="updatePoint">

@@ -5,6 +5,7 @@ import kr.kro.namohagae.board.dto.BoardTownDto;
 import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class BoardTownService {
 
     }
 
-    public Board boardTownRead(Integer boardNo) {
+    public BoardList boardTownRead(Integer boardNo) {
 
         return boardTownDao.boardTownRead(boardNo);
     }

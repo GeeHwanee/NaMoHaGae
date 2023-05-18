@@ -16,7 +16,7 @@ public interface BoardDao {
     public void boardFreeInsertData(Board board);
 
 
-    public Board boardFreeReadData(Integer boardNo);
+    public BoardList boardFreeReadData(Integer boardNo);
 
     public Integer boardDeleteData(Integer boardNo);
 
