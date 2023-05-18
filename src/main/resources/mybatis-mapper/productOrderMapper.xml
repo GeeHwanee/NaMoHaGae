@@ -83,7 +83,7 @@
                                  join address a on po.address_no = a.address_no
                                  join product p on pod.product_no = p.product_no
                                  join product_image pi on pod.product_no = pi.product_no and pi.PRODUCT_IMAGE_NO=1
-                        where a.member_no = #{memberNo}
+                        where a.member_no = #{memberNo} order by po.product_order_date desc
                     ) q
                 where rownum&lt;=#{endRowNum}
             )
