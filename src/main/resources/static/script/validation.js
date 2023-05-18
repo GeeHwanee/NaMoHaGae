@@ -40,12 +40,17 @@ function irumCheck() {
     return check($('#memberNickname').val(), pattern, "별명은 한,영자 2~8자입니다", $("#memberNickname_msg"));
 }
 
-
+function  phoneCheck(){
+    $('#memberPhone_msg').text("");
+    const pattern = /^[0-9]{11}$/;
+    return check($('#memberPhone').val(),pattern,"전화번호는 11자리 숫자입니다",$("#memberPhone_msg"));
+}
 
 $(document).ready(function() {
     $('#memberProfileImage').change(loadProfile);
     $('#memberPassword').blur(passwordCheck);
     $('#memberPassword2').blur(password2Check);
+    $('#memberPhone').blur(phoneCheck);
 
     $('#sendEmail').click(async function (){
         try {
@@ -110,7 +115,7 @@ $(document).ready(function() {
     $('#join').click(async function() {
 
         //  필수입력에 대한 널 체크, 패턴 체크 수행
-        const result = emailCheck() && passwordCheck() && password2Check() && irumCheck() && emailCheck() && a;
+        const result = emailCheck() && passwordCheck() && password2Check() && irumCheck() && emailCheck() &&phoneCheck() && a;
         if(result==false)
             return false;
 
