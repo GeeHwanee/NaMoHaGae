@@ -22,7 +22,7 @@
                 <td><button id="follow_btn-${i}" type="button"></button></td>
                 <input type="hidden" id="checkfollow-${i}" value="${f.followMemberNo}">
 				<td>
-					<a href="http://localhost:8081/mall/product/read?productNo=${f.followMemberNo}">${f.memberNickname}</a>
+					<a href="/member/profile?memberNo=${f.followMemberNo}">${f.memberNickname}</a>
 				</td>
 				<td>${f.memberGrade}</td>
 			</tr>`;

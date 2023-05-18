@@ -32,7 +32,7 @@
         }
         .profile-container{
             width: 620px;
-            height: 320px;
+            height: 270px;
             display: flex;
         }
 
@@ -49,16 +49,35 @@
         }
         .review-form {
             margin-top: 20px;
-
+            width: 400px;
+            height: 200px;
         }
         .review-form textarea {
             width: 100%;
-            height: 100px;
+            height: 100%;
             resize: vertical;
             border-radius: 3%;
+            border: 2px solid #ea986b;
+            display: inline-block;
         }
         .review-form button {
             margin-top: 10px;
+            width: 150px;
+            height: 50px;
+            text-align: center;
+            padding: 5px 10px 5px 10px;
+            font-family: "Nanum Gothic";
+            font-size: 15px;
+            font-weight: 1200;
+            background-color: #ea986b;
+            border-radius: 7px;
+            color: white;
+            border:4px solid #de743a;
+
+        }
+        .review-form button:hover{
+            background-color: #ec8d5a;
+            border:4px solid #efcbb6;
 
         }
     </style>
@@ -82,22 +101,20 @@
         </div>
     </div>
     <input type="hidden" th:data-lat="${l.latitude}" th:data-lng="${l.longitude}">
-    <span>  퍼칭장소</span>
-    <div id="map"></div>
     <div class="promise-time">
         <h2>약속시간</h2>
         <span class="time" th:text="${l.promiseDate}" th:data-time="${l.promiseDate}"></span>
     </div>
       <div class="rating">
-          <span class="star" data-value="-4">&#9733;</span>
-          <span class="star" data-value="-2">&#9733;</span>
-          <span class="star" data-value="0">&#9733;</span>
-          <span class="star" data-value="2">&#9733;</span>
-          <span class="star" data-value="4">&#9733;</span>
+          <span class="star" data-value="-4"><i class="fa-solid fa-dog fa-2xl"></i></span>
+          <span class="star" data-value="-2"><i class="fa-solid fa-dog fa-2xl"></i></span>
+          <span class="star" data-value="0"><i class="fa-solid fa-dog fa-2xl"></i></span>
+          <span class="star" data-value="2"><i class="fa-solid fa-dog fa-2xl"></i></span>
+          <span class="star" data-value="4"><i class="fa-solid fa-dog fa-2xl"></i></span>
       </div>
 
       <div class="review-form">
-          <textarea id="review-text" placeholder="리뷰 작성 내용" maxlength="150"></textarea>
+          <textarea id="review-text" placeholder="혐오발언이나 욕설을 하지 말아주세요" maxlength="150"></textarea>
           <button id="submit-review">리뷰 작성</button>
       </div>
 </div>
