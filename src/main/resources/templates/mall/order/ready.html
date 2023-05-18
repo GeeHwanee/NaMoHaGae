@@ -135,10 +135,19 @@
     function updateUsedPoint() {
         // 입력값 가져오기
         const usedPointElement = document.getElementById("usedPoint");
+        const memberPointElement = document.getElementById("memberPoint");
+        const inputElement = document.getElementById("pointInput");
 
-        // 입력값을 가져와서 텍스트로 설정
-        const usedPoint = inputElement.value;
-        usedPointElement.innerText = "-" + usedPoint + "원";
+        // 멤버의 현재 포인트와 입력값 비교
+        const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
+        const usedPoint = parseInt(inputElement.value);
+
+        if (usedPoint > memberPoint) {
+            alert('보유한 포인트보다 많이 적었습니다.');
+            inputElement.value = memberPoint;
+        }
+
+        usedPointElement.innerText = "-" + inputElement.value + "원";
     }
 
     function calculationOrderTotalPrice() {
