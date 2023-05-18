@@ -310,7 +310,9 @@
     const listFn = () => {
         const page = [[${page}]];
         const searchName = "[[${searchName}]]";
-        location.href = "/board/free/list?page=" + page + "&searchName=" + searchName;
+        const change = [[${change}]];
+        console.log(change);
+        location.href = "/board/free/list?page=" + page + "&searchName=" + searchName + "&change" + change;
     }
 
 

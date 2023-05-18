@@ -43,6 +43,7 @@
         ORDER BY b.board_No DESC
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
+
     <select id="boardTownRead" resultType="kr.kro.namohagae.board.entity.BoardList">
         SELECT b.*, m.member_nickname AS memberNickname
         FROM board b

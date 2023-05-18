@@ -24,6 +24,9 @@ public interface BoardDao {
 
     List<BoardList> pagingList(@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
 
+    List<BoardList> readCountList(@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
+
+    List<BoardList> recommendCountList(@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
     public int boardCount();
 
     public Integer increaseReadCnt(Integer boardNo);

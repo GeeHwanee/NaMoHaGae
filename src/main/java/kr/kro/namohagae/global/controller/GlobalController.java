@@ -299,15 +299,28 @@ public class GlobalController {
     @GetMapping("/board/free/list")
     public String paging(Model model,
                          @RequestParam(value ="page", required = false, defaultValue = "1") int page,
-                         @RequestParam(value ="searchName", defaultValue = "") String searchName) {
-
+                         @RequestParam(value ="searchName", defaultValue = "") String searchName,
+                         @RequestParam(value ="change", defaultValue = "1") int change) {
         List<BoardList> pagingList = boardService.pagingList(searchName,page);
         PageDto pageDTO = boardService.pagingParam(page);
+        model.addAttribute("change", change);
         if (searchName != null && !searchName.isEmpty()) {
             model.addAttribute("searchName", searchName);
         }
-        model.addAttribute("list", pagingList);
-        model.addAttribute("paging", pageDTO);
+        if(change == 3) {
+            model.addAttribute("list",boardService.recommendCountList(searchName, page));
+            model.addAttribute("paging", pageDTO);
+        }
+
+        if(change == 2) {
+            model.addAttribute("list",boardService.readCountList(searchName, page));
+            model.addAttribute("paging", pageDTO);
+
+        } else {
+            model.addAttribute("list", pagingList);
+            model.addAttribute("paging", pageDTO);
+        }
+
         return "board/free/list";
     }
 
