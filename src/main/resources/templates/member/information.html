@@ -42,9 +42,12 @@
 
 
           $('#profile').change(loadProfile);
-            const checkKaKao = $('#memberCheckKaKao').val();
+            console.log($('#memberCheckKaKao').val());
+            const memberCheckKaKaoValue = $('#memberCheckKaKao').val();
+            const memberCheckKaKaoString = String(memberCheckKaKaoValue).toLowerCase();
+            const checkKaKao = memberCheckKaKaoString === 'true';
 
-          $('#updateCheck').click(function (){console.log(checkKaKao);changeUpdate(checkKaKao);})
+          $('#updateCheck').click(function (){changeUpdate(checkKaKao);})
           $('#updateCancle').click(function (){changeBasic(checkKaKao);})
 
           $('#update').click(async function(){
@@ -218,8 +221,8 @@
             $('#nickname').removeClass('hidden');
             $('#introduce').removeClass('hidden');
             if(checkKaKao===false){
-            $('#passwordTr').removeClass('hidden');
-            $('#password2Tr').removeClass('hidden');
+                $('#passwordTr').removeClass('hidden');
+                $('#password2Tr').removeClass('hidden');
             }
             $('#phoneTr').removeClass('hidden');
             $('#update_btn').removeClass('hidden');
@@ -233,7 +236,7 @@
             if (checkKaKao===false){
             $('#passwordTr').addClass('hidden');
             $('#password2Tr').addClass('hidden');
-            }else{}
+            }
             $('#phoneTr').addClass('hidden');
             $('#update_btn').addClass('hidden');
             $('#addressTr').addClass('hidden');
