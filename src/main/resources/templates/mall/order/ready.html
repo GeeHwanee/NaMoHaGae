@@ -106,14 +106,104 @@
 
 
         $("#order").click(function() {
+            const usedMemberPoint = $('#pointInput').val();
             const $form = $('<form>').attr('action', "/order/check").attr('method','post');
+            const orderTotalPrice = $('#orderTotalPrice').text();
+            $form.append($('<input>').attr('type','hidden').attr('name','usedMemberPoint').val(usedMemberPoint));
+            $form.append($('<input>').attr('type','hidden').attr('name','orderTotalPrice').val(orderTotalPrice));
             $.each($(".addressNo"), function(idx, element) {
                 if($(element).attr("checked")=="checked")
                     $('<input type="hidden" name="addressNo">').val($(element).val()).appendTo($form);
             });
             $form.appendTo($('body')).submit();
         })
+
+
     })
+</script>
+<script>
+    let inputElement;
+
+    function fullUse() {
+        const memberPointElement = document.getElementById("memberPoint");
+        const pointInputElement = document.getElementById("pointInput");
+        if (memberPointElement && pointInputElement) {
+            const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
+
+            pointInputElement.value = memberPoint;
+            updateUsedPoint();
+            calculationOrderTotalPrice();
+        }
+    }
+
+    function updateUsedPoint() {
+        // 입력값 가져오기
+        const usedPointElement = document.getElementById("usedPoint");
+        const memberPointElement = document.getElementById("memberPoint");
+        const inputElement = document.getElementById("pointInput");
+
+        // 멤버의 현재 포인트와 입력값 비교
+        const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
+        const usedPoint = parseInt(inputElement.value);
+
+        if (usedPoint > memberPoint) {
+            alert('보유한 포인트가 부족합니다');
+            inputElement.value = memberPoint;
+        } else if(usedPoint < 0) {
+            alert('0포인트 이상 사용이 가능합니다');
+            inputElement.value = 0;
+        }
+
+        usedPointElement.innerText = "-" + inputElement.value + "원";
+        calculationOrderTotalPrice();
+    }
+
+    function calculationOrderTotalPrice() {
+        const orderTotalPriceElement = document.getElementById("orderTotalPrice");
+        const deliveryFee = 3000;
+
+        // 최종 결제 금액 계산
+        let totalPrice = data.orderTotalPrice;
+        if (isNaN(totalPrice)) {
+            totalPrice = 0;
+        }
+        let orderTotalPrice = totalPrice + deliveryFee;
+
+        const inputElement = document.getElementById("pointInput");
+        if (inputElement.value !== "") {
+            orderTotalPrice -= parseInt(inputElement.value);
+        }
+
+        // 결과 표시
+        orderTotalPriceElement.innerText = orderTotalPrice + "원";
+    }
+
+    // 페이지 로드 시 초기 실행
+    window.addEventListener("load", function() {
+        inputElement = document.getElementById("pointInput");
+        calculationOrderTotalPrice();
+    });
+
+    // inputElement 값 변경 시 실행
+    window.addEventListener("load", function() {
+        if (inputElement) {
+            inputElement.addEventListener("input", function() {
+                calculationOrderTotalPrice();
+            });
+        }
+    });
+
+    function onPageLoad() {
+        // 입력값 변경 이벤트에 함수 연결
+        inputElement = document.getElementById("pointInput");
+        if (inputElement) {
+            inputElement.addEventListener("input", updateUsedPoint);
+        }
+    }
+
+    window.addEventListener("load", onPageLoad);
+
+
 </script>
 </head>
 <body>
@@ -149,7 +239,7 @@
                     <td style="font-weight: bold; text-align: left; padding-top: 20px; padding-bottom: 20px;">주문금액</td>
                     <td colspan="2" class="productInfo">
                         <span style="font-weight: bold" th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'")></span>
-                        <span th:text="'(상품가 '+${#numbers.formatInteger(map.orderTotalPrice,0,'COMMA')}+'원+배송비 3,000원)'"></span>
+                        <span id="totalPrice" th:text="'(상품가 '+${#numbers.formatInteger(map.orderTotalPrice,0,'COMMA')}+'원+배송비 3,000원)'"></span>
                     </td>
                 </tr>
             </tbody>
@@ -182,9 +272,24 @@
         <div style="text-align: center">
             <div class="title">뼈다귀 포인트 사용</div>
             <br>
-                <div>보유</div>
-                <div>사용</div>
+                <div>
+                    <span>보유</span>
+                    <span id="memberPoint" th:text="${#numbers.formatInteger(map.memberPoint,0,'COMMA')}+'원'"></span>
+                </div>
+                <div>
+                    <label for="pointInput">사용</label>
+                    <div><input type="number" id="pointInput" min="0">원</div>
+                    <button onclick="fullUse()" id="fullUse">전액사용</button>
+                </div>
         </div>
+    <br>
+    <br>
+
+    <div style="text-align: center">
+        <div class="title">결제방법</div>
+        <br>
+        <input type="radio" checked="checked" /><span class="up">카카오페이</span>
+    </div>
     <br>
     <br>
 
@@ -201,7 +306,7 @@
                 </div>
                 <div>
                     <span>뼈다귀 포인트 사용</span>
-                    <span></span>
+                    <span id="usedPoint"></span>
                 </div>
         </div>
     <br>
@@ -210,7 +315,10 @@
         <div style="text-align: center">
             <div class="title">결제예정금액</div>
             <br>
-            <div th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'"></div>
+            <!--
+            <div id="orderTotalPrice" th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'"></div>
+            -->
+            <div id="orderTotalPrice"></div>
         </div>
     <br>
     <br>
@@ -224,6 +332,5 @@
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
-</body>
 </body>
 </html>
