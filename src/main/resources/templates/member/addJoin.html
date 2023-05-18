@@ -18,23 +18,26 @@
     </script>
     <script>
 
-            function addressCheck(gu) {
-                $('#address_msg').text("");
-                let a = null;
-                const value =$('#sample4_jibunAddress').val();
-                if(value=="")	{
-                    $('#address_msg').text("필수입력입니다").attr("class","fail");
-                    return false;
-                }
-                for (let i = 0; i < gu.length; i++) {
-                    a=$('#memberGu').matches(gu.get(i).townGu);
-                    if (a==false){
-                        break;
-                        $('#address_msg').text("서비스하지 않는 지역입니다").attr("class","fail");
-                    }
-                }
-                return a;
+        function addressCheck(gu) {
+            $('#address_msg').text("");
+            let a = null;
+            const value = $('#sample4_roadAddress').val();
+            console.log(value)
+            if (value == "") {
+                $('#address_msg').text("필수 입력입니다").attr("class", "fail");
+                return false;
             }
+
+            for (let i = 0; i < gu.length; i++) {
+                a = gu[i].townGu === $('#memberGu').val();
+                if (!a) {
+                    $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
+                    break;
+                }
+            }
+                return a;
+
+        }
         function sample4_execDaumPostcode() {
             new daum.Postcode({
                 oncomplete : function(data) {
@@ -87,11 +90,12 @@
     <script>
         $(document).ready(async function(){
             $('#memberProfileImage').change(loadProfile);
-
+            let result = null
             $('#joinAdd').click(async function (){
                 try {
-                    const result = await $.ajax("/api/v1//town/gulist");
-                    addressCheck(result);
+                    result = await $.ajax("/api/v1/town/gulist");
+                    console.log(result);
+                     addressCheck(result);
                 }catch (err){
                     console.log(err)
                 }
@@ -117,7 +121,9 @@
                         for (const pair of entries) {
                             console.log(pair[1]);
                         }
+                        if(addressCheck(result)==true){
                         $('#join_form').submit();
+                        }
                     },error: function(xhr, status, error){
                         console.log(error);
                     }
