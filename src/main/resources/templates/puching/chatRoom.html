@@ -337,7 +337,10 @@
             position: absolute;
             top: 15%;
         }
-        #imageLabel:hover{
+        #imageLabel:hover,
+        #sendImageButton:hover,
+        #openPopupButton:hover,
+        .review-button:hover{
             cursor: pointer;
         }
         .review-button{
@@ -1094,6 +1097,16 @@
 </script>
 <script>
     $(document).ready(function(){
+
+        $('.btn-area i').hover(
+            function() {
+                $(this).addClass('fa-bounce');
+            },
+            function() {
+                $(this).removeClass('fa-bounce');
+            }
+        );
+
 
     });
 </script>
