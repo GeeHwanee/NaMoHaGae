@@ -198,7 +198,7 @@
         from PRODUCT p join PRODUCT_IMAGE pi on
         p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by product_name asc
+        order by trim(product_name) asc
         ) p
         where rownum&lt;=#{endRowNum}
         )
