@@ -23,16 +23,12 @@
 
     .product-card {
         flex: 0 1 calc(25% - 16px);
-        /*width: 180px;*/
-        /*height: 300px;*/
         margin-right: 24px;
         margin-bottom: 20px;
         border: none;
     }
 
     .product-contents {
-        /*display: flex;*/
-        /*flex-direction: column;*/
         padding: 8px;
     }
 
@@ -54,53 +50,32 @@
     }
 </style>
 <script>
-    // 최신순으로 정렬
-    function sortByNew() {
+    function updateUrlParams(params) {
         const urlParams = new URLSearchParams(window.location.search);
-        const categoryNo = urlParams.get('categoryNo');
-        urlParams.set('sortBy', 'NewProduct');
-        if (categoryNo) {
-            urlParams.set('categoryNo', categoryNo);
+        for (const [key, value] of Object.entries(params)) {
+            urlParams.set(key, value);
         }
-        console.log(window.location.search);
-        window.location.href = '/mall/product/list?' + urlParams.toString();
+        return urlParams.toString();
     }
 
-    // 상품명으로 정렬
-    function sortByName() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryNo = urlParams.get('categoryNo');
-        urlParams.set('sortBy', 'ProductName');
-        if (categoryNo) {
-            urlParams.set('categoryNo', categoryNo);
-        }
-        console.log(window.location.search);
-        window.location.href = '/mall/product/list?' + urlParams.toString();
-    }
-
-    // 인기순으로 정렬
-    function sortByBest() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryNo = urlParams.get('categoryNo');
-        urlParams.set('sortBy', 'BestProduct');
-        if (categoryNo) {
-            urlParams.set('categoryNo', categoryNo);
-        }
-        console.log(window.location.search);
-        window.location.href = '/mall/product/list?' + urlParams.toString();
+    function sortProducts(sortBy) {
+        const params = {
+            sortBy: sortBy,
+        };
+        const queryString = updateUrlParams(params);
+        window.location.href = '/mall/product/list?' + queryString;
     }
 
     function searchProduct(event) {
         if (event.key === 'Enter' || event.keyCode === 13) {
-            const searchInput = document.getElementById("searchInput");
+            const searchInput = document.getElementById('searchInput');
             const searchProduct = searchInput.value;
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('searchProduct', searchProduct);
-            if (categoryNo) {
-                urlParams.set('categoryNo', categoryNo);
-            }
-            window.location.href = '/mall/product/list?' + urlParams.toString();
+
+            const params = {
+                searchProduct: searchProduct,
+            };
+            const queryString = updateUrlParams(params);
+            window.location.href = '/mall/product/list?' + queryString;
         }
     }
 </script>
@@ -141,9 +116,9 @@
         </div>
 
         <div class="product-filter">
-            <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortByNew()">최신순</button>
-            <button class="btn btn-danger mt-3" id="sortByName" onclick="sortByName()">상품명</button>
-            <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortByBest()">인기순</button>
+            <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</button>
+            <button class="btn btn-danger mt-3" id="sortByName" onclick="sortProducts('ProductName')">상품명</button>
+            <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortProducts('BestProduct')">인기순</button>
         </div>
 
         <div class="product-list">
