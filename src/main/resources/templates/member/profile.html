@@ -14,7 +14,7 @@
       const $tbody = $('#review');
       for(const r of review) {
         const tpl = `<tr>
-				<td>${r.reviewReceiver}</td>
+				<td>${r.reviewWriter}</td>
 				<td>${r.reviewContent}</td>
 			</tr>`;
         $tbody.append(tpl);
@@ -43,17 +43,16 @@
       const memberNo = param.get('memberNo');
       const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
       try {
-        result = await $.ajax("/api/v1/review/list?pageno=" + pageno+"&memberNo="+memberNo);
+        result = await $.ajax("/api/v1/review/list?pageno="+pageno+"&memberNo="+memberNo);
         console.log(result);
         printBoard(result.review);
         printPagination(result);
 
         // Add a click event listener to the pagination links
         $('#page_ul').on('click', '.page-link', async function (e) {
-          $('#review').remove();
           e.preventDefault();
           const pageNum = $(this).data('page-no');
-          const result = await $.ajax("/api/v1/review/list?pageno=" + pageNum);
+          const result = await $.ajax("/api/v1/review/list?pageno=" + pageNum+"&memberNo="+memberNo);
           console.log(result);
           printBoard(result.review);
           printPagination(result);
@@ -119,13 +118,14 @@
             </label>
           </td>
         </tr>
-        <tr id="review">
-          <td>
-            <ul class="pagination" id="page_ul">
+            <tr id="review">
+            </tr>
+            <tr>
+              <td>
+              <ul class="pagination" id="page_ul">
             </ul>
-          </td>
-
-        </tr>
+              </td>
+            </tr>
       </table>
       <button type="button" class="btn btn-primary" id="follow_btn" > <span id="follow_text">팔로우</span></button>
       <button id="chat" type="button" class="btn btn-danger"><a th:href="@{/puching/chatroom(receiverEmail=${member.memberEmail})}">채팅하기</a></button>
