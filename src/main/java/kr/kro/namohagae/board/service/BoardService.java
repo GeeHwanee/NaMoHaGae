@@ -41,7 +41,7 @@ public class BoardService {
 
 
 
-    public Board boardFreeReadData(Integer boardNo) {
+    public BoardList boardFreeReadData(Integer boardNo) {
 
         return boardDao.boardFreeReadData(boardNo);
     }
