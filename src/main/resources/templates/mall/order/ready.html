@@ -118,7 +118,8 @@
     })
 </script>
 <script>
-    // 포인트 전액 사용
+    let inputElement;
+
     function fullUse() {
         const memberPointElement = document.getElementById("memberPoint");
         const pointInputElement = document.getElementById("pointInput");
@@ -127,13 +128,12 @@
 
             pointInputElement.value = memberPoint;
             updateUsedPoint();
-
+            calculationOrderTotalPrice();
         }
     }
 
     function updateUsedPoint() {
         // 입력값 가져오기
-        const inputElement = document.getElementById("pointInput");
         const usedPointElement = document.getElementById("usedPoint");
 
         // 입력값을 가져와서 텍스트로 설정
@@ -141,15 +141,56 @@
         usedPointElement.innerText = "-" + usedPoint + "원";
     }
 
-    function onPageLoad() {
+    function calculationOrderTotalPrice() {
+        const totalPriceElement = document.getElementById("totalPrice");
+        const orderTotalPriceElement = document.getElementById("orderTotalPrice");
+        const deliveryFee = 3000;
 
-        // 입력값 변경 이벤트에 함수 연결
+        // 최종 결제 금액 계산
+        let totalPrice = data.orderTotalPrice;
+        if (isNaN(totalPrice)) {
+            totalPrice = 0;
+        }
+        let orderTotalPrice = totalPrice + deliveryFee;
+
         const inputElement = document.getElementById("pointInput");
-        inputElement.addEventListener("input", updateUsedPoint);
+        if (inputElement.value !== "") {
+            orderTotalPrice -= parseInt(inputElement.value);
+        }
+
+        // 결과 표시
+        orderTotalPriceElement.innerText = orderTotalPrice + "원";
+    }
+
+    // 페이지 로드 시 초기 실행
+    window.addEventListener("load", function() {
+        inputElement = document.getElementById("pointInput");
+        calculationOrderTotalPrice();
+    });
+
+    // inputElement 값 변경 시 실행
+    window.addEventListener("load", function() {
+        if (inputElement) {
+            inputElement.addEventListener("input", function() {
+                calculationOrderTotalPrice();
+            });
+        }
+    });
+
+    function onPageLoad() {
+        // 입력값 변경 이벤트에 함수 연결
+        inputElement = document.getElementById("pointInput");
+        if (inputElement) {
+            inputElement.addEventListener("input", updateUsedPoint);
+        }
     }
 
     window.addEventListener("load", onPageLoad);
 
+
+</script>
+<script th:inline="javascript">
+    const data =  [[${map}]]
 </script>
 </head>
 <body>
@@ -185,7 +226,7 @@
                     <td style="font-weight: bold; text-align: left; padding-top: 20px; padding-bottom: 20px;">주문금액</td>
                     <td colspan="2" class="productInfo">
                         <span style="font-weight: bold" th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'")></span>
-                        <span th:text="'(상품가 '+${#numbers.formatInteger(map.orderTotalPrice,0,'COMMA')}+'원+배송비 3,000원)'"></span>
+                        <span id="totalPrice" th:text="'(상품가 '+${#numbers.formatInteger(map.orderTotalPrice,0,'COMMA')}+'원+배송비 3,000원)'"></span>
                     </td>
                 </tr>
             </tbody>
@@ -261,7 +302,10 @@
         <div style="text-align: center">
             <div class="title">결제예정금액</div>
             <br>
-            <div th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'"></div>
+            <!--
+            <div id="orderTotalPrice" th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'"></div>
+            -->
+            <div id="orderTotalPrice"></div>
         </div>
     <br>
     <br>
@@ -275,6 +319,5 @@
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
-</body>
 </body>
 </html>
