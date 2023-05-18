@@ -91,4 +91,8 @@
     <update id="changePassword">
         update member set member_password=#{memberPassword} where member_email=#{memberEmail}
     </update>
+
+    <select id="findMemberPointByMemberNo" resultType="Integer">
+        select member_point from member where member_no=#{memberNo}
+    </select>
 </mapper>
