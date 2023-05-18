@@ -95,4 +95,8 @@
     <select id="findMemberPointByMemberNo" resultType="Integer">
         select member_point from member where member_no=#{memberNo}
     </select>
+
+    <update id="updateMemberPointByMemberNo">
+        update member set member_point=member_point-#{memberPoint} where member_no=#{memberNo}
+    </update>
 </mapper>
