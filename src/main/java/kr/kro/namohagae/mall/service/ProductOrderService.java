@@ -65,7 +65,7 @@ public class ProductOrderService {
         return productOrderDao.read(orderNo);
     }
 
-    public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo) {
+    public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo, Integer usedMemberPoint) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
         ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), orderTotalPrice, LocalDateTime.now());
         productOrderDao.save(productOrder);
@@ -93,8 +93,18 @@ public class ProductOrderService {
         if (!productNos.isEmpty()) {
             cartDetailDao.removeByCartNo(productNos, memberNo);
         }
-        // 이거 배송지 + 3000원 들어가는거도 잡아줘야함.
-        Integer bonePoint = (int) (productOrder.getProductOrderTotalPrice() * 0.01);
+
+        // 현재 포인트
+        memberDao.findMemberPointByMemberNo(memberNo);
+
+        // 포인트 사용 후 멤버 포인트 차감
+        if(usedMemberPoint!=null) {
+            memberDao.updateMemberPointByMemberNo(usedMemberPoint, memberNo);
+        }
+
+        // 구매 포인트 적립
+        Integer deliveryFee = 3000;
+        Integer bonePoint = (int) ((productOrder.getProductOrderTotalPrice()-deliveryFee) * 0.01);
         productOrderDao.updateMemberPoint(bonePoint, memberNo);
         return productOrder.getProductOrderNo();
 

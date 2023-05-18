@@ -66,32 +66,18 @@ public class ProductOrderController {
 
     @PostMapping("/order/check")
     public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
-                             @RequestParam Integer addressNo, RedirectAttributes ra) {
+                             @RequestParam Integer addressNo, @RequestParam(required = false) Integer usedMemberPoint,
+                             @RequestParam String orderTotalPrice,  RedirectAttributes ra) {
         Map<String, Object> map = (Map<String, Object>)session.getAttribute("map");
         List<ProductOrderDto.OrderList> orderItems = (List<ProductOrderDto.OrderList>)map.get("orderItems");
-        Integer orderTotalPrice = (Integer)map.get("orderTotalPrice");
-        Integer productOrderNo = service.saveOrder(orderItems, orderTotalPrice, myUserDetails.getMemberNo(), addressNo);
+        Integer totalPrice = Integer.parseInt(orderTotalPrice.replace("원", "").trim());
+        Integer productOrderNo = service.saveOrder(orderItems, totalPrice, myUserDetails.getMemberNo(), addressNo, usedMemberPoint);
 
         ra.addFlashAttribute("orderNo", productOrderNo);
-//        return "redirect:/mall/order/success";
         return "redirect:/mall/order/success";
     }
 
     // 주문 결과 보기
-    /*
-    @GetMapping("/mall/order/success")
-    public String orderSuccess(Model model, HttpServletRequest req, RedirectAttributes ra) {
-        Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
-        if(paramMap!=null) {
-            Integer orderNo = (Integer)paramMap.get("orderNo");
-            model.addAttribute("order", service.findById(orderNo));
-            return "/mall/order/success";
-        } else {
-            ra.addFlashAttribute("msg", "잘못된 작업입니다");
-            return "redirect:/mall/main";
-        }
-    }
-     */
     @GetMapping("/mall/order/success")
     public String orderSuccess(Model model, HttpServletRequest req, RedirectAttributes ra) {
         Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
