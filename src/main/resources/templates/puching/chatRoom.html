@@ -12,9 +12,11 @@
 
     <!--신청 맵스타일-->
     <style>
-        .map_wrap {position:relative;width:100%;height:350px;}
+        .map_wrap {position:relative;width:100%;height:350px; border:2px solid #ea986b; border-radius: 3px}
         .title {font-weight:bold;display:block;}
-        .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
+        .hAddr {position:absolute;left:56px;top:20px;border-radius:5px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;
+            border:2px solid #ea986b; text-align: center;
+        }
         #centerAddr {display:block;margin-top:2px;font-weight: normal;}
         .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
     </style>
@@ -27,7 +29,16 @@
             align-items: center;
             justify-content: center;
         }
+        #closePopupButton{
+            float: right;
+            position: relative;
+            bottom:40px;
 
+        }
+        #closePopupButton:hover{
+            cursor: pointer;
+
+        }
         .popup-background {
             position: fixed;
             top: 0;
@@ -43,18 +54,42 @@
         .popup-content {
             background-color: white;
             padding: 20px;
-            width: 800px;
-            height: 70%;
+            width: 50vw;
+            height: 75vh;
             overflow: auto;
         }
 
         .popup-content h2 {
             margin-top: 0;
+            text-align: center;
+            color: #ea986b;
+            font-weight: bold;
+            font-family: "Nanum Gothic";
+
         }
 
         .popup-content p {
             margin-bottom: 20px;
         }
+        .nowpos:hover{
+            cursor: pointer;
+            background-color: #ded7d7;
+        }
+        .nowpos{
+            display: flex;
+            width: 29px;
+            height: 29px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            position:absolute;
+            right:10px;
+            top:10px;
+            z-index: 1;
+
+        }
+
 
     </style>
         <!--퍼칭메세지 스타일-->
@@ -81,7 +116,8 @@
             display: inline-block;
             flex-direction: column;
             justify-content: center;
-            margin-left: 10px;
+
+            background-color: #ea986b;
 
         }
 
@@ -91,13 +127,19 @@
             font-weight: bold;
             margin-bottom: 5px;
             text-align: center;
-            color: #ea986b;
+            color: #ffffff;
+            width: 100%;
         }
 
         .puching-description {
             display: inline-block;
             font-size: 0.9em;
             margin-bottom: 5px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-family: "Nanum Gothic";
+            font-weight: bold;
         }
 
         .location-button,
@@ -106,15 +148,17 @@
 
             margin-right: 10px;
             margin-bottom: 10px;
-            padding: 8px 16px;
+            padding: 10px 16px 16px 10px;
             font-size: 1em;
             font-weight: bold;
             text-align: center;
             color: #fff;
-            background-color: #ed9e71;
+            background-color: #ef7e3f;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 100%;
+
 
         }
 
@@ -134,22 +178,18 @@
         .sent_msg .accept-button{
             display: none;
         }
-
+        #nowchatusernick{
+            font-family: "Nanum Gothic";
+            font-size: 20px;
+            color: white;
+            border-radius: 10px;
+            background-color: #ec5f1f;
+            padding: 5px 5px 5px 5px;
+        }
 
     </style>
     <!--채팅방 스타일-->
     <style>
-        .chat_image_sender{
-            width: 60%;
-            float: right;
-            border-radius: 10%;
-
-        }
-        .chat_image_receiver{
-            width: 40%;
-            float: left;
-            border-radius: 10%;
-        }
        .inbox_chat :hover{
 
             background-color: #e38d5f;
@@ -242,6 +282,15 @@
             word-break:break-all;
 
         }
+        .received_withd_msg .puching-info{
+            background-color: #ebebeb;
+        }
+       .received_withd_msg .puching-title,.puching-description{
+           color: #19130d;
+       }
+       .received_withd_msg button{
+           background-color: #979292;
+       }
         .time_date {
             color: #747474;
             display: block;
@@ -271,7 +320,7 @@
             font-size: 14px;
             margin: 0; color:#fff;
             padding: 5px 10px 5px 12px;
-            width:80%;
+            width:100%;
             float: right;
             word-break:break-all;
 
@@ -327,15 +376,17 @@
         #openPopupButton{
             position: absolute;
             top: 60%;
-            right: 35%;
+            right: 30%;
         }
         #sendImageButton{
             position: absolute;
             top:30%;
+            right: 34%;
         }
         #imageLabel{
             position: absolute;
             top: 15%;
+            right: 34%;
         }
         #imageLabel:hover,
         #sendImageButton:hover,
@@ -346,8 +397,43 @@
         .review-button{
             position: absolute;
             top: 45%;
+            right: 34%;
         }
+        .popup-puching-btn{
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px 16px 16px 10px;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            background-color: #ef7e3f;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .date-wrap{
+            position: absolute;
+            z-index: 1;
+            padding: 30px 30px 30px 30px;
+            margin: 40px 10px 10px 10px;
+            width: 40%;
+            top: 9%;
+        }
+        .date-wrap #day{
+            margin: 20px 20px 20px 20px;
+            float: left;
+            left:40px;
+            top: 10px;
 
+        }
+        .date-wrap #time{
+            margin: 20px 20px 20px 20px;
+            float: left;
+            left:40px;
+            top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -413,22 +499,26 @@
         <div class="popup-background">
             <div class="popup-content">  <!--퍼칭 신청 화면-->
                 <h2>퍼칭신청</h2>
-                <label for="day"></label>
-                <input type="date" id="day">
-                <label for="time"></label>
-                <input type="time" id="time"/>
-
-
+                <a id="closePopupButton"><i class="fa-solid fa-delete-left fa-rotate-180 fa-2xl" style="color: #f4984e"></i></a>
                 <div class="map_wrap">
-                    <div id="map" style="width:50%;height:100%;position:relative;overflow:hidden;"></div>
+                        <div class="date-wrap">
+                            <label for="day"></label>
+                            <input type="date" id="day">
+                            <label for="time"></label>
+                            <input type="time" id="time"/>
+                        </div>
+                    <div id="map" style="width:50%;height:100%;position:relative;overflow:hidden;left: 50%;border-left: 1px solid #ea986b"></div>
                     <div class="hAddr">
                         <span class="title">지도중심기준 행정동 주소정보</span>
                         <span id="centerAddr"></span>
                     </div>
+                    <div class="nowpos">
+                        <a id="getCurrentPosBtn"><i class="fa-solid fa-location-crosshairs fa-lg" style="color: #f1722a;"></i></a>
+                    </div>
                 </div>
-                <button id="getCurrentPosBtn">현재위치검색</button>
-                <button onclick="sendPuching()">신청하기</button>
-                <button id="closePopupButton">닫기</button>
+
+                <button class="popup-puching-btn" onclick="sendPuching()">신청하기</button>
+
             </div>
         </div>
 
@@ -649,11 +739,27 @@
         console.log("WebSocket connection closed with code " + event.code + " and reason " + event.reason);
     };
 
+    var enterPressed = false;
+
+    $('#message').keydown(function(event) {
+        if (event.key === 'Enter' && !enterPressed) {
+            enterPressed = true; // 플래그 변수 설정
+            event.preventDefault(); // 기본 엔터키 동작 방지
+            sendMessage(); // 메시지 전송 함수 호출
+        }
+    });
+
+    $('#message').keyup(function(event) {
+        if (event.key === 'Enter') {
+            enterPressed = false; // 플래그 변수 초기화
+        }
+    });
+
+
+
     async function sendMessage() {
         var messageInput = document.getElementById("message");
-        console.log(nowChatEmail);
         var checkmessage =messageInput.value.trim();
-        console.log("4444")
         if(checkmessage==0){
             return;
         }
@@ -678,7 +784,7 @@
 
 
             $('.msg_history').append(content)
-            $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
+             $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
         } catch (err) {
            alert("socket 메세지전송실패")
         }finally {
@@ -852,7 +958,7 @@
        }
        //퍼칭수락요청일 경우
        if(messageContent=='accept'){
-           var content=`<span class="puching-description">퍼칭성공!</span>;`
+           var content=`<span class="puching-description">퍼칭성공!</span>`
            $('.puching-info .accept-button').remove()
            $('.puching-info .disaccept-button').remove()
            $('.msg_history .puching-info').last().append(content);
