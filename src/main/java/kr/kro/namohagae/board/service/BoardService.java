@@ -74,6 +74,20 @@ public class BoardService {
         return boardDao.pagingList(searchName,pagingStart, pageLimit);
     }
 
+    public List<BoardList> readCountList(String searchName,int page) {
+
+
+        int pagingStart = (page - 1) * pageLimit;
+
+        return boardDao.readCountList(searchName,pagingStart, pageLimit);
+    }
+
+    public List<BoardList> recommendCountList(String searchName,int page) {
+
+        int pagingStart = (page - 1) * pageLimit;
+
+        return boardDao.recommendCountList(searchName,pagingStart,pageLimit);
+    }
 
     public PageDto pagingParam(int page) {
         // 전체 글 갯수 조회

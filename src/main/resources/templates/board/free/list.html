@@ -48,6 +48,7 @@
     <section>
         <h1>메인 페이지</h1>
         <article>
+
                 <table class="table table-hover table-striped text-center">
                     <thead>
                     <tr>
@@ -56,23 +57,36 @@
                         <th>글쓴이</th>
                         <th>글쓴시간</th>
                         <th>조회수</th>
+                        <th>추천수</th>
                     </tr>
                     </thead>
                     <tbody>
-
                         <tr th:each="board : ${list}">
-
                             <td th:text="${board.boardNo}">1</td>
                             <td>
-                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName})}" th:text="${board.boardTitle}">게시물 제목</a>
+                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName},change=${change})}" th:text="${board.boardTitle}">게시물 제목</a>
                             </td>
                             <td th:text="${board.memberNickname}"></td>
                             <td th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${board.boardReadCount}"></td>
-
-
+                            <td th:text="${board.boardRecommendCount}"></td>
                         </tr>
                     </tbody>
+                    <form method="GET" action="/board/free/list">
+                        <!-- 다른 입력 필드들 -->
+                        <input type="hidden" name="change" value="1">
+                        <button type="submit">전체글</button>
+                    </form>
+                    <form method="GET" action="/board/free/list">
+                        <!-- 다른 입력 필드들 -->
+                        <input type="hidden" name="change" value="2">
+                        <button type="submit">조회순</button>
+                    </form>
+                    <form method="GET" action="/board/free/list">
+                        <!-- 다른 입력 필드들 -->
+                        <input type="hidden" name="change" value="3">
+                        <button type="submit">추천순</button>
+                    </form>
                 </table>
             <form th:action="@{/board/free/list}" method="get">
                 <input type="text" name="searchName">
@@ -84,21 +98,21 @@
                         <span>[이전]</span>
                     </li>
                     <li th:if="${paging.page > 1}">
-                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName})}">[이전]</a>
+                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName},change=${change})}">[이전]</a>
                     </li>
                     <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
                         <div th:if="${i eq paging.page}">
                             <span th:text="${i}"></span>
                         </div>
                         <div th:if="${i != paging.page}">
-                            <a th:href="@{/board/free/list(page=${i}, searchName=${searchName})}" th:text="${i}"></a>
+                            <a th:href="@{/board/free/list(page=${i}, searchName=${searchName},change=${change})}" th:text="${i}"></a>
                         </div>
                     </li>
                     <li th:if="${paging.page >= paging.maxPage}">
                         <span>[다음]</span>
                     </li>
                     <li th:if="${paging.page < paging.maxPage}">
-                        <a th:href="@{/board/free/list(page=${paging.page + 1}, searchName=${searchName})}">[다음]</a>
+                        <a th:href="@{/board/free/list(page=${paging.page + 1}, searchName=${searchName},change=${change})}">[다음]</a>
                     </li>
                 </ul>
             </div>
@@ -110,4 +124,7 @@
 <footer th:replace="~{/fragment/footer.html}">
 </footer>
 </body>
+<script>
+
+</script>
 </html>
