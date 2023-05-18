@@ -53,7 +53,8 @@ public class BoardController {
     @GetMapping("/read")
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page ,
-                                    @RequestParam(value ="searchName", defaultValue = "") String searchName,Model model,Principal principal) {
+                                    @RequestParam(value ="searchName", defaultValue = "") String searchName,
+                                    @RequestParam(value ="change", defaultValue = "1") int change,Model model,Principal principal) {
         boardService.increaseReadCnt(boardNo);
         boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
 
@@ -62,7 +63,7 @@ public class BoardController {
         } else {
             model.addAttribute("good","좋아요");
         }
-
+        model.addAttribute("change", change);
         model.addAttribute("searchName", searchName);
         model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
         model.addAttribute("comment", commentService.commentList(boardNo));
