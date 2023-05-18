@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface MemberDao {
 
     public void save(Member member);
-
-    public Boolean updateMember(@Param("no") Integer no, @Param("password") String password, @Param("nickname") String nickname,@Param("phone")String phone,@Param("townNo")Integer townNo,@Param("profile")String profile);
+    public Boolean updateMember(@Param("no") Integer no, @Param("password") String password, @Param("nickname") String nickname,@Param("phone")String phone,
+                                @Param("townNo")Integer townNo,@Param("profile")String profile,@Param("longitude")Double longitude,@Param("latitude")Double latitude,@Param("introduce")String introduce);
 
     public Optional<Member> findByMember(Integer no);
 
@@ -24,8 +24,6 @@ public interface MemberDao {
     public Integer resetMemberLoginCount(Integer no);
 
     public Integer memberEnabled(Integer no,Boolean enabled);
-
-    public Integer updateLocation(Integer no,@Param("latitude")Double latitude,@Param("longitude")Double longitude);
 
     public Integer updatePoint(Integer no,@Param("point")Integer point);
 

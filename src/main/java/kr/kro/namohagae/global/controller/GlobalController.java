@@ -146,7 +146,6 @@ public class GlobalController {
     @PostMapping("/member/kakaoJoin")
     public String kakao(String kakaoEmail,String kakaoName,Model model){
         model.addAttribute("dto",memberService.kakaoJoin(kakaoEmail,kakaoName));
-        System.out.println("여기인가?");
         return "member/addJoin";
     }
 

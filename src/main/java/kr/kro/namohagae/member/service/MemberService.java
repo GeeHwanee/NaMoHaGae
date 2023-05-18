@@ -66,7 +66,8 @@ public class MemberService {
         }
         Integer townNo = townDao.findNoByDong(dto.getTownDong());
         String encodedPassword = passwordEncoder.encode(dto.getMemberPassword());
-        Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo);
+        Boolean checkKaKao = dto.getMemberCheckKaKao();
+        Member member = dto.toEntity(encodedPassword, profileName, memberIntroduce,townNo,checkKaKao);
         memberDao.save(member);
     }
     private void sendMail(String from, String to, String title, String text) {
@@ -111,12 +112,12 @@ public class MemberService {
         }
     }
 
-    public Boolean update(MultipartFile profile, String nickname, Integer memberNo,String password,String phone,Integer townNo) {
-
+    public Boolean update(MultipartFile profile, String nickname, Integer memberNo,String password,String phone,String townDong,String introduce,Double lognitude,Double latitude) {
+        Integer townNo = townDao.findNoByDong(townDong);
 
         if (profile==null || profile.isEmpty()==true) {
             System.out.println("11");
-            memberDao.updateMember(memberNo,password,nickname,phone,townNo,null);
+            memberDao.updateMember(memberNo,password,nickname,phone,townNo,null,lognitude,latitude,introduce);
             return true;
         }else {    // else는 Don't care -> 신경쓰지 않는다
         }
@@ -129,7 +130,7 @@ public class MemberService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Boolean a = memberDao.updateMember(memberNo,password,nickname,phone,townNo,memberNo+ext);
+        Boolean a = memberDao.updateMember(memberNo,passwordEncoder.encode(password),nickname,phone,townNo,memberNo+ext,lognitude,latitude,introduce);
         System.out.println("11");
         return a;
 
@@ -177,7 +178,7 @@ public class MemberService {
     }
 
     public MemberDto.Join kakaoJoin(String kakaoEmail,String kakaoName){
-        return MemberDto.Join.builder().memberPassword(kakaoEmail).memberEmail(kakaoEmail).memberNickname(kakaoName).build();
+        return MemberDto.Join.builder().memberPassword(kakaoEmail).memberEmail(kakaoEmail).memberNickname(kakaoName).memberCheckKaKao(true).build();
     }
 
 

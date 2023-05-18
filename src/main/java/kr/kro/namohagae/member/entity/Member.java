@@ -30,11 +30,12 @@ public class Member {
     private Integer memberLoginCount;
     private Integer memberQuestionSelectCount;
     private Boolean memberLocationEnabled;
+    private Boolean memberCheckKaKao;
 
 
     public MemberDto.Read toReadDto() {
 
-       return new MemberDto.Read(memberNo,ImageConstants.IMAGE_PROFILE_URL +memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce);
+       return new MemberDto.Read(memberNo,ImageConstants.IMAGE_PROFILE_URL +memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce,memberCheckKaKao);
     }
 
 }
