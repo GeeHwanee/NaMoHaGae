@@ -17,5 +17,17 @@
                knowledge_answer_Write_date, knowledge_answer_selection_enabled, knowledge_answer_recommend
         from knowledge_answer join member m on knowledge_answer.member_no = m.member_no
         where knowledge_question_no = #{questionNo}
+        order by KNOWLEDGE_ANSWER_SELECTION_ENABLED desc, KNOWLEDGE_ANSWER_WRITE_DATE
     </select>
+    <select id="findByKnowledgeAnswerNo" resultType="kr.kro.namohagae.board.dto.KnowledgeAnswerDto$Point">
+        select KQ.KNOWLEDGE_QUESTION_NO, KNOWLEDGE_ANSWER_NO, KQ.MEMBER_NO as knowledge_question_member_no, KA.MEMBER_NO as knowledge_answer_member_no, KNOWLEDGE_QUESTION_POINT
+        from KNOWLEDGE_ANSWER KA join KNOWLEDGE_QUESTION KQ on KA.KNOWLEDGE_QUESTION_NO = KQ.KNOWLEDGE_QUESTION_NO
+        where KNOWLEDGE_ANSWER_NO=#{answerNo}
+    </select>
+
+    <update id="update" parameterType="int">
+        update KNOWLEDGE_ANSWER set KNOWLEDGE_ANSWER_SELECTION_ENABLED=1 where KNOWLEDGE_ANSWER_NO = #{answerNo}
+    </update>
+
+
 </mapper>

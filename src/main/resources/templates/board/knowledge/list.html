@@ -23,6 +23,7 @@
             <thead>
             <tr>
                 <th>글번호</th>
+                <th>뼈다귀 포인트</th>
                 <th>제목</th>
                 <th>글쓴이</th>
                 <th>글쓴시간</th>
@@ -33,6 +34,7 @@
 
             <tr th:each="question : ${list.questions}">
                     <td th:text="${question.knowledgeQuestionNo}">1</td>
+                    <td th:text="${question.knowledgeQuestionPoint}"></td>
                     <td>
                         <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${question.knowledgeQuestionNo})}" th:text="${question.knowledgeQuestionTitle}"></a>
                     </td>

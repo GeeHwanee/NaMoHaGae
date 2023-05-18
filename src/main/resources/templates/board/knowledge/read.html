@@ -8,6 +8,15 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>지식인 게시판 읽기 페이지</title>
+    <script th:inline="javascript">
+        const question = [[${question}]];
+        const memberNo = [[${memberNo}]];
+        const questionPoint = question.knowledgeQuestionPoint;
+        const isWriter = memberNo===question.memberNo;
+    </script>
+    <style>
+        .hide{display: none;}
+    </style>
 </head>
 <script>
 
@@ -20,15 +29,17 @@
             success(result){
                 if(result.length>0){
                 const $answer_select = $('#answer_select');
-                const $answer = $('#answer').empty();
+                const $answers = $('#answers').empty();
+                let isSelected = false;
                     for (const answer of result) {
-
-                        // 내 추천 여부 확인 안했고, 채택 박는거 아직 안했고
+                        const $button = $(`<button type="button" data-no="${answer.knowledgeAnswerNo}" class="btn btn-primary select">채택 하기</button>`);
+                        // 내 추천 여부 확인 안했고
                         const tpl = `
-                            <div style="text-align: left">
-                                <i class="fa-solid fa-user fa-lg"></i>  <span>${answer.memberNickname}</span> |
-                                <i class="fa-regular fa-thumbs-up fa-lg"></i>   <span >${answer.knowledgeAnswerRecommend}</span> |
-                                <i class="fa-regular fa-calendar fa-lg"></i>  <span>${answer.knowledgeAnswerWriteDate}</span>
+                            <div class="answer" style="text-align: left">
+                                <i class="fa-solid fa-user fa-lg"></i>  <span class="username">${answer.memberNickname}</span> |
+                                <i class="fa-regular fa-thumbs-up fa-lg"></i> <span >${answer.knowledgeAnswerRecommend}</span> |
+                                <i class="fa-regular fa-calendar fa-lg"></i>  <span>${answer.knowledgeAnswerWriteDate}</span> |
+                                <span class="select_area">${(isWriter&&!isSelected&&!answer.knowledgeAnswerSelectionEnabled) ? $button[0].outerHTML : ''}</span>
                             </div>
                             <div >
                                 <div>${answer.knowledgeAnswerContent}</div>
@@ -36,8 +47,9 @@
                         `;
                         if(answer.knowledgeAnswerSelectionEnabled===true){
                             $answer_select.empty().append(tpl);
+                            isSelected = answer.knowledgeAnswerSelectionEnabled;
                         }else {
-                            $answer.append(tpl);
+                            $answers.append(tpl);
                         }
                     }
 
@@ -51,10 +63,44 @@
 
     $(document).ready(function (){
         printKnowledgeAnswer();
+        console.log(isWriter);
 
-        $('#answer_write').click(function(){
+        $('#answers').on('click', '.select', async function (){
+            const $memberNickname = $(this).parent().parent().find('.username').text();
+            const $answerNo = $(this).data('no');
+            console.log("클릭  "+$answerNo);
+            const choice = await Swal.fire({
+                title: $memberNickname+' 님의 답변을 채택하시겠습니까?',
+                text: "뼈다귀 포인트 "+questionPoint+" 포인트 소모",
+                showCancelButton: true,
+                confirmButtonText: '답변 채택',
+                cancelButtonText: '취소',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            });
+            if(choice.isConfirmed===true){
+
+                await $.ajax({
+                    url:'/api/v1/knowledge/answer/select?answerNo='+$answerNo,
+                    type:'post',
+                    success(result){
+                        printKnowledgeAnswer();
+                    },
+                    error(error){
+                        Swal.fire('포인트 부족', '채택에 필요한 포인트가 부족합니다', 'warning');
+                        printKnowledgeAnswer();
+                    }
+                })
+            }else if (choice.dismiss === Swal.DismissReason.cancel) {
+                // 취소 버튼이 클릭된 경우 처리할 동작을 작성합니다.
+                // 예: 채택 취소 로직 실행
+            }
+
+        })
+
+        $('#answer_write').click(async function(){
             const formData = $('#answer_form').serialize();
-            $.ajax({
+            await $.ajax({
                 url:'/api/v1/knowledge/answer/write',
                 type:'post',
                 data: formData,
@@ -62,7 +108,8 @@
                     printKnowledgeAnswer();
                 },
                 error(error){
-                    console.log(error);
+                    Swal.fire('내 답변이 존재합니다', '이미 해당 질문에 답변을 남기셨습니다', 'warning');
+                    printKnowledgeAnswer();
                 }
             })
         })
@@ -97,13 +144,14 @@
         </article>
         <hr>
         <article>
-            <div id="answer">
+            <div id="answers">
                 등록된 답변이 없습니다
             </div>
         </article>
         <hr>
         <form action="/api/v1/knowledge/answer/write" method="post" id="answer_form">
             <input type="hidden" id="question_no" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
+            <input type="hidden" name="answerMemberNo" th:value="${memberNo}">
             <textarea name="knowledgeAnswerContent"></textarea>
             <button type="button" id="answer_write">답변 작성</button>
         </form>
