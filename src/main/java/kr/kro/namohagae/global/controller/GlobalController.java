@@ -386,8 +386,9 @@ public class GlobalController {
     }
 
     @GetMapping("/board/knowledge/read")
-    public String knowledgeRead(Integer knowledgeQuestionNo, Model model){
+    public String knowledgeRead(Integer knowledgeQuestionNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
         model.addAttribute("question", knowledgeService.questionRead(knowledgeQuestionNo));
+        model.addAttribute("memberNo", myUserDetails.getMemberNo());
         return "board/knowledge/read";
     }
 

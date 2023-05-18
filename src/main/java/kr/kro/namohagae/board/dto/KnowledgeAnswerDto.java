@@ -13,6 +13,7 @@ public class KnowledgeAnswerDto {
     @Data
     public static class Write{
         private Integer knowledgeQuestionNo;
+        private Integer answerMemberNo;
         private String knowledgeAnswerContent;
 
         public KnowledgeAnswer toEntity(Integer memberNo){
@@ -32,4 +33,13 @@ public class KnowledgeAnswerDto {
         private Integer knowledgeAnswerRecommend;
     }
 
+    @Data
+    public static class Point{
+        private Integer knowledgeQuestionNo;
+        private Integer knowledgeAnswerNo;
+        private Integer knowledgeQuestionMemberNo;
+        private Integer knowledgeAnswerMemberNo;
+        private Integer knowledgeQuestionPoint;
+
+    }
 }

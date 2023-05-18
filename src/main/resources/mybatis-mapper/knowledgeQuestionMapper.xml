@@ -8,8 +8,8 @@
         <selectKey keyProperty="knowledgeQuestionNo" order="BEFORE" resultType="java.lang.Integer">
             select KNOWLEDGE_QUESTION_SEQ_KNOWLEDGE_QUESTION_NO.nextval from dual
         </selectKey>
-        insert into KNOWLEDGE_QUESTION(KNOWLEDGE_QUESTION_NO, MEMBER_NO, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT)
-        values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, 0,#{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint})
+        insert into KNOWLEDGE_QUESTION(KNOWLEDGE_QUESTION_NO, MEMBER_NO, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_ENABLED)
+        values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, 0,#{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint}, 1)
     </insert>
 
     <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$List">
@@ -20,7 +20,8 @@
                         select
                             KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_NO, M.MEMBER_Nickname, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE
                         from KNOWLEDGE_QUESTION
-                            join MEMBER M on KNOWLEDGE_QUESTION.MEMBER_NO = M.MEMBER_NO
+                        join MEMBER M on KNOWLEDGE_QUESTION.MEMBER_NO = M.MEMBER_NO
+                        where KNOWLEDGE_QUESTION_ENABLED =1
                         order by KNOWLEDGE_QUESTION_NO desc
                     ) a
                 where rownum&lt;=#{endRowNum}

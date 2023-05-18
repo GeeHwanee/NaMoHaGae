@@ -11,4 +11,7 @@ public interface KnowledgeAnswerDao {
     public Integer save(KnowledgeAnswer knowledgeAnswer);
 
     public List<KnowledgeAnswerDto.Read> findAll(Integer questionNo);
+
+    public Integer update(Integer answerNo);
+    public KnowledgeAnswerDto.Point findByKnowledgeAnswerNo(Integer answerNo);
 }

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -24,10 +25,17 @@ public class KnowledgeService {
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
-    public Integer questionSave(KnowledgeQuestionDto.Write dto, Integer memberNo){
-        KnowledgeQuestion knowledgeQuestion = dto.toEntity(memberNo);
-        knowledgeQuestionDao.save(knowledgeQuestion);
-        return knowledgeQuestion.getKnowledgeQuestionNo();
+    public Integer questionSave(KnowledgeQuestionDto.Write dto, Integer memberNo) {
+        Integer point = memberDao.findByMember(memberNo).get().getMemberPoint();
+        if (point >= dto.getKnowledgeQuestionPoint()) {
+            KnowledgeQuestion knowledgeQuestion = dto.toEntity(memberNo);
+            knowledgeQuestionDao.save(knowledgeQuestion);
+            memberDao.updatePoint(memberNo, (-point));
+            return knowledgeQuestion.getKnowledgeQuestionNo();
+        } else {
+            return 0;
+        }
+
     }
 
 
@@ -37,29 +45,41 @@ public class KnowledgeService {
     }
 
     public KnowledgeQuestionDto.Pagination questionFindAll(Integer pageNo) {
-        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer startRowNum = (pageNo - 1) * PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<KnowledgeQuestionDto.List> questions = knowledgeQuestionDao.findAll(startRowNum, endRowNum);
         Integer countOfQuestion = knowledgeQuestionDao.count();
-        Integer countOfPage = (countOfQuestion-1)/PAGESIZE + 1;
-        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
+        Integer countOfPage = (countOfQuestion - 1) / PAGESIZE + 1;
+        Integer prev = (pageNo - 1) / BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev + 1;
         Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
+        Integer next = end + 1;
+        if (end >= countOfPage) {
             end = countOfPage;
             next = 0;
         }
         return new KnowledgeQuestionDto.Pagination(pageNo, prev, start, end, next, questions);
     }
 
-    public Boolean answerSave(KnowledgeAnswerDto.Write dto, Integer memberNo){
+    public Boolean answerSave(KnowledgeAnswerDto.Write dto, Integer memberNo) {
+        if (Objects.equals(dto.getAnswerMemberNo(), memberNo))
+            return false;
+
         KnowledgeAnswer knowledgeAnswer = dto.toEntity(memberNo);
-        return knowledgeAnswerDao.save(knowledgeAnswer)==1;
+        return knowledgeAnswerDao.save(knowledgeAnswer) == 1;
     }
 
 
     public List<KnowledgeAnswerDto.Read> answerFindAll(Integer questionNo) {
         return knowledgeAnswerDao.findAll(questionNo);
     }
+
+    public Boolean answerUpdate(Integer answerNo) {
+        KnowledgeAnswerDto.Point point = knowledgeAnswerDao.findByKnowledgeAnswerNo(answerNo);
+
+        memberDao.updatePoint(point.getKnowledgeAnswerMemberNo(), point.getKnowledgeQuestionPoint());
+        return true;
+
+    }
 }
+
