@@ -182,9 +182,23 @@
         <div style="text-align: center">
             <div class="title">뼈다귀 포인트 사용</div>
             <br>
-                <div>보유</div>
-                <div>사용</div>
+                <div>
+                    <span>보유</span>
+                    <span th:text="${#numbers.formatInteger(map.memberPoint,0,'COMMA')}+'원'"></span>
+                </div>
+                <div>
+                    <span>사용</span>
+                    <span>원</span>
+                </div>
         </div>
+    <br>
+    <br>
+
+    <div style="text-align: center">
+        <div class="title">결제방법</div>
+        <br>
+        <input type="radio" checked="checked" /><span class="up">카카오페이</span>
+    </div>
     <br>
     <br>
 

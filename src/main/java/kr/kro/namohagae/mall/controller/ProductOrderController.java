@@ -57,6 +57,7 @@ public class ProductOrderController {
         List<AddressDto.Read> addresses = service.findAddress(myUserDetails.getMemberNo());
         Map<String, Object> map = new HashMap<>();
         map.put("orderItems", order.getOrderItems());
+        map.put("memberPoint", order.getMemberPoint());
         map.put("orderTotalPrice", order.getOrderTotalPrice());
         map.put("addresses", addresses);
         session.setAttribute("map",map);

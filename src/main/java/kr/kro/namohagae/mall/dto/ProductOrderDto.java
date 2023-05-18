@@ -13,15 +13,17 @@ public class ProductOrderDto {
         private Integer productNo;
         private String productImage;
         private String productName;
+        private Integer memberPoint;
         private Integer cartDetailCount;
         private Integer cartDetailPrice;
         private Integer orderTotalPrice;
-    }
 
+    }
     @Data
     @AllArgsConstructor
     public static class Read {
         private List<OrderList> orderItems;
+        private Integer memberPoint;
         private Integer orderTotalPrice;
     }
 
@@ -31,6 +33,7 @@ public class ProductOrderDto {
         private Integer productOrderTotalPrice;
         private LocalDateTime productOrderDate;
         private Integer memberNo;
+        private Integer memberPoint;
         private String addressPostcode;
         private String addressAddress;
         private String addressAddressDetail;
