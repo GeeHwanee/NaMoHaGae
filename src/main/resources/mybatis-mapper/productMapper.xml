@@ -144,9 +144,25 @@
     </select>
 
     <!-- 상품명으로 검색 -->
-    <select id="findByProductName" parameterType="String" resultType="Product">
-        select * from PRODUCT where product_name like '%'|| #{productName} || '%'
+    <select id="findByProductName" parameterType="String" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
+        select * from
+        (
+        select rownum as rnum, p.* from
+        (
+        select p.product_no, p.product_name, p.product_price, p.product_grade,
+        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and PRODUCT_IMAGE_NO=1
+        <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
+        and product_name like '%'|| #{productName} || '%'
+        order by p.product_name asc
+        ) p
+        where rownum&lt;=#{endRowNum}
+        )
+        where rnum&gt;=#{startRowNum}
     </select>
+
 
     <!-- 필터(최신순) 검색 -->
     <select id="findAllByNewProduct" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">

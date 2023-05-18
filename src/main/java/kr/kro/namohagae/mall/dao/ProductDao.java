@@ -39,7 +39,7 @@ public interface ProductDao {
     public Optional<Product> findProductByNo(Integer productNo);
 
     // 상품명으로 검색
-    public List<Product> findByProductName(String productName);
+    public List<ProductDto.ReadAll> findByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo, String productName);
 
     // 필터(최신순) 검색
     public List<ProductDto.ReadAll> findAllByNewProduct(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
