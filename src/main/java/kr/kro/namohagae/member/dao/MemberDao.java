@@ -45,4 +45,8 @@ public interface MemberDao {
     public String findEmailByNicknameAndPhone(String nickname, String phone);
 
     public Boolean changePassword(String memberPassword,String memberEmail);
+
+    public Integer findMemberPointByMemberNo(Integer memberNo);
+
+    public Integer updateMemberPointByMemberNo(Integer memberPoint, Integer memberNo);
 }

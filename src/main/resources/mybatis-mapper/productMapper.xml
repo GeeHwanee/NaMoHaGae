@@ -41,7 +41,7 @@
         (
         select rownum as rnum, p.* from
         (
-        select p.product_no, p.product_name, p.product_price, p.product_stock,
+        select p.product_no, p.product_name, p.product_price, p.product_stock, p.product_grade,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
         (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p
@@ -144,17 +144,33 @@
     </select>
 
     <!-- 상품명으로 검색 -->
-    <select id="findByProductName" parameterType="String" resultType="Product">
-        select * from PRODUCT where product_name like '%'|| #{productName} || '%'
-    </select>
-
-    <!-- 필터(최신순) 검색 -->
-    <select id="findAllByLatestOrder" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
+    <select id="findByProductName" parameterType="String" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
         select * from
         (
         select rownum as rnum, p.* from
         (
-        select p.product_no, p.product_name, p.product_price,
+        select p.product_no, p.product_name, p.product_price, p.product_grade,
+        'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
+        from PRODUCT p join PRODUCT_IMAGE pi on
+        p.product_no=pi.product_no and PRODUCT_IMAGE_NO=1
+        <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
+        and product_name like '%'|| #{productName} || '%'
+        order by p.product_name asc
+        ) p
+        where rownum&lt;=#{endRowNum}
+        )
+        where rnum&gt;=#{startRowNum}
+    </select>
+
+
+    <!-- 필터(최신순) 검색 -->
+    <select id="findAllByNewProduct" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
+        select * from
+        (
+        select rownum as rnum, p.* from
+        (
+        select p.product_no, p.product_name, p.product_price, p.product_grade,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
         (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p join PRODUCT_IMAGE pi on
@@ -167,19 +183,19 @@
         where rnum&gt;=#{startRowNum}
     </select>
 
-    <!-- 필터(판매량) 검색 -->
-    <select id="findAllByOrderOfHighSales" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
+    <!-- 필터(인기순) 검색 -->
+    <select id="findAllByBestProduct" resultType="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
         select * from
         (
         select rownum as rnum, p.* from
         (
-        select p.product_no, p.product_name, p.product_price,
+        select p.product_no, p.product_name, p.product_price, p.product_grade,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
         (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p join PRODUCT_IMAGE pi on
         p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by product_stock asc
+        order by product_grade desc
         ) p
         where rownum&lt;=#{endRowNum}
         )
@@ -192,13 +208,13 @@
         (
         select rownum as rnum, p.* from
         (
-        select p.product_no, p.product_name, p.product_price,
+        select p.product_no, p.product_name, p.product_price, p.product_grade,
         'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
         (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
         from PRODUCT p join PRODUCT_IMAGE pi on
         p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by product_name asc
+        order by trim(product_name) asc
         ) p
         where rownum&lt;=#{endRowNum}
         )
@@ -208,4 +224,15 @@
     <delete id="delete">
         delete from PRODUCT where PRODUCT_NO= #{productNo} and ROWNUM=1
     </delete>
+
+    <!-- 리뷰 등록 시 상품 별점 업데이트 -->
+    <update id="updateProductGradebyReviewStar">
+        UPDATE product p
+        SET product_grade = (
+            SELECT ROUND(SUM(pr.product_review_star) / COUNT(pr.product_order_detail_no), 1)
+            FROM product_review pr
+            WHERE p.product_no = pr.product_no
+        )
+        WHERE p.product_no = #{productNo}
+    </update>
 </mapper>

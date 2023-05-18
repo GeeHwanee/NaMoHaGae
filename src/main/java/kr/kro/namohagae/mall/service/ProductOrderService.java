@@ -8,6 +8,7 @@ import kr.kro.namohagae.mall.entity.Address;
 import kr.kro.namohagae.mall.entity.CartDetail;
 import kr.kro.namohagae.mall.entity.ProductOrder;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
+import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ProductOrderService {
     private final CartDetailDao cartDetailDao;
     private final AddressDao addressDao;
     private final ProductDao productDao;
+    private final MemberDao memberDao;
     private Integer PAGESIZE = 10;
     private Integer BLOCKSIZE = 5;
 
@@ -30,6 +32,7 @@ public class ProductOrderService {
     public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos, Integer productOrderDetailCount) {
         List<ProductOrderDto.OrderList> orderItems = new ArrayList<>();
         Integer orderTotalPrice = 0;
+        Integer memberPoint = memberDao.findMemberPointByMemberNo(memberNo);
         for (Integer productNo : checkedProductNos) {
             Optional<CartDetail> result = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo);
             CartDetail cartDetail;
@@ -39,12 +42,13 @@ public class ProductOrderService {
             } else{
                 cartDetail = new CartDetail(null,memberNo,null,productNo,productOrderDetailCount,product.getProductPrice());
             }
-                ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
+                ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), memberPoint, cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
                 orderItems.add(orderItem);
+                memberPoint = orderItem.getMemberPoint();
                 orderTotalPrice += orderItem.getOrderTotalPrice();
         }
 
-        return new ProductOrderDto.Read(orderItems, orderTotalPrice);
+        return new ProductOrderDto.Read(orderItems, memberPoint, orderTotalPrice);
     }
 
 
@@ -61,7 +65,7 @@ public class ProductOrderService {
         return productOrderDao.read(orderNo);
     }
 
-    public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo) {
+    public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo, Integer usedMemberPoint) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
         ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), orderTotalPrice, LocalDateTime.now());
         productOrderDao.save(productOrder);
@@ -89,8 +93,18 @@ public class ProductOrderService {
         if (!productNos.isEmpty()) {
             cartDetailDao.removeByCartNo(productNos, memberNo);
         }
-        // 이거 배송지 + 3000원 들어가는거도 잡아줘야함.
-        Integer bonePoint = (int) (productOrder.getProductOrderTotalPrice() * 0.01);
+
+        // 현재 포인트
+        memberDao.findMemberPointByMemberNo(memberNo);
+
+        // 포인트 사용 후 멤버 포인트 차감
+        if(usedMemberPoint!=null) {
+            memberDao.updateMemberPointByMemberNo(usedMemberPoint, memberNo);
+        }
+
+        // 구매 포인트 적립
+        Integer deliveryFee = 3000;
+        Integer bonePoint = (int) ((productOrder.getProductOrderTotalPrice()-deliveryFee) * 0.01);
         productOrderDao.updateMemberPoint(bonePoint, memberNo);
         return productOrder.getProductOrderNo();
 

@@ -52,8 +52,9 @@ public class ProductDto {
         private String productName;
         private Integer productPrice;
         private Integer productStock;
+        private Double productGrade;
         private String productImage;
-        private Boolean favoriteEnabled; // 찜여부
+        private Boolean favoriteEnabled;
     }
 
     // 상품 상세보기
@@ -63,10 +64,9 @@ public class ProductDto {
         private String productName;
         private String productContent;
         private Integer productPrice;
-        private Double productGrade; // 별점등급
-        private Integer reviewCount; // 리뷰개수
+        private Double productGrade;
+        private Integer reviewCount;
         private Integer productStock;
-        //private Boolean favoriteEnabled; // 찜여부
         private List<String> productImages;
         private List<ProductReviewDto.ReviewList> productReviews;
         private List<QnaDto.QnaList> qnas;

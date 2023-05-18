@@ -4,7 +4,6 @@ import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
-import kr.kro.namohagae.mall.entity.ProductCategory;
 import kr.kro.namohagae.mall.entity.ProductImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,6 @@ public class ProductService {
     private final ProductCategoryDao productCategoryDao;
     private final ProductDao productDao;
     private final ProductImageDao productImageDao;
-    private final ProductReviewDao productReviewDao;
-    private final QnaDao qnaDao;
 
     private final Integer PAGESIZE = 9;
     private final Integer BLOCKSIZE = 5;
@@ -88,6 +85,35 @@ public class ProductService {
         return product.getProductNo();
     }
 
+    // 필터 정렬
+    public ProductDto.Pagination findAll(Integer pageNo, Integer categoryNo, String sortBy, Integer memberNo) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductDto.ReadAll> products=null;
+        Integer countOfProduct=0;
+
+        if (sortBy.equals("NewProduct")) {
+            products =  productDao.findAllByNewProduct(startRowNum, endRowNum, categoryNo, memberNo);
+            countOfProduct = productDao.count(categoryNo);
+        } else if (sortBy.equals("ProductName")) {
+            products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo, memberNo);
+            countOfProduct = productDao.count(categoryNo);
+        } else if (sortBy.equals("BestProduct")) {
+            products = productDao.findAllByBestProduct(startRowNum, endRowNum, categoryNo, memberNo);
+            countOfProduct = productDao.count(categoryNo);
+        }
+        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
+    }
+
     public ProductDto.Pagination list(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
@@ -105,61 +131,6 @@ public class ProductService {
         return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
     }
 
-    // 필터(최신순) 정렬
-    public ProductDto.Pagination findAllByLatestOrder(Integer pageNo, Integer categoryNo, Integer memberNo) {
-        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
-        Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByLatestOrder(startRowNum, endRowNum, categoryNo, memberNo);
-        Integer countOfProduct = productDao.count(categoryNo);
-        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
-        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
-        Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
-            end = countOfPage;
-            next = 0;
-        }
-        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
-    }
-
-    // 필터(판매량) 정렬
-    public ProductDto.Pagination findAllByOrderOfHighSales(Integer pageNo, Integer categoryNo, Integer memberNo) {
-        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
-        Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByOrderOfHighSales(startRowNum, endRowNum, categoryNo, memberNo);
-        Integer countOfProduct = productDao.count(categoryNo);
-        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
-        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
-        Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
-            end = countOfPage;
-            next = 0;
-        }
-        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
-    }
-
-    // 필터(이름순) 정렬
-    public ProductDto.Pagination findAllByProductName(Integer pageNo, Integer categoryNo, Integer memberNo) {
-        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
-        Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo, memberNo);
-        Integer countOfProduct = productDao.count(categoryNo);
-        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
-        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
-        Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
-            end = countOfPage;
-            next = 0;
-        }
-        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
-    }
-
-
     public ProductDto.Read read(Integer productNo) {
         ProductDto.Read dto = productDao.findByProductNo(productNo);
         return dto;
@@ -169,8 +140,24 @@ public class ProductService {
     public Boolean delete(Integer productNo) {
         Integer imageDeleteResult = productImageDao.delete(productNo);
         Integer productDeleteResult = productDao.delete(productNo);
-
         return (imageDeleteResult>0)&&(productDeleteResult>0);
+    }
+
+    public ProductDto.Pagination searchProductName(Integer pageNo, Integer categoryNo, Integer memberNo, String productName) {
+        Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<ProductDto.ReadAll> products = productDao.findByProductName(startRowNum, endRowNum, categoryNo, memberNo, productName);
+        Integer countOfProduct = productDao.count(categoryNo);
+        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
     }
 
 }

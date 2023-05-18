@@ -1,110 +1,108 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <!------------------------------------------------------------------------------------------------------------------------------>
-    <!--기본 CND, Script, CSS 내장 삽입-->
-    <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+<!------------------------------------------------------------------------------------------------------------------------------>
+<!--기본 CND, Script, CSS 내장 삽입-->
+<th:block th:replace="~{fragments/head :: head}"></th:block>
+<!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
-    <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>상품 목록 페이지</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
+<!------------------------------------------------------------------------------------------------------------------------------>
+<title>상품 목록 페이지</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .hide{ display: none}
+    .product-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
+
+    .product-card {
+        flex: 0 1 calc(25% - 16px);
+        margin-right: 24px;
+        margin-bottom: 20px;
+        border: none;
+    }
+
+    .product-contents {
+        padding: 8px;
+    }
+
+    .product-img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .product-name {
+        font-size: 14px;
+    }
+
+    .product-price {
+        font-size: 14px;
+    }
+
+    .product-favorite {
+        font-size: 14px;
+    }
+</style>
+<script>
+    function updateUrlParams(params) {
+        const urlParams = new URLSearchParams(window.location.search);
+        for (const [key, value] of Object.entries(params)) {
+            urlParams.set(key, value);
         }
-        .hide{ display: none}
-        .product-list {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            margin-top: 12px;
+        return urlParams.toString();
+    }
+
+    function sortProducts(sortBy) {
+        const params = {
+            sortBy: sortBy,
+        };
+        const queryString = updateUrlParams(params);
+        window.location.href = '/mall/product/list?' + queryString;
+    }
+
+    function searchProduct(event) {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            const searchInput = document.getElementById('searchInput');
+            const searchProduct = searchInput.value;
+
+            const params = {
+                searchProduct: searchProduct,
+            };
+            const queryString = updateUrlParams(params);
+            window.location.href = '/mall/product/list?' + queryString;
         }
+    }
+</script>
+<script>
+    $(document).ready(function(){
+        $('.product-favorite').click(async function(){
+           let $productNo = $(this).data('productno');
+           console.log(typeof $productNo);
+            try{
+                const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+$productNo, method:"patch"});
+                if(result.favorite){
+                    $(this).parent().children().first().removeClass('hide');
+                    $(this).parent().children().first().next().addClass('hide');
 
-        .product-card {
-            flex: 0 1 calc(25% - 16px); /* 4개의 카드가 한 줄에 배치되도록 설정 */
-            /*width: 180px;*/
-            /*height: 300px;*/
-            margin-right: 24px;
-            margin-bottom: 20px;
-            border: none;
-        }
-
-        .product-contents {
-            /*display: flex;*/
-            /*flex-direction: column;*/
-            padding: 8px;
-        }
-
-        .product-img {
-            width: 200px;
-            height: 200px;
-        }
-
-        .product-name {
-            font-size: 14px;
-        }
-
-        .product-price {
-            font-size: 14px;
-        }
-
-        .product-favorite {
-            font-size: 14px;
-        }
-    </style>
-    <script>
-
-        // 최신순으로 정렬
-        function list() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('orderByProductName', 'false');
-            if (categoryNo) {
-                urlParams.set('categoryNo', categoryNo);
-            }
-            console.log(window.location.search);
-            window.location.href = '/mall/product/list?' + urlParams.toString();
-        }
-
-        // 상품명으로 정렬
-        function findAllName() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('orderByProductName', 'true');
-            if (categoryNo) {
-                urlParams.set('categoryNo', categoryNo);
-            }
-            console.log(window.location.search);
-            window.location.href = '/mall/product/list?' + urlParams.toString();
-        }
-
-    </script>
-    <script>
-        $(document).ready(function(){
-            $('.product-favorite').click(async function(){
-               let $productNo = $(this).data('productno');
-               console.log(typeof $productNo);
-                try{
-                    const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+$productNo, method:"patch"});
-                    if(result.favorite){
-                        $(this).parent().children().first().removeClass('hide');
-                        $(this).parent().children().first().next().addClass('hide');
-
-                    } else {
-                        $(this).parent().children().first().addClass('hide');
-                        $(this).parent().children().first().next().removeClass('hide');
-                    }
-                }catch (err){
-                    console.log(err)
+                } else {
+                    $(this).parent().children().first().addClass('hide');
+                    $(this).parent().children().first().next().removeClass('hide');
                 }
-                })
+            }catch (err){
+                console.log(err)
+            }
+        })
+    })
+</script>
+<script>
 
-            })
-
-    </script>
-
-
+</script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -112,12 +110,15 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>제품 목록</h1>
+        <div class="search">
+            <input id="searchInput" type="text" placeholder="상품명 입력" onkeydown="searchProduct(event)">>
+            <span id="searchProduct" onclick="searchProduct(event)" class="fa-solid fa-magnifying-glass"></span>
+        </div>
 
-        <!-- 필터만드는중 -->
         <div class="product-filter">
-            <button class="btn btn-danger mt-3" id="list" onclick="list()">최신순</button>
-            <button class="btn btn-danger mt-3" id="findAllByProductName" onclick="findAllName()">상품명</button>
+            <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</button>
+            <button class="btn btn-danger mt-3" id="sortByName" onclick="sortProducts('ProductName')">상품명</button>
+            <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortProducts('BestProduct')">인기순</button>
         </div>
 
         <div class="product-list">
@@ -140,10 +141,6 @@
                       </div>
                     </span>
                     <div>
-                        <!--
-                    <span  th:classappend="${p.favoriteEnabled ? '':'hide'}" th:data-productNo="${p.productNo}" class="product-favorite">찜하기 취소</span>
-                    <span  th:classappend="${p.favoriteEnabled ? 'hide':''}" th:data-productNo="${p.productNo}" class="product-favorite">찜하기</span>
-                    -->
                         <span th:classappend="${p.favoriteEnabled ? '' : 'hide'}" th:data-productNo="${p.productNo}" class="product-favorite">
                            <i class="fa-solid fa-heart fa-xl"></i> 찜하기 취소
                         </span>
@@ -156,7 +153,6 @@
             <div id="product"></div>
         </div>
 
-        <!-- 페이징 -->
         <ul class="pagination">
             <li th:if="${list.prev>0}" class="page-item">
                 <a class="page-link" th:href="@{/mall/product/list(categoryNo=${list.categoryNo},pageNo=list.prev)}">이전으로</a>
