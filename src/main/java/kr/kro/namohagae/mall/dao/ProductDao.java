@@ -42,10 +42,10 @@ public interface ProductDao {
     public List<Product> findByProductName(String productName);
 
     // 필터(최신순) 검색
-    public List<ProductDto.ReadAll> findAllByLatestOrder(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
+    public List<ProductDto.ReadAll> findAllByNewProduct(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
-    // 필터(판매량) 검색
-    public List<ProductDto.ReadAll> findAllByOrderOfHighSales(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
+    // 필터(인기순) 검색
+    public List<ProductDto.ReadAll> findAllByBestProduct(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 필터(이름순) 검색
     public List<ProductDto.ReadAll> findAllByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
@@ -53,4 +53,7 @@ public interface ProductDao {
     public Integer delete(Integer productNo);
 
     public Integer update(Product product);
+    
+    // 리뷰 등록 시 상품 별점 업데이트
+    public void updateProductGradebyReviewStar(Integer productNo);
 }

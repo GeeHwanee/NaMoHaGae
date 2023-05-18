@@ -4,7 +4,6 @@ import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
-import kr.kro.namohagae.mall.entity.ProductCategory;
 import kr.kro.namohagae.mall.entity.ProductImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -106,10 +105,10 @@ public class ProductService {
     }
 
     // 필터(최신순) 정렬
-    public ProductDto.Pagination findAllByLatestOrder(Integer pageNo, Integer categoryNo, Integer memberNo) {
+    public ProductDto.Pagination findAllByNewProduct(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByLatestOrder(startRowNum, endRowNum, categoryNo, memberNo);
+        List<ProductDto.ReadAll> products = productDao.findAllByNewProduct(startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -123,11 +122,11 @@ public class ProductService {
         return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
     }
 
-    // 필터(판매량) 정렬
-    public ProductDto.Pagination findAllByOrderOfHighSales(Integer pageNo, Integer categoryNo, Integer memberNo) {
+    // 필터(인기순) 정렬
+    public ProductDto.Pagination findAllByBestProduct(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findAllByOrderOfHighSales(startRowNum, endRowNum, categoryNo, memberNo);
+        List<ProductDto.ReadAll> products = productDao.findAllByBestProduct(startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;

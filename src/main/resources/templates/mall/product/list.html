@@ -56,10 +56,10 @@
     <script>
 
         // 최신순으로 정렬
-        function list() {
+        function sortByNew() {
             const urlParams = new URLSearchParams(window.location.search);
             const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('orderByProductName', 'false');
+            urlParams.set('sortBy', 'NewProduct');
             if (categoryNo) {
                 urlParams.set('categoryNo', categoryNo);
             }
@@ -68,10 +68,22 @@
         }
 
         // 상품명으로 정렬
-        function findAllName() {
+        function sortByName() {
             const urlParams = new URLSearchParams(window.location.search);
             const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('orderByProductName', 'true');
+            urlParams.set('sortBy', 'ProductName');
+            if (categoryNo) {
+                urlParams.set('categoryNo', categoryNo);
+            }
+            console.log(window.location.search);
+            window.location.href = '/mall/product/list?' + urlParams.toString();
+        }
+
+        // 인기순으로 정렬
+        function sortByBest() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryNo = urlParams.get('categoryNo');
+            urlParams.set('sortBy', 'BestProduct');
             if (categoryNo) {
                 urlParams.set('categoryNo', categoryNo);
             }
@@ -114,10 +126,12 @@
     <section>
         <h1>제품 목록</h1>
 
-        <!-- 필터만드는중 -->
+        <!-- 필터만드는중 (인기순 추가중)
+        -->
         <div class="product-filter">
-            <button class="btn btn-danger mt-3" id="list" onclick="list()">최신순</button>
-            <button class="btn btn-danger mt-3" id="findAllByProductName" onclick="findAllName()">상품명</button>
+            <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortByNew()">최신순</button>
+            <button class="btn btn-danger mt-3" id="sortByName" onclick="sortByName()">상품명</button>
+            <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortByBest()">인기순</button>
         </div>
 
         <div class="product-list">

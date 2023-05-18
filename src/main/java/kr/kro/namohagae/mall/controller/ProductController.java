@@ -17,17 +17,19 @@ public class ProductController {
 
     @GetMapping("/mall/product/list")
     public String list(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model, HttpSession session,
-                       @RequestParam(defaultValue="false") boolean orderByProductName, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+                       @RequestParam(defaultValue="NewProduct") String sortBy, @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
         if(session.getAttribute("msg")!=null) {
             model.addAttribute("msg", session.getAttribute("msg"));
             session.removeAttribute("msg");
         }
 
-        if (orderByProductName) {
-            model.addAttribute("list", service.findAllByProductName(pageNo, categoryNo, myUserDetails.getMemberNo()));
-        } else {
+        if (sortBy.equals("NewProduct")) {
             model.addAttribute("list", service.list(pageNo, categoryNo, myUserDetails.getMemberNo()));
+        } else if(sortBy.equals("ProductName")) {
+            model.addAttribute("list", service.findAllByProductName(pageNo, categoryNo, myUserDetails.getMemberNo()));
+        } else if(sortBy.equals("BestProduct")) {
+            model.addAttribute("list", service.findAllByBestProduct(pageNo, categoryNo, myUserDetails.getMemberNo()));
         }
 
         return "mall/product/list";
