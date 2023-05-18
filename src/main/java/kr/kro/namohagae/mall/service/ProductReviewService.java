@@ -27,6 +27,7 @@ public class ProductReviewService {
         ProductReview productReview = dto.toEntity(memberNo);
         productReviewDao.save(productReview);
         productOrderDetailDao.updateReview(dto.getProductOrderDetailNo());
+        productDao.updateProductGradebyReviewStar(dto.getProductNo());
     }
 
     // 수정중 0517
