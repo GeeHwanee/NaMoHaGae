@@ -149,9 +149,13 @@
         if (usedPoint > memberPoint) {
             alert('보유한 포인트가 부족합니다');
             inputElement.value = memberPoint;
+        } else if(usedPoint < 0) {
+            alert('0포인트 이상 사용이 가능합니다');
+            inputElement.value = 0;
         }
 
         usedPointElement.innerText = "-" + inputElement.value + "원";
+        calculationOrderTotalPrice();
     }
 
     function calculationOrderTotalPrice() {
