@@ -8,6 +8,7 @@ import kr.kro.namohagae.mall.entity.Address;
 import kr.kro.namohagae.mall.entity.CartDetail;
 import kr.kro.namohagae.mall.entity.ProductOrder;
 import kr.kro.namohagae.mall.entity.ProductOrderDetail;
+import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ProductOrderService {
     private final CartDetailDao cartDetailDao;
     private final AddressDao addressDao;
     private final ProductDao productDao;
+    private final MemberDao memberDao;
     private Integer PAGESIZE = 10;
     private Integer BLOCKSIZE = 5;
 
@@ -30,6 +32,7 @@ public class ProductOrderService {
     public ProductOrderDto.Read orderReady(Integer memberNo, List<Integer> checkedProductNos, Integer productOrderDetailCount) {
         List<ProductOrderDto.OrderList> orderItems = new ArrayList<>();
         Integer orderTotalPrice = 0;
+        Integer memberPoint = memberDao.findMemberPointByMemberNo(memberNo);
         for (Integer productNo : checkedProductNos) {
             Optional<CartDetail> result = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo);
             CartDetail cartDetail;
@@ -39,12 +42,13 @@ public class ProductOrderService {
             } else{
                 cartDetail = new CartDetail(null,memberNo,null,productNo,productOrderDetailCount,product.getProductPrice());
             }
-                ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
+                ProductOrderDto.OrderList orderItem = new ProductOrderDto.OrderList(cartDetail.getProductNo(), product.getProductImages().get(0), product.getProductName(), memberPoint, cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*product.getProductPrice());
                 orderItems.add(orderItem);
+                memberPoint = orderItem.getMemberPoint();
                 orderTotalPrice += orderItem.getOrderTotalPrice();
         }
 
-        return new ProductOrderDto.Read(orderItems, orderTotalPrice);
+        return new ProductOrderDto.Read(orderItems, memberPoint, orderTotalPrice);
     }
 
 
