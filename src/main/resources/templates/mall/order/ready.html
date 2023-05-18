@@ -113,7 +113,43 @@
             });
             $form.appendTo($('body')).submit();
         })
+
+
     })
+</script>
+<script>
+    // 포인트 전액 사용
+    function fullUse() {
+        const memberPointElement = document.getElementById("memberPoint");
+        const pointInputElement = document.getElementById("pointInput");
+        if (memberPointElement && pointInputElement) {
+            const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
+
+            pointInputElement.value = memberPoint;
+            updateUsedPoint();
+
+        }
+    }
+
+    function updateUsedPoint() {
+        // 입력값 가져오기
+        const inputElement = document.getElementById("pointInput");
+        const usedPointElement = document.getElementById("usedPoint");
+
+        // 입력값을 가져와서 텍스트로 설정
+        const usedPoint = inputElement.value;
+        usedPointElement.innerText = "-" + usedPoint + "원";
+    }
+
+    function onPageLoad() {
+
+        // 입력값 변경 이벤트에 함수 연결
+        const inputElement = document.getElementById("pointInput");
+        inputElement.addEventListener("input", updateUsedPoint);
+    }
+
+    window.addEventListener("load", onPageLoad);
+
 </script>
 </head>
 <body>
@@ -184,11 +220,12 @@
             <br>
                 <div>
                     <span>보유</span>
-                    <span th:text="${#numbers.formatInteger(map.memberPoint,0,'COMMA')}+'원'"></span>
+                    <span id="memberPoint" th:text="${#numbers.formatInteger(map.memberPoint,0,'COMMA')}+'원'"></span>
                 </div>
                 <div>
-                    <span>사용</span>
-                    <span>원</span>
+                    <label for="pointInput">사용</label>
+                    <div><input type="number" id="pointInput" min="0">원</div>
+                    <button onclick="fullUse()" id="fullUse">전액사용</button>
                 </div>
         </div>
     <br>
@@ -215,7 +252,7 @@
                 </div>
                 <div>
                     <span>뼈다귀 포인트 사용</span>
-                    <span></span>
+                    <span id="usedPoint"></span>
                 </div>
         </div>
     <br>
