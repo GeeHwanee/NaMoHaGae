@@ -28,10 +28,10 @@ public class MemberDto {
         private Boolean memberCheckKaKao;
 
 
-        public Member toEntity(String encodedPassword, String memberProfileImage, String memberIntroduce,Integer townNo) {
+        public Member toEntity(String encodedPassword, String memberProfileImage, String memberIntroduce,Integer townNo,Boolean memberCheckKaKao) {
 
             return Member.builder().townNo(townNo).memberEmail(memberEmail).memberPassword(encodedPassword).memberNickname(memberNickname).memberPhone(memberPhone).
-                    memberIntroduce(memberIntroduce).memberProfileImage(memberProfileImage).memberLatitude(memberLatitude).memberLongitude(memberLongitude).memberCheckKaKao(false).build();
+                    memberIntroduce(memberIntroduce).memberProfileImage(memberProfileImage).memberLatitude(memberLatitude).memberLongitude(memberLongitude).memberCheckKaKao(memberCheckKaKao).build();
         }
 
     }
