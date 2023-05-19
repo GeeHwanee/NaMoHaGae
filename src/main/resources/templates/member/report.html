@@ -19,7 +19,7 @@
 
             formData.append('memberNo', $('#memberNo').val());
             formData.append('reportContent', $('#reportContent').val());
-            formData.append('reportCategory', $('#reportCotegory').val());
+            formData.append('reportCategory', $('#reportCategory').val());
 
             // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
             for(let key of formData.keys()){
@@ -68,7 +68,7 @@
                 <span id="reportContent_msg"></span>
             </div>
             <div class="mb-3 mt-3 d-grid">
-                <button id="report" type="button" class="btn btn-primary btn-block">가입</button>
+                <button id="report" type="button" class="btn btn-primary btn-block">신고</button>
             </div>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
