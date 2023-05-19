@@ -128,6 +128,9 @@
     #likeButton {
         margin-top:30px;
     }
+    .card-text {
+        padding-top:15px;
+    }
 
 </style>
 <body>
@@ -151,7 +154,7 @@
                         <span id="recommendCountSpan" th:text="${board.boardRecommendCount}"></span>
                         </div>
                     </div>
-                    <p th:text="${board.boardContent}" class="card=text">내용이 들어갈 부분입니다.</p>
+                    <p th:text="${board.boardContent}" class="card-text">내용이 들어갈 부분입니다.</p>
 
 
 
