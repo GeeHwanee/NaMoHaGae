@@ -67,7 +67,7 @@
     }
 
     function searchProduct(event) {
-        if (event.key === 'Enter' || event.keyCode === 13) {
+        if (event.key === 'Enter' || event.keyCode === 13 || event.target.classList.contains('searchIcon')) {
             const searchInput = document.getElementById('searchInput');
             const searchProduct = searchInput.value;
 
@@ -100,9 +100,6 @@
         })
     })
 </script>
-<script>
-
-</script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -110,9 +107,10 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
+
         <div class="search">
             <input id="searchInput" type="text" placeholder="상품명 입력" onkeydown="searchProduct(event)">>
-            <span id="searchProduct" onclick="searchProduct(event)" class="fa-solid fa-magnifying-glass"></span>
+            <span class="searchIcon fa-solid fa-magnifying-glass" onclick="searchProduct(event)"></span>
         </div>
 
         <div class="product-filter">
@@ -140,6 +138,13 @@
                         </div>
                       </div>
                     </span>
+                    <div th:classappend="${p.reviewCount == 0? 'hide':''}">
+                        <span class="productGrade">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span th:text="${p.productGrade}"></span>
+                            <span th:text="' (' + ${p.reviewCount} + '건)'"></span>
+                        </span>
+                    </div>
                     <div>
                         <span th:classappend="${p.favoriteEnabled ? '' : 'hide'}" th:data-productNo="${p.productNo}" class="product-favorite">
                            <i class="fa-solid fa-heart fa-xl"></i> 찜하기 취소

@@ -53,6 +53,7 @@ public class ProductDto {
         private Integer productPrice;
         private Integer productStock;
         private Double productGrade;
+        private Integer reviewCount;
         private String productImage;
         private Boolean favoriteEnabled;
     }
