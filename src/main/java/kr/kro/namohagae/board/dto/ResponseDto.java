@@ -12,6 +12,7 @@ import java.util.List;
 public class ResponseDto {
     private PageDto pageDto;
     private List<BoardTownListDto> boardTownListDto;
-
+    private List<BoardTownListDto> boardTownReadCountDto;
+    private List<BoardTownListDto> boardTownRecommendCountDto;
 
 }

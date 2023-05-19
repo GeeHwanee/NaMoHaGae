@@ -12,6 +12,7 @@ import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.*;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
+import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
@@ -82,6 +83,8 @@ public class GlobalController {
     private BoardTownService boardTownService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private TownService townService;
 
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
@@ -327,9 +330,20 @@ public class GlobalController {
 
         return "board/free/list";
     }
+    @GetMapping("/board/notice/read")
+    public String noticeRead(Model model,Integer boardNoticeNo){
+
+        boardNoticeService.increaseReadCnt(boardNoticeNo);
+        model.addAttribute("read",boardNoticeService.read(boardNoticeNo));
+
+        return "board/notice/read";
+    }
 
     @GetMapping("/board/notice/list")
-    public String noticeList(){
+    public String noticeList(Model model) {
+
+        model.addAttribute("list", boardNoticeService.list());
+
         return "board/notice/list";
     }
 
@@ -374,8 +388,10 @@ public class GlobalController {
     }
 
     @GetMapping("/board/town/list")
-    public String townList(){
+    public String townList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails,Principal principal){
 
+        model.addAttribute("town",townService.findFuck(memberDao.findNoByUsername(principal.getName())));
+        model.addAttribute("logintownNo",myUserDetails.getTownNo());
 
         return "board/town/list";
     }

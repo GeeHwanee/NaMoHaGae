@@ -7,7 +7,7 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>공지사항 게시물 상세 페이지</title>
+    <title>공지사항 게시판 읽기 페이지</title>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -15,11 +15,27 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>공지사항 게시물 상세 페이지</h1>
-        <article></article>
+        <div class="card">
+            <div class="card-body">
+                <h5 th:text="${read.boardNoticeTitle}" class="card-title">제목입니다.</h5>
+                <h6 th:text="${#temporals.format(read.boardNoticeWriteDate, 'yyyy-MM-dd HH:mm:ss')}" class="card-subtitle mb=2 text-muted"></h6>
+                <p th:text="${read.boardNoticeContent}" class="card=text">내용이 들어갈 부분입니다.</p>
+
+                <button onclick="listFn()">목록</button>
+
+
+            </div>
+        </div>
+
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
+<script>
+    const listFn = () => {
+
+        location.href = "/board/notice/list"
+    }
+</script>
 </html>
