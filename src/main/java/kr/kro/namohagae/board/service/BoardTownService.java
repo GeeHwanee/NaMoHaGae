@@ -36,6 +36,20 @@ public class BoardTownService {
 
     }
 
+    public List<BoardTownListDto> boardTownReadCountList(Integer townNo, String searchName, int page) {
+        int pageLimit = 10;
+        int pagingStart = (page - 1) * pageLimit;
+
+        return boardTownDao.boardTownReadCountList(townNo,searchName,pagingStart,pageLimit);
+    }
+
+    public List<BoardTownListDto> boardTownRecommendCountList(Integer townNo, String searchName, int page) {
+        int pageLimit = 10;
+        int pagingStart = (page - 1) * pageLimit;
+
+        return boardTownDao.boardTownRecommendCountList(townNo,searchName,pagingStart,pageLimit);
+    }
+
     public BoardList boardTownRead(Integer boardNo) {
 
         return boardTownDao.boardTownRead(boardNo);

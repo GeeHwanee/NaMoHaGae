@@ -29,48 +29,88 @@
 
     }
 </style>
-<script type="text/javascript">
+<script th:inline="javascript">
     function printBoard(boardTownListDto) {
         const $tbody = $('#tbody');
         $tbody.empty(); // tbody 비우기
 
         for (const b of boardTownListDto) {
             const tpl = `<tr>
-                     <td>${b.boardNo}</td>
-                     <td>${b.townNo}</td>
-                     <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
-                     <td>${b.memberNickname}</td>
-                     <td>${b.boardWriteDate.replace('T', ' ')}</td>
-                     <td>${b.boardReadCount}</td>
-                    </tr>`;
+                 <td>${b.boardNo}</td>
+                 <td>${b.townNo}</td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
+                 <td>${b.memberNickname}</td>
+                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
+                 <td>${b.boardReadCount}</td>
+                 <td>${b.boardRecommendCount}</td>
+                </tr>`;
             $tbody.append(tpl);
         }
     };
+    function printBoard2(boardTownReadCountDto) {
+        const $tbody = $('#tbody2');
+        $tbody.empty(); // tbody 비우기
 
+        for (const b of boardTownReadCountDto) {
+            const tpl = `<tr>
+                 <td>${b.boardNo}</td>
+                 <td>${b.townNo}</td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
+                 <td>${b.memberNickname}</td>
+                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
+                 <td>${b.boardReadCount}</td>
+                 <td>${b.boardRecommendCount}</td>
+                </tr>`;
+            $tbody.append(tpl);
+        }
+    };
+    function printBoard3(boardTownRecommendCountDto) {
+        const $tbody = $('#tbody3');
+        $tbody.empty(); // tbody 비우기
 
-    function printTownDong(){
-        const $townGu = $('#townGu').val();
-        console.log($townGu);
-        $.ajax({
-            url: `/api/v1/town/find?townGu=${$townGu}`,
-            method: 'GET',
-            success: function (list) {
-                const $townDong = $('#townDong').empty();
-                let tpl = ` <option selected disabled>구 선택</option>`;
-                $townDong.append(tpl);
-                for (const town of list) {
-                    tpl = `
-                        <option value="${town.townNo}">${town.townDong}</option>
-                    `
-                    $townDong.append(tpl);
-                }
+        for (const b of boardTownRecommendCountDto) {
+            const tpl = `<tr>
+                 <td>${b.boardNo}</td>
+                 <td>${b.townNo}</td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
+                 <td>${b.memberNickname}</td>
+                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
+                 <td>${b.boardReadCount}</td>
+                 <td>${b.boardRecommendCount}</td>
+                </tr>`;
+            $tbody.append(tpl);
+        }
+    };
+    function printReadCount(){
+        const $readCount = $('#readCount');
+        $readCount.empty();
 
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr, status, error);
-            }
-        });
+        const tql = `
+                    <button onclick="fuck2()">전체글</button>
+                    <button onclick="fuck()">조회순</button>
+                    <button onclick="fuck3()">추천순</button>
+                     `
+
+        $readCount.append(tql);
     }
+
+    function fuck(){
+        $('#tbody3').hide();
+        $('#tbody2').show();
+        $('#tbody').hide();
+    }
+    function fuck2(){
+        $('#tbody3').hide();
+        $('#tbody2').hide();
+        $('#tbody').show();
+    }
+    function fuck3(){
+        $('#tbody2').hide();
+        $('#tbody').hide();
+        $('#tbody3').show();
+    }
+
+
     function onSearch() {
         const searchName = $('#searchName').val();
         onChangePage(1, searchName);
@@ -133,10 +173,16 @@
         const boardTownListDto = board.boardTownListDto;
         console.log('안녕하세요', board);
         printBoard(boardTownListDto);
+        const boardTownReadCountListDto = board.boardTownReadCountDto
+        printBoard2(boardTownReadCountListDto);
+        const boardTownRecommendCountListDto = board.boardTownRecommendCountDto
+        printBoard3(boardTownRecommendCountListDto);
         const searchName = "";
         printSearch(searchName);
         const paging = board.pageDto;
         printPaging(paging);
+        printReadCount();
+
     }
 
     function onError(xhr, status, error) {
@@ -163,7 +209,35 @@
             error: onError
         });
     }
+    function printTownDong() {
+        const $townGu = $('#townGu').val();
+        console.log($townGu);
+        $.ajax({
+            url: `/api/v1/town/find?townGu=${$townGu}`,
+            method: 'GET',
+            success: function (list) {
+                const $townDong = $('#townDong').empty();
+                let tpl = ` <option selected disabled>구 선택</option>`;
+                $townDong.append(tpl);
+                for (const town of list) {
+                    tpl = `
+                    <option value="${town.townNo}">${town.townDong}</option>
+                `;
+                    $townDong.append(tpl);
+                }
+                 const logintownNo = [[${logintownNo}]];
+                console.log('이거값뭐야'+logintownNo);
+                    $('select[name="townDong"]').val(logintownNo);
 
+
+                // 페이지를 1로 초기화하고 API 요청
+                onChangePage(1, '');
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr, status, error);
+            }
+        });
+    }
     // select 요소에서 값이 변경될 때마다 호출되는 함수
     function onChangeTownNo() {
         const townNo = $('select[name="townDong"]').val();
@@ -173,14 +247,13 @@
             return;
         }
 
+
         // 페이지를 1로 초기화하고 API 요청
         onChangePage(1);
     }
 
     $(document).ready(function () {
-        $('#townGu').on('change', function () {
-            printTownDong();
-        });
+        printTownDong();
         // select 요소 값 변경 이벤트 등록
         $('select[name="townDong"]').on('change', onChangeTownNo);
     });
@@ -192,9 +265,11 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>동네 게시판</h1>
+        <div th:text="${logintownNo}" id="logintownNo"></div>
+        <div th:text="${town.townGu}" id="loginTownGu"></div>
         <select class="form-select" aria-label="Default select example" id="townGu" name="townGu">
             <option selected disabled>구 선택</option>
-            <option value="미추홀구">미추홀구</option>
+            <option th:value="${town.townGu}" th:text="${town.townGu}" selected>미추홀구</option>
         </select>
         <select class="form-select" id="townDong" name="townDong">
             <option selected disabled>구 부터 선택해주세요</option>
@@ -211,16 +286,21 @@
                     <th>글쓴이</th>
                     <th>글쓴시간</th>
                     <th>조회수</th>
+                    <th>추천수</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
                 </tbody>
+                <tbody id="tbody2" style="display:none">
+                </tbody>
+                <tbody id="tbody3" style="display:none">
+                </tbody>
             </table>
+            <div id="readCount">
+            </div>
             <div class="layout2">
-
             </div>
             <div class="layout3">
-
             </div>
             <a class="card-link" th:href="@{/board/town/write}">글쓰기</a>
         </article>
