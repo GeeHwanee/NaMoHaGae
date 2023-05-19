@@ -20,7 +20,7 @@
     <select id="findReportByMemberNo" resultType="Integer">
         select report_no from block where member_no=#{memberNo}
     </select>
-    <select id="findDeadlineDateByMemberNo" resultType="java.time.LocalDateTime">
+    <select id="findDeadlineDateByMemberNo" resultType="java.time.LocalDate">
         select block_deadline_date from blcok where member_no=#{memberNo}
     </select>
 </mapper>

@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.dto;
 import kr.kro.namohagae.global.entity.Block;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class BlockDto {
@@ -12,8 +13,8 @@ public class BlockDto {
         private Integer reportNo;
         private String blockDeadlineDate;
 
-        public Block toEntity(LocalDateTime blockDeadlineDate){
-          return   Block.builder().memberNo(memberNo).reportNo(reportNo).blockDeadLineDate(blockDeadlineDate).build();
+        public Block toEntity(LocalDate blockDeadlineDate){
+          return   Block.builder().memberNo(memberNo).reportNo(reportNo).blockDeadlineDate(blockDeadlineDate).build();
         }
     }
 }
