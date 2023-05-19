@@ -39,7 +39,7 @@
                  <tr>
                 <td>${r.reportContent}</td>
                 <td><button type="button" id="delete-${i}" class="btn btn-primary btn-block">삭제</button></td>
-                <td><a type="button" href="/admin/report/block?memberNo=${r.memberNo}&reportNo=${r.reportNo}" class="btn btn-danger" style="color: beige;">계정 정지</a></td>
+                <td><a type="button" href="/admin/report/block?memberNo=${r.memberNo}&reportNo=${r.reportNo}" target="_blank" class="btn btn-danger" style="color: beige;">계정 정지</a></td>
                 </tr>
                 <input type="hidden" id="reportNo-${i}" value="${r.reportNo}">
                     `;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,20 +26,28 @@ public class BlockService {
     public Boolean save(BlockDto.save dto) {
         String dateString = dto.getBlockDeadlineDate();
         String pattern = "yyyy-MM-dd";
-        LocalDateTime dateTime = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern(pattern));
+        LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(pattern));
         Block block = dto.toEntity(dateTime);
+        System.out.println(dto.getMemberNo());
+        Boolean check = blockDao.checkByMemberNo(dto.getMemberNo());
+        System.out.println(check);
+        if (check == true){
+            return false;
+        }
         memberDao.memberEnabled(dto.getMemberNo(),false);
         return blockDao.save(block);
     }
-    public Boolean delete(LocalDateTime today){
+    public Boolean delete(LocalDate today){
         List<Integer> leavePrisons = blockDao.findMemberNoByToday(today);
-
+        System.out.println(today);
+        Boolean a = blockDao.delete(today);
         for (Integer i: leavePrisons) {
+            System.out.println(i);
             Integer result = blockDao.findReportByMemberNo(i);
-            memberDao.memberEnabled(i,true);
             reportDao.delete(result);
+            memberDao.memberEnabled(i,true);
         }
-        return blockDao.delete(today);
+        return a;
     }
 
 }

@@ -10,15 +10,18 @@
   <title>블락</title>
   <script>
     $(document).ready(function (){
-
+      const param = new URLSearchParams(location.search);
+      const memberNo = param.get('memberNo')
+      const reportNo = param.get('reportNo')
       $('#block').click(function(){
+
         // FormData 처리 방식
         // 1. new FormData($('폼아이디')[0]);
         // 2. new FormData() -> 원소를 하나씩 append
         const formData = new FormData();
 
-        formData.append('memberNo', $('#memberNo').val());
-        formData.append('reportNo', $('#reportNo').val());
+        formData.append('memberNo', memberNo);
+        formData.append('reportNo', reportNo);
         formData.append('blockDeadlineDate', $('#blockDeadlineDate').val());
 
         // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
@@ -53,8 +56,6 @@
   <aside th:replace="~{fragments/aside :: aside}"></aside>
   <section>
     <h1>회원 가입</h1>
-    <input type="hidden" th:value="${memberNo}" id="memberNo" name="memberNo">
-    <input type="hidden"th:value="${reportNo}" id="reportNo" name="reportNo">
     <div class="mb-3 mt-3">
       <label for="blockDeadlineDate">기간</label>
       <input type="date" name="blockDeadlineDate" id="blockDeadlineDate" class="form-control">
