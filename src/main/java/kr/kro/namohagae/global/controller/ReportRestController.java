@@ -17,20 +17,17 @@ public class ReportRestController {
     @Autowired
     private ReportService reportService;
     @GetMapping(value="/report/findAll", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAll(@RequestParam(defaultValue="1") Integer pageno, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Integer memberNo= myUserDetails.getMemberNo();
-        return ResponseEntity.ok(reportService.findAll(pageno,memberNo));
+    public ResponseEntity<?> findAll(@RequestParam(defaultValue="1") Integer pageno,String nickname) {
+        Integer memberNo = reportService.findMemberNoByNickname(nickname);
+        if (nickname!=null&&nickname.trim().equals("")==false){
+            return ResponseEntity.ok(reportService.findAllByMemberNo(pageno,memberNo));
+        }
+        return ResponseEntity.ok(reportService.findAll(pageno));
     }
     @PostMapping("report/save")
     public ResponseEntity<Boolean> save(@AuthenticationPrincipal MyUserDetails myUserDetails, ReportDto.Save dto){
         Integer reportMemberNo = myUserDetails.getMemberNo();
-        reportService.save(dto,reportMemberNo);
         return ResponseEntity.ok(reportService.save(dto,reportMemberNo));
-    }
-    @GetMapping(value="/report/findAllByMemberNo", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAllByMemberNo(@RequestParam(defaultValue="1") Integer pageno, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Integer memberNo= myUserDetails.getMemberNo();
-        return ResponseEntity.ok(reportService.findAllByMemberNo(pageno,memberNo));
     }
     @PostMapping("/report/delete")
     public ResponseEntity<Boolean> delete(Integer reportNo){
