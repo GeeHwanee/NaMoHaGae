@@ -13,10 +13,10 @@
       $('#review').empty();
       const $tbody = $('#review');
       for(const r of review) {
-        const tpl = `<tr>
+        const tpl = `
 				<td>${r.reviewWriter}</td>
 				<td>${r.reviewContent}</td>
-			</tr>`;
+			`;
         $tbody.append(tpl);
       }
     }
