@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.kro.namohagae.global.dao.BlockDao">
+
+    <insert id="save">
+        insert into block(block_no,member_no,report_no,block_date,block_deadline_date) values (block_seq_block_no.nextval,#{memberNo},#{reportNo},sysdate,#{blockDeadlineDate})
+    </insert>
+    <delete id="delete">
+        delete form block where block_deadline_date=#{today}
+    </delete>
+    <select id="findMemberNoByToday" resultType="Integer">
+        select member_no from block where block_deadline_date = #{today}
+    </select>
+    <select id="checkByMemberNo" resultType="Boolean">
+        select count(*) from block where member_no=#{memberNo}
+    </select>
+    <select id="findReportByMemberNo" resultType="Integer">
+        select report_no from block where member_no=#{memberNo}
+    </select>
+    <select id="findDeadlineDateByMemberNo" resultType="java.time.LocalDateTime">
+        select block_deadline_date from blcok where member_no=#{memberNo}
+    </select>
+</mapper>
