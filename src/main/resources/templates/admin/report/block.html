@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <!------------------------------------------------------------------------------------------------------------------------------>
+  <!--기본 CND, Script, CSS 내장 삽입-->
+  <th:block th:replace="~{fragments/head :: head}"></th:block>
+  <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+
+  <!------------------------------------------------------------------------------------------------------------------------------>
+  <title>블락</title>
+  <script>
+    $(document).ready(function (){
+
+      $('#block').click(function(){
+        // FormData 처리 방식
+        // 1. new FormData($('폼아이디')[0]);
+        // 2. new FormData() -> 원소를 하나씩 append
+        const formData = new FormData();
+
+        formData.append('memberNo', $('#memberNo').val());
+        formData.append('reportNo', $('#reportNo').val());
+        formData.append('blockDeadlineDate', $('#blockDeadlineDate').val());
+
+        // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
+        for(let key of formData.keys()){
+          console.log(key+" : "+formData.get(key));
+        }
+        // 1. Multipart-formdata: contentType: false
+        // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
+        //		{username:'spring', nai:20} -> ?username=spring&nai=20}
+        try{
+          $.ajax({
+            url: "/api/v1/block/save",
+            method:'post',
+            data: formData,
+            processData:false, 	// urlencoded 자동 변환 옵션
+            contentType:false 	// Multipart-formdata 지정 옵션
+          });
+          setTimeout(function(){
+            window.close();
+          }, 1000);
+        }catch(err){
+          alert('신고 불가');
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/nav :: nav}"></nav>
+<main>
+  <aside th:replace="~{fragments/aside :: aside}"></aside>
+  <section>
+    <h1>회원 가입</h1>
+    <input type="hidden" th:value="${memberNo}" id="memberNo" name="memberNo">
+    <input type="hidden"th:value="${reportNo}" id="reportNo" name="reportNo">
+    <div class="mb-3 mt-3">
+      <label for="blockDeadlineDate">기간</label>
+      <input type="date" name="blockDeadlineDate" id="blockDeadlineDate" class="form-control">
+    </div>
+    <div class="mb-3 mt-3 d-grid">
+      <button id="block" type="button" class="btn btn-primary btn-block">입력</button>
+    </div>
+  </section>
+  <aside th:replace="~{fragments/bside :: bside}"></aside>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
