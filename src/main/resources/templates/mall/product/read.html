@@ -347,9 +347,7 @@
         calculateTotalPrice(1);
 
         // 리뷰 별점 평균 출력
-         printReviewStar(data.productGrade, data.reviewCount);
-
-
+        printReviewStar(data.productGrade, data.reviewCount);
     });
 </script>
 <script>
@@ -396,6 +394,14 @@
 </script>
 <script>
     function printReviewStar(productGrade, reviewCount) {
+        if (productGrade === null) {
+            const productGradeElement = document.querySelector('.productGrade');
+            if (productGradeElement) {
+                productGradeElement.classList.add('hide');
+            }
+            return;
+        }
+
         const fullStars = Math.floor(productGrade);
         const halfStar = productGrade - fullStars;
         const emptyStars = 5 - fullStars - (halfStar > 0 ? 1 : 0);
@@ -414,7 +420,10 @@
         const productGradeHTML = starsHTML + ' ' + productGrade.toFixed(1);
         const reviewCountHTML = '(' + reviewCount + '건)';
 
-        document.querySelector('.productGrade').innerHTML = productGradeHTML + ' ' + reviewCountHTML;
+        const productGradeElement = document.querySelector('.productGrade');
+        if (productGradeElement) {
+            productGradeElement.innerHTML = productGradeHTML + ' ' + reviewCountHTML;
+        }
     }
 </script>
 <script th:inline="javascript">

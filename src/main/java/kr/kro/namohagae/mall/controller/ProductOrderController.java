@@ -44,10 +44,9 @@ public class ProductOrderController {
 
     @GetMapping("/mall/order/ready")
     public ModelAndView orderList(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        System.out.println("카페 통과 1"); //
         List<Integer> checkedProductNos = (List<Integer>)session.getAttribute("checkedProductNos");
         Integer productOrderDetailCount = (Integer)session.getAttribute("productOrderDetailCount");
-        session.removeAttribute("checkedProductNos");
-        session.removeAttribute("productOrderDetailCount");
         ProductOrderDto.Read order;
         if (checkedProductNos != null) {
             order = service.orderReady(myUserDetails.getMemberNo(), checkedProductNos, productOrderDetailCount);
@@ -68,6 +67,8 @@ public class ProductOrderController {
     public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
                              @RequestParam Integer addressNo, @RequestParam(required = false) Integer usedMemberPoint,
                              @RequestParam String orderTotalPrice,  RedirectAttributes ra) {
+        System.out.println("카페 통과 2");
+
         Map<String, Object> map = (Map<String, Object>)session.getAttribute("map");
         List<ProductOrderDto.OrderList> orderItems = (List<ProductOrderDto.OrderList>)map.get("orderItems");
         Integer totalPrice = Integer.parseInt(orderTotalPrice.replace("원", "").trim());
@@ -79,9 +80,13 @@ public class ProductOrderController {
 
     // 주문 결과 보기
     @GetMapping("/mall/order/success")
-    public String orderSuccess(Model model, HttpServletRequest req, RedirectAttributes ra) {
+    public String orderSuccess(HttpSession session, Model model, HttpServletRequest req, RedirectAttributes ra) {
+        System.out.println("카페 통과 3");
+        session.removeAttribute("checkedProductNos");
+        session.removeAttribute("productOrderDetailCount");
         Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
         if (paramMap != null) {
+            System.out.println("카페 통과 4");
             Integer orderNo = (Integer) paramMap.get("orderNo");
             ProductOrderDto.OrderResult order = service.findById(orderNo);
 
@@ -92,6 +97,7 @@ public class ProductOrderController {
             model.addAttribute("productOrderDate", productOrderDate);
             return "mall/order/success";
         } else {
+            System.out.println("카페 통과 5"); //
             ra.addFlashAttribute("msg", "잘못된 작업입니다");
             return "redirect:/mall/main";
         }
@@ -100,6 +106,7 @@ public class ProductOrderController {
     // 주문 목록 보기
     @GetMapping(value = "/mall/order/list")
     public void orderList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        System.out.println("카페 통과 6");
         model.addAttribute("orders", service.orderList(myUserDetails.getMemberNo()));
     }
 

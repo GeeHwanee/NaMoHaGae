@@ -81,8 +81,8 @@
                 taxFreeAmount = Math.round(cartTotalPrice/10);
             }else{
                 let i=0;
-                for (const item of data.items) {
-                    cartDetailCount += data.items[i].cartDetailCount;
+                for (const item of data.orderItems) {
+                    cartDetailCount += data.orderItems[i].cartDetailCount;
                     i++;
                 }
                 cartTotalPrice = data.orderTotalPrice;

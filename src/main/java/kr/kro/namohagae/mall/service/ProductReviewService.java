@@ -30,12 +30,6 @@ public class ProductReviewService {
         productDao.updateProductGradebyReviewStar(dto.getProductNo());
     }
 
-    // 수정중 0517
-    /*
-    public ProductOrderDetail read(Integer productOrderDetailNo) {
-        return productOrderDetailDao.findByOrderDetailNo(productOrderDetailNo);
-    }
-     */
     public ProductOrderDetailDto.OrderInformation read(Integer productOrderDetailNo) {
         return productOrderDetailDao.findByOrderDetailNo(productOrderDetailNo);
     }
