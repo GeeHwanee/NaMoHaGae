@@ -1,6 +1,7 @@
 package kr.kro.namohagae.global.dto;
 
 
+import jdk.jfr.DataAmount;
 import lombok.Data;
 
 public class TownDto {
@@ -14,5 +15,13 @@ public class TownDto {
     public static class Gu{
         private String townGu;
     }
+    @Data
+    public static class userGuAndDong{
+        private Integer townNo;
+        private String townGu;
+        private String townDong;
+    }
+
+
 
 }

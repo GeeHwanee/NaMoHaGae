@@ -15,6 +15,9 @@ public interface BoardTownDao {
 
     public List<BoardTownListDto> boardTownList(Integer townNo,@Param("searchName") String searchName, @Param("start") int start, @Param("limit") int limit);
 
+    public List<BoardTownListDto> boardTownReadCountList(Integer townNo,@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
+
+    public List<BoardTownListDto> boardTownRecommendCountList(Integer townNo,@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
     public BoardList boardTownRead(Integer boardNo);
 
 

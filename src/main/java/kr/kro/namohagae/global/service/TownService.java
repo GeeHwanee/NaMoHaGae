@@ -17,4 +17,9 @@ public class TownService {
     }
 
     public List<TownDto.Gu> findGu(){return  townDao.findGu();}
+
+    public TownDto.userGuAndDong findFuck(Integer memberNo){
+
+        return townDao.findFuck(memberNo);
+    }
 }
