@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.BoardTownDto;
 import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
@@ -125,7 +126,12 @@ public class GlobalController {
     }
 
     @GetMapping("/login")
-    public void login(){}
+    public void login(HttpSession session, Model model){
+        if (session.getAttribute("msg")!=null) {
+            model.addAttribute("msg", session.getAttribute("msg"));
+            session.removeAttribute("msg");
+        }
+    }
 
     // [회원 파트]--------------------------------------------------------------------
     @GetMapping("/member/join")
@@ -151,10 +157,7 @@ public class GlobalController {
 
     @PostMapping("/member/addJoin")
     public String addJoin(MemberDto.Join dto){
-        System.out.println("아니면 여기?");
         memberService.join(dto);
-        System.out.println(dto.getMemberEmail());
-        System.out.println("");
         return "redirect:/";
     }
 
@@ -470,12 +473,15 @@ public class GlobalController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/admin/report/list")
-    public String adminReportList(){ return "admin/report/list";}
+    @GetMapping("/admin/report/report")
+    public String adminReportList(){ return "admin/report/report";}
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/product/write")
     public void adminProductWrite(){}
 
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/report/block")
+    public void adminBlock(){}
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/product/write")
     public String adminProductWrite(ProductDto.Add dto){
