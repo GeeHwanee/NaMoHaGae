@@ -17,4 +17,8 @@ public interface ReportDao {
     public List<ReportDto.FindAll> findAllByMemberNo(Integer memberNo,Integer startRownum,Integer endRownum);
 
     public  Integer countReportByMemberNo(Integer memberNo);
+
+    public Integer countAll();
+
+    public Integer findMemberNoByNickname(String nickname);
 }
