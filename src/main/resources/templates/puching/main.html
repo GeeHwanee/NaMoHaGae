@@ -207,7 +207,7 @@
                async function locationLoadError(pos){
                     var defalut_LatLng = new kakao.maps.LatLng(37.4398411, 126.6640894)
 
-                    await map.panTO(defalut_LatLng)
+                    await map.panTo(defalut_LatLng)
 
                     alert('위치 정보를 못가져왔넹')
                     await $('#loading').hide();

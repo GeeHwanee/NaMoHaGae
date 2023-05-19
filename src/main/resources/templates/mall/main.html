@@ -11,7 +11,106 @@
 
 </head>
 <style>
+    @import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
 
+
+
+    :root {
+        font-size: 16px;
+    }
+
+    .mall-body{
+        font-family: "Black Ops One", cursive;
+        overflow: hidden;
+        margin: 0;
+        background-color: #dfe9f3;
+        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mall-container {
+        width: 100%;
+        display: flex;
+        padding: 0 20px;
+    }
+
+    .slide {
+        height: 80vh;
+        border-radius: 20px;
+        margin: 10px;
+        cursor: pointer;
+        color: #fff;
+        flex: 1;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        transition: all 0.7s ease-in-out;
+        filter: blur(4px);
+    }
+
+    .slide h3 {
+        position: absolute;
+        font-size: clamp(1rem, 5vw, 5rem);
+        bottom: 20px;
+        left: 20px;
+        margin: 0;
+        opacity: 0;
+        background-color: #e3fdf5;
+        background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .slide.active {
+        flex: 10;
+        filter: blur(0px);
+    }
+
+    .slide.active h3 {
+        opacity: 1;
+        transition: opacity 0.3s ease-in 0.4s;
+    }
+
+    @media screen and (max-width: 50rem) {
+        .container {
+            display: flex;
+            height: 90vh;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            width: 90vw;
+            border-radius: 20px;
+            margin: 10px;
+            cursor: pointer;
+            color: #fff;
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            transition: all 0.7s ease-in-out;
+            filter: blur(4px);
+        }
+
+        .slide.active {
+            flex: 10;
+            filter: blur(0px);
+        }
+
+        .slide h3 {
+            left: 5px;
+        }
+    }
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -20,6 +119,56 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>몰 메인</h1>
+        <div class="mall-body">
+        <div class="mall-container">
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1477764250597-dffe9f601ae8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=80');">
+                <h3>Tiger</h3>
+            </div>
+            <div class="slide" style="
+          background-image: url('https://images.unsplash.com/photo-1456926631375-92c8ce872def?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+        ">
+                <h3>Leopard</h3>
+            </div>
+            <div class="slide" style="
+          background-image: url('https://images.unsplash.com/photo-1470848051974-964b789cb6fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80');
+        ">
+                <h3>Lion</h3>
+            </div>
+            <div class="slide" style="
+          background-image: url('https://images.unsplash.com/photo-1526289636136-bce3fd37f962?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80');
+        ">
+                <h3>Snowleopard</h3>
+            </div>
+            <div class="slide" style="
+          background-image: url('https://images.unsplash.com/photo-1515970501993-dafc9f582f3e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+        ">
+                <h3>Puma</h3>
+            </div>
+        </div>
+        </div>
+        <script>
+            function slidesPlugin(activeSlide = 2) {
+                const slides = document.querySelectorAll(".slide");
+
+                slides[activeSlide].classList.add("active");
+
+                for (const slide of slides) {
+                    slide.addEventListener("click", () => {
+                        clearActiveClasses();
+
+                        slide.classList.add("active");
+                    });
+                }
+
+                function clearActiveClasses() {
+                    slides.forEach((slide) => {
+                        slide.classList.remove("active");
+                    });
+                }
+            }
+
+            slidesPlugin();
+        </script>
        <article></article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
