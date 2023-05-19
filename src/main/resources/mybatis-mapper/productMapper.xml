@@ -165,7 +165,8 @@
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by p.product_no desc
+        and product_name like '%' || #{productName} || '%'
+        order by p.product_name asc
         ) p
         where rownum&lt;=#{endRowNum}
         )
@@ -216,7 +217,7 @@
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by p.product_no desc
+        order by p.product_grade desc
         ) p
         where rownum&lt;=#{endRowNum}
         )
@@ -241,7 +242,7 @@
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by p.product_no desc
+        order by trim(product_name) asc
         ) p
         where rownum&lt;=#{endRowNum}
         )
