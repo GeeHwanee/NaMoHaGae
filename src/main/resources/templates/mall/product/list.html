@@ -100,9 +100,6 @@
         })
     })
 </script>
-<script>
-
-</script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -140,6 +137,13 @@
                         </div>
                       </div>
                     </span>
+                    <div th:classappend="${p.reviewCount == 0? 'hide':''}">
+                        <span class="productGrade">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span th:text="${p.productGrade}"></span>
+                            <span th:text="' (' + ${p.reviewCount} + '건)'"></span>
+                        </span>
+                    </div>
                     <div>
                         <span th:classappend="${p.favoriteEnabled ? '' : 'hide'}" th:data-productNo="${p.productNo}" class="product-favorite">
                            <i class="fa-solid fa-heart fa-xl"></i> 찜하기 취소

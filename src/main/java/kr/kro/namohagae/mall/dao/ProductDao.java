@@ -22,9 +22,6 @@ public interface ProductDao {
     // 상품 상세 보기
     public ProductDto.Read findByProductNo(Integer productNo);
 
-    // 사용자가 구매하기 선택한 상품 검색
-    public ProductDto.Read findByMemberNoAndProductNo(Integer memberNo, Integer productNo);
-
     // 상품 번호 찾아서 재고 업데이트
     //public void updateStockByProductNo(List<Integer> productNos, Integer productOrderDetailNo);
     public void updateStockByProductNo(Map<String, Object> params);
