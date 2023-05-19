@@ -57,7 +57,7 @@ public class ProductController {
 
         redirectAttributes.addAttribute("categoryNo", categoryNo);
         redirectAttributes.addAttribute("sortBy", sortBy);
-        redirectAttributes.addAttribute("searchProduct", "");
+//        redirectAttributes.addAttribute("searchProduct", "");
         return "redirect:/mall/product/list";
     }
 }
