@@ -87,7 +87,7 @@
 
     <!-- 결제할 상품 정보 불러오기 -->
     <select id="findWithProduct" resultType="ProductOrderDetail">
-        SELECT 'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        SELECT #{url} || pi.product_image_filename as product_image,
         p.product_no,
         p.product_name,
         cd.cart_detail_count,

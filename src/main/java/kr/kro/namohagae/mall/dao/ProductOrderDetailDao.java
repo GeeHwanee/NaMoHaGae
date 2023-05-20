@@ -10,7 +10,7 @@ public interface ProductOrderDetailDao {
     public Integer save(ProductOrderDetail productOrderDetail);
 
     // 내가 쓴 리뷰
-    public ProductOrderDetailDto.OrderInformation findByOrderDetailNo(Integer productOrderDetailNo);
+    public ProductOrderDetailDto.OrderInformation findByOrderDetailNo(String url, Integer productOrderDetailNo);
 
     // 리뷰 작성 완료
     public Integer updateReview(Integer productOrderDetailNo);

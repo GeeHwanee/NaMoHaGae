@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.CartDao;
 import kr.kro.namohagae.mall.dao.CartDetailDao;
 import kr.kro.namohagae.mall.dao.ProductDao;
@@ -72,7 +73,7 @@ public class CartService {
         List<CartDetailDto.CartDetailList> items = new ArrayList<>();
         int totalPrice = 0;
         for (CartDetail cartDetail : carts) {
-            ProductDto.Read dto = productDao.findByProductNo(cartDetail.getProductNo());
+            ProductDto.Read dto = productDao.findByProductNo(ImageConstants.IMAGE_PRODUCT_URL,cartDetail.getProductNo());
             CartDetailDto.CartDetailList item = new CartDetailDto.CartDetailList(cartDetail.getProductNo(), dto.getProductImages().get(0), dto.getProductName(), dto.getProductStock(), cartDetail.getCartDetailCount(), cartDetail.getCartDetailPrice(), cartDetail.getCartDetailCount()*dto.getProductPrice());
             items.add(item);
             totalPrice += item.getCartTotalPrice();

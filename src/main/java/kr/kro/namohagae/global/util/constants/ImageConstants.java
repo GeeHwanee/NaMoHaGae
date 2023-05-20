@@ -1,17 +1,16 @@
 package kr.kro.namohagae.global.util.constants;
 
-/*
-    작성자: 박지환
-    작성일: 23-05-20
- */
-
 import kr.kro.namohagae.global.util.ConsoleColor;
 
-public class ImageConstants {
+/*
+        작성자: 박지환
+        작성일: 23.05.20
+ */
+public final class ImageConstants {
 
-    private static final String ROOT_URL;                       // mapper 파일에 같이 붙이세요
-    private static final String ROOT_DIRECTORY;                 // 파일 저장할때 쓰세요
-    private static final String ROOT_PATH="/api/v1/image/";     // ajax에서 URL 체크 할때 씁니다
+    private static final String ROOT_URL;
+    private static final String ROOT_DIRECTORY;
+    private static final String ROOT_PATH="/api/v1/image/";
 
     static {    // static 초기화
         String os =  System.getProperty("os.name").toLowerCase();
@@ -55,6 +54,11 @@ public class ImageConstants {
         IMAGE_DOG_DIRECTORY=ROOT_DIRECTORY+"dog";
         IMAGE_DOG_PATH=ROOT_PATH+"dog";
     }
+
+    //  IMAGE_****_DERECTORY:   파일을 저장하는 폴더 경로입니다         파일 저장할때 쓰세요
+    //  IMAGE_****_PATH:        ajax에서 URL 체크 할때 씁니다           GlobalRestController 전용
+    //  IMAGE_****_URL:         <img>태그의 src에 붙일 속성입니다       mapper 파일 or dto로 출력시 같이 붙여주세요
+
     public static final String IMAGE_EMBEDED_DIRECTORY;
     public static final String IMAGE_EMBEDED_PATH;
     public static final String IMAGE_EMBEDED_URL;

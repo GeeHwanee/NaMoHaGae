@@ -93,13 +93,13 @@ public class ProductService {
         Integer countOfProduct=0;
 
         if (sortBy.equals("NewProduct")) {
-            products =  productDao.findAllByNewProduct(startRowNum, endRowNum, categoryNo, memberNo);
+            products =  productDao.findAllByNewProduct(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
             countOfProduct = productDao.count(categoryNo);
         } else if (sortBy.equals("ProductName")) {
-            products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo, memberNo);
+            products = productDao.findAllByProductName(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
             countOfProduct = productDao.count(categoryNo);
         } else if (sortBy.equals("BestProduct")) {
-            products = productDao.findAllByBestProduct(startRowNum, endRowNum, categoryNo, memberNo);
+            products = productDao.findAllByBestProduct(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
             countOfProduct = productDao.count(categoryNo);
         }
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
@@ -117,7 +117,7 @@ public class ProductService {
     public ProductDto.Pagination list(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo, memberNo);
+        List<ProductDto.ReadAll> products =  productDao.findAll(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -132,7 +132,7 @@ public class ProductService {
     }
 
     public ProductDto.Read read(Integer productNo) {
-        ProductDto.Read dto = productDao.findByProductNo(productNo);
+        ProductDto.Read dto = productDao.findByProductNo(ImageConstants.IMAGE_PRODUCT_URL, productNo);
         return dto;
     }
 
@@ -146,7 +146,7 @@ public class ProductService {
     public ProductDto.Pagination searchProductName(Integer pageNo, Integer categoryNo, Integer memberNo, String productName) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findByProductName(startRowNum, endRowNum, categoryNo, memberNo, productName);
+        List<ProductDto.ReadAll> products = productDao.findByProductName(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo, productName);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;

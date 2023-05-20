@@ -3,7 +3,7 @@
 <mapper namespace="kr.kro.namohagae.puching.dao.ChatDao">
 
     <select id="findAllChatRoom" resultType="kr.kro.namohagae.puching.dto.ChatRoomDto$Read">
-        select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,'http://localhost:8081/api/v1/image/profile?name=' || m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
+        select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,#{url} || m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
         from CHATROOM c,MEMBER m
         WHERE m.MEMBER_NO=c.CHATROOM_RECEIVER_NO and c.MEMBER_NO=#{memberNo}
     </select>
@@ -30,14 +30,14 @@
     </select>
 
     <select id="findChatRoom" resultType="kr.kro.namohagae.puching.dto.ChatRoomDto$Read">
-        select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,'http://localhost:8081/api/v1/image/profile?name=' || m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
+        select c.CHATROOM_RECEIVER_NO as chatRoomReceiverNo,m.MEMBER_NICKNAME as memberNickName,#{url} || m.MEMBER_PROFILE_IMAGE as memberImage,m.MEMBER_EMAIL as memberEmail
         from CHATROOM c,MEMBER m
         WHERE m.MEMBER_NO=c.CHATROOM_RECEIVER_NO and c.MEMBER_NO=#{memberNo} and c.CHATROOM_RECEIVER_NO=#{receiverNo}
 
     </select>
 
     <select id="findChatRoomByReceiverNo" resultType="kr.kro.namohagae.puching.dto.ChatRoomDto$Read">
-        select MEMBER_NO as chatRoomReceiverNo,MEMBER_NICKNAME as memberNickName,'http://localhost:8081/api/v1/image/profile?name=' || MEMBER_PROFILE_IMAGE as memberImage,
+        select MEMBER_NO as chatRoomReceiverNo,MEMBER_NICKNAME as memberNickName,#{url} || MEMBER_PROFILE_IMAGE as memberImage,
                MEMBER_EMAIL as memberEmail
          from MEMBER WHERE MEMBER_NO=#{receiverNo}
     </select>

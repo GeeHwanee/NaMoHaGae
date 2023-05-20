@@ -16,7 +16,7 @@ public interface Puchingdao {
             "from TOWN t,MEMBER m   where t.TOWN_NO=m.TOWN_NO(+) " +
             "group by t.town_no,t.town_dong,t.town_latitude,t.town_longitude,m.town_no order by townNO")
     public List<PuchingDto.readTown> findAllTown();
-    public List<PuchingDto.readUser> findByUsers(Double latitude,Double longitude,Integer startrownum,Integer endrownum,Integer memberNo);
+    public List<PuchingDto.readUser> findByUsers(String url, Double latitude,Double longitude,Integer startrownum,Integer endrownum,Integer memberNo);
 
 
     public Integer checkPuching(Integer senderNo,Integer receiverNo);  // 체크 잘되는지 테스트 필요
