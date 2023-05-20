@@ -1,12 +1,20 @@
 $(document).ready(async function() {
+    const url = location.href.slice(7);
+    let socket;
     // Aside
     printAside();
     // Bside
-    const socket = new WebSocket('ws://localhost:8081/notification');
+    if (url.includes("namohagae.kro.kr")){
+        socket = new WebSocket('ws://namohagae.kro.kr/notification');
+        printEmbededImage("namohagae.kro.kr");
+    }else if(url.includes("localhost:8081")){
+        socket = new WebSocket('ws://localhost:8081/notification');
+        printEmbededImage("localhost:8081");
+    }
 
     socket.addEventListener('open', function (event) {
         // 연결이 성공한 경우 실행되는 코드
-        console.log('socket open');
+        console.log('Notification Service On');
     });
 
     socket.addEventListener('message', function (event) {
@@ -22,12 +30,12 @@ $(document).ready(async function() {
     });
 
     socket.addEventListener('close', function (event) {
-        console.log('socket close');
+        console.log('Notification Service Off');
         // 연결이 종료된 경우 실행되는 코드
     });
 
     socket.addEventListener('error', function (event) {
-        console.log('socket error');
+        console.log('Notification Service Error');
         // 에러가 발생한 경우 실행되는 코드
     });
 
@@ -114,6 +122,13 @@ function printAside(){
         $side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
         $side_bar.append('<li><a href="/admin/report/list">신고 관리</a></li>');
     }
+}
+
+function printEmbededImage(url){
+    $('#logo_main').attr('src','http://'+url+'/api/v1/image/embeded?name=logo_Main.png');
+    $('#logo_notion').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Notion.png');
+    $('#logo_github').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Github.png');
+    $('#logo_swagger').attr('src','http://'+url+'/api/v1/image/embeded?name=logo_Swagger.png');
 }
 
 function printBsideNotification(result) {
