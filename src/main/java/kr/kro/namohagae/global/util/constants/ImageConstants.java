@@ -1,23 +1,30 @@
 package kr.kro.namohagae.global.util.constants;
 
+/*
+    작성자: 박지환
+    작성일: 23-05-20
+ */
+
+import kr.kro.namohagae.global.util.ConsoleColor;
+
 public class ImageConstants {
 
-    private static final String ROOT_URL;         // mapper 파일에 같이 붙이세요
-    private static final String ROOT_DIRECTORY;   // 파일 저장할때 쓰세요
-    private static final String ROOT_PATH;        // ajax에서 URL 체크 할때 씁니다
+    private static final String ROOT_URL;                       // mapper 파일에 같이 붙이세요
+    private static final String ROOT_DIRECTORY;                 // 파일 저장할때 쓰세요
+    private static final String ROOT_PATH="/api/v1/image/";     // ajax에서 URL 체크 할때 씁니다
 
     static {    // static 초기화
-        // 시스템 체크용 -> 배포할때는 linux, 그 외는 window나 mac
         String os =  System.getProperty("os.name").toLowerCase();
         // 시스템이 linux일 때 도메인 및 이미지 저장 폴더 설정, 그 외는 localhost, 프로젝트 파일 폴더 설정
         if(os.contains("linux")){
             ROOT_URL="http://namohagae.kro.kr/api/v1/image/";
             ROOT_DIRECTORY = "/home/jhp/image/";
+            System.out.println(ConsoleColor.CYAN +"Application Run with ["+System.getProperty("os.name")+"] on Server"+ConsoleColor.RESET);
         }else{
             ROOT_URL="http://localhost:8081/api/v1/image/";
             ROOT_DIRECTORY =System.getProperty("user.dir")+"/./src/main/resources/static/image/";
+            System.out.println(ConsoleColor.CYAN +"Application Run with ["+System.getProperty("os.name")+"] on LocalHost"+ConsoleColor.RESET);
         }
-        ROOT_PATH="/api/v1/image/";
 
         // 설정한 ROOT 값들로 각각 매핑 작업
         IMAGE_EMBEDED_URL=ROOT_URL+"embeded?name=";

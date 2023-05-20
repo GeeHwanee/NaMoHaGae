@@ -1,7 +1,9 @@
 package kr.kro.namohagae.mall.service;
 
-import kr.kro.namohagae.global.util.constants.ImageConstantsInterface;
-import kr.kro.namohagae.mall.dao.*;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.mall.dao.ProductCategoryDao;
+import kr.kro.namohagae.mall.dao.ProductDao;
+import kr.kro.namohagae.mall.dao.ProductImageDao;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductImage;
@@ -32,7 +34,6 @@ public class ProductService {
     @Transactional
     public Integer add(ProductDto.Add dto) {
         Integer imageIndex = 1;
-        String currentDir = System.getProperty("user.dir")+"/";
         String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.save(product);
@@ -41,7 +42,7 @@ public class ProductService {
         for(MultipartFile image: dto.getProductImages()) {
             if(image!=null && !image.isEmpty()) {
                 originalFilename = image.getOriginalFilename();
-                File saveFile = new File(currentDir+ ImageConstantsInterface.IMAGE_PRODUCT_FOLDER, originalFilename);
+                File saveFile = new File(ImageConstants.IMAGE_PRODUCT_DIRECTORY, originalFilename);
                 try {
                     image.transferTo(saveFile);
                 } catch (IllegalStateException | IOException e) {
@@ -59,7 +60,6 @@ public class ProductService {
     @Transactional
     public Integer put(ProductDto.Put dto) {
         Integer imageIndex = 1;
-        String currentDir = System.getProperty("user.dir")+"/";
         String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.update(product);
@@ -68,7 +68,7 @@ public class ProductService {
             for (MultipartFile image : dto.getProductImages()) {
                 if (image != null && !image.isEmpty()) {
                     originalFilename = image.getOriginalFilename();
-                    File saveFile = new File(currentDir + ImageConstantsInterface.IMAGE_PRODUCT_FOLDER, originalFilename);
+                    File saveFile = new File(ImageConstants.IMAGE_PRODUCT_DIRECTORY, originalFilename);
                     try {
                         image.transferTo(saveFile);
                     } catch (IllegalStateException | IOException e) {
