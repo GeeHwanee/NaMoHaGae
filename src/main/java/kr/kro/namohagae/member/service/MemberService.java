@@ -11,23 +11,15 @@ import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +45,8 @@ public class MemberService {
         if(mf!=null && !mf.isEmpty()) {
             int postionOfDot = mf.getOriginalFilename().lastIndexOf(".");
             String ext = mf.getOriginalFilename().substring(postionOfDot);
-            String currentDir = System.getProperty("user.dir")+"/";
-            System.out.println(currentDir);
-            String imagePath = currentDir+ImageConstants.IMAGE_PROFILE_FOLDER;
-            File file = new File(imagePath, dto.getMemberEmail() + ext);
+
+            File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, dto.getMemberEmail() + ext);
             try {
                 mf.transferTo(file);
                 profileName = dto.getMemberEmail() + ext;
@@ -123,7 +113,7 @@ public class MemberService {
         }
         int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
         String ext = profile.getOriginalFilename().substring(postionOfDot);
-        File file = new File(ImageConstants.IMAGE_PROFILE_FOLDER, memberNo + ext);
+        File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, memberNo + ext);
         try {
             profile.transferTo(file);
         } catch (IllegalStateException | IOException e) {

@@ -1,7 +1,9 @@
 package kr.kro.namohagae.mall.service;
 
 import kr.kro.namohagae.global.util.constants.ImageConstants;
-import kr.kro.namohagae.mall.dao.*;
+import kr.kro.namohagae.mall.dao.ProductCategoryDao;
+import kr.kro.namohagae.mall.dao.ProductDao;
+import kr.kro.namohagae.mall.dao.ProductImageDao;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
 import kr.kro.namohagae.mall.entity.ProductImage;
@@ -32,7 +34,6 @@ public class ProductService {
     @Transactional
     public Integer add(ProductDto.Add dto) {
         Integer imageIndex = 1;
-        String currentDir = System.getProperty("user.dir")+"/";
         String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.save(product);
@@ -41,7 +42,7 @@ public class ProductService {
         for(MultipartFile image: dto.getProductImages()) {
             if(image!=null && !image.isEmpty()) {
                 originalFilename = image.getOriginalFilename();
-                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                File saveFile = new File(ImageConstants.IMAGE_PRODUCT_DIRECTORY, originalFilename);
                 try {
                     image.transferTo(saveFile);
                 } catch (IllegalStateException | IOException e) {
@@ -59,7 +60,6 @@ public class ProductService {
     @Transactional
     public Integer put(ProductDto.Put dto) {
         Integer imageIndex = 1;
-        String currentDir = System.getProperty("user.dir")+"/";
         String originalFilename = "default.jpg";
         Product product = dto.toEntity();
         productDao.update(product);
@@ -68,7 +68,7 @@ public class ProductService {
             for (MultipartFile image : dto.getProductImages()) {
                 if (image != null && !image.isEmpty()) {
                     originalFilename = image.getOriginalFilename();
-                    File saveFile = new File(currentDir + ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                    File saveFile = new File(ImageConstants.IMAGE_PRODUCT_DIRECTORY, originalFilename);
                     try {
                         image.transferTo(saveFile);
                     } catch (IllegalStateException | IOException e) {
@@ -93,13 +93,13 @@ public class ProductService {
         Integer countOfProduct=0;
 
         if (sortBy.equals("NewProduct")) {
-            products =  productDao.findAllByNewProduct(startRowNum, endRowNum, categoryNo, memberNo);
+            products =  productDao.findAllByNewProduct(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
             countOfProduct = productDao.count(categoryNo);
         } else if (sortBy.equals("ProductName")) {
-            products = productDao.findAllByProductName(startRowNum, endRowNum, categoryNo, memberNo);
+            products = productDao.findAllByProductName(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
             countOfProduct = productDao.count(categoryNo);
         } else if (sortBy.equals("BestProduct")) {
-            products = productDao.findAllByBestProduct(startRowNum, endRowNum, categoryNo, memberNo);
+            products = productDao.findAllByBestProduct(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
             countOfProduct = productDao.count(categoryNo);
         }
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
@@ -117,7 +117,7 @@ public class ProductService {
     public ProductDto.Pagination list(Integer pageNo, Integer categoryNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products =  productDao.findAll(startRowNum, endRowNum, categoryNo, memberNo);
+        List<ProductDto.ReadAll> products =  productDao.findAll(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
@@ -132,7 +132,7 @@ public class ProductService {
     }
 
     public ProductDto.Read read(Integer productNo) {
-        ProductDto.Read dto = productDao.findByProductNo(productNo);
+        ProductDto.Read dto = productDao.findByProductNo(ImageConstants.IMAGE_PRODUCT_URL, productNo);
         return dto;
     }
 
@@ -146,7 +146,7 @@ public class ProductService {
     public ProductDto.Pagination searchProductName(Integer pageNo, Integer categoryNo, Integer memberNo, String productName) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products = productDao.findByProductName(startRowNum, endRowNum, categoryNo, memberNo, productName);
+        List<ProductDto.ReadAll> products = productDao.findByProductName(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo, productName);
         Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;

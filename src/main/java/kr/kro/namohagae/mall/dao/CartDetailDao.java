@@ -46,5 +46,5 @@ public interface CartDetailDao {
     public Integer findTotalPriceByMemberNo(Integer memberNo);
 
     // 결제할 상품 정보 불러오기
-    public List<ProductOrderDetail> findWithProduct(List<Integer> list, Integer memberNo);
+    public List<ProductOrderDetail> findWithProduct(String url, List<Integer> list, Integer memberNo);
 }

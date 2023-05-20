@@ -34,7 +34,7 @@ public class ChatService {
 
 
     public List<ChatRoomDto.Read> findAllChatRoom(Integer myMemberNo) {
-        List<ChatRoomDto.Read> list = cdao.findAllChatRoom(myMemberNo);
+        List<ChatRoomDto.Read> list = cdao.findAllChatRoom(ImageConstants.IMAGE_PROFILE_URL,myMemberNo);
         return list;
     }
 
@@ -78,14 +78,14 @@ public class ChatService {
     public ChatRoomDto.Read findChatRoom(String userEmail,String receiverEmail) {
         Integer userNo =mdao.findNoByUsername(userEmail);
         Integer receiverNo= mdao.findNoByUsername(receiverEmail);
-        return cdao.findChatRoom(userNo,receiverNo);
+        return cdao.findChatRoom(ImageConstants.IMAGE_PROFILE_URL,userNo,receiverNo);
     }
 
     public ChatRoomDto.Read existchatRoom(String username,String receiverEmail) {
         Integer userNo= mdao.findNoByUsername(username);
         Integer receiverNo= mdao.findNoByUsername(receiverEmail);
             if(!cdao.existsByChatRoom(userNo,receiverNo)) {
-             return cdao.findChatRoomByReceiverNo(receiverNo);
+             return cdao.findChatRoomByReceiverNo(ImageConstants.IMAGE_PROFILE_URL,receiverNo);
             }
         return null;
     }
@@ -95,10 +95,9 @@ public class ChatService {
         if(image!=null && !image.isEmpty()) {
             int postionOfDot = image.getOriginalFilename().lastIndexOf(".");
             String ext = image.getOriginalFilename().substring(postionOfDot);
-            String currentDir = System.getProperty("user.dir")+"/";
-            String imagePath = currentDir+ ImageConstants.IMAGE_CHAT_FOLDER;
+
             imageName=UUID.randomUUID()+ext;
-            File file = new File(imagePath, imageName);
+            File file = new File(ImageConstants.IMAGE_CHAT_DIRECTORY, imageName);
             try {
                 image.transferTo(file);
             } catch (IllegalStateException | IOException e) {

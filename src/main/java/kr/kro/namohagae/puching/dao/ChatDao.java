@@ -14,11 +14,11 @@ public interface ChatDao {
     public Boolean existsByChatRoom(Integer memberNo,Integer receiverNo);  //상대방과의 채팅방이 있는지 체크
     public void saveChatRoom(Integer senderNo,Integer receiverNo); // 첫 메세지 저장시 채팅방 생성
 
-    public List<ChatRoomDto.Read> findAllChatRoom(Integer memberNo); // 자신이 가지고 있는 채팅방
+    public List<ChatRoomDto.Read> findAllChatRoom(String url, Integer memberNo); // 자신이 가지고 있는 채팅방
 
-    public ChatRoomDto.Read findChatRoom(Integer memberNo,Integer receiverNo);// 내번호와 상대번호로 채팅방 정보 불러오기
+    public ChatRoomDto.Read findChatRoom(String url, Integer memberNo,Integer receiverNo);// 내번호와 상대번호로 채팅방 정보 불러오기
 
-    public ChatRoomDto.Read findChatRoomByReceiverNo(Integer receiverNo);
+    public ChatRoomDto.Read findChatRoomByReceiverNo(String url, Integer receiverNo);
 
     public Integer saveMessage(Message message); // 메세지 전송 성공시 저장
 
