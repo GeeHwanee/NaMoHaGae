@@ -1,7 +1,7 @@
 package kr.kro.namohagae.puching.service;
 
 import kr.kro.namohagae.global.service.NotificationService;
-import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstantsInterface;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.entity.Member;
@@ -96,7 +96,7 @@ public class ChatService {
             int postionOfDot = image.getOriginalFilename().lastIndexOf(".");
             String ext = image.getOriginalFilename().substring(postionOfDot);
             String currentDir = System.getProperty("user.dir")+"/";
-            String imagePath = currentDir+ ImageConstants.IMAGE_CHAT_FOLDER;
+            String imagePath = currentDir+ ImageConstantsInterface.IMAGE_CHAT_FOLDER;
             imageName=UUID.randomUUID()+ext;
             File file = new File(imagePath, imageName);
             try {
