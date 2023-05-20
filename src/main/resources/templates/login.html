@@ -10,9 +10,13 @@
   <!------------------------------------------------------------------------------------------------------------------------------>
   <title>Sign in example • Pico.css</title>
   <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
-
+  <script th:inline="javascript">
+    const msg = /*[[${msg}]]*/ null;
+    if (msg !== null) {
+      alert(msg);
+    }
+  </script>
   <script>
-
     function loginWithKakao() {
       Kakao.Auth.loginForm({
         success: function(authObj) {

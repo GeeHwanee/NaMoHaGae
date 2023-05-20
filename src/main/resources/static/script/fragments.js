@@ -112,7 +112,7 @@ function printAside(){
         $side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
         $side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
         $side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
-        $side_bar.append('<li><a href="/admin/report/list">신고 관리</a></li>');
+        $side_bar.append('<li><a href="/admin/report/report">신고 관리</a></li>');
     }
 }
 

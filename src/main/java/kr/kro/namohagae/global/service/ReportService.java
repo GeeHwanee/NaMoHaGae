@@ -15,8 +15,8 @@ public class ReportService {
     private ReportDao reportDao;
     private final static Integer PAGESIZE=10;
     private final static Integer BLOCKSIZE=5;
-    public ReportDto.Pagination findAll(Integer pageno, Integer memberNo) {
-        Integer countOfProduct = reportDao.countReportByMemberNo(memberNo);
+    public ReportDto.Pagination findAll(Integer pageno) {
+        Integer countOfProduct = reportDao.countAll();
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
         pageno = Math.abs(pageno);
@@ -47,7 +47,7 @@ public class ReportService {
 
         Integer startRownum = (pageno-1)*PAGESIZE + 1;
         Integer endRownum = startRownum + PAGESIZE - 1;
-        List<ReportDto.FindAll> reports = reportDao.findAllByMemberNo(startRownum, endRownum,memberNo);
+        List<ReportDto.FindAll> reports = reportDao.findAllByMemberNo(memberNo,startRownum,endRownum);
         // 리스트 log로 찍어
         Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
@@ -66,15 +66,14 @@ public class ReportService {
             reportContent=save.getReportContent();
         }
         Report report = save.toEntity(reportContent,reportMemberNo);
-        System.out.println(report.getMemberNo());
-        System.out.println(report.getReportCategory());
-        System.out.println(report.getReportDate());
-        System.out.println(report.getReportContent());
-        System.out.println(report.getReportMemberNo());
         return reportDao.save(report);
     }
 
     public Boolean delete(Integer reportNo){
         return reportDao.delete(reportNo);
+    }
+
+    public Integer findMemberNoByNickname(String nickname) {
+        return reportDao.findMemberNoByNickname(nickname);
     }
 }
