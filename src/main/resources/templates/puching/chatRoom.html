@@ -667,10 +667,16 @@
 </script>
 <!--텍스트랑 이미지 전송하는 스크립트-->
 <script>
-    var socket = new WebSocket("ws://localhost:8081/chatroom");
+    const url = location.href.slice(7);
+    var socket;
+    if (url.includes("namohagae.kro.kr")){
+        socket = new WebSocket('ws://namohagae.kro.kr/chatroom');
+    }else if(url.includes("localhost:8081")){
+        socket = new WebSocket('ws://localhost:8081/chatroom');
+    }
 
     socket.onopen = function() {
-        console.log("WebSocket connection opened.");
+        console.log("Chat Service On");
 
     };
 
@@ -735,11 +741,11 @@
     };
 
     socket.onerror = function(error) {
-        console.log("WebSocket error: " + error);
+        console.log("Chat Service Error: " + error);
     };
 
     socket.onclose = function(event) {
-        console.log("WebSocket connection closed with code " + event.code + " and reason " + event.reason);
+        console.log("Chat Service Off with code " + event.code + " and reason " + event.reason);
     };
 
     var enterPressed = false;
@@ -933,13 +939,19 @@
 </script>
 <script>
    //이미지 전송 및 화면에 바로 띄우는 거
-   var puchingSocket = new WebSocket("ws://localhost:8081/puching");
+   var puchingSocket;
+   if (url.includes("namohagae.kro.kr")){
+       puchingSocket = new WebSocket('ws://namohagae.kro.kr/puching');
+   }else if(url.includes("localhost:8081")){
+       puchingSocket = new WebSocket('ws://localhost:8081/puching');
+   }
+
    var pulat=undefined;
    var pulng=undefined;
    var address=undefined;
 
    puchingSocket.onopen=function (){
-       console.log("퍼칭웹소켓 open")
+       console.log("Puching Service On");
    };
    //퍼칭상태가 실시간으로 변경되는 작업은 여기에서 하자
    puchingSocket.onmessage=function (event){

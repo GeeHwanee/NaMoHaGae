@@ -1,23 +1,23 @@
 $(document).ready(async function() {
     const url = location.href.slice(7);
-    let socket;
+    let notificationSocket;
     // Aside
     printAside();
     // Bside
     if (url.includes("namohagae.kro.kr")){
-        socket = new WebSocket('ws://namohagae.kro.kr/notification');
+        notificationSocket = new WebSocket('ws://namohagae.kro.kr/notification');
         printEmbededImage("namohagae.kro.kr");
     }else if(url.includes("localhost:8081")){
-        socket = new WebSocket('ws://localhost:8081/notification');
+        notificationSocket = new WebSocket('ws://localhost:8081/notification');
         printEmbededImage("localhost:8081");
     }
 
-    socket.addEventListener('open', function (event) {
+    notificationSocket.addEventListener('open', function (event) {
         // 연결이 성공한 경우 실행되는 코드
         console.log('Notification Service On');
     });
 
-    socket.addEventListener('message', function (event) {
+    notificationSocket.addEventListener('message', function (event) {
         // 메시지를 받은 경우 실행되는 코드
         const data = event.data;
         const notification = JSON.parse(data).notification;
@@ -29,12 +29,12 @@ $(document).ready(async function() {
         },2000);
     });
 
-    socket.addEventListener('close', function (event) {
+    notificationSocket.addEventListener('close', function (event) {
         console.log('Notification Service Off');
         // 연결이 종료된 경우 실행되는 코드
     });
 
-    socket.addEventListener('error', function (event) {
+    notificationSocket.addEventListener('error', function (event) {
         console.log('Notification Service Error');
         // 에러가 발생한 경우 실행되는 코드
     });
