@@ -129,6 +129,8 @@ function printEmbededImage(url){
     $('#logo_notion').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Notion.png');
     $('#logo_github').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Github.png');
     $('#logo_swagger').attr('src','http://'+url+'/api/v1/image/embeded?name=logo_Swagger.png');
+    $('#logo_kakao').attr('src','http://'+url+'/api/v1/image/embeded?name=kakao_login_large_wide.png');
+
 }
 
 function printBsideNotification(result) {
