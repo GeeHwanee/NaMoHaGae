@@ -1,5 +1,6 @@
 package kr.kro.namohagae.puching.service;
 
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puching.dao.ChatDao;
 import kr.kro.namohagae.puching.dao.Puchingdao;
@@ -30,7 +31,7 @@ public class PuchingService {
         Integer endrownum=pageSize*pageNum;
 
         Integer memberNo=mdao.findNoByUsername(userEmail);
-        List<PuchingDto.readUser> list =pdao.findByUsers(latitude,longitude,startrownum,endrownum,memberNo);
+        List<PuchingDto.readUser> list =pdao.findByUsers(ImageConstants.IMAGE_PROFILE_URL,latitude,longitude,startrownum,endrownum,memberNo);
 
         return  list;
     }

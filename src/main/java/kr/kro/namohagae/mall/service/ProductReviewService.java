@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dao.ProductOrderDetailDao;
 import kr.kro.namohagae.mall.dao.ProductReviewDao;
@@ -31,7 +32,7 @@ public class ProductReviewService {
     }
 
     public ProductOrderDetailDto.OrderInformation read(Integer productOrderDetailNo) {
-        return productOrderDetailDao.findByOrderDetailNo(productOrderDetailNo);
+        return productOrderDetailDao.findByOrderDetailNo(ImageConstants.IMAGE_PRODUCT_URL,productOrderDetailNo);
     }
 
     public ProductReviewDto.Pagination list(Integer pageNo, Integer productNo) {
@@ -54,7 +55,7 @@ public class ProductReviewService {
     public ProductReviewDto.PaginationMyReview myProductReviewList(Integer pageNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductReviewDto.MyReviewList> review =  productReviewDao.findAllByMemberNo(startRowNum,endRowNum,memberNo);
+        List<ProductReviewDto.MyReviewList> review =  productReviewDao.findAllByMemberNo(ImageConstants.IMAGE_PRODUCT_URL, startRowNum,endRowNum,memberNo);
         System.out.println(review.get(0).getReviewContent());
         System.out.println(review.get(0).getReviewStar());
         Integer countOfReview = productReviewDao.countByMemberNo(memberNo);

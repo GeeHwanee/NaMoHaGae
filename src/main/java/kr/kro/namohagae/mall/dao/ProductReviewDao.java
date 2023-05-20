@@ -22,5 +22,5 @@ public interface ProductReviewDao {
 
     public Integer countByMemberNo(Integer memberNo);
 
-    public List<ProductReviewDto.MyReviewList> findAllByMemberNo(Integer startRowNum,Integer endRowNum,Integer memberNo);
+    public List<ProductReviewDto.MyReviewList> findAllByMemberNo(String url, Integer startRowNum,Integer endRowNum,Integer memberNo);
 }

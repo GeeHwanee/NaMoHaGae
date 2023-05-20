@@ -34,7 +34,7 @@ public class ChatService {
 
 
     public List<ChatRoomDto.Read> findAllChatRoom(Integer myMemberNo) {
-        List<ChatRoomDto.Read> list = cdao.findAllChatRoom(myMemberNo);
+        List<ChatRoomDto.Read> list = cdao.findAllChatRoom(ImageConstants.IMAGE_PROFILE_URL,myMemberNo);
         return list;
     }
 
@@ -78,14 +78,14 @@ public class ChatService {
     public ChatRoomDto.Read findChatRoom(String userEmail,String receiverEmail) {
         Integer userNo =mdao.findNoByUsername(userEmail);
         Integer receiverNo= mdao.findNoByUsername(receiverEmail);
-        return cdao.findChatRoom(userNo,receiverNo);
+        return cdao.findChatRoom(ImageConstants.IMAGE_PROFILE_URL,userNo,receiverNo);
     }
 
     public ChatRoomDto.Read existchatRoom(String username,String receiverEmail) {
         Integer userNo= mdao.findNoByUsername(username);
         Integer receiverNo= mdao.findNoByUsername(receiverEmail);
             if(!cdao.existsByChatRoom(userNo,receiverNo)) {
-             return cdao.findChatRoomByReceiverNo(receiverNo);
+             return cdao.findChatRoomByReceiverNo(ImageConstants.IMAGE_PROFILE_URL,receiverNo);
             }
         return null;
     }

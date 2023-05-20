@@ -6,7 +6,7 @@
         SELECT rownum rnum,m.* FROM
         (
         SELECT m.MEMBER_NO as memberNo, m.MEMBER_NICKNAME as memberNickName, m.MEMBER_LATITUDE as memberLatitude, m.MEMBER_LONGITUDE as memberLongitude,
-       round(distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}),1) as distance,'http://localhost:8081/api/v1/image/profile?name=' || m.MEMBER_PROFILE_IMAGE as memberImage
+       round(distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}),1) as distance,#{url} || m.MEMBER_PROFILE_IMAGE as memberImage
         FROM MEMBER m
         WHERE distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}) &lt;=5.0
         ORDER BY distance
