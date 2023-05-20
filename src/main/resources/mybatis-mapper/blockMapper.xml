@@ -9,7 +9,7 @@
         insert into block(block_no,member_no,report_no,block_date,block_deadline_date) values (block_seq_block_no.nextval,#{memberNo},#{reportNo},sysdate,#{blockDeadlineDate})
     </insert>
     <delete id="delete">
-        delete form block where block_deadline_date=#{today}
+        delete from block where block_deadline_date=#{today}
     </delete>
     <select id="findMemberNoByToday" resultType="Integer">
         select member_no from block where block_deadline_date = #{today}
