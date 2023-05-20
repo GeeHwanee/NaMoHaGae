@@ -12,7 +12,7 @@
 
     <!-- 내가 쓴 리뷰 -->
     <select id="findByOrderDetailNo" resultType="kr.kro.namohagae.mall.dto.ProductOrderDetailDto$OrderInformation">
-        select pod.product_no, p.product_name, 'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename as product_image,
+        select pod.product_no, p.product_name, #{url} || pi.product_image_filename as product_image,
                pod.product_order_no, pod.product_order_detail_no, pod.product_order_detail_review_enabled
         from PRODUCT_ORDER_DETAIL pod
                  join product p on pod.product_no = p.product_no

@@ -46,7 +46,7 @@ public class MessageDto {
 
         public Message toEntity(String messageContentType,String imageName){
             return Message.builder().messageSender(messageSender).messageReceiver(messageReceiver)
-                    .messageContent("<img src='"+ImageConstants.IMAGE_CHAT_URL +imageName+"'alt='chatimage'>")
+                    .messageContent("<img src='"+ ImageConstants.IMAGE_CHAT_URL +imageName+"'alt='chatimage'>")
                     .messageContentType(messageContentType).messageWriteDate(LocalDateTime.now()).build();
         }
     }

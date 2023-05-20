@@ -29,16 +29,14 @@ public class GlobalRestController {
     public ResponseEntity<byte[]> viewImage(String name, HttpServletRequest req){
         String path = req.getRequestURI();
         String folder = null;
-        switch (path){
-            case ImageConstants.IMAGE_BOARD_PATH -> folder = ImageConstants.IMAGE_BOARD_FOLDER;
-            case ImageConstants.IMAGE_EMBEDED_PATH -> folder = ImageConstants.IMAGE_EMBEDED_FOLDER;
-            case ImageConstants.IMAGE_PRODUCT_PATH -> folder = ImageConstants.IMAGE_PRODUCT_FOLDER;
-            case ImageConstants.IMAGE_PROFILE_PATH -> folder = ImageConstants.IMAGE_PROFILE_FOLDER;
-            case ImageConstants.IMAGE_TEMP_PATH -> folder = ImageConstants.IMAGE_TEMP_FOLDER;
-            case ImageConstants.IMAGE_CHAT_PATH -> folder = ImageConstants.IMAGE_CHAT_FOLDER;
-            case ImageConstants.IMAGE_DOG_PATH -> folder = ImageConstants.IMAGE_DOG_FOLDER;
-            default -> throw new IllegalStateException("Unexpected value: " + path);
-        }
+        if(path.startsWith(ImageConstants.IMAGE_BOARD_PATH)){folder = ImageConstants.IMAGE_BOARD_DIRECTORY;}
+        else if (path.startsWith(ImageConstants.IMAGE_DOG_PATH)) {folder = ImageConstants.IMAGE_DOG_DIRECTORY;}
+        else if (path.startsWith(ImageConstants.IMAGE_EMBEDED_PATH)) {folder = ImageConstants.IMAGE_EMBEDED_DIRECTORY;}
+        else if (path.startsWith(ImageConstants.IMAGE_PRODUCT_PATH)) {folder = ImageConstants.IMAGE_PRODUCT_DIRECTORY;}
+        else if (path.startsWith(ImageConstants.IMAGE_PROFILE_PATH)) {folder = ImageConstants.IMAGE_PROFILE_DIRECTORY;}
+        else if (path.startsWith(ImageConstants.IMAGE_TEMP_PATH)) {folder = ImageConstants.IMAGE_TEMP_DIRECTORY;}
+        else if (path.startsWith(ImageConstants.IMAGE_CHAT_PATH)) {folder = ImageConstants.IMAGE_CHAT_DIRECTORY;}
+        else {folder = ImageConstants.IMAGE_EMBEDED_DIRECTORY;}
         File file = new File(folder, name);
         try {
             byte[] bytes = Files.readAllBytes(file.toPath());

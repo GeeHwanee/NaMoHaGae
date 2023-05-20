@@ -1,5 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.AddressDto;
 import kr.kro.namohagae.mall.dto.ProductDto;
@@ -36,7 +37,7 @@ public class ProductOrderService {
         for (Integer productNo : checkedProductNos) {
             Optional<CartDetail> result = cartDetailDao.findByMemberNoAndProductNo(memberNo, productNo);
             CartDetail cartDetail;
-            ProductDto.Read product = productDao.findByProductNo(productNo);
+            ProductDto.Read product = productDao.findByProductNo(ImageConstants.IMAGE_PRODUCT_URL,productNo);
             if (result.isPresent()) {
                 cartDetail = result.get();
             } else{
@@ -58,11 +59,11 @@ public class ProductOrderService {
     }
 
     public List<ProductOrderDto.OrderResult> orderList(Integer memberNo) {
-        return productOrderDao.list(memberNo);
+        return productOrderDao.list(ImageConstants.IMAGE_PRODUCT_URL,memberNo);
     }
 
     public ProductOrderDto.OrderResult findById(Integer orderNo) {
-        return productOrderDao.read(orderNo);
+        return productOrderDao.read(ImageConstants.IMAGE_PRODUCT_URL, orderNo);
     }
 
     public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo, Integer usedMemberPoint) {
@@ -112,7 +113,7 @@ public class ProductOrderService {
     public ProductOrderDto.PaginationOrder listMyOrder(Integer pageNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductOrderDto.MyOrderList> orderLists = productOrderDao.myOrderList(startRowNum,endRowNum,memberNo);
+        List<ProductOrderDto.MyOrderList> orderLists = productOrderDao.myOrderList(ImageConstants.IMAGE_PRODUCT_URL,startRowNum,endRowNum,memberNo);
         System.out.println(orderLists.size());
         Integer countOfQna = productOrderDao.countMe(memberNo);
         Integer countOfPage = (countOfQna-1)/PAGESIZE + 1;

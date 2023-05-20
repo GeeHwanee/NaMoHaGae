@@ -1,6 +1,7 @@
 package kr.kro.namohagae.mall.service;
 
 import kr.kro.namohagae.global.service.NotificationService;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dao.QnaDao;
@@ -33,7 +34,7 @@ public class QnaService {
     }
 
     public ProductDto.Read read(Integer productNo) {
-        return productDao.findByProductNo(productNo);
+        return productDao.findByProductNo(ImageConstants.IMAGE_PRODUCT_URL,productNo);
     }
 
     public QnaDto.Pagination list(Integer pageNo, Integer productNo) {
@@ -72,7 +73,7 @@ public class QnaService {
         BLOCKSIZE = 3;
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<QnaDto.FindByMemberNo> qna =  qnaDao.findByMemberNo(startRowNum, endRowNum, memberNo);
+        List<QnaDto.FindByMemberNo> qna =  qnaDao.findByMemberNo(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, memberNo);
         Integer countOfQna = qnaDao.countMe(memberNo);
         Integer countOfPage = (countOfQna-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;

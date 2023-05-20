@@ -12,16 +12,16 @@ public interface ProductOrderDao {
     public Integer save(ProductOrder productOrder);
 
     // 주문 목록 보기
-    public List<ProductOrderDto.OrderResult> list(Integer memberNo);
+    public List<ProductOrderDto.OrderResult> list(String url, Integer memberNo);
 
     // 주문 상세 보기
-    public ProductOrderDto.OrderResult read(Integer productOrderNo);
+    public ProductOrderDto.OrderResult read(String url, Integer productOrderNo);
 
     // 주문 완료시 멤버 포인트 지급
     public void updateMemberPoint(Integer bonePoint,Integer memberNo);
     public Integer countMe(Integer memberNo);
 
-    public List<ProductOrderDto.MyOrderList> myOrderList(Integer startRowNum, Integer endRowNum, Integer memberNo);
+    public List<ProductOrderDto.MyOrderList> myOrderList(String url, Integer startRowNum, Integer endRowNum, Integer memberNo);
 
 
 }

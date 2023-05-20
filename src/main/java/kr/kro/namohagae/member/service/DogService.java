@@ -27,10 +27,7 @@ public class DogService {
         if(mf!=null && !mf.isEmpty()) {
             int postionOfDot = mf.getOriginalFilename().lastIndexOf(".");
             String ext = mf.getOriginalFilename().substring(postionOfDot);
-            String currentDir = System.getProperty("user.dir")+"/";
-            System.out.println(currentDir);
-            String imagePath = currentDir+ ImageConstants.IMAGE_DOG_FOLDER;
-            File file = new File(imagePath, dto.getDogName() + ext);
+            File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, dto.getDogName() + ext);
             try {
                 mf.transferTo(file);
                 profileName = dto.getDogName() + ext;
@@ -57,16 +54,17 @@ public class DogService {
     public Boolean update(MultipartFile profile, String name,String introduce, Boolean notGenderEnabled,Double weight,Integer dogNo) {
         File file = null;
         String ext = "";
-        String currentDir = System.getProperty("user.dir")+"/";
+
         if (profile==null || profile.isEmpty()==true) {
             dogDao.update(dogNo,introduce,notGenderEnabled,weight,name,null);
             return true;
         }else {    // else는 Don't care -> 신경쓰지 않는다
         }
         if(name!=null||name.trim().equals("")==false){
-        int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
-        ext = profile.getOriginalFilename().substring(postionOfDot);
-        file = new File(currentDir+ImageConstants.IMAGE_DOG_FOLDER, name + ext);}else{}
+            int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
+            ext = profile.getOriginalFilename().substring(postionOfDot);
+            file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, name + ext);
+        } else{}
         try {
             profile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
@@ -79,9 +77,8 @@ public class DogService {
 
     public void resign(Integer dogNo) {
         try {
-            String currentDir = System.getProperty("user.dir")+"/";
             String profile = dogDao.findByDog(dogNo).get().getDogProfile();
-            File file = new File(currentDir+ImageConstants.IMAGE_DOG_FOLDER, profile);
+            File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, profile);
 
             // 예외가 발생하면 롤백되는데, 발생 안하니까... 어떻게 처리하지? -> 작업을 중단하자(아래 코드는 설명용)
             if (file.exists()==false) {

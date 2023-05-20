@@ -15,7 +15,7 @@ public interface ReviewDao {
     public Integer countWriter(Integer memberNo);
     public Integer count(Integer receiverNo);
 
-    public ReviewDto.Writeview reviewWriteInfo(Integer senderNo, Integer receiverNo, Integer puchingNo);
+    public ReviewDto.Writeview reviewWriteInfo(String url, Integer senderNo, Integer receiverNo, Integer puchingNo);
 
     public void save(Review review);
 

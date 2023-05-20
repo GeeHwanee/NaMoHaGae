@@ -1,5 +1,6 @@
 package kr.kro.namohagae.puching.service;
 
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.puching.dao.ChatDao;
 import kr.kro.namohagae.puching.dao.Puchingdao;
@@ -72,7 +73,7 @@ public class ReviewService {
 
     public ReviewDto.Writeview findWriteViewInfo(String userEmail, Integer receiverNo, Integer puchingNo){
         Integer userNo=memberDao.findNoByUsername(userEmail);
-        ReviewDto.Writeview dto = reviewDao.reviewWriteInfo(userNo,receiverNo,puchingNo);
+        ReviewDto.Writeview dto = reviewDao.reviewWriteInfo(ImageConstants.IMAGE_PROFILE_URL,userNo,receiverNo,puchingNo);
 
         return dto;
     }

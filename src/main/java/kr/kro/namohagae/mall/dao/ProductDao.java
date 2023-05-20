@@ -17,10 +17,10 @@ public interface ProductDao {
     public Integer count(Integer categoryNo);
 
     // 상품 목록 조회
-    public List<ProductDto.ReadAll> findAll(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
+    public List<ProductDto.ReadAll> findAll(String url,Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 상품 상세 보기
-    public ProductDto.Read findByProductNo(Integer productNo);
+    public ProductDto.Read findByProductNo(String url, Integer productNo);
 
     // 상품 번호 찾아서 재고 업데이트
     //public void updateStockByProductNo(List<Integer> productNos, Integer productOrderDetailNo);
@@ -36,16 +36,16 @@ public interface ProductDao {
     public Optional<Product> findProductByNo(Integer productNo);
 
     // 상품명으로 검색
-    public List<ProductDto.ReadAll> findByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo, String productName);
+    public List<ProductDto.ReadAll> findByProductName(String url,Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo, String productName);
 
     // 필터(최신순) 검색
-    public List<ProductDto.ReadAll> findAllByNewProduct(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
+    public List<ProductDto.ReadAll> findAllByNewProduct(String url, Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 필터(인기순) 검색
-    public List<ProductDto.ReadAll> findAllByBestProduct(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
+    public List<ProductDto.ReadAll> findAllByBestProduct(String url, Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     // 필터(이름순) 검색
-    public List<ProductDto.ReadAll> findAllByProductName(Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
+    public List<ProductDto.ReadAll> findAllByProductName(String url, Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
     public Integer delete(Integer productNo);
 

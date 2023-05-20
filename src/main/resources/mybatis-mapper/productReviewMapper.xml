@@ -39,7 +39,7 @@
                 select rownum rnum,a.* from
                     (
                         select product_review_content as reviewContent,product_review_star as reviewStar,product_review_write_date,product_no,
-                               'http://localhost:8081/api/v1/image/product?name=' || (select product_image_filename from product_image where product_no=r.product_no and rownum=1) as productImage,
+                               #{url} || (select product_image_filename from product_image where product_no=r.product_no and rownum=1) as productImage,
                                (select product_name from product where product_no=r.product_no) as productName from product_review r where product_review_writer=#{memberNo}
                     )
                         a where rownum&lt;=#{endRowNum}

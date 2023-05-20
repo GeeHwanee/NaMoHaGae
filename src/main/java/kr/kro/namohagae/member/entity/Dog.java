@@ -27,6 +27,6 @@ public class Dog {
 
     public DogDto.Read toReadDto(String dogNotGenderEnabled) {
 
-        return new DogDto.Read(ImageConstants.IMAGE_PROFILE_URL +dogProfile,dogName,dogGender,dogCategory,dogBirthdayDate,dogNotGenderEnabled,dogWeight,dogIntroduce);
+        return new DogDto.Read(ImageConstants.IMAGE_DOG_URL +dogProfile,dogName,dogGender,dogCategory,dogBirthdayDate,dogNotGenderEnabled,dogWeight,dogIntroduce);
     }
 }
