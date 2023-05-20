@@ -3,7 +3,7 @@ package kr.kro.namohagae.member.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import kr.kro.namohagae.global.dao.TownDao;
-import kr.kro.namohagae.global.util.constants.ImageConstantsInterface;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.MemberDto;
@@ -45,10 +45,8 @@ public class MemberService {
         if(mf!=null && !mf.isEmpty()) {
             int postionOfDot = mf.getOriginalFilename().lastIndexOf(".");
             String ext = mf.getOriginalFilename().substring(postionOfDot);
-            String currentDir = System.getProperty("user.dir")+"/";
-            System.out.println(currentDir);
-            String imagePath = currentDir+ ImageConstantsInterface.IMAGE_PROFILE_FOLDER;
-            File file = new File(imagePath, dto.getMemberEmail() + ext);
+
+            File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, dto.getMemberEmail() + ext);
             try {
                 mf.transferTo(file);
                 profileName = dto.getMemberEmail() + ext;
@@ -115,7 +113,7 @@ public class MemberService {
         }
         int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
         String ext = profile.getOriginalFilename().substring(postionOfDot);
-        File file = new File(ImageConstantsInterface.IMAGE_PROFILE_FOLDER, memberNo + ext);
+        File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, memberNo + ext);
         try {
             profile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
