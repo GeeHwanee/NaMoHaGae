@@ -1,6 +1,6 @@
 package kr.kro.namohagae.member.entity;
 
-import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstantsInterface;
 import kr.kro.namohagae.member.dto.DogDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +27,6 @@ public class Dog {
 
     public DogDto.Read toReadDto(String dogNotGenderEnabled) {
 
-        return new DogDto.Read(ImageConstants.IMAGE_PROFILE_URL +dogProfile,dogName,dogGender,dogCategory,dogBirthdayDate,dogNotGenderEnabled,dogWeight,dogIntroduce);
+        return new DogDto.Read(ImageConstantsInterface.IMAGE_PROFILE_URL +dogProfile,dogName,dogGender,dogCategory,dogBirthdayDate,dogNotGenderEnabled,dogWeight,dogIntroduce);
     }
 }

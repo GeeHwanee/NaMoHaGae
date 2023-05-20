@@ -1,6 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
-import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstantsInterface;
 import kr.kro.namohagae.mall.dao.*;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.entity.Product;
@@ -41,7 +41,7 @@ public class ProductService {
         for(MultipartFile image: dto.getProductImages()) {
             if(image!=null && !image.isEmpty()) {
                 originalFilename = image.getOriginalFilename();
-                File saveFile = new File(currentDir+ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                File saveFile = new File(currentDir+ ImageConstantsInterface.IMAGE_PRODUCT_FOLDER, originalFilename);
                 try {
                     image.transferTo(saveFile);
                 } catch (IllegalStateException | IOException e) {
@@ -68,7 +68,7 @@ public class ProductService {
             for (MultipartFile image : dto.getProductImages()) {
                 if (image != null && !image.isEmpty()) {
                     originalFilename = image.getOriginalFilename();
-                    File saveFile = new File(currentDir + ImageConstants.IMAGE_PRODUCT_FOLDER, originalFilename);
+                    File saveFile = new File(currentDir + ImageConstantsInterface.IMAGE_PRODUCT_FOLDER, originalFilename);
                     try {
                         image.transferTo(saveFile);
                     } catch (IllegalStateException | IOException e) {

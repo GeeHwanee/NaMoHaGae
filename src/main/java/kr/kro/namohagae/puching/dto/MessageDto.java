@@ -1,6 +1,6 @@
 package kr.kro.namohagae.puching.dto;
 
-import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstantsInterface;
 import kr.kro.namohagae.puching.entity.Message;
 import kr.kro.namohagae.puching.entity.Puching;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class MessageDto {
 
         public Message toEntity(String messageContentType,String imageName){
             return Message.builder().messageSender(messageSender).messageReceiver(messageReceiver)
-                    .messageContent("<img src='"+ImageConstants.IMAGE_CHAT_URL +imageName+"'alt='chatimage'>")
+                    .messageContent("<img src='"+ ImageConstantsInterface.IMAGE_CHAT_URL +imageName+"'alt='chatimage'>")
                     .messageContentType(messageContentType).messageWriteDate(LocalDateTime.now()).build();
         }
     }
