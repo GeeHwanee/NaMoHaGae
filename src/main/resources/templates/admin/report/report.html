@@ -1,25 +1,154 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>회원 신고 페이지</title>
+    <title>qna</title>
+    <style>
+
+
+    </style>
+    <script>
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+        function printMyProductReview(reports) {
+            $('#tbody').empty();
+            const $tbody = $('#tbody');
+            reports.forEach((r, i)=> {
+                    const tpl = `
+
+                <tr>
+                    <td>${r.memberNickname} </td>
+                     <td>${r.reportMemberNickname}</td>
+                    <td>${r.reportDate}</td>
+                    <td>${r.reportCategory}</td>
+			    </tr>
+                 <tr>
+                <td>${r.reportContent}</td>
+                <td><button type="button" id="delete-${i}" class="btn btn-primary btn-block">삭제</button></td>
+                <td><a type="button" href="/admin/report/block?memberNo=${r.memberNo}&reportNo=${r.reportNo}" target="_blank" class="btn btn-danger" style="color: beige;">계정 정지</a></td>
+                </tr>
+                <input type="hidden" id="reportNo-${i}" value="${r.reportNo}">
+                    `;
+                    $tbody.append(tpl);
+                }
+            )
+        }
+
+
+        function printPagination({prev, start, end, next, pageno}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+
+        $(document).ready(async function() {
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            console.log("asd");
+            try {
+                const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
+                console.log(result);
+                printMyProductReview(result.reports);
+                printPagination(result)
+
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
+                    console.log(result);
+                    printMyProductReview(result.reports);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+            $('#serch_btn').click(async function (){
+                try {
+                    const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
+                    console.log(result);
+                    printMyProductReview(result.reports);
+                    printPagination(result)
+
+
+                    $('#page_ul').on('click', '.page-link', async function (e) {
+                        e.preventDefault();
+                        const pageNum = $(this).data('page-no');
+                        const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
+                        console.log(result);
+                        printMyProductReview(result.reports);
+                        printPagination(result);
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+            $(document).on("click", "button[id^='delete-']", async function () {
+                const index = $(this).attr('id').split('-')[1];
+                const reportNo = $(`#reportNo-${index}`).val();
+                try {
+                    await $.ajax({ url: '/api/v1/report/delete?reportNo=' + reportNo, method: "post" });
+                    location.reload();
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+            $(document).on("click","button[id^='block-']",async function(){
+                const index = $(this).attr('id').split('-')[1];
+                const memberNo=$(`#memberNo-${index}`).val();
+
+            });
+        });
+
+    </script>
 </head>
 <body>
-<header th:replace="~{fragments/header :: header}"></header>
-<nav th:replace="~{fragments/nav :: nav}"></nav>
-<main>
-    <aside th:replace="~{fragments/aside :: aside}"></aside>
-    <section>
-        <h1>회원 신고 페이지</h1>
-        <article></article>
-    </section>
-    <aside th:replace="~{fragments/bside :: bside}"></aside>
-</main>
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+<div id="page">
+    <header th:replace="~{fragments/header :: header}"></header>
+    <nav th:replace="~{fragments/nav :: nav}"></nav>
+    <main>
+        <aside th:replace="~{fragments/aside :: aside}"></aside>
+        </aside>
+        <section>
+            <input type="text" id="serchNickname">
+            <button type="button" class="btn btn-primary btn-block" id="serch_btn">검색</button>
+            <table class="table table-hover vertical-table">
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+            <ul class="pagination" id="page_ul">
+            </ul>
+        </section>
+        <aside th:replace="~{fragments/bside :: bside}"></aside>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    </footer>
+</div>
 </body>
 </html>

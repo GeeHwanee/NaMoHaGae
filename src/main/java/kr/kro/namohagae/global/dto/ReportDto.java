@@ -24,8 +24,10 @@ public class ReportDto {
     public static class FindAll{
         private Integer reportNo;
         private Integer memberNo;
-        private String reportCategory;
         private Integer reportMemberNo;
+        private String memberNickname;
+        private String reportCategory;
+        private String reportMemberNickname;
         private String reportContent;
         @JsonFormat(pattern = "yy년 MM월 dd일 hh:mm:ss")
         private LocalDateTime reportDate;

@@ -14,8 +14,8 @@
                 select rownum as rnum, a.* from
                     (
                         select
-                          report_no,member_no,report_category,report_member_no,report_content,report_date
-                        from report
+                          report_no,member_no,report_member_no,(select member_nickname from member where member_no= r.member_no ) as memberNickname,report_category,(select  member_nickname from member where member_no=r.report_member_no) as reportMemberNickname,report_content,report_date
+                        from report r
                     ) a
                 where rownum&lt;=#{endRownum}
             )
@@ -27,17 +27,23 @@
                 select rownum as rnum, a.* from
                     (
                         select
-                            report_no,member_no,report_category,report_member_no,report_content,report_date
-                        from report where member_no=#{memberNo}
+                            report_no,member_no,report_member_no,(select member_nickname from member where member_no= r.member_no ) as memberNickname,report_category,(select  member_nickname from member where member_no=r.report_member_no) as reportMemberNickname,report_content,report_date
+                        from report r where member_no=#{memberNo}
                     ) a
                 where rownum&lt;=#{endRownum}
             )
         where rnum&gt;=#{startRownum}
     </select>
     <delete id="delete">
-        delete from reprot where report_no=#{reportNo}
+        delete from report where report_no=#{reportNo}
     </delete>
     <select id="countReportByMemberNo" resultType="int">
         select count(*) from report where member_no=#{memberNo}
+    </select>
+    <select id="countAll" resultType="Integer">
+        select count(*) from report
+    </select>
+    <select id="findMemberNoByNickname" resultType="Integer">
+        select member_no from report where member_no=(select member_no from member where member_nickname=#{nickname}) and rownum=1
     </select>
 </mapper>
