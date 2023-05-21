@@ -109,7 +109,6 @@
 
             const usedMemberPoint = $('#pointInput').val();
             const $form = $('<form>').attr('action', "/order/check").attr('method', 'post');
-            //const orderTotalPrice = $('#orderTotalPrice').text();
             $form.append($('<input>').attr('type', 'hidden').attr('name', 'usedMemberPoint').val(usedMemberPoint));
             $form.append($('<input>').attr('type', 'hidden').attr('name', 'orderTotalPrice').val(orderTotalPrice));
             $.each($(".addressNo"), function (idx, element) {
@@ -126,10 +125,18 @@
     function fullUse() {
         const memberPointElement = document.getElementById("memberPoint");
         const pointInputElement = document.getElementById("pointInput");
-        if (memberPointElement && pointInputElement) {
-            const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
+        const orderTotalPriceElement = document.getElementById("orderTotalPrice");
 
-            pointInputElement.value = memberPoint;
+        if (memberPointElement && pointInputElement && orderTotalPriceElement) {
+            const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
+            const orderTotalPrice = parseInt(orderTotalPriceElement.textContent.replace(/[^0-9]/g, ''));
+
+            if (memberPoint >= orderTotalPrice) {
+                pointInputElement.value = orderTotalPrice;
+            } else {
+                pointInputElement.value = memberPoint;
+            }
+
             updateUsedPoint();
             calculationOrderTotalPrice();
         }
@@ -312,9 +319,6 @@
         <div style="text-align: center">
             <div class="title">결제예정금액</div>
             <br>
-            <!--
-            <div id="orderTotalPrice" th:text="${#numbers.formatInteger(map.orderTotalPrice+3000,0,'COMMA')}+'원'"></div>
-            -->
             <div id="orderTotalPrice"></div>
         </div>
     <br>
@@ -323,7 +327,6 @@
 
         <div style="text-align: center">
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
-            <button id="kaobtn" type="button" class="btn btn-primary btn-block">카카오페이</button>
         </div>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
