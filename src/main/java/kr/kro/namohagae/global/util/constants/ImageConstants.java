@@ -8,19 +8,17 @@ import kr.kro.namohagae.global.util.ConsoleColor;
  */
 public final class ImageConstants {
 
-    private static final String ROOT_URL;
+    private static final String ROOT_URL="/api/v1/image/";
     private static final String ROOT_DIRECTORY;
     private static final String ROOT_PATH="/api/v1/image/";
 
     static {    // static 초기화
         String os =  System.getProperty("os.name").toLowerCase();
-        // 시스템이 linux일 때 도메인 및 이미지 저장 폴더 설정, 그 외는 localhost, 프로젝트 파일 폴더 설정
+        // 시스템이 linux일 때 이미지 저장 폴더 설정, 그 외는  프로젝트 파일 폴더 설정
         if(os.contains("linux")){
-            ROOT_URL="http://namohagae.kro.kr/api/v1/image/";
             ROOT_DIRECTORY = "/home/jhp/image/";
             System.out.println(ConsoleColor.CYAN +"Application Run with ["+System.getProperty("os.name")+"] on Server"+ConsoleColor.RESET);
         }else{
-            ROOT_URL="http://localhost:8081/api/v1/image/";
             ROOT_DIRECTORY =System.getProperty("user.dir")+"/./src/main/resources/static/image/";
             System.out.println(ConsoleColor.CYAN +"Application Run with ["+System.getProperty("os.name")+"] on LocalHost"+ConsoleColor.RESET);
         }
