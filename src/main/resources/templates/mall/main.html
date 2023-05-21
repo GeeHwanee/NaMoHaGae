@@ -64,6 +64,7 @@
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        font-family: 'Dongle', sans-serif;
     }
 
     .slide.active {
@@ -113,8 +114,8 @@
     }
     .title {
         font-weight: bold;
-        font-family: 'Gothic', sans-serif;
-        font-size: 20px;
+        font-family: 'Dongle', sans-serif;
+        font-size: 40px;
     }
     .product-list {
         display: flex;
@@ -129,6 +130,7 @@
         margin-bottom: 20px;
         border: none;
     }
+
     .hide{ display: none}
 </style>
 <script>
@@ -160,28 +162,29 @@
     <section>
         <div class="mall-body">
         <div class="mall-container">
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1477764250597-dffe9f601ae8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=80');">
-                <h3>Tiger</h3>
+            <div class="slide" style="background-image: url('/image/product/메인1.jpg');
+        ">
+                <h3></h3>
             </div>
             <div class="slide" style="
-          background-image: url('https://images.unsplash.com/photo-1456926631375-92c8ce872def?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+          background-image: url('/image/product/메인2.jpg');
         ">
-                <h3>Leopard</h3>
+                <h3></h3>
             </div>
             <div class="slide" style="
-          background-image: url('https://images.unsplash.com/photo-1470848051974-964b789cb6fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80');
+          background-image: url('/image/product/메인3.jpg');
         ">
-                <h3>Lion</h3>
+                <h3>강아지와 즐거운 곳</h3>
             </div>
             <div class="slide" style="
-          background-image: url('https://images.unsplash.com/photo-1526289636136-bce3fd37f962?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80');
+          background-image: url('/image/product/메인4.jpg');
         ">
-                <h3>Snowleopard</h3>
+                <h3></h3>
             </div>
             <div class="slide" style="
-          background-image: url('https://images.unsplash.com/photo-1515970501993-dafc9f582f3e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+          background-image: url('/image/product/메인5.jpg');
         ">
-                <h3>Puma</h3>
+                <h3></h3>
             </div>
         </div>
         </div>
@@ -215,18 +218,18 @@
             <div class="product-card" th:each="p:${bestProduct}">
                 <div class="product-img">
                     <a th:href="@{/mall/product/read(productNo=${p.productNo})}">
-                        <img th:src="${p.productImage}" width="100px" height="100px" alt="">
+                        <img th:src="${p.productImage}" width="150px" height="150px" alt="">
                     </a>
                 </div>
                 <div class="product-contents">
                     <span class="product-name" th:text="${p.productName}"></span>
                     <span class="product-price">
                       <div th:if="${p.productStock == 0}">
-                        <span style="color: red">품절</span>
+                        <span class="product-price" style="color: red">품절</span>
                       </div>
                       <div th:unless="${p.productStock == 0}">
                         <div>
-                          <span th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span>
+                          <span class="product-price" th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span>
                         </div>
                       </div>
                     </span>
@@ -248,18 +251,18 @@
             <div class="product-card" th:each="p:${newProduct}">
                 <div class="product-img">
                     <a th:href="@{/mall/product/read(productNo=${p.productNo})}">
-                        <img th:src="${p.productImage}" width="100px" height="100px" alt="">
+                        <img th:src="${p.productImage}" width="150px" height="150px" alt="">
                     </a>
                 </div>
                 <div class="product-contents">
                     <span class="product-name" th:text="${p.productName}"></span>
-                    <span class="product-price">
+                    <span>
                       <div th:if="${p.productStock == 0}">
-                        <span style="color: red">품절</span>
+                        <span class="product-price" style="color: red">품절</span>
                       </div>
                       <div th:unless="${p.productStock == 0}">
                         <div>
-                          <span th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span>
+                          <span class="product-price" th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span>
                         </div>
                       </div>
                     </span>
