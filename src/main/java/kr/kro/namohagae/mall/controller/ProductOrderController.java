@@ -80,11 +80,11 @@ public class ProductOrderController {
     // 주문 결과 보기
     @GetMapping("/mall/order/success")
     public String orderSuccess(@RequestParam("pg_token") String pgToken, HttpSession session, Model model, HttpServletRequest req, RedirectAttributes ra) {
-        session.removeAttribute("checkedProductNos");
-        session.removeAttribute("productOrderDetailCount");
         KakaoPayApprovalVO res = kakaoPayService.kakaoPayApprove(pgToken,session);
         session.removeAttribute("partner_order_id");
         session.removeAttribute("tid");
+        session.removeAttribute("checkedProductNos");
+        session.removeAttribute("productOrderDetailCount");
         Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
         if (paramMap != null) {
             Integer orderNo = (Integer) paramMap.get("orderNo");
