@@ -160,4 +160,25 @@ public class ProductService {
         return new ProductDto.Pagination(pageNo, prev, start, end, next, categoryNo, products);
     }
 
+    public List<ProductDto.ReadAll> newProductForMain(Integer memberNo) {
+        List<ProductDto.ReadAll> newProduct = productDao.findAllByNewProductForMain(memberNo);
+
+        List<ProductDto.ReadAll> products = new ArrayList<>();
+        for (int i = 0; i < Math.min(newProduct.size(), 5); i++) {
+            products.add(newProduct.get(i));
+        }
+
+        return products;
+    }
+    public List<ProductDto.ReadAll> bestProductForMain(Integer memberNo) {
+        List<ProductDto.ReadAll> bestProduct = productDao.findAllByBestProductForMain(memberNo);
+
+        List<ProductDto.ReadAll> products = new ArrayList<>();
+        for (int i = 0; i < Math.min(bestProduct.size(), 5); i++) {
+            products.add(bestProduct.get(i));
+        }
+
+        return products;
+    }
+
 }
