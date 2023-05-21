@@ -76,8 +76,8 @@ public class KnowledgeService {
 
     public Boolean answerUpdate(Integer answerNo) {
         KnowledgeAnswerDto.Point point = knowledgeAnswerDao.findByKnowledgeAnswerNo(answerNo);
-
         memberDao.updatePoint(point.getKnowledgeAnswerMemberNo(), point.getKnowledgeQuestionPoint());
+        knowledgeAnswerDao.update(answerNo);
         return true;
 
     }
