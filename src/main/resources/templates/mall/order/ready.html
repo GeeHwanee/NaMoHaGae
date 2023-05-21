@@ -61,64 +61,63 @@
     const data = [[${map}]];
 </script>
 <script>
+    // 주문에 카카오페이 로직 추가중
     let productName = undefined;
     let cartDetailCount = undefined;
     let cartTotalPrice = undefined;
     let taxFreeAmount = undefined;
+
     $(document).ready(function() {
         console.log(data);
-           const orderItems = data.orderItems;
-           const orderTotalPrice = data.orderTotalPrice;
-            console.log(orderItems);
-            console.log(orderTotalPrice);
-        $('#kaobtn').click(function() {
+        const orderItems = data.orderItems;
+        console.log(orderItems);
+        $('#order').click(function() {
             productName = '';
             cartDetailCount = 0;
-            if(data.orderItems.length==1){
+            const orderTotalPrice = $('#orderTotalPrice').text().replace("원", "").replace(",", "");
+            if(data.orderItems.length == 1){
                 productName = data.orderItems[0].productName;
                 cartDetailCount = data.orderItems[0].cartDetailCount;
-                cartTotalPrice = data.orderTotalPrice;
-                taxFreeAmount = Math.round(cartTotalPrice/10);
-            }else{
-                let i=0;
+                cartTotalPrice = orderTotalPrice;
+                taxFreeAmount = 0;
+            } else {
+                let i = 0;
                 for (const item of data.orderItems) {
                     cartDetailCount += data.orderItems[i].cartDetailCount;
                     i++;
                 }
-                cartTotalPrice = data.orderTotalPrice;
-                taxFreeAmount = Math.round(cartTotalPrice/10);
-                productName = data.orderItems[0].productName+ ' 외 '+((data.orderItems.length)-1)+'건';
+                cartTotalPrice = orderTotalPrice;
+                taxFreeAmount = 0;
+                productName = data.orderItems[0].productName + ' 외 ' + ((data.orderItems.length) - 1) + '건';
             }
+
+            const totalAmount = parseInt(cartTotalPrice.replace(/[^0-9]/g, ''));
+
             $.ajax({
-                type:'get',
-                url:'/pay/start',
+                type: 'get',
+                url: '/pay/start',
                 data: {
-                    item_name : productName,
-                    quantity : cartDetailCount,
-                    total_amount : cartTotalPrice,
-                    tax_free_amount : taxFreeAmount
+                    item_name: productName,
+                    quantity: cartDetailCount,
+                    total_amount: totalAmount,
+                    tax_free_amount: taxFreeAmount
                 },
-                success:function(res) {
+                success: function(res) {
                     location.href = res.next_redirect_pc_url;
                 }
-            })
-        })
+            });
 
-
-        $("#order").click(function() {
             const usedMemberPoint = $('#pointInput').val();
-            const $form = $('<form>').attr('action', "/order/check").attr('method','post');
-            const orderTotalPrice = $('#orderTotalPrice').text();
-            $form.append($('<input>').attr('type','hidden').attr('name','usedMemberPoint').val(usedMemberPoint));
-            $form.append($('<input>').attr('type','hidden').attr('name','orderTotalPrice').val(orderTotalPrice));
-            $.each($(".addressNo"), function(idx, element) {
-                if($(element).attr("checked")=="checked")
+            const $form = $('<form>').attr('action', "/order/check").attr('method', 'post');
+            //const orderTotalPrice = $('#orderTotalPrice').text();
+            $form.append($('<input>').attr('type', 'hidden').attr('name', 'usedMemberPoint').val(usedMemberPoint));
+            $form.append($('<input>').attr('type', 'hidden').attr('name', 'orderTotalPrice').val(orderTotalPrice));
+            $.each($(".addressNo"), function (idx, element) {
+                if ($(element).attr("checked") == "checked")
                     $('<input type="hidden" name="addressNo">').val($(element).val()).appendTo($form);
             });
             $form.appendTo($('body')).submit();
         })
-
-
     })
 </script>
 <script>
@@ -194,7 +193,6 @@
     });
 
     function onPageLoad() {
-        // 입력값 변경 이벤트에 함수 연결
         inputElement = document.getElementById("pointInput");
         if (inputElement) {
             inputElement.addEventListener("input", updateUsedPoint);
@@ -202,7 +200,6 @@
     }
 
     window.addEventListener("load", onPageLoad);
-
 
 </script>
 </head>
