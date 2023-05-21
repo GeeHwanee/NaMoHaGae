@@ -25,7 +25,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         if (os.contains("linux")) {
             registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("https://namohagae.kro.kr","https://www.namohagae.kro.kr");
             registry.addHandler(chatImageWebsocketHandler,"/puching").setAllowedOrigins("https://namohagae.kro.kr","https://www.namohagae.kro.kr");
-            registry.addHandler(notificationWebSocketHandler, "/notification").setAllowedOrigins("https://namohagae.kro.kr","https://namohagae.kro.kr");
+            registry.addHandler(notificationWebSocketHandler, "/notification").setAllowedOrigins("https://namohagae.kro.kr","https://www.namohagae.kro.kr");
         } else{
             registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("http://localhost:8081");
             registry.addHandler(chatImageWebsocketHandler,"/puching").setAllowedOrigins(("http://localhost:8081"));
