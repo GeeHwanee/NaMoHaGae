@@ -6,7 +6,7 @@ $(document).ready(async function() {
     printEmbededImage();
     // Bside
     if (url.includes("namohagae.kro.kr")){
-        notificationSocket = new WebSocket('ws://namohagae.kro.kr/notification');
+        notificationSocket = new WebSocket('wss://namohagae.kro.kr/notification');
     }else if(url.includes("localhost:8081")){
         notificationSocket = new WebSocket('ws://localhost:8081/notification');
     }

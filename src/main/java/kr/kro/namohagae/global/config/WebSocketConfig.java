@@ -24,9 +24,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
         // 소켓연결 주소와 소켓접근가능 도메인 설정
         String os =  System.getProperty("os.name").toLowerCase();
         if (os.contains("linux")) {
-            registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("http://namohagae.kro.kr");
-            registry.addHandler(chatImageWebsocketHandler,"/puching").setAllowedOrigins(("http://namohagae.kro.kr"));
-            registry.addHandler(notificationWebSocketHandler, "/notification").setAllowedOrigins("http://namohagae.kro.kr");
+            registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("https://namohagae.kro.kr");
+            registry.addHandler(chatImageWebsocketHandler,"/puching").setAllowedOrigins(("https://namohagae.kro.kr"));
+            registry.addHandler(notificationWebSocketHandler, "/notification").setAllowedOrigins("https://namohagae.kro.kr");
         } else{
             registry.addHandler(chatWebSocketHandler,"/chatroom").setAllowedOrigins("http://localhost:8081");
             registry.addHandler(chatImageWebsocketHandler,"/puching").setAllowedOrigins(("http://localhost:8081"));
