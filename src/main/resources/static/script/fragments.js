@@ -1,15 +1,14 @@
 $(document).ready(async function() {
-    const url = location.href.slice(7);
+    const url = location.host;
     let notificationSocket;
     // Aside
     printAside();
+    printEmbededImage();
     // Bside
     if (url.includes("namohagae.kro.kr")){
         notificationSocket = new WebSocket('ws://namohagae.kro.kr/notification');
-        printEmbededImage("namohagae.kro.kr");
     }else if(url.includes("localhost:8081")){
         notificationSocket = new WebSocket('ws://localhost:8081/notification');
-        printEmbededImage("localhost:8081");
     }
 
     notificationSocket.addEventListener('open', function (event) {
@@ -74,26 +73,25 @@ $(document).ready(async function() {
     })
 
 })
-const mall = "mall";
-const puching = "puching";
-const member = "member";
-const board = "board";
-const admin	= "admin";
+const mall = "/mall";
+const puching = "/puching";
+const member = "/member";
+const board = "/board";
+const admin	= "/admin";
 
 function printAside(){
-    let sideBar = location.href.slice(28);
-    let localSideBar = location.href.slice(22);
+    let sideBar = location.pathname;
     const $title = $('#aside_title');
     const $side_bar = $('#side_bar');
     $title.text("");
     $side_bar.empty();
-    if(sideBar.startsWith(mall)||localSideBar.startsWith(mall)){
+    if(sideBar.startsWith(mall)){
         $title.append('<li><a href="/mall/main">뼈다귀몰</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=1">사료/간식</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=2">장난감</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=3">산책용품</a></li>');
         $side_bar.append('<li><a href="/mall/product/list?categoryNo=4">기타</a></li>');
-    }else if(sideBar.startsWith(member)||localSideBar.startsWith(member)){
+    }else if(sideBar.startsWith(member)){
         $title.append('<li><a href="/member/main">내 정보</a></li>');
         $side_bar.append('<li><a href="/member/notification">알림함</a></li>');
         $side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
@@ -106,16 +104,16 @@ function printAside(){
         $side_bar.append('<li><a href="/member/board/comment">내가 작성한 댓글</a></li>');
         $side_bar.append('<li><a href="/member/board/question">내가 작성한 질문</a></li>');
         $side_bar.append('<li><a href="/member/board/answer">내가 작성한 답변</a></li>');
-    }else if(sideBar.startsWith(puching)||localSideBar.startsWith(puching)){
+    }else if(sideBar.startsWith(puching)){
         $title.append('<li><a href="/puching/main">퍼칭</a></li>');
         $side_bar.append('<li><a href="/puching/chatroom">채팅방</a></li>');
-    }else if(sideBar.startsWith(board)||localSideBar.startsWith(board)){
+    }else if(sideBar.startsWith(board)){
         $title.append('<li><a href="/board/main">커뮤니티</a></li>');
         $side_bar.append('<li><a href="/board/notice/list">공지사항</a></li>');
         $side_bar.append('<li><a href="/board/free/list">자유 게시판</a></li>');
         $side_bar.append('<li><a href="/board/town/list">동네 게시판</a></li>');
         $side_bar.append('<li><a href="/board/knowledge/list">지식인</a></li>');
-    }else if(sideBar.startsWith(admin)||localSideBar.startsWith(admin)){
+    }else if(sideBar.startsWith(admin)){
         $title.append('<li><a href="/admin/main">관리자</a></li>');
         $side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
         $side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
@@ -124,12 +122,12 @@ function printAside(){
     }
 }
 
-function printEmbededImage(url){
-    $('#logo_main').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Main.png');
-    $('#logo_notion').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Notion.png');
-    $('#logo_github').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Github.png');
-    $('#logo_swagger').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Swagger.png');
-    $('#logo_kakao').attr('src','http://'+url+'/api/v1/image/embeded?name=kakao_login_large_wide.png');
+function printEmbededImage(){
+    $('#logo_main').attr('src','/api/v1/image/embeded?name=Logo_Main.png');
+    $('#logo_notion').attr('src','/api/v1/image/embeded?name=Logo_Notion.png');
+    $('#logo_github').attr('src','/api/v1/image/embeded?name=Logo_Github.png');
+    $('#logo_swagger').attr('src','/api/v1/image/embeded?name=Logo_Swagger.png');
+    $('#logo_kakao').attr('src','/api/v1/image/embeded?name=kakao_login_large_wide.png');
 
 }
 
