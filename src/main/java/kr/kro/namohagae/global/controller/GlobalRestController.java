@@ -38,6 +38,9 @@ public class GlobalRestController {
         else if (path.startsWith(ImageConstants.IMAGE_CHAT_PATH)) {folder = ImageConstants.IMAGE_CHAT_DIRECTORY;}
         else {folder = ImageConstants.IMAGE_EMBEDED_DIRECTORY;}
         File file = new File(folder, name);
+        if (!file.exists()) {
+            file = new File(ImageConstants.IMAGE_EMBEDED_DIRECTORY, "error.png");
+        }
         try {
             byte[] bytes = Files.readAllBytes(file.toPath());
             String contentType = Files.probeContentType(file.toPath());
