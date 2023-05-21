@@ -8,6 +8,12 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>지식인 게시판 쓰기 페이지</title>
+    <script th:inline="javascript">
+        const msg = [[${msg}]];
+        if (msg!=null) {
+            alert(msg);
+        }
+    </script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
