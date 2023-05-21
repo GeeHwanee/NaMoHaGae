@@ -125,10 +125,10 @@ function printAside(){
 }
 
 function printEmbededImage(url){
-    $('#logo_main').attr('src','http://'+url+'/api/v1/image/embeded?name=logo_Main.png');
+    $('#logo_main').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Main.png');
     $('#logo_notion').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Notion.png');
     $('#logo_github').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Github.png');
-    $('#logo_swagger').attr('src','http://'+url+'/api/v1/image/embeded?name=logo_Swagger.png');
+    $('#logo_swagger').attr('src','http://'+url+'/api/v1/image/embeded?name=Logo_Swagger.png');
     $('#logo_kakao').attr('src','http://'+url+'/api/v1/image/embeded?name=kakao_login_large_wide.png');
 
 }
