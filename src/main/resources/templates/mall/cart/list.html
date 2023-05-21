@@ -33,6 +33,13 @@
         font-weight: bold;
         color: white;
     }
+
+    #cartText {
+        font-weight: bold;
+        font-family: 'Gothic', sans-serif;
+        text-align: center;
+        font-size: 40px;
+    }
 </style>
 <script>
 
@@ -170,6 +177,7 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
+        <div id="cartText">장바구니</div>
         <table style="width:100%;" id="cart_table" class="table table-hover">
             <tr>
                 <th>

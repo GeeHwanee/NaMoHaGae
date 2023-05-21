@@ -51,21 +51,20 @@
       <br>
       <table class="table table-hover">
         <colgroup>
-          <col style="width: 50%;">
+          <col style="width: 25%;">
+          <col style="width: 25%;">
           <col style="width: 25%;">
           <col style="width: 25%;">
         </colgroup>
         <thead>
         <tr>
-          <th>상품정보</th><th>수량</th><th>상품금액</th>
+          <th colspan="2">상품정보</th><th>수량</th><th>상품금액</th>
         </tr>
         </thead>
         <tbody>
           <tr th:each="item:${order.orderDetailList}">
-            <td class="productInfo">
-              <img th:src="${item.productImage}" width="100px" height="100px">
-              <span th:text="${item.productName}"></span>
-            </td>
+            <td class="productInfo"><img th:src="${item.productImage}" width="100px" height="100px"></td>
+            <td class="productInfo"><span th:text="${item.productName}"></span></td>
             <td class="productInfo"><span th:text="${item.productOrderDetailCount}"></span></td>
             <td class="productInfo"><span th:text="${#numbers.formatInteger(item.productOrderDetailPrice,0,'COMMA')}"></span>원</td>
           </tr>
