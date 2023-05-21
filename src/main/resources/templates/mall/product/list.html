@@ -130,7 +130,7 @@
                     <span class="product-name" th:text="${p.productName}"></span>
                     <span class="product-price">
                       <div th:if="${p.productStock == 0}">
-                        <span style="color: red">품절댐</span>
+                        <span style="color: red">품절</span>
                       </div>
                       <div th:unless="${p.productStock == 0}">
                         <div>
