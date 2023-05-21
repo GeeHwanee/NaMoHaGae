@@ -79,15 +79,14 @@
                 cancelButtonColor: '#d33',
             });
             if(choice.isConfirmed===true){
-
                 await $.ajax({
                     url:'/api/v1/knowledge/answer/select?answerNo='+$answerNo,
                     type:'post',
                     success(result){
+                        alert("채택 완료");
                         printKnowledgeAnswer();
                     },
                     error(error){
-                        Swal.fire('포인트 부족', '채택에 필요한 포인트가 부족합니다', 'warning');
                         printKnowledgeAnswer();
                     }
                 })
