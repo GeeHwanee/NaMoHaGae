@@ -670,7 +670,7 @@
     const url = location.href.slice(7);
     var socket;
     if (url.includes("namohagae.kro.kr")){
-        socket = new WebSocket('ws://namohagae.kro.kr/chatroom');
+        socket = new WebSocket('wss://namohagae.kro.kr/chatroom');
     }else if(url.includes("localhost:8081")){
         socket = new WebSocket('ws://localhost:8081/chatroom');
     }
@@ -941,7 +941,7 @@
    //이미지 전송 및 화면에 바로 띄우는 거
    var puchingSocket;
    if (url.includes("namohagae.kro.kr")){
-       puchingSocket = new WebSocket('ws://namohagae.kro.kr/puching');
+       puchingSocket = new WebSocket('wss://namohagae.kro.kr/puching');
    }else if(url.includes("localhost:8081")){
        puchingSocket = new WebSocket('ws://localhost:8081/puching');
    }
