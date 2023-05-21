@@ -52,40 +52,25 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class GlobalController {
-    @Autowired
-    private ChatService chatService;
-    @Autowired
-    private MemberDao memberDao;
-    @Autowired
-    private ReviewService puchingReviewService;
-    @Autowired
-    private QnaService qnaService;
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private DogService dogService;
-    @Autowired
-    private BoardNoticeService boardNoticeService;
-
+    private final TownService townService;
+    private final BoardService boardService;
+    private final BoardTownService boardTownService;
     private final KnowledgeService knowledgeService;
+    private final BoardNoticeService boardNoticeService;
+    private final CommentService commentService;
 
-    @Autowired
-    private AddressService addressService;
-    @Autowired
-    private ReportService reportService;
-    @Autowired
-    private WebSocketService webSocketService;
+    private final MemberService memberService;
+    private final DogService dogService;
+    private final ReportService reportService;
 
-    @Autowired
-    private BoardService boardService;
-    @Autowired
-    private BoardTownService boardTownService;
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private TownService townService;
+    private final ProductService productService;
+    private final QnaService qnaService;
+    private final AddressService addressService;
+
+    private final ChatService chatService;
+    private final MemberDao memberDao;
+    private final ReviewService puchingReviewService;
+    private final WebSocketService webSocketService;
 
     // [Global 파트]--------------------------------------------------------------------
     @GetMapping(value = {"/", "/main"})
@@ -411,10 +396,15 @@ public class GlobalController {
     }
 
     @PostMapping("/board/knowledge/write")
-    public String knowledgeWrite(KnowledgeQuestionDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
+    public String knowledgeWrite(KnowledgeQuestionDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails, RedirectAttributes ra){
        Integer result = knowledgeService.questionSave(dto, myUserDetails.getMemberNo());
+       if(result>0){
         return "redirect:/board/knowledge/read?knowledgeQuestionNo="+result;
-    }
+        } else {
+            ra.addFlashAttribute("msg","포인트가 부족합니다");
+           return "redirect:/board/knowledge/write";
+        }
+       }
 
     @GetMapping("/board/knowledge/read")
     public String knowledgeRead(Integer knowledgeQuestionNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
