@@ -5,7 +5,91 @@
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+    <script>
+        function printMyAnswer(answers) {
+            $('#answerDiv').empty();
+            const $answerDiv = $('#answerDiv');
+            answers.forEach(a => {
 
+                    const tpl = `
+                    <div class="card bg-success text-white">
+                    <div class="card-body" style="overflow:hidden;">
+                    <div style="float:left;">
+                    <span><a style="color: white" href="/board/knowledge/read?knowledgeQuestionNo=${a.knowledgeQuestionNo}">질문 제목:${a.knowledgeQuestionTitle} </a></span><span> 질문 작성일:${formatDateAnswer(a.knowledgeQuestionWriteDate)}</span>
+
+                    </div>
+                    <div style="float:right;">
+                    <span>채택 여부:${selectAnswer(a.knowledgeAnswerSelectionEnabled)}</span><span>답변 작성일:${formatDateAnswer(a.knowledgeAnswerWriteDate)}</span>
+                    </div>
+                      </div>
+                </div>
+
+                    <table class="table table-border">
+                        <tr>
+                            <td>${a.knowledgeAnswerContent}</td>
+                        </tr>
+                    `;
+                    $answerDiv.append(tpl);
+                }
+            )
+        }
+        function selectAnswer(knowledgeAnswerSelectionEnabled){
+            if (knowledgeAnswerSelectionEnabled==false){
+                return "미채택"
+            }
+            else{
+                return "채택됨"
+            }
+        }
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        function printPagination({prev, start, end, next, pageno}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+        $(document).ready(async function() {
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            try {
+                const result = await $.ajax("/api/v1/member/knowledge/answer?pageno=" + pageno);
+                console.log(result);
+                printMyAnswer(result.answers);
+                printPagination(result)
+
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/member/knowledge/answer?pageno=" + pageNum);
+                    console.log(result);
+                    printMyAnswer(result.answers);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>내가 작성한 답변 페이지</title>
 </head>
@@ -15,8 +99,11 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>내가 작성한 답변 페이지</h1>
-        <article></article>
+        <div id="answerDiv">
+
+        </div>
+        <ul class="pagination" id="page_ul">
+        </ul>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
