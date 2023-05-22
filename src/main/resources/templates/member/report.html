@@ -20,6 +20,7 @@
             formData.append('memberNo', $('#memberNo').val());
             formData.append('reportContent', $('#reportContent').val());
             formData.append('reportCategory', $('#reportCategory').val());
+            formData.append('_csrf', $_csrf);
 
             // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
             for(let key of formData.keys()){

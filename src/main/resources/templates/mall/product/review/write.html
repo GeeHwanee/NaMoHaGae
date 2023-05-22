@@ -73,6 +73,7 @@
       $("<input type='hidden'>").attr('name','productNo').val(productNo).appendTo($form);
       $("<input type='hidden'>").attr('name','productReviewContent').val(productReviewContent).appendTo($form);
       $("<input type='hidden'>").attr('name','productReviewStar').val(productReviewStar).appendTo($form);
+      $form.append($_csrf_input);
       $form.appendTo($('body')).submit();
     })
   })

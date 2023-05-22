@@ -80,7 +80,7 @@
             });
             if(choice.isConfirmed===true){
                 await $.ajax({
-                    url:'/api/v1/knowledge/answer/select?answerNo='+$answerNo,
+                    url:'/api/v1/knowledge/answer/select?answerNo='+$answerNo+"&_csrf="+$_csrf,
                     type:'post',
                     success(result){
                         alert("채택 완료");
@@ -157,8 +157,6 @@
                 등록된 답변이 없습니다
             </div>
         </article>
-
-
         </div>
     </section>
 

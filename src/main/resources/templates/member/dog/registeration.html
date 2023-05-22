@@ -59,6 +59,7 @@
         <section>
             <h1>회원 가입</h1>
             <form id="registeration_form" method="post" action="/dog/registeration" enctype="multipart/form-data">
+                <input type="hidden" id="_csrf" name="_csrf">
                 <div class="mb-3 mt-3">
                     <input type="file" name="dogProfile" id="dogProfile" class="form-control">
                 </div>

@@ -61,6 +61,7 @@
     </div>
     <hr>
     <form id="add_form" action="/mall/product/qna/write" method="post" enctype="multipart/form-data">
+      <input type="hidden" id="_csrf" name="_csrf">
       <input type="hidden" id="productNo" name="productNo" th:value="${item.productNo}" />
       <input type="hidden" id="memberNo" name="memberNo" th:value="${writer}" />
       <div id="qnaText">

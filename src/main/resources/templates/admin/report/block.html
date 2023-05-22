@@ -22,6 +22,7 @@
 
         formData.append('memberNo', memberNo);
         formData.append('reportNo', reportNo);
+        formData.append('_csrf', $_csrf);
         formData.append('blockDeadlineDate', $('#blockDeadlineDate').val());
 
         // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
