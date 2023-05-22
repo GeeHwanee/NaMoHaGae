@@ -145,6 +145,18 @@
             window.location.href = '/mall/product/list?' + queryString;
         }
     }
+
+
+    function addEmptyCards() {
+        const productCards = $('.product-card');
+        const numCards = productCards.length;
+        const numEmptyCards = 3 - (numCards % 3);
+
+        // 빈 카드 추가
+        for (let i = 0; i < numEmptyCards; i++) {
+            $('.product-list').append('<div class="product-card empty-card"></div>');
+        }
+    }
 </script>
 <script>
     $(document).ready(function(){
@@ -166,6 +178,8 @@
             }
         })
 
+
+        // 필터 선택시 글씨 굵게 적용
         // 페이지 로드 시 필터링 옵션을 가져옴
         const urlParams = new URLSearchParams(window.location.search);
         const sortBy = urlParams.get('sortBy');
@@ -178,6 +192,16 @@
         } else if (sortBy === 'ProductName') {
             $('#sortByName').addClass('filterBold');
         }
+
+
+        // 상품 정렬 빈 공간 있으면 왼쪽 정렬
+        // 페이지 로드 시 빈 카드 추가
+        addEmptyCards();
+
+        // 윈도우 리사이즈 시 빈 카드 업데이트
+        $(window).resize(function() {
+            addEmptyCards();
+        });
     })
 </script>
 </head>
