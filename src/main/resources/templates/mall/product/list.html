@@ -13,12 +13,19 @@
         margin: 0;
         padding: 0;
     }
+
+    #page_ul {
+        margin: 0 auto;
+        justify-content: center;
+    }
     .hide{ display: none}
     .product-list {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: center;
         margin-top: 12px;
+        margin-left: 20px;
     }
 
     .product-card {
@@ -48,6 +55,32 @@
     .product-favorite {
         font-size: 14px;
     }
+
+    .filter-and-search {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .product-filter {
+        margin-left: 50px;
+    }
+
+    .filterBold {
+        font-weight: bold;
+    }
+
+    .search {
+        margin-right: 50px;
+    }
+
+    #categoryName div {
+        font-weight: bold;
+        font-family: 'Gothic', sans-serif;
+        text-align: left;
+        margin-left: 50px;
+        font-size: 30px;
+    }
 </style>
 <script>
     function updateUrlParams(params) {
@@ -58,6 +91,8 @@
         return urlParams.toString();
     }
 
+
+    /*
     function sortProducts(sortBy) {
         const params = {
             sortBy: sortBy,
@@ -65,6 +100,38 @@
         const queryString = updateUrlParams(params);
         window.location.href = '/mall/product/list?' + queryString;
     }
+     */
+
+    function sortProducts(sortBy) {
+        const params = {
+            sortBy: sortBy,
+        };
+
+        $('.filter-text').each(function() {
+            $(this).removeClass('filterBold');
+        });
+
+        const queryString = updateUrlParams(params);
+        window.location.href = '/mall/product/list?' + queryString;
+    }
+
+    function updateUrlParams(params) {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const value = params[key];
+                if (value) {
+                    urlParams.set(key, value);
+                } else {
+                    urlParams.delete(key);
+                }
+            }
+        }
+
+        return urlParams.toString();
+    }
+
 
     function searchProduct(event) {
         if (event.key === 'Enter' || event.keyCode === 13 || event.target.classList.contains('searchIcon')) {
@@ -76,6 +143,18 @@
             };
             const queryString = updateUrlParams(params);
             window.location.href = '/mall/product/list?' + queryString;
+        }
+    }
+
+
+    function addEmptyCards() {
+        const productCards = $('.product-card');
+        const numCards = productCards.length;
+        const numEmptyCards = 3 - (numCards % 3);
+
+        // 빈 카드 추가
+        for (let i = 0; i < numEmptyCards; i++) {
+            $('.product-list').append('<div class="product-card empty-card"></div>');
         }
     }
 </script>
@@ -98,6 +177,31 @@
                 console.log(err)
             }
         })
+
+
+        // 필터 선택시 글씨 굵게 적용
+        // 페이지 로드 시 필터링 옵션을 가져옴
+        const urlParams = new URLSearchParams(window.location.search);
+        const sortBy = urlParams.get('sortBy');
+
+        // 필터링 옵션에 따라 스타일을 설정
+        if (sortBy === 'NewProduct') {
+            $('#sortByNew').addClass('filterBold');
+        } else if (sortBy === 'BestProduct') {
+            $('#sortByBest').addClass('filterBold');
+        } else if (sortBy === 'ProductName') {
+            $('#sortByName').addClass('filterBold');
+        }
+
+
+        // 상품 정렬 빈 공간 있으면 왼쪽 정렬
+        // 페이지 로드 시 빈 카드 추가
+        addEmptyCards();
+
+        // 윈도우 리사이즈 시 빈 카드 업데이트
+        $(window).resize(function() {
+            addEmptyCards();
+        });
     })
 </script>
 </head>
@@ -107,18 +211,35 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-
-        <div class="search">
-            <input id="searchInput" type="text" placeholder="상품명 입력" onkeydown="searchProduct(event)">>
-            <span class="searchIcon fa-solid fa-magnifying-glass" onclick="searchProduct(event)"></span>
+        <div id="categoryName">
+            <div th:if="${list.categoryNo == 1}">사료/간식</div>
+            <div th:if="${list.categoryNo == 2}">장난감</div>
+            <div th:if="${list.categoryNo == 3}">산책용품</div>
+            <div th:if="${list.categoryNo == 4}">기타</div>
         </div>
-
-        <div class="product-filter">
-            <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</button>
-            <button class="btn btn-danger mt-3" id="sortByName" onclick="sortProducts('ProductName')">상품명</button>
-            <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortProducts('BestProduct')">인기순</button>
+        <br>
+        <div class="filter-and-search">
+            <!--
+            <div class="product-filter">
+                <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</button>
+                <button class="btn btn-danger mt-3" id="sortByName" onclick="sortProducts('ProductName')">상품명</button>
+                <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortProducts('BestProduct')">인기순</button>
+            </div>
+            -->
+            <div class="product-filter">
+                <span class="filter-text" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</span>
+                <span> ㅣ </span>
+                <span class="filter-text" id="sortByBest" onclick="sortProducts('BestProduct')">인기순</span>
+                <span> ㅣ </span>
+                <span class="filter-text" id="sortByName" onclick="sortProducts('ProductName')"> 상품명</span>
+            </div>
+            <div class="search">
+                <input id="searchInput" type="text" placeholder="상품명 입력" onkeydown="searchProduct(event)">
+                <span class="searchIcon fa-solid fa-magnifying-glass" onclick="searchProduct(event)"></span>
+            </div>
         </div>
-
+        <br>
+        <br>
         <div class="product-list">
             <div class="product-card" th:each="p:${list.products}">
                 <div class="product-img">
@@ -158,7 +279,7 @@
             <div id="product"></div>
         </div>
 
-        <ul class="pagination">
+        <ul class="pagination" id="page_ul">
             <li th:if="${list.prev>0}" class="page-item">
                 <a class="page-link" th:href="@{/mall/product/list(categoryNo=${list.categoryNo},pageNo=list.prev)}">이전으로</a>
             </li>
