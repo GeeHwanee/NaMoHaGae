@@ -46,4 +46,10 @@ public class KnowledgeRestController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("실패");
         }
     }
+
+    @GetMapping("/member/knowledge/question")
+    public ResponseEntity<?> myQuestionList(Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails){
+        Integer memberNo = myUserDetails.getMemberNo();
+        return  ResponseEntity.ok(knowledgeService.myQusetionList(pageno,memberNo));
+    }
 }
