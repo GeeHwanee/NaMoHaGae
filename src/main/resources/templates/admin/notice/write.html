@@ -18,6 +18,7 @@
         <div>
 
             <form action="/admin/notice/write" method="post">
+                <input type="hidden" id="_csrf" name="_csrf">
                 <input type="text" name="boardNoticeTitle">
                 <textarea name="boardNoticeContent"></textarea>
                 <button >답변 작성하기</button>

@@ -78,7 +78,7 @@
                 const index = $(this).attr('id').split('-')[1];
                 const favoriteNo = $(`#favoriteNo-${index}`).val();
                 try {
-                    const result = await $.ajax({ url: '/api/v1/favorite/add?productNo=' + favoriteNo, method: "patch" });
+                    const result = await $.ajax({ url: '/api/v1/favorite/add?productNo=' + favoriteNo+"&_csrf="+$_csrf, method: "patch" });
                     if (result.favorite == true) {
                         $(this).text("취소");
                     } else {

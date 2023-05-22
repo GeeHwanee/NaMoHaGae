@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <aside th:fragment="bside" id="bside">
-	<div class="quickMenu">
+	<div class="quickMenu" sec:authorize="isAuthenticated()">
 		<h4 style="font-family: 'Dongle', sans-serif; font-size: 2em; border-bottom: 1px solid #c9dc92; margin-bottom: 0; display: inline-block">읽지 않은 알림</h4>
 		<ul id="notification"></ul>
 	</div>

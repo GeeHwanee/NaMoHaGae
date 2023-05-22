@@ -50,7 +50,7 @@
                 const no = $(this).val();
                 try {
                     await $.ajax({
-                        url: "/api/v1/address/delete?addressNo=" + no,
+                        url: "/api/v1/address/delete?addressNo=" + no+"&_csrf="+$_csrf,
                         type: "POST"
                     });
                     // 읽음 여부를 업데이트한 후의 작업을 수행
@@ -70,7 +70,7 @@
                 const no = $(this).val();
                 try {
                     await $.ajax({
-                        url: "/api/v1/address/default?addressNo=" + no,
+                        url: "/api/v1/address/default?addressNo=" + no+"&_csrf="+$_csrf,
                         type: "POST"
                     });
                 } catch (err) {

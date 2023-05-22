@@ -9,10 +9,21 @@ let $_csrf_input;
 $(document).ready(async function() {
     $_csrf = $('meta[name="_csrf"]').attr('content');
     $_csrf_input = $('<input type="hidden" name="_csrf" value="'+ $_csrf + '">');
+    let csrf = $('#_csrf');
+    if(csrf.length){
+        csrf.val($_csrf);
+        console.log(csrf.val());
+    }
     const url = location.host;
     let notificationSocket;
-    // Aside
-    printAside();
+        printAside();
+        try {
+            const result = await $.ajax("/api/v1/notification/aside/list");
+            printBsideNotification(result);
+        }catch (err){
+            console.log(err)
+        }
+
     printEmbededImage();
     // Bside
     if (url.includes("namohagae.kro.kr")){
@@ -47,13 +58,6 @@ $(document).ready(async function() {
         console.log('Notification Service Error');
         // 에러가 발생한 경우 실행되는 코드
     });
-
-    try {
-        const result = await $.ajax("/api/v1/notification/aside/list");
-        printBsideNotification(result);
-    }catch (err){
-        console.log(err)
-    }
     $('#notification').on("click", "#read", async function () {
         const $notificationNo = $(this).data('notification-no');
         try {

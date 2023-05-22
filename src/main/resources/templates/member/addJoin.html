@@ -151,6 +151,7 @@
         <section>
             <h1>회원 가입</h1>
             <form id="join_form" method="post" enctype="multipart/form-data" action="/member/addJoin" th:object="${dto}">
+               <input type="hidden" id="_csrf" name="_csrf">
                 <div class="mb-3 mt-3">
                     <input type="file" name="memberProfileImage" id="memberProfileImage" class="form-control">
                 </div>

@@ -115,6 +115,7 @@
                 if ($(element).attr("checked") == "checked")
                     $('<input type="hidden" name="addressNo">').val($(element).val()).appendTo($form);
             });
+            $form.append($_csrf_input);
             $form.appendTo($('body')).submit();
         })
     })
