@@ -42,14 +42,14 @@
    }
    .title {
        color:#ec5f1f;
-       width:80%;
+        width:80%;
        font-weight:bold;
    }
     .table > a:hover {
         color:#333;
     }
    .title_sub {
-       width:60%;
+       width:70%;
        height:5px;
        background: #ebeced;
        float:right;
@@ -61,6 +61,21 @@
    .comment_count {
        font-size:12px;
    }
+    @media (max-width: 1500px) {
+       .title_sub {
+           width:60%;
+       }
+    }
+    @media (max-width: 1160px) {
+        .title_sub {
+            width:40%;
+        }
+    }
+    @media (max-width: 950px) {
+        .title_sub {
+            width:30%;
+        }
+    }
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -95,6 +110,7 @@
                     <a th:href="@{town/list}" class="title">동네인기게시물<div class="title_sub"></div></a>
                     <div th:each="board : ${TownReadList}" class="table">
                         <a th:href="@{/board/town/read(boardNo=${board.boardNo})}">
+                            <span th:text="'['+${board.townDong}+']'" class="town_Dong"></span>
                             <span th:text="${board.boardTitle}" class="boardTitle"></span>
                             <span th:text="'['+${board.commentCount}+']'" class="comment_count"></span>
                             <span th:text="${#temporals.format(board.boardWriteDate, 'MM/dd')}" class="date_right"></span>
@@ -105,6 +121,7 @@
                     <a th:href="@{town/list}" class="title">동네추천게시물<div class="title_sub"></div></a>
                     <div th:each="board : ${TownRecommendList}" class="table">
                         <a th:href="@{/board/town/read(boardNo=${board.boardNo})}">
+                            <span th:text="'['+${board.townDong}+']'" class="town_Dong"></span>
                             <span th:text="${board.boardTitle}" class="boardTitle"></span>
                             <span th:text="'['+${board.commentCount}+']'" class="comment_count"></span>
                             <span th:text="${#temporals.format(board.boardWriteDate, 'MM/dd')}" class="date_right"></span>
@@ -124,7 +141,7 @@
         var titleElements = document.getElementsByClassName("boardTitle");
         for (var i = 0; i < titleElements.length; i++) {
             var title = titleElements[i].textContent;
-            var maxLength = 16; // 최대 길이 설정
+            var maxLength = 5; // 최대 길이 설정
             if (title.length > maxLength) {
                 titleElements[i].textContent = title.substring(0, maxLength) + "...";
             }

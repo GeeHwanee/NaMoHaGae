@@ -11,22 +11,16 @@
 
 </head>
 <style>
+ #page {
+     border:none;
+ }
+ #search_form {
+     text-align: center;
+ }
+ #button_form {
+     display:flex;
+ }
 
-    .layout {
-        width : 500px;
-        margin : 0 auto;
-        margin-top : 40px;
-    }
-    .layout2 > ul{
-        display:flex;
-        justify-content: center;
-    }
-    .layout2 > ul > li {
-        margin-top:50px;
-        margin-right:30px;
-        font-size:25px;
-
-    }
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -60,49 +54,55 @@
                             <td th:text="${board.boardRecommendCount}"></td>
                         </tr>
                     </tbody>
-                    <form method="GET" action="/board/free/list">
-                        <!-- 다른 입력 필드들 -->
-                        <input type="hidden" name="change" value="1">
-                        <button type="submit">전체글</button>
-                    </form>
-                    <form method="GET" action="/board/free/list">
-                        <!-- 다른 입력 필드들 -->
-                        <input type="hidden" name="change" value="2">
-                        <button type="submit">조회순</button>
-                    </form>
-                    <form method="GET" action="/board/free/list">
-                        <!-- 다른 입력 필드들 -->
-                        <input type="hidden" name="change" value="3">
-                        <button type="submit">추천순</button>
-                    </form>
+
                 </table>
-            <form th:action="@{/board/free/list}" method="get">
-                <input type="text" name="searchName">
-                <button type="submit">검색</button>
+            <div id="button_form">
+            <form method="GET" action="/board/free/list">
+                <!-- 다른 입력 필드들 -->
+                <input type="hidden" name="change" value="1">
+                <button type="submit">전체글</button>
             </form>
-            <div class="layout2">
-                <ul>
+            <form method="GET" action="/board/free/list">
+                <!-- 다른 입력 필드들 -->
+                <input type="hidden" name="change" value="2">
+                <button type="submit">조회순</button>
+            </form>
+            <form method="GET" action="/board/free/list">
+                <!-- 다른 입력 필드들 -->
+                <input type="hidden" name="change" value="3">
+                <button type="submit">추천순</button>
+            </form>
+            </div>
+            <nav aria-label="Page navigation example" id="page">
+                <ul class="pagination">
                     <li th:if="${paging.page <= 1}">
-                        <span>[이전]</span>
+                        <span class="page-link">이전</span>
                     </li>
-                    <li th:if="${paging.page > 1}">
-                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName},change=${change})}">[이전]</a>
+                    <li th:if="${paging.page > 1}" class="page-item">
+                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName},change=${change})}" class="page-link">[이전]</a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+                    <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item">
                         <div th:if="${i eq paging.page}">
-                            <span th:text="${i}"></span>
+                            <span th:text="${i}" class="page-link"></span>
                         </div>
                         <div th:if="${i != paging.page}">
-                            <a th:href="@{/board/free/list(page=${i}, searchName=${searchName},change=${change})}" th:text="${i}"></a>
+                            <a th:href="@{/board/free/list(page=${i}, searchName=${searchName},change=${change})}" th:text="${i}" class="page-link"></a>
                         </div>
                     </li>
-                    <li th:if="${paging.page >= paging.maxPage}">
-                        <span>[다음]</span>
+                    <li th:if="${paging.page >= paging.maxPage}" class="page-item">
+                        <span class="page-link">다음</span>
                     </li>
-                    <li th:if="${paging.page < paging.maxPage}">
-                        <a th:href="@{/board/free/list(page=${paging.page + 1}, searchName=${searchName},change=${change})}">[다음]</a>
+                    <li th:if="${paging.page < paging.maxPage}" class="page-item">
+                        <a th:href="@{/board/free/list(page=${paging.page + 1}, searchName=${searchName},change=${change})}" class="page-link">다음</a>
                     </li>
                 </ul>
+            </nav>
+
+            <div id="search_form">
+            <form th:action="@{/board/free/list}" method="get">
+                <input type="text" name="searchName">
+                <button type="submit" class="btn btn-primary">검색</button>
+            </form>
             </div>
             <a class="card-link" th:href="@{/board/free/write}">글쓰기</a>
         </article>
@@ -116,7 +116,7 @@
         var titleElements = document.getElementsByClassName("boardTitle");
         for (var i = 0; i < titleElements.length; i++) {
             var title = titleElements[i].textContent;
-            var maxLength = 10; // 최대 길이 설정
+            var maxLength = 5; // 최대 길이 설정
             if (title.length > maxLength) {
                 titleElements[i].textContent = title.substring(0, maxLength) + "...";
             }

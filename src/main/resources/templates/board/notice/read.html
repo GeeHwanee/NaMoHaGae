@@ -9,6 +9,56 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>공지사항 게시판 읽기 페이지</title>
 </head>
+<style>
+    .card {
+        min-height:700px;
+    }
+    .board_header {
+        border-bottom: 1px solid #cccccc;
+        height:80px;
+        position:relative;
+    }
+    .board_count {
+        position:absolute;
+        right:0;
+        bottom:17px;
+    }
+    .board_count > span {
+        color : #6c757d;
+        font-size:14px;
+    }
+
+    .name_layout > span {
+        font-size:13px;
+    }
+
+    .day_layout > span {
+        font-size:11px;
+    }
+
+
+    .card-text {
+        padding-top:15px;
+    }
+    .comment_group {
+        background: #fafafa;
+        border-top : 2px solid #dfaa8b;
+        border-bottom : 2px solid #dfaa8b;
+        position:relative;
+        height:180px;
+    }
+    .button_layout {
+        position:relative;
+        height:100px;
+
+    }
+    .board_button {
+        position:absolute;
+        right:0;
+        top:32px;
+    }
+
+</style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
@@ -17,16 +67,25 @@
     <section>
         <div class="card">
             <div class="card-body">
-                <h5 th:text="${read.boardNoticeTitle}" class="card-title">제목입니다.</h5>
-                <h6 th:text="${#temporals.format(read.boardNoticeWriteDate, 'yyyy-MM-dd HH:mm:ss')}" class="card-subtitle mb=2 text-muted"></h6>
-                <p th:text="${read.boardNoticeContent}" class="card=text">내용이 들어갈 부분입니다.</p>
-
-                <button onclick="listFn()">목록</button>
-
-
+                <div class="board_header">
+                <h4 th:text="${read.boardNoticeTitle}" class="card-title">제목입니다.</h4>
+                    <span th:text="${read.boardNoticeWriter}"></span>
+                <span th:text="${#temporals.format(read.boardNoticeWriteDate, 'yyyy-MM-dd HH:mm:ss')}" class="card-subtitle mb=2 text-muted"></span>
+                    <div class="board_count">
+                        <span>조회</span>
+                        <span th:text="${read.boardNoticeReadCount}"></span>
+                    </div>
+                </div>
+                <p th:text="${read.boardNoticeContent}" class="card-text">내용이 들어갈 부분입니다.</p>
             </div>
         </div>
-
+        <div class="button_layout">
+        <div class="comment_group">
+            <div class="board_button">
+                <button onclick="listFn()" class="btn btn-primary">목록</button>
+            </div>
+        </div>
+        </div>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>

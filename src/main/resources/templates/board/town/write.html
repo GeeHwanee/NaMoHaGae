@@ -41,28 +41,7 @@
                     <span>내용</span>
                     <select class="form-select" aria-label="Default select example" name="townNo">
                         <option selected>동네를 선택해주세요</option>
-                        <option value="1">중의 1·3동</option>
-                        <option value="2">중의2동</option>
-                        <option value="3">중의4동</option>
-                        <option value="4">용현 1·4동</option>
-                        <option value="5">용현2동</option>
-                        <option value="6">용현3동</option>
-                        <option value="7">용현5동</option>
-                        <option value="8">도화1동</option>
-                        <option value="9">도화2·3동</option>
-                        <option value="10">주안1동</option>
-                        <option value="11">주안2동</option>
-                        <option value="12">주안3동</option>
-                        <option value="13">주안4동</option>
-                        <option value="14">주안5동</option>
-                        <option value="15">주안6동</option>
-                        <option value="16">주안7동</option>
-                        <option value="17">주안8동</option>
-                        <option value="18">학익1동</option>
-                        <option value="19">학익2동</option>
-                        <option value="20">관교동</option>
-                        <option value="21">문학동</option>
-
+                        <option th:each="town : ${town}" th:value="${town.townNo}" th:text="${town.townDong}"></option>
                     </select>
                     <textarea name="Content"></textarea>
                     <button type="submit">작성</button>
