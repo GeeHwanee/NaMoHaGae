@@ -1,6 +1,7 @@
 package kr.kro.namohagae.board.dao;
 
 import kr.kro.namohagae.board.dto.BoardDto;
+import kr.kro.namohagae.board.dto.BoardMainList;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
 import org.apache.ibatis.annotations.Mapper;
@@ -28,6 +29,9 @@ public interface BoardDao {
 
     List<BoardList> recommendCountList(@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
 
+    List<BoardMainList> mainReadList();
+
+    List<BoardMainList> mainRecommendList();
     public int boardCount();
 
     public Integer increaseReadCnt(Integer boardNo);

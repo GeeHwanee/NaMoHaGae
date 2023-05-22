@@ -110,8 +110,12 @@ public class GlobalController {
     }
 
     @GetMapping("/board/main")
-    public String boardMain(){
+    public String boardMain(Model model){
 
+        model.addAttribute("ReadList",boardService.mainReadList());
+        model.addAttribute("RecommendList",boardService.mainRecommendList());
+        model.addAttribute("TownReadList",boardTownService.mainReadList());
+        model.addAttribute("TownRecommendList",boardTownService.mainRecommendList());
         return "board/main";
     }
 
@@ -320,13 +324,15 @@ public class GlobalController {
         if(change == 3) {
             model.addAttribute("list",boardService.recommendCountList(searchName, page));
             model.addAttribute("paging", pageDTO);
+            System.out.println(boardService.recommendCountList(searchName, page));
         }
 
         if(change == 2) {
             model.addAttribute("list",boardService.readCountList(searchName, page));
             model.addAttribute("paging", pageDTO);
 
-        } else {
+        }
+        if (change == 1) {
             model.addAttribute("list", pagingList);
             model.addAttribute("paging", pageDTO);
         }
