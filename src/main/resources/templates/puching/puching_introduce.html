@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!------------------------------------------------------------------------------------------------------------------------------>
+    <!--기본 CND, Script, CSS 내장 삽입-->
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+
+    <!------------------------------------------------------------------------------------------------------------------------------>
+    <title>퍼칭 리뷰 페이지</title>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/nav :: nav}"></nav>
+<main>
+    <aside th:replace="~{fragments/aside :: aside}"></aside>
+    <section th:replace="~{puching/puching_section}">
+
+
+
+
+
+
+
+    </section>
+    <aside th:replace="~{fragments/bside :: bside}"></aside>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
