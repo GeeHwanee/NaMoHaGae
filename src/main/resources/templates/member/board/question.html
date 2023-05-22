@@ -4,7 +4,84 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)--><title>내가 작성한 질문 페이지</title>
+    <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+    <script>
+        function printMyQuestion(questions) {
+            $('#tbody').empty();
+            const $reft = $('#tbody');
+            questions.forEach(q => {
+
+                    const tpl = `<tr>
+                     <td><a href='/board/knowledge/read?knowledgeQuestionNo=${q.knowledgeQuestionNo}'>${q.knowledgeQuestionTitle}</a></td>
+                    <td>${q.answerCount}</td>
+                    <td>${q.knowledgeQuestionReadCount}</td>
+                    <td>${selectAnswer(q.knowledgeAnswerSelectionEnabled)}</td>
+                    <td>${formatDateAnswer(q.knowledgeQuestionWriteDate)}</td>
+                    <td>${q.knowledgeQuestionPoint}</td>
+			    </tr>`;
+                    $reft.append(tpl);
+                }
+            )
+        }
+        function selectAnswer(knowledgeAnswerSelectionEnabled){
+            if (knowledgeAnswerSelectionEnabled==false){
+                return "채택 안함"
+            }
+            else{
+                return "채택 완료"
+            }
+        }
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        function printPagination({prev, start, end, next, pageno}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+        $(document).ready(async function() {
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            try {
+                const result = await $.ajax("/api/v1/member/knowledge/question?pageno=" + pageno);
+                console.log(result);
+                printMyQuestion(result.questions);
+                printPagination(result)
+
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/member/knowledge/question?pageno=" + pageNum);
+                    console.log(result);
+                    printMyQuestion(result.questions);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
+    <!------------------------------------------------------------------------------------------------------------------------------>
+    <title>내가 작성한 게시물 페이지</title>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -12,8 +89,17 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>내가 작성한 질문 페이지</h1>
-        <article></article>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>제목</th><th>답변수</th><th>조회수</th><th>채택 여부</th><th>작성일시</th><th>내공</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+            <ul class="pagination" id="page_ul">
+            </ul>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
