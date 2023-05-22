@@ -5,7 +5,12 @@
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
-
+    <style>
+        section{
+            font-family: 'Dongle', sans-serif;
+            font-size: 20px;
+        }
+    </style>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>멤버 메인(내정보 페이지)</title>
 </head>
@@ -15,13 +20,25 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>멤버 메인(내 정보 페이지)</h1>
-        <article><a href="/member/notification">알림함</a></article>
-        <article><a href="/member/information">내정보</a></article>
-        <article><a href="/member/mall/address">배송지</a></article>
-        <article><a href="/member/mall/favorite">찜목록</a></article>
-        <article><a href="/member/puching/follow">팔로우 목록</a></article>
-        <article><a href="/member/mall/favorite">찜목록</a></article>
+        <h1>나 뭐개?</h1>
+        <h2>정보</h2>
+        <article><a style="color: #19130d" href="/member/notification">알림함</a></article>
+        <article><a style="color: #19130d" href="/member/information">내정보</a></article>
+        <h2>퍼칭!</h2>
+        <article><a style="color: #19130d" href="/member/puching/follow">나의 팔로우</a></article>
+        <article><a style="color:black;" href="/member/puching/review">내가 작성한 리뷰</a></article>
+        <h2>뼈다귀 몰</h2>
+        <article><a style="color: #19130d" href="/member/mall/address">배송지</a></article>
+        <article><a style="color: #19130d" href="/member/mall/favorite">찜목록</a></article>
+        <article><a style="color:black;" href="/member/mall/order"></a></article>
+        <article><a style="color:black;" href="/mall/cart">장바구니</a></article>
+        <h2>커뮤니티</h2>
+        <article><a style="color:black;" href="/member/board/post">내가 작성한 게시글</a></article>
+        <article><a style="color:black;" href="/member/board/comment">내가 작성한 댓글</a></article>
+        <article><a style="color:black;" href="/member/board/question">내가 작성한 질문</a></article>
+        <article><a style="color:black;" href="/member/board/answer">내가 답변해준 질문</a></article>
+        <article><a style="color:black;" href="/board/notice/list">공지사항!</a></article>
+
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
