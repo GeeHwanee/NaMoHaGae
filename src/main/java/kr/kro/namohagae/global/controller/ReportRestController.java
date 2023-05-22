@@ -19,7 +19,7 @@ public class ReportRestController {
     @GetMapping(value="/report/findAll", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findAll(@RequestParam(defaultValue="1") Integer pageno,String nickname) {
         Integer memberNo = reportService.findMemberNoByNickname(nickname);
-        if (nickname!=null&&nickname.trim().equals("")==false){
+        if (memberNo!=null&&nickname.trim().equals("")==false){
             return ResponseEntity.ok(reportService.findAllByMemberNo(pageno,memberNo));
         }
         return ResponseEntity.ok(reportService.findAll(pageno));
