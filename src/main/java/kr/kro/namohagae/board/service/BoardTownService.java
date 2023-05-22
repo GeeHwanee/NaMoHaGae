@@ -1,6 +1,7 @@
 package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardTownDao;
+import kr.kro.namohagae.board.dto.BoardMainList;
 import kr.kro.namohagae.board.dto.BoardTownDto;
 import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.dto.PageDto;
@@ -48,6 +49,15 @@ public class BoardTownService {
         int pagingStart = (page - 1) * pageLimit;
 
         return boardTownDao.boardTownRecommendCountList(townNo,searchName,pagingStart,pageLimit);
+    }
+    public List<BoardMainList> mainReadList(){
+
+        return boardTownDao.mainReadList();
+    }
+
+    public List<BoardMainList> mainRecommendList(){
+
+        return boardTownDao.mainRecommendList();
     }
 
     public BoardList boardTownRead(Integer boardNo) {
