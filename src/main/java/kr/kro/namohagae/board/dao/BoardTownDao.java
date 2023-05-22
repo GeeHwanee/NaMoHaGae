@@ -1,5 +1,6 @@
 package kr.kro.namohagae.board.dao;
 
+import kr.kro.namohagae.board.dto.BoardMainList;
 import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
@@ -18,6 +19,9 @@ public interface BoardTownDao {
     public List<BoardTownListDto> boardTownReadCountList(Integer townNo,@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
 
     public List<BoardTownListDto> boardTownRecommendCountList(Integer townNo,@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
+    List<BoardMainList> mainReadList();
+
+    List<BoardMainList> mainRecommendList();
     public BoardList boardTownRead(Integer boardNo);
 
 

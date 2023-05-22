@@ -38,7 +38,7 @@
             const tpl = `<tr>
                  <td>${b.boardNo}</td>
                  <td>${b.townNo}</td>
-                 <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
                  <td>${b.memberNickname}</td>
                  <td>${b.boardWriteDate.replace('T', ' ')}</td>
                  <td>${b.boardReadCount}</td>
@@ -55,7 +55,7 @@
             const tpl = `<tr>
                  <td>${b.boardNo}</td>
                  <td>${b.townNo}</td>
-                 <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
                  <td>${b.memberNickname}</td>
                  <td>${b.boardWriteDate.replace('T', ' ')}</td>
                  <td>${b.boardReadCount}</td>
@@ -72,7 +72,7 @@
             const tpl = `<tr>
                  <td>${b.boardNo}</td>
                  <td>${b.townNo}</td>
-                 <td><a href="/board/town/read?boardNo=${b.boardNo}">${b.boardTitle}</a></td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
                  <td>${b.memberNickname}</td>
                  <td>${b.boardWriteDate.replace('T', ' ')}</td>
                  <td>${b.boardReadCount}</td>
@@ -182,6 +182,7 @@
         const paging = board.pageDto;
         printPaging(paging);
         printReadCount();
+        limitTitleLength();
 
     }
 
@@ -257,6 +258,18 @@
         // select 요소 값 변경 이벤트 등록
         $('select[name="townDong"]').on('change', onChangeTownNo);
     });
+    function limitTitleLength() {
+        var titleElements = document.getElementsByClassName("boardTitle");
+        for (var i = 0; i < titleElements.length; i++) {
+            var title = titleElements[i].textContent;
+            var maxLength = 10; // 최대 길이 설정
+            if (title.length > maxLength) {
+                titleElements[i].textContent = title.substring(0, maxLength) + "...";
+            }
+        }
+    }
+
+
 </script>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -265,8 +278,8 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>동네 게시판</h1>
-        <div th:text="${logintownNo}" id="logintownNo"></div>
-        <div th:text="${town.townGu}" id="loginTownGu"></div>
+        <div th:text="${logintownNo}" id="logintownNo" style="display:none"></div>
+        <div th:text="${town.townGu}" id="loginTownGu" style="display:none"></div>
         <select class="form-select" aria-label="Default select example" id="townGu" name="townGu">
             <option selected disabled>구 선택</option>
             <option th:value="${town.townGu}" th:text="${town.townGu}" selected>미추홀구</option>
@@ -309,4 +322,5 @@
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
+
 </html>
