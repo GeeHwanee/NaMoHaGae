@@ -52,4 +52,9 @@ public class KnowledgeRestController {
         Integer memberNo = myUserDetails.getMemberNo();
         return  ResponseEntity.ok(knowledgeService.myQusetionList(pageno,memberNo));
     }
+    @GetMapping("/member/knowledge/answer")
+    public ResponseEntity<?> myAnswerList(Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails){
+        Integer memberNo = myUserDetails.getMemberNo();
+        return  ResponseEntity.ok(knowledgeService.myAnswerList(pageno,memberNo));
+    }
 }
