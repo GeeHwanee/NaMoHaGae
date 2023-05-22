@@ -98,5 +98,21 @@ public class KnowledgeService {
         return new KnowledgeQuestionDto.myPagination(pageno, prev, start, end, next, myQusetionList);
     }
 
+    public KnowledgeAnswerDto.myAnswerPagination myAnswerList(Integer pageno, Integer memberNo) {
+        Integer startRowNum = (pageno-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<KnowledgeAnswerDto.myAnswerList> myAnswerLists =  knowledgeAnswerDao.findAllByMemberNo(startRowNum,endRowNum, memberNo);
+        Integer countOfFavorite = knowledgeAnswerDao.countByMemberNo(memberNo);
+        Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
+        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new KnowledgeAnswerDto.myAnswerPagination(pageno, prev, start, end, next, myAnswerLists);
+    }
 }
 
