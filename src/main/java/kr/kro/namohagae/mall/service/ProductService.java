@@ -161,7 +161,7 @@ public class ProductService {
     }
 
     public List<ProductDto.ReadAll> newProductForMain(Integer memberNo) {
-        List<ProductDto.ReadAll> newProduct = productDao.findAllByNewProductForMain(memberNo);
+        List<ProductDto.ReadAll> newProduct = productDao.findAllByNewProductForMain(ImageConstants.IMAGE_PRODUCT_URL,memberNo);
 
         List<ProductDto.ReadAll> products = new ArrayList<>();
         for (int i = 0; i < Math.min(newProduct.size(), 5); i++) {
@@ -171,7 +171,7 @@ public class ProductService {
         return products;
     }
     public List<ProductDto.ReadAll> bestProductForMain(Integer memberNo) {
-        List<ProductDto.ReadAll> bestProduct = productDao.findAllByBestProductForMain(memberNo);
+        List<ProductDto.ReadAll> bestProduct = productDao.findAllByBestProductForMain(ImageConstants.IMAGE_PRODUCT_URL,memberNo);
 
         List<ProductDto.ReadAll> products = new ArrayList<>();
         for (int i = 0; i < Math.min(bestProduct.size(), 5); i++) {

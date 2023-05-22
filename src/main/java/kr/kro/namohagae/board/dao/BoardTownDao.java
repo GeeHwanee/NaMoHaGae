@@ -4,6 +4,7 @@ import kr.kro.namohagae.board.dto.BoardMainList;
 import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
+import kr.kro.namohagae.global.entity.Town;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,6 +15,7 @@ public interface BoardTownDao {
 
     public void boardTownInsertData(Board board);
 
+    public List<Town> townList();
     public List<BoardTownListDto> boardTownList(Integer townNo,@Param("searchName") String searchName, @Param("start") int start, @Param("limit") int limit);
 
     public List<BoardTownListDto> boardTownReadCountList(Integer townNo,@Param("searchName") String searchName,@Param("start") int start, @Param("limit") int limit);
