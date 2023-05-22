@@ -1,4 +1,14 @@
+const mall = "/mall";
+const puching = "/puching";
+const member = "/member";
+const board = "/board";
+const admin	= "/admin";
+let $_csrf;
+let $_csrf_input;
+
 $(document).ready(async function() {
+    $_csrf = $('meta[name="_csrf"]').attr('content');
+    $_csrf_input = $('<input type="hidden" name="_csrf" value="'+ $_csrf + '">');
     const url = location.host;
     let notificationSocket;
     // Aside
@@ -65,7 +75,7 @@ $(document).ready(async function() {
     // Header
     $("#logout").click(function() {
         // body.append(form) -> body,  form.appendTo(body) -> form
-        $('<form>').attr("action","/logout").attr("method","post")
+        $('<form>').append($_csrf_input).attr("action","/logout").attr("method","post")
             .appendTo($('body')).submit();
     })
     $('.header_logo').click(function (){
@@ -73,11 +83,6 @@ $(document).ready(async function() {
     })
 
 })
-const mall = "/mall";
-const puching = "/puching";
-const member = "/member";
-const board = "/board";
-const admin	= "/admin";
 
 function printAside(){
     let sideBar = location.pathname;
