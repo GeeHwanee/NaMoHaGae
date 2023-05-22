@@ -65,7 +65,7 @@
         $('.lower').on('click', '.plus', async function(){
             const productNo = $(this).attr("data-productNo");
             try{
-                const result = await $.ajax({url: "/api/v1/cart/increase?productNo=" + productNo, method: 'patch' });
+                const result = await $.ajax({url: "/api/v1/cart/increase?productNo=" + productNo+"&_csrf="+$_csrf, method: 'patch' });
                 $(this).siblings('.count').text(result.cartDetailCount);
                 $(this).parent().parent().next().find('.item_price').text((result.cartDetailPrice)*(result.cartDetailCount));
                 totalPrice();
@@ -79,7 +79,7 @@
         $('.lower').on('click', '.minus', async function(){
             const productNo = $(this).attr("data-productNo");
             try {
-                const result = await $.ajax({url: "/api/v1/cart/decrease?productNo=" + productNo, method: 'patch' });
+                const result = await $.ajax({url: "/api/v1/cart/decrease?productNo=" + productNo+"&_csrf="+$_csrf, method: 'patch' });
                 $(this).siblings('.count').text(result.cartDetailCount);
                 $(this).parent().parent().next().find('.item_price').text((result.cartDetailPrice)*(result.cartDetailCount));
                 totalPrice();
@@ -94,6 +94,7 @@
             const productNo = $(this).attr('data-productNo');
             const $form = $('<form>').attr("action","/cart/remove").attr("method","post").appendTo($('body'));
             $form.append($('<input>').attr('type','hidden').attr('name','list').val(productNo));
+            $form.append($_csrf_input);
             $form.submit();
         });
 
@@ -111,7 +112,7 @@
                 const $element = $(element);
                 $form.append($('<input>').attr('type','hidden').attr('name','list').val($element.attr('data-productNo')));
             });
-
+            $form.append($_csrf_input);
             $form.submit();
             $form.remove();
         });
@@ -150,6 +151,7 @@
             $.each($('.productNo:checked'), function(idx, element) {
                 $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val($(this).attr("data-productNo")));
             });
+            $form.append($_csrf_input);
             $form.submit();
         });
 

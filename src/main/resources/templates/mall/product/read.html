@@ -280,7 +280,7 @@
         }
         $('#favorite').on('click',async function(){
             try{
-                const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+productNo, method:"patch"});
+                const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+productNo+"&_csrf="+$_csrf, method:"patch"});
                 if(result.favorite == true){
                     $('#favorite_text').text("찜하기 취소");
                 } else {
@@ -295,7 +295,7 @@
         // qna 문의하기
         $("#write").click(function() {
             const $productNo = $("#productNo").text();
-            window.location.href = "http://localhost:8081/mall/product/qna/write?productNo=" + $productNo;
+            window.location.href = "/mall/product/qna/write?productNo=" + $productNo;
         });
 
 
@@ -304,7 +304,7 @@
         $('#cart').click(async function() {
             console.log("/api/v1/cart/add?productNo=" + $("#productNo").text());
             try {
-                const result = await $.ajax({url: "/api/v1/cart/add?productNo=" + $("#productNo").text()+"&cartDetailCount="+$('#quantity').text(), method:"post"});
+                const result = await $.ajax({url: "/api/v1/cart/add?productNo=" + $("#productNo").text()+"&cartDetailCount="+$('#quantity').text()+"&_csrf="+$_csrf, method:"post"});
                 const choice = await Swal.fire({
                     title: result,
                     text: "장바구니로 이동하시겠습니까?",
@@ -332,6 +332,7 @@
             const $form = $('<form>').attr("id", "checkedProductNosForm").attr("action","/mall/order").attr("method","post").appendTo($('body'));
             $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val(checkedProductNos));
             $form.append($('<input>').attr('type','hidden').attr('name','productOrderDetailCount').val(productOrderDetailCount));
+            $form.append($_csrf_input);
             $form.submit();
         });
 

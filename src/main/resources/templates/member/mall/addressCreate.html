@@ -33,6 +33,7 @@
                 formData.append('addressPostcode', $('#sample4_postcode').val());
                 formData.append('addressAddress', $('#sample4_roadAddress').val());
                 formData.append('addressAddressDetail', $('#sample4_detailAddress').val());
+                formData.append('_csrf', $_csrf);
                 try{
                     $.ajax({
                         url: "/api/v1/member/mall/address/add",

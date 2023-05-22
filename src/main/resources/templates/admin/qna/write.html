@@ -22,6 +22,7 @@
                 <p th:text="${qna.qnaWriteDate}"></p>
             </div>
             <form action="/admin/qna/write" method="post">
+                <input type="hidden" id="_csrf" name="_csrf">
                 <input type="hidden" name="qnaNo" th:value="${qna.qnaNo}">
                 <input type="hidden" name="qnaWriter" th:value="${qna.qnaWriter}">
                 <textarea name="qnaAnswerContent"></textarea>

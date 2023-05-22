@@ -9,9 +9,13 @@ let $_csrf_input;
 $(document).ready(async function() {
     $_csrf = $('meta[name="_csrf"]').attr('content');
     $_csrf_input = $('<input type="hidden" name="_csrf" value="'+ $_csrf + '">');
+    let csrf = $('#_csrf');
+    if(csrf.length){
+        csrf.val($_csrf);
+        console.log(csrf.val());
+    }
     const url = location.host;
     let notificationSocket;
-    if(sessionStorage.getItem('isLoggedIn') === 'true'){
         printAside();
         try {
             const result = await $.ajax("/api/v1/notification/aside/list");
@@ -19,7 +23,7 @@ $(document).ready(async function() {
         }catch (err){
             console.log(err)
         }
-    }
+
     printEmbededImage();
     // Bside
     if (url.includes("namohagae.kro.kr")){

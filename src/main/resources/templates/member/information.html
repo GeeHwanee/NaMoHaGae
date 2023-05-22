@@ -92,6 +92,7 @@
                 formData.append('phone',$('#phone').val());
                 formData.append('nickname', $('#nickname').val());
                 formData.append('introduce', $('#introduce').val());
+                formData.append('_csrf', $_csrf);
 
                 // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
                 for(let key of formData.keys()){
@@ -127,7 +128,7 @@
                     alert("열심히 하겠습니다, 감사합니다.");
                     return;
                 }
-                const $form = $('<form>');
+                const $form = $('<form>').append($_csrf_input);
                 $form.attr('action','/member/resign').attr('method','post').appendTo($('body')).submit();
 
                 // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면

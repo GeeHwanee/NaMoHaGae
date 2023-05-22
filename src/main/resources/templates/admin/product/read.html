@@ -73,6 +73,7 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <form id="form" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="_csrf" name="_csrf">
         <input type="hidden" name="productNo" th:value="${product.productNo}" id="productNo">
         <div style="overflow:hidden;">
             <div id="left">

@@ -220,7 +220,8 @@
                 url: "/api/v1/comment/free/update",
                 data: {
                     commentNo: commentNo,
-                    commentContent: updatedCommentContent
+                    commentContent: updatedCommentContent,
+                    _csrf: $_csrf
                 },
                 success: function(res) {
                     console.log("성공:", res);
@@ -253,7 +254,8 @@
             type: "POST",
             url: "/api/v1/comment/free/delete",
             data: {
-                commentNo: commentNo
+                commentNo: commentNo,
+                _csrf: $_csrf
             },
             success: function(res) {
                 console.log('성공' + res);
@@ -276,11 +278,11 @@
             type: "POST",
             url: "/api/v1/comment/free/write",
 
-
             data: {
                 "commentContent": commentContent,
                 "boardNo": boardNo,
-                "memberNo": memberNo
+                "memberNo": memberNo,
+                "_csrf": $_csrf
             },
             success: function (res) {
                 console.log("요청 성공", res);
@@ -328,7 +330,7 @@
             data: {
                 "boardNo": boardNo,
                 "memberNo": memberNo,
-
+                "_csrf": $_csrf
             },
             success: function(res) {
                 console.log("요청 성공", res.boardRecommendCount);
