@@ -3,6 +3,7 @@ package kr.kro.namohagae.board.service;
 import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.dao.BoardNoticeDao;
 import kr.kro.namohagae.board.dto.BoardDto;
+import kr.kro.namohagae.board.dto.BoardMainList;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
@@ -109,6 +110,15 @@ public class BoardService {
         return pageDTO;
     }
 
+    public List<BoardMainList> mainReadList(){
+
+        return boardDao.mainReadList();
+    }
+
+    public List<BoardMainList> mainRecommendList(){
+
+        return boardDao.mainRecommendList();
+    }
     public Integer increaseReadCnt(Integer boardNo) {
 
         return boardDao.increaseReadCnt(boardNo);
