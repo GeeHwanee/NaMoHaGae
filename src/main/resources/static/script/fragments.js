@@ -104,7 +104,7 @@ function printAside(){
         $title.append('<li><a href="/member/main">내 정보</a></li>');
         $side_bar.append('<li><a href="/member/notification">알림함</a></li>');
         $side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
-        $side_bar.append('<li><a href="/member/review">내게 쓴 리뷰</a></li>');
+        $side_bar.append('<li><a href="/member/puching/review">내게 쓴 리뷰</a></li>');
         $side_bar.append('<li><a href="/member/follow">팔로우 목록</a></li>');
         $side_bar.append('<li><a href="/member/mall/order">결제 내역</a></li>');
         $side_bar.append('<li><a href="/member/mall/address">배송지</a></li>');
