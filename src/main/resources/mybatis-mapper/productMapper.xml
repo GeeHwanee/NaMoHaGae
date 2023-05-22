@@ -273,7 +273,7 @@
             (SELECT COUNT(pr.product_order_detail_no)
              FROM product_review pr
              WHERE p.product_no = pr.product_no) AS review_count,
-            'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename AS product_image,
+             #{url} || pi.product_image_filename AS product_image,
             (SELECT COUNT(*)
              FROM favorite
              WHERE favorite.product_no = p.product_no
@@ -294,7 +294,7 @@
             (SELECT COUNT(pr.product_order_detail_no)
              FROM product_review pr
              WHERE p.product_no = pr.product_no) AS review_count,
-            'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename AS product_image,
+             #{url} || pi.product_image_filename AS product_image,
             (SELECT COUNT(*)
              FROM favorite
              WHERE favorite.product_no = p.product_no

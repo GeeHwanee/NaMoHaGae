@@ -54,7 +54,7 @@ public interface ProductDao {
     // 리뷰 등록 시 상품 별점 업데이트
     public void updateProductGradebyReviewStar(Integer productNo);
 
-    public List<ProductDto.ReadAll> findAllByNewProductForMain(Integer memberNo);
+    public List<ProductDto.ReadAll> findAllByNewProductForMain(String url, Integer memberNo);
 
-    public List<ProductDto.ReadAll> findAllByBestProductForMain(Integer memberNo);
+    public List<ProductDto.ReadAll> findAllByBestProductForMain(String url, Integer memberNo);
 }
