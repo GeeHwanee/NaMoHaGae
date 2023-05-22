@@ -263,4 +263,46 @@
         )
         WHERE p.product_no = #{productNo}
     </update>
+
+    <select id="findAllByNewProductForMain" resultMap="readAllMap">
+        SELECT
+            p.product_no, p.product_name, p.product_price, p.product_stock,
+            (SELECT ROUND(SUM(pr.product_review_star) / COUNT(pr.product_order_detail_no), 1)
+             FROM product_review pr
+             WHERE p.product_no = pr.product_no) AS product_grade,
+            (SELECT COUNT(pr.product_order_detail_no)
+             FROM product_review pr
+             WHERE p.product_no = pr.product_no) AS review_count,
+            'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename AS product_image,
+            (SELECT COUNT(*)
+             FROM favorite
+             WHERE favorite.product_no = p.product_no
+               AND favorite.member_no = #{memberNo}
+               AND ROWNUM = 1) AS favorite_enabled
+        FROM product p
+                 JOIN product_image pi ON p.product_no = pi.product_no
+            AND pi.product_image_no = 1
+        ORDER BY p.product_no DESC
+    </select>
+
+    <select id="findAllByBestProductForMain" resultMap="readAllMap">
+        SELECT
+            p.product_no, p.product_name, p.product_price, p.product_stock,
+            (SELECT ROUND(SUM(pr.product_review_star) / COUNT(pr.product_order_detail_no), 1)
+             FROM product_review pr
+             WHERE p.product_no = pr.product_no) AS product_grade,
+            (SELECT COUNT(pr.product_order_detail_no)
+             FROM product_review pr
+             WHERE p.product_no = pr.product_no) AS review_count,
+            'http://localhost:8081/api/v1/image/product?name=' || pi.product_image_filename AS product_image,
+            (SELECT COUNT(*)
+             FROM favorite
+             WHERE favorite.product_no = p.product_no
+               AND favorite.member_no = #{memberNo}
+               AND ROWNUM = 1) AS favorite_enabled
+        FROM product p
+                 JOIN product_image pi ON p.product_no = pi.product_no
+            AND pi.product_image_no = 1
+        ORDER BY p.product_grade DESC
+    </select>
 </mapper>

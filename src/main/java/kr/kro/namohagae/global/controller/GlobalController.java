@@ -90,7 +90,9 @@ public class GlobalController {
     }
 
     @GetMapping("/mall/main")
-    public String mallMain(){
+    public String mallMain(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
+        model.addAttribute("newProduct", productService.newProductForMain(myUserDetails.getMemberNo()));
+        model.addAttribute("bestProduct", productService.bestProductForMain(myUserDetails.getMemberNo()));
         return "mall/main";
     }
 

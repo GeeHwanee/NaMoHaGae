@@ -92,6 +92,12 @@
     .hide {
         display: none;
     }
+
+    .title {
+        font-weight: bold;
+        font-family: 'Gothic', sans-serif;
+        font-size: 20px;
+    }
 </style>
 <script>
     // 날짜 yyyy-MM-dd
@@ -498,12 +504,18 @@
             <div id="formArea">
             </div>
             <div id="content" th:utext="${product.productContent}"></div>
+            <br>
+            <br>
 
-
-            <hr>
-            <h3>리뷰 출력중</h3>
+            <div class="title">고객리뷰</div>
             <div>
                 <table class="table table-hover">
+                    <colgroup>
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>별점</th><th>내용</th><th>작성자</th><th>작성일</th>
@@ -515,12 +527,18 @@
                 <ul class="pagination" id="page_ul">
                 </ul>
             </div>
+            <br>
+            <br>
 
 
-            <hr>
-            <h3>qna 출력중 (관리자답변도 같이 끌고오세요)</h3>
+            <div class="title">상품 Q&A</div>
             <div>
                 <table class="table table-hover">
+                    <colgroup>
+                        <col style="width: 50%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>내용</th><th>작성자</th><th>작성일</th>

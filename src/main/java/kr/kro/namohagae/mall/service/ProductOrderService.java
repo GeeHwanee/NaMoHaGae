@@ -108,8 +108,8 @@ public class ProductOrderService {
         Integer bonePoint = (int) ((productOrder.getProductOrderTotalPrice()-deliveryFee) * 0.01);
         productOrderDao.updateMemberPoint(bonePoint, memberNo);
         return productOrder.getProductOrderNo();
-
     }
+
     public ProductOrderDto.PaginationOrder listMyOrder(Integer pageNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;

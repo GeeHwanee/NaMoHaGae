@@ -31,6 +31,13 @@
   .button-group {
     text-align:center;
   }
+
+  #qnaWrite {
+    font-weight: bold;
+    font-family: 'Gothic', sans-serif;
+    text-align: center;
+    font-size: 40px;
+  }
 </style>
 <script>
   const productNo = document.getElementById('productNo').value;
@@ -40,10 +47,6 @@
     $('#write').click(function(){
       $('#add_form').submit();
     });
-
-  //  $('#cancel').click(function(){
-  //    window.location.href = '/mall/product/read?productNo='+productNo;
-  //  });
   })
 </script>
 <body>
@@ -52,10 +55,9 @@
 <main>
   <aside th:replace="~{fragments/aside :: aside}"></aside>
   <section>
-    <h1>큐엔에이쓰기 페이지</h1>
     <hr>
     <div class="qnaTitle">
-      <span>문의하기</span>
+      <span id="qnaWrite">문의하기</span>
     </div>
     <hr>
     <form id="add_form" action="/mall/product/qna/write" method="post" enctype="multipart/form-data">
@@ -67,7 +69,7 @@
       </div>
       <div class="button-group">
         <button type="submit" id="write" class="btn btn-primary">확인</button>
-        <button type="button" id="cancel" class="btn btn-primary"><a th:href="@{/mall/product/read(productNo=${item.productNo})}" style="color: black">취소</a></button>
+        <button type="button" id="cancel" class="btn btn-primary"><a th:href="@{/mall/product/read(productNo=${item.productNo})}" style="color: white; text-decoration-line: none">취소</a></button>
       </div>
     </form>
   </section>
