@@ -136,28 +136,68 @@
                 <div th:text="${question.knowledgeQuestionContent}"></div>
             </div>
         </article>
+        <div id="answer_layout">
         <hr>
-        <article>
+            <div id="textbox_layout">
+            <form action="/api/v1/knowledge/answer/write" method="post" id="answer_form">
+                <input type="hidden" id="question_no" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
+                <input type="hidden" name="answerMemberNo" th:value="${memberNo}">
+                <textarea name="knowledgeAnswerContent" id="answer_content"></textarea>
+                <button type="button" id="answer_write" class="btn btn-primary">답변 작성</button>
+            </form>
+            </div>
+
+        <article class="answer_list">
             <div id="answer_select">
                 채택된 답변이 없습니다
             </div>
         </article>
-        <hr>
-        <article>
+
+        <article class="answer_list">
             <div id="answers">
                 등록된 답변이 없습니다
             </div>
         </article>
-        <hr>
-        <form action="/api/v1/knowledge/answer/write" method="post" id="answer_form">
-            <input type="hidden" id="question_no" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
-            <input type="hidden" name="answerMemberNo" th:value="${memberNo}">
-            <textarea name="knowledgeAnswerContent"></textarea>
-            <button type="button" id="answer_write">답변 작성</button>
-        </form>
+
+
+        </div>
     </section>
+
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
+<style>
+    #answer_layout {
+        min-height : 800px;
+        background: #f4f5f6;
+
+    }
+    #answer_content {
+
+        width:100%;
+        height: 140px;
+
+
+
+    }
+    #textbox_layout {
+        position:relative;
+        margin-top:50px;
+        width:100%;
+    }
+    #answer_write {
+        position:absolute;
+        right:80px;
+        bottom:60px;
+
+    }
+    .answer_list {
+        min-height:400px;
+        margin-top:50px;
+        background: white;
+        border-top: 2px solid #dfaa8b;
+        border-bottom: 2px solid #dfaa8b;
+    }
+</style>
 </html>

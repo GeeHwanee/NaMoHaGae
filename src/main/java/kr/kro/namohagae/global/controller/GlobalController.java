@@ -112,6 +112,7 @@ public class GlobalController {
     @GetMapping("/board/main")
     public String boardMain(Model model){
 
+
         model.addAttribute("ReadList",boardService.mainReadList());
         model.addAttribute("RecommendList",boardService.mainRecommendList());
         model.addAttribute("TownReadList",boardTownService.mainReadList());
@@ -357,12 +358,14 @@ public class GlobalController {
     }
 
     @GetMapping("/board/town/write")
-    public String boardTownWrite() {
-
+    public String boardTownWrite(Model model) {
+        model.addAttribute("town",boardTownService.townList());
+        System.out.println(boardTownService.townList());
         return "board/town/write";
     }
     @PostMapping("/board/town/writepro")
     public String boardTownWritePro(BoardTownDto.write boardTownDto, Principal principal){
+
 
 
         boardTownService.boardTownInsertData(boardTownDto,principal.getName());

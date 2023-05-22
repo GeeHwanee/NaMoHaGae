@@ -34,7 +34,9 @@
         WHERE
             m.member_no = #{memberNo}
     </insert>
-
+    <select id="townList" resultType="kr.kro.namohagae.global.entity.Town">
+        SELECT * FROM TOWN
+    </select>
     <select id="boardTownList" resultType="kr.kro.namohagae.board.dto.BoardTownListDto">
         SELECT b.*, m.member_nickname AS memberNickname
         FROM board b
@@ -61,25 +63,47 @@
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
     <select id="mainReadList" resultType="kr.kro.namohagae.board.dto.BoardMainList">
-        SELECT b.board_no,b.board_title,b.board_write_date, COALESCE(c.commentCount, 0) AS commentCount
+        SELECT
+            b.board_no,
+            b.board_title,
+            b.board_write_date,
+            t.town_dong,
+            COALESCE(c.commentCount, 0) AS commentCount
         FROM board b
                  LEFT JOIN (
-            SELECT board_no, COUNT(*) AS commentCount
+            SELECT
+                board_no,
+                COUNT(*) AS commentCount
             FROM BOARD_COMMENT
             GROUP BY board_no
-        ) c ON b.board_no = c.board_no where B.town_no != 0
-        ORDER BY b.board_recommend_count DESC
+        ) c ON b.board_no = c.board_no
+                 LEFT JOIN town t ON b.town_no = t.town_no -- town 테이블 조인
+        WHERE
+            b.town_no != 0
+        ORDER BY
+            b.board_read_count DESC
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
     <select id="mainRecommendList" resultType="kr.kro.namohagae.board.dto.BoardMainList">
-        SELECT b.board_no,b.board_title,b.board_write_date, COALESCE(c.commentCount, 0) AS commentCount
+        SELECT
+            b.board_no,
+            b.board_title,
+            b.board_write_date,
+            t.town_dong,
+            COALESCE(c.commentCount, 0) AS commentCount
         FROM board b
                  LEFT JOIN (
-            SELECT board_no, COUNT(*) AS commentCount
+            SELECT
+                board_no,
+                COUNT(*) AS commentCount
             FROM BOARD_COMMENT
             GROUP BY board_no
-        ) c ON b.board_no = c.board_no where B.town_no != 0
-        ORDER BY b.board_recommend_count DESC
+        ) c ON b.board_no = c.board_no
+                 LEFT JOIN town t ON b.town_no = t.town_no -- town 테이블 조인
+        WHERE
+            b.town_no != 0
+        ORDER BY
+            b.board_recommend_count DESC
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
 
