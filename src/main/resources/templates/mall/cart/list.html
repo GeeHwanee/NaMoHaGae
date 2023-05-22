@@ -33,6 +33,13 @@
         font-weight: bold;
         color: white;
     }
+
+    #cartText {
+        font-weight: bold;
+        font-family: 'Gothic', sans-serif;
+        text-align: center;
+        font-size: 40px;
+    }
 </style>
 <script>
 
@@ -162,11 +169,6 @@
                 }
             });
         });
-
-        
-        $('#kakaoPay').click(function(){
-            location.href='/pay';
-        })
     });
 </script>
 <body>
@@ -175,6 +177,7 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
+        <div id="cartText">장바구니</div>
         <table style="width:100%;" id="cart_table" class="table table-hover">
             <tr>
                 <th>
@@ -222,7 +225,6 @@
         <div>
             <button id="order" class="btn btn-outline-success">주문하기</button>
             <button id="delete" class="btn btn-outline-danger">선택 상품 삭제</button>
-            <button id="kakaoPay" class="btn btn-outline-primary">카카오 페이로 결제하기</button>
         </div>
         <div id="formArea">
         </div>
