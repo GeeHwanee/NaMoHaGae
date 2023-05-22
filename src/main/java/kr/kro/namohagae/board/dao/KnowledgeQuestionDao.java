@@ -17,4 +17,8 @@ public interface KnowledgeQuestionDao {
     public List<KnowledgeQuestionDto.List> findAll(Integer startRowNum, Integer endRowNum);
 
     public Integer count();
+    public List<KnowledgeQuestionDto.myQuestionList> findAllByMemberNo(Integer startRowNum, Integer endRowNum, Integer memberNo);
+
+    public Integer countByMemberNo(Integer memberNo);
+
 }

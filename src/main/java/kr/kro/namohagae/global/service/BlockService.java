@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,14 +41,23 @@ public class BlockService {
     public Boolean delete(LocalDate today){
         List<Integer> leavePrisons = blockDao.findMemberNoByToday(today);
         System.out.println(today);
-        Boolean a = blockDao.delete(today);
+        List<Integer> reportNo = new ArrayList<>();
+        Integer result =0;
         for (Integer i: leavePrisons) {
             System.out.println(i);
-            Integer result = blockDao.findReportByMemberNo(i);
-            reportDao.delete(result);
+            result = blockDao.findReportByMemberNo(i);
+            reportNo.add(result);
+            System.out.println(result);
             memberDao.memberEnabled(i,true);
+        }
+        Boolean a = blockDao.delete(today);
+        if (reportNo!=null){
+            for (Integer i:reportNo) {
+                reportDao.delete(i);
+            }
         }
         return a;
     }
+
 
 }

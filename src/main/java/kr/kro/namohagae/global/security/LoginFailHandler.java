@@ -29,12 +29,10 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         HttpSession session = request.getSession();
-        Integer memberNo=0;
+        String username = request.getParameter("username");
+        Member member = memberDao.findByUsername(username).get();
         if (exception instanceof BadCredentialsException){
-            String username = request.getParameter("username");
 
-            Member member = memberDao.findByUsername(username).get();
-            memberNo=member.getMemberNo();
             if (member.getMemberLoginCount()<4){
                 memberDao.increaseMemberLoginCount(member.getMemberNo());
                 String msg = "로그인에 " + member.getMemberLoginCount() + "회 실패했습니다, 5회 이상 실패 시 계정이 비활성화 됩니다.";
@@ -46,17 +44,20 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
             }
 
         } else if (exception instanceof DisabledException) {
-            if (blockDao.checkByMemberNo(memberNo)==true){
-            String formattedDateTime =blockDao.findDeadlineDateByMemberNo(memberNo).format(formatter);
-                String msg = "이 계정은 "+formattedDateTime+"까지 계정이 정지당했습니다";
+            System.out.println(member.getMemberNo());
+            if (blockDao.checkByMemberNo(member.getMemberNo())==true){
+                String dateString = blockDao.findDeadlineDateByMemberNo(member.getMemberNo()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                System.out.println("asdasd");
+                String msg = "이 계정은 "+dateString+"까지 계정이 정지당했습니다";
                 session.setAttribute("msg",msg);
+            }else{
+                session.setAttribute("msg", "비활성화된 계정입니다. 관리자에게 문의 하세요");
             }
-            session.setAttribute("msg", "비활성화된 계정입니다. 관리자에게 문의 하세요");
 
         }
-        System.out.println("asdasd");
         System.out.println(session.getAttribute("msg"));
         response.sendRedirect("/login");
     }
+
 
 }
