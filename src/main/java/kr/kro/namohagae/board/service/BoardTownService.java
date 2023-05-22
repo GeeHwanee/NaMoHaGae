@@ -7,6 +7,7 @@ import kr.kro.namohagae.board.dto.BoardTownListDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
+import kr.kro.namohagae.global.entity.Town;
 import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,5 +79,9 @@ public class BoardTownService {
     public Integer townDeleteData(Integer boardNo) {
 
         return boardTownDao.townDeleteData(boardNo);
+    }
+    public List<Town> townList() {
+        System.out.println(boardTownDao.townList());
+        return boardTownDao.townList();
     }
 }
