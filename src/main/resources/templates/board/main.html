@@ -10,7 +10,57 @@
     <title>게시판 메인</title>
 </head>
 <style>
+    a {
+        text-decoration: none;
+        color:#333;
+        display:block;
+    }
 
+    .row {
+        margin:0 15px;
+    }
+   .table {
+       border-bottom: 1px dashed #CCC;
+       height:42px;
+       line-height: 42px;
+       width:80%;
+       position:relative;
+       margin:0;
+       padding:0;
+       text-decoration: none;
+   }
+    .table:hover {
+        background: #f3f3f3;
+
+    }
+   .date_right {
+       position:absolute;
+       right:0;
+   }
+   .col-sm-6 {
+       margin-top:30px;
+   }
+   .title {
+       color:#ec5f1f;
+       width:80%;
+       font-weight:bold;
+   }
+    .table > a:hover {
+        color:#333;
+    }
+   .title_sub {
+       width:60%;
+       height:5px;
+       background: #ebeced;
+       float:right;
+       margin-top:10px;
+   }
+   span {
+       font-size:14px;
+   }
+   .comment_count {
+       font-size:12px;
+   }
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -19,10 +69,73 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>게시판 메인</h1>
-        <article></article>
+        <article>
+            <div class="row">
+                <div class="col-sm-6">
+                    <a th:href="@{free/list(change=2)}" class="title">자유인기게시물<div class="title_sub"></div></a>
+                        <div th:each="board : ${ReadList}" class="table">
+                            <a th:href="@{/board/free/read(boardNo=${board.boardNo})}">
+                            <span th:text="${board.boardTitle}" class="boardTitle"></span>
+                                <span th:text="'['+${board.commentCount}+']'" class="comment_count"></span>
+                            <span th:text="${#temporals.format(board.boardWriteDate, 'MM/dd')}" class="date_right"></span>
+                            </a>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                    <a th:href="@{free/list(change=3)}" class="title">자유추천게시물<div class="title_sub"></div></a>
+                    <div th:each="board : ${RecommendList}" class="table">
+                        <a th:href="@{/board/free/read(boardNo=${board.boardNo})}">
+                            <span th:text="${board.boardTitle}" class="boardTitle"></span>
+                            <span th:text="'['+${board.commentCount}+']'" class="comment_count"></span>
+                            <span th:text="${#temporals.format(board.boardWriteDate, 'MM/dd')}" class="date_right"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <a th:href="@{town/list}" class="title">동네인기게시물<div class="title_sub"></div></a>
+                    <div th:each="board : ${TownReadList}" class="table">
+                        <a th:href="@{/board/town/read(boardNo=${board.boardNo})}">
+                            <span th:text="${board.boardTitle}" class="boardTitle"></span>
+                            <span th:text="'['+${board.commentCount}+']'" class="comment_count"></span>
+                            <span th:text="${#temporals.format(board.boardWriteDate, 'MM/dd')}" class="date_right"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <a th:href="@{town/list}" class="title">동네추천게시물<div class="title_sub"></div></a>
+                    <div th:each="board : ${TownRecommendList}" class="table">
+                        <a th:href="@{/board/town/read(boardNo=${board.boardNo})}">
+                            <span th:text="${board.boardTitle}" class="boardTitle"></span>
+                            <span th:text="'['+${board.commentCount}+']'" class="comment_count"></span>
+                            <span th:text="${#temporals.format(board.boardWriteDate, 'MM/dd')}" class="date_right"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
+<script>
+    // 제목 길이 제한 함수
+    function limitTitleLength() {
+        var titleElements = document.getElementsByClassName("boardTitle");
+        for (var i = 0; i < titleElements.length; i++) {
+            var title = titleElements[i].textContent;
+            var maxLength = 16; // 최대 길이 설정
+            if (title.length > maxLength) {
+                titleElements[i].textContent = title.substring(0, maxLength) + "...";
+            }
+        }
+    }
+
+    // 페이지 로드 시 호출
+    window.onload = function() {
+        limitTitleLength();
+    };
+
+
+</script>
 </html>

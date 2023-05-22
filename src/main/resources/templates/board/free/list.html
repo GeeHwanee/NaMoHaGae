@@ -52,7 +52,7 @@
                         <tr th:each="board : ${list}">
                             <td th:text="${board.boardNo}">1</td>
                             <td>
-                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName},change=${change})}" th:text="${board.boardTitle}">게시물 제목</a>
+                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName},change=${change})}" th:text="${board.boardTitle}" class="boardTitle">게시물 제목</a>
                             </td>
                             <td th:text="${board.memberNickname}"></td>
                             <td th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
@@ -112,6 +112,20 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 <script>
+    function limitTitleLength() {
+        var titleElements = document.getElementsByClassName("boardTitle");
+        for (var i = 0; i < titleElements.length; i++) {
+            var title = titleElements[i].textContent;
+            var maxLength = 10; // 최대 길이 설정
+            if (title.length > maxLength) {
+                titleElements[i].textContent = title.substring(0, maxLength) + "...";
+            }
+        }
+    }
 
+    // 페이지 로드 시 호출
+    window.onload = function() {
+        limitTitleLength();
+    };
 </script>
 </html>
