@@ -39,6 +39,7 @@
         <article>
             <div class="layout">
                 <form th:action="@{/board/free/update(boardNo = ${board.boardNo})}" method="post">
+                    <input type="hidden" id="_csrf" name="_csrf">
                     <input name="boardTitle" type="text" th:value="${board.boardTitle}">
                     <textarea name="boardContent" th:text="${board.boardContent}"></textarea>
                     <button type="submit">수정</button>

@@ -39,6 +39,7 @@
     <article>
       <div class="layout">
         <form th:action="@{/admin/notice/update(boardNoticeNo = ${read.boardNoticeNo})}" method="post">
+          <input type="hidden" id="_csrf" name="_csrf">
           <input name="boardNoticeTitle" type="text" th:value="${read.boardNoticeTitle}">
           <textarea name="boardNoticeContent" th:text="${read.boardNoticeContent}"></textarea>
           <button type="submit">수정</button>

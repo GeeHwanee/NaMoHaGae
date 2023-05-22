@@ -73,7 +73,7 @@
       $('#follow_btn').on('click',async function(){
         try{
           // 추천하면 서버는 새로운 추천수를 리턴한다 -> #good_cnt를 업데이트
-          const result =await $.ajax({url:'/api/v1/member/follow?memberNo='+memberNo, method:"patch",});
+          const result =await $.ajax({url:'/api/v1/member/follow?memberNo='+memberNo+"&_csrf="+$_csrf, method:"patch",});
           if(result.follow == true){
           $('#follow_text').text("팔로우취소 ");
           } else {

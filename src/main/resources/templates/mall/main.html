@@ -139,7 +139,7 @@
             let $productNo = $(this).data('productno');
             console.log(typeof $productNo);
             try{
-                const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+$productNo, method:"patch"});
+                const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+$productNo+"&_csrf="+$_csrf, method:"patch"});
                 if(result.favorite){
                     $(this).parent().children().first().removeClass('hide');
                     $(this).parent().children().first().next().addClass('hide');

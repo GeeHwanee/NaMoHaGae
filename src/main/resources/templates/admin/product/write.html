@@ -25,6 +25,7 @@
   <section>
     <h1>상품 등록</h1>
     <form id="add_form" action="/admin/product/write" method="post" enctype="multipart/form-data">
+      <input type="hidden" id="_csrf" name="_csrf">
       <div class="mb-3 bt-3">
         <label for="productCategoryNo">카테고리 선택</label>
         <select name="productCategoryNo" id="productCategoryNo">

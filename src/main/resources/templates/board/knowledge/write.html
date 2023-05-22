@@ -24,6 +24,7 @@
         <h1>지식인 게시판 쓰기 페이지</h1>
         <article>
             <form action="/board/knowledge/write" method="post">
+                <input type="hidden" id="_csrf" name="_csrf">
                제목 <input type="text" name="knowledgeQuestionTitle"><br>
                내용 <textarea name="knowledgeQuestionContent"></textarea><br>
                포인트 <input type="number" min="100" name="knowledgeQuestionPoint"><br>
