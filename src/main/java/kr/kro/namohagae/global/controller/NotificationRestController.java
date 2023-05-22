@@ -19,7 +19,7 @@ public class NotificationRestController {
     private NotificationService service;
     @GetMapping(value="/notification/list", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails) {
-        return ResponseEntity.ok(service.findAll(pageno,myUserDetails.getMemberNo()));
+        return ResponseEntity.ok().contentType(MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE)).body(service.findAll(pageno,myUserDetails.getMemberNo()));
     }
 
     @PutMapping("/notification/read")
@@ -29,12 +29,11 @@ public class NotificationRestController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @GetMapping("/notification/aside/list")
+    @GetMapping(value = "/notification/aside/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<NotificationDto.FindAll>> printNotificationList(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         if (myUserDetails != null) {
-            return ResponseEntity.ok(service.printNotificationList(myUserDetails.getMemberNo()));
+            return ResponseEntity.ok().contentType(MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE)).body(service.printNotificationList(myUserDetails.getMemberNo()));
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-
     }
 }
