@@ -29,5 +29,24 @@
         update KNOWLEDGE_ANSWER set KNOWLEDGE_ANSWER_SELECTION_ENABLED=1 where KNOWLEDGE_ANSWER_NO = #{answerNo}
     </update>
 
+    <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.KnowledgeAnswerDto$myAnswerList">
+        select * from
+            (
+                select rownum as rnum, a.* from
+                    (
+                        select
+                            a.knowledge_question_no,q.knowledge_question_title,q.knowledge_question_write_date,a.knowledge_answer_selection_enabled,a.knowledge_answer_write_date,a.knowledge_answer_content
+                        from knowledge_answer a
+                                 join KNOWLEDGE_QUESTION q  on a.KNOWLEDGE_QUESTION_NO = q.KNOWLEDGE_QUESTION_NO
+                        where a.MEMBER_NO=#{memberNo}
+                        order by a.knowledge_answer_no desc
+                    ) a
+                where rownum&lt;=#{endRowNum}
+            )
+        where rnum&gt;=#{startRowNum}
+    </select>
+    <select id="countByMemberNo" resultType="Integer">
+        select count(*) from knowledge_answer where member_no=#{memberNo}
+    </select>
 
 </mapper>

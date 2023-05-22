@@ -4,6 +4,7 @@ import kr.kro.namohagae.global.dao.ReportDao;
 import kr.kro.namohagae.global.dto.NotificationDto;
 import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.entity.Report;
+import kr.kro.namohagae.member.dao.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public class ReportService {
     @Autowired
     private ReportDao reportDao;
+    @Autowired
+    private MemberDao memberDao;
     private final static Integer PAGESIZE=10;
     private final static Integer BLOCKSIZE=5;
     public ReportDto.Pagination findAll(Integer pageno) {
@@ -38,6 +41,7 @@ public class ReportService {
         return new ReportDto.Pagination(pageno, prev, start, end, next, reports);
     }
     public ReportDto.Pagination findAllByMemberNo(Integer pageno, Integer memberNo) {
+        System.out.println(memberNo);
         Integer countOfProduct = reportDao.countReportByMemberNo(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
 
@@ -74,6 +78,6 @@ public class ReportService {
     }
 
     public Integer findMemberNoByNickname(String nickname) {
-        return reportDao.findMemberNoByNickname(nickname);
+        return memberDao.findMemberNoByNickname(nickname);
     }
 }

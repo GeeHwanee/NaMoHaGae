@@ -42,4 +42,24 @@ public class KnowledgeAnswerDto {
         private Integer knowledgeQuestionPoint;
 
     }
+//    질문 제목, 질문 작성일자,답변 내용,채택시 채택됨, 작성일 표기
+    @Data
+    public static class myAnswerList{
+        private Integer knowledgeQuestionNo;
+        private String knowledgeQuestionTitle;
+        private LocalDateTime knowledgeQuestionWriteDate;
+        private Boolean knowledgeAnswerSelectionEnabled;
+        private LocalDateTime knowledgeAnswerWriteDate;
+        private String knowledgeAnswerContent;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class myAnswerPagination {
+        private Integer pageNo;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private java.util.List<KnowledgeAnswerDto.myAnswerList> answers;
+    }
 }

@@ -49,4 +49,5 @@ public interface MemberDao {
     public Integer findMemberPointByMemberNo(Integer memberNo);
 
     public Integer updateMemberPointByMemberNo(Integer memberPoint, Integer memberNo);
+    public Integer findMemberNoByNickname(String nickname);
 }

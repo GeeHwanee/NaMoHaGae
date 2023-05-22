@@ -14,4 +14,8 @@ public interface KnowledgeAnswerDao {
 
     public Integer update(Integer answerNo);
     public KnowledgeAnswerDto.Point findByKnowledgeAnswerNo(Integer answerNo);
+
+    public List<KnowledgeAnswerDto.myAnswerList> findAllByMemberNo(Integer startRowNum, Integer endRowNum, Integer memberNo);
+
+    public Integer countByMemberNo(Integer memberNo);
 }
