@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>퍼칭 소개글</title>
+    <style>@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+    .page-div {
+        --border-radius: 0.25rem;
+
+        --color-accent: hsl(0, 0%, 35%);
+        --color-anchor: hsl(333, 84%, 60%);
+        --color-anchor-focus: hsl(0, 0%, 100%);
+        --color-background: hsl(7, 80%, 64%);
+        --color-background-alt: hsl(7, 80%, 72%);
+        --color-highlight: hsl(64, 92%, 52%);
+        --color-os: hsl(195, 24%, 6%);
+        --color-os-header: hsl(240, 4%, 17%);
+        --color-os-close: hsl(4, 62%, 64%);
+        --color-os-minimize: hsl(47, 66%, 59%);
+        --color-os-fullscreen: hsl(98, 63%, 51%);
+        --color-text: hsl(0, 0%, 80%);
+        --color-warning: hsl(0, 75%, 62%);
+
+        --font-main: "IBM Plex Mono", monospace;
+        --font-system: "Helvetica Neue", sans-serif;
+        --font-size: 1rem;
+        --font-weight-normal: 400;
+        --font-weight-bold: 600;
+
+        --height-header: 42px;
+        --max-width-body: 100%;
+
+        --space-xxs: 0.125rem;
+        --space-xs: 0.5rem;
+        --space-sm: 0.75rem;
+        --space-base: 1rem;
+        --space-md: 1.25rem;
+        --space-lg: 2rem;
+        --space-xl: 2.5rem;
+        --space-body: 5vmin;
+    }
+
+    @media (min-width: 500px) {
+        .page-div {
+            --font-size: 1.25rem;
+        }
+    }
+
+    .page-div {
+        overflow: hidden;
+        height: 100%;
+        background: linear-gradient(-25deg, var(--color-background), var(--color-background-alt));
+        padding: var(--space-body);
+    }
+
+    #body {
+        position: relative;
+        font-family: var(--font-main);
+        font-size: var(--font-size);
+        font-weight: var(--font-weight-normal);
+        line-height: 1.5;
+        color: var(--color-text);
+        background-color: var(--color-os);
+        margin: 0 auto;
+        padding: var(--space-body) var(--space-body) 0;
+        max-width: var(--max-width-body);
+        height: 600px;
+        border-top: var(--height-header) solid var(--color-os-header);
+        border-radius: var(--border-radius);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1),
+        0 2px 4px rgba(0,0,0,0.1),
+        0 4px 8px rgba(0,0,0,0.1),
+        0 8px 16px rgba(0,0,0,0.1),
+        0 16px 32px rgba(0,0,0,0.1),
+        0 32px 64px rgba(0,0,0,0.1);
+    }
+
+    /* Section layout */
+    #body {
+        display: flex;
+        flex-wrap: wrap;
+        overflow: scroll;
+        scroll-behavior: smooth;
+    }
+
+    #body > * {
+        flex: 1 0 100%;
+    }
+
+    .page-div aside {
+        margin-top: var(--space-xl);
+    }
+
+    @media (min-width: 800px) {
+        #body > aside {
+            flex: 1 0 50%;
+        }
+    }
+
+    /* Elements */
+    .page-div *,
+    .page-div *::before,
+    .page-div *::after {
+        box-sizing: border-box;
+    }
+
+    .page-div h1,
+    .page-div h2,
+    .page-div h3,
+    .page-div h4,
+    .page-div p {
+        font-size: unset;
+        font-weight: unset;
+        margin: unset;
+    }
+
+    .page-div  ul {
+        list-style-type: none;
+        padding-left: unset;
+    }
+
+    .page-div ol li + .page-div li {
+        margin-top: var(--space-sm);
+    }
+
+    .page-div svg {
+        fill: currentcolor;
+        width: 1em;
+    }
+
+    /* Remove animations for reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+        .page-div *,
+        .page-div *::before,
+        .page-div *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+
+    /* Blockquotes and files container */
+    .page-div #files .container,
+    .page-div blockquote {
+        overflow: hidden;
+        text-overflow: clip;
+        border: 2px dashed var(--color-accent);
+        max-width: 50ch;
+        margin: var(--space-xl) auto;
+        padding: var(--space-xl) var(--space-md);
+        text-align: center;
+    }
+
+    .page-div blockquote strong {
+        display: block;
+        margin-bottom: var(--space-sm);
+    }
+
+    .page-div  #files .container h3::before,
+    .page-div #files .container h3::after,
+    .page-div blockquote strong::before,
+    .page-div blockquote strong::after {
+        content: "* * * * * * * *";
+        display: block;
+        color: var(--color-highlight);
+        white-space: nowrap;
+        font-weight: var(--font-weight-normal);
+        animation: marquee 2s linear infinite;
+    }
+
+    @keyframes marquee {
+        0%   { content: "* * * * * * * * *" }
+        10%  { content: "# * * * * * * * *" }
+        20%  { content: "* # * * * * * * *" }
+        30%  { content: "* * # * * * * * *" }
+        40%  { content: "* * * # * * * * *" }
+        50%  { content: "* * * * # * * * *" }
+        60%  { content: "* * * * * # * * *" }
+        70%  { content: "* * * * * * # * *" }
+        80%  { content: "* * * * * * * # *" }
+        90%  { content: "* * * * * * * * #" }
+        100% { content: "* * * * * * * * *" }
+    }
+
+    /* Links */
+    .page-div a {
+        display: inline-block;
+        color: var(--color-anchor);
+    }
+
+    .page-div a:hover,
+    .page-div a:focus {
+        color: var(--color-anchor-focus);
+    }
+
+    .page-div a:focus {
+        outline: 2px dashed var(--color-anchor-focus);
+        outline-offset: 4px;
+        text-decoration: none;
+    }
+
+    .page-div .skip-link {
+        flex: 0 0 auto;
+        margin-bottom: var(--space-base);
+    }
+
+    .page-div .skip-link:not(:focus) {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+    }
+
+    /* Container children spacing */
+    .page-div main .container >.page-div * +.page-div *:not(blockquote),
+    .page-div .page-footer .container >.page-div * + .page-div * {
+        margin-top: var(--space-lg);
+    }
+
+    /* Header */
+    .page-div header p::before {
+        content: "‣";
+        display: inline-block;
+        color: var(--color-highlight);
+    }
+
+    .page-div header .link-github {
+        margin-top: var(--space-lg);
+    }
+
+    .page-div header .link-github {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        color: var(--color-os);
+        background-color: var(--color-highlight);
+        padding: 0 var(--space-xs);
+        text-decoration: none;
+    }
+
+    .page-div header .link-github:hover,
+    .page-div header .link-github:focus {
+        color: var(--color-os);
+    }
+
+    .page-div header .link-github svg {
+        position: relative;
+        top: 0.125rem;
+        margin-right: var(--space-xs);
+    }
+
+    .page-div  header h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: var(--space-body);
+        margin: 0 auto;
+        margin-left: calc(var(--space-body) * -1);
+        font-family: var(--font-system);
+        font-size: 0.9rem;
+        text-align: center;
+        padding: var(--space-sm);
+        width: calc(100% - var(--space-body) * 2);
+        max-width: var(--max-width-body);
+        height: var(--height-header);
+
+    }
+
+    .page-div header h1::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: var(--space-base);
+        transform: translateY(-50%);
+        width: 12px;
+        height: 12px;
+        background-color: var(--color-os-close);
+        border-radius: 50%;
+        box-shadow: var(--color-os-minimize) var(--space-md) 0,
+        var(--color-os-fullscreen) calc(var(--space-md) * 2) 0;
+    }
+
+    .page-div header h2 {
+        display: inline-flex;
+        flex-wrap: wrap;
+    }
+
+    .page-div header h2::before,
+    .page-div .page-footer::before {
+        order: -2;
+        content: "~/Desktop$";
+        color: var(--color-accent);
+    }
+
+    .page-div header h2::after {
+        order: -1;
+        content: "run StyleStage.dev";
+        margin-left: var(--space-sm);
+        color: var(--color-highlight);
+        font-weight: var(--font-weight-bold);
+    }
+
+    /* Navigation */
+    .page-div nav {
+        margin: var(--space-xl) 0 0;
+    }
+
+    .page-div  nav ul,
+    .page-div  .page-footer ul {
+        column-width: 240px;
+        max-width: 45ch;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-div  nav a {
+        padding: var(--space-xxs) 0;
+    }
+
+    .page-div  main {
+        outline: none;
+    }
+
+    /* Main */
+    .page-div main .container h2,
+    .page-div main .container h3,
+    .page-div #profile-title,
+    .page-div #styles h2 {
+        color: var(--color-highlight);
+        font-weight: var(--font-weight-bold);
+    }
+
+    /* Articles */
+    .page-div article .container {
+        margin-top: var(--space-xl);
+        padding-top: var(--space-xl);
+        border-top: 2px dashed var(--color-accent);
+    }
+
+    .page-div  #about .container ul {
+        column-width: 260px;
+        column-fill: auto;
+    }
+
+    .page-div #about .container ul li {
+        display: inline-flex;
+        width: 100%;
+    }
+
+    .page-div  #about .container ul li::before {
+        content: "*";
+        margin-right: var(--space-sm);
+        color: var(--color-accent);
+    }
+
+    .page-div #guidelines h3 {
+        display: inline-block;
+        padding: 0 var(--space-xs);
+        color: var(--color-os);
+        background-color: var(--color-warning);
+    }
+
+    .page-div #files .container h3 {
+        color: var(--color-text);
+        margin-bottom: var(--space-base);
+    }
+    .page-div #files .container a {
+        margin-top: unset;
+        padding: var(--space-xs);
+    }
+
+    /* Footer */
+    .page-div .page-footer {
+        display: flex;
+        flex-wrap: wrap;
+        order: 0;
+        margin-top: var(--space-xl);
+        padding-top: var(--space-xl);
+        padding-bottom: var(--space-body);
+        border-top: 2px dashed var(--color-accent);
+    }
+
+    .page-div .page-footer .container {
+        flex: 1 0 100%;
+        margin-bottom: var(--space-xl);
+    }
+
+    .page-div .page-footer ul {
+        margin: var(--space-xl) 0;
+    }
+
+    .page-div .page-footer ul a {
+        padding: var(--space-xxs) 0;
+    }
+
+    .page-div .page-footer .link-github svg {
+        position: relative;
+        top: 0.15rem;
+    }
+
+    .page-div .page-footer::before {
+        order: 1;
+    }
+
+    .page-div .page-footer::after {
+        order: 2;
+        content: "";
+        display: inline-block;
+        position: relative;
+        top: 0.25rem;
+        margin-left: 0.5rem;
+        width: 2px;
+        height: 1.125em;
+        background-color: var(--color-highlight);
+        animation: blink-cursor 1s steps(1, start) infinite;
+    }
+
+    @keyframes blink-cursor {
+        0%,
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .page-div #sponsor-footer {
+        margin-bottom: var(--space-body);
+    }</style>
+
+</head>
+<body>
+<section th:fragment="puching_section">
+    <div class="page-div">
+        <div id="body">
+    <a href="puching__main.html#main" class="skip-link">Skip to main content</a>
+    <header>
+        <div class="container">
+            <h1>NaMohaGae!</h1>
+            <a href="#" class="link-github"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M32 12.408l-11.056-1.607-4.944-10.018-4.944 10.018-11.056 1.607 8 7.798-1.889 11.011 9.889-5.199 9.889 5.199-1.889-11.011 8-7.798z"></path>
+        </svg>
+      </span>
+                Welcome Puching</a>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#about">About Puching</a></li>
+            <li><a href="#guidelines">PuchingMap</a></li>
+            <li><a href="#contribute">Chat</a></li>
+            <li><a href="#files">How to Puching</a></li>
+        </ul>
+    </nav>
+
+    <main id="main" tabIndex="-1">
+        <div class="container">
+            <article id="about">
+                <section class="container">
+                    <blockquote>
+                        <p>
+                            <strong>About Puching</strong>
+                            함께 산책하고 싶은 사람을 찾고 싶으신 분들을 위한 매칭 시스템입니다. </p>
+                        <p>주변에서 산책할 사람들을 찾아 보세요!  </p>
+
+                    </blockquote>
+                </section>
+                <section class="container">
+                    <h2>퍼칭을 하기 위해 강아지를 등록 해 주세요!</h2>
+                    <p>
+                        강아지를 등록하셔야 매칭이 가능합니다!
+                    </p>
+                    <p>
+                        퍼칭은 다음과 같은 파트로 이루어져 있습니다.
+                    </p>
+                    <ul>
+                        <li>퍼칭지도</li>
+                        <li>채팅</li>
+                        <li>퍼칭신청</li>
+                        <li>리뷰작성</li>
+                    </ul>
+                </section>
+            </article>
+            <article id="guidelines">
+                <section class="container">
+                    <h2>Puching Map</h2>
+                    <p>
+                        퍼칭 지도에서 주변 유저들을 볼 수 있습니다. 상대 프로필을 통해 채팅을 시작하시고 매칭까지 시도할 수 있습니다
+                        <a href="/puching/main">지도 보러가기</a>.
+                    </p>
+                    <h3>주의사항</h3>
+                    <p>
+                        지도 상에는 유저의 실제 주거지를 표시하지 않습니다.
+                        맵상에는 동네와 동네에 있는 유저의 수가 표시 됩니다.
+                        채팅을 통해 실제로 만남이 이루어질 장소를 선택하실 수 있습니다.
+
+                    </p>
+                </section>
+            </article>
+            <article id="contribute">
+                <section class="container">
+                    <h2>Chat</h2>
+                    <p>채팅기능을 통해 실시간으로 소통하실 수 있습니다!</p>
+                    <p>
+                        퍼칭 목적이 아니더라도 채팅을 통해 소통하실 수 있습니다!
+                    </p>
+                    <p>원하는 상대를 찾기위해 소통하세요!
+                        <a href="/puching/chatroom">채팅방으로 이동</a>.
+                    </p>
+                </section>
+
+                <footer id="files">
+                    <div class="container">
+                        <h3>How to Puching</h3>
+                    </div>
+                    <h3>Steps to Puching</h3>
+                    <ol>
+                        <li>
+                            퍼칭 지도를 통해 원하는 상대를 찾습니다.
+                        </li>
+                        <li>
+                            찾은 상대에게 채팅을 통해 퍼칭신청을 거세요!
+                        </li>
+                        <li>
+                            상대방이 수락한다면 신청할 때의 장소와 시간에 매칭이 잡힙니다!
+                        </li>
+                        <li>
+                            매칭시간이 지나면 서로에게 리뷰를 작성해주세요! 작성자에게는 뼈다귀 포인트, 수신자에게는 등급이 주어집니다!
+                        </li>
+                    </ol>
+                </footer>
+            </article>
+        </div>
+    </main>
+    <aside id="styles">
+        <div class="container">
+            <h2>리뷰 혜택</h2>
+            <ul>
+                <li>리뷰 작성으로 얻은 뼈다귀 포인트는 뼈다귀몰에서 상품구매시 할인혜택이 주어집니다</li>
+                <li>리뷰를 받으신분은 등급이 올라갑니다! 높은 등급을 받을 수록 퍼칭 신청을 많이 받거나 신청할 때 유리합니다</li>
+            </ul>
+        </div>
+    </aside>
+    <footer class="page-footer">
+        <div class="container">
+            <p>
+                Created by HyeonUk Kim
+            </p>
+        </div>
+    </footer>
+
+        </div>
+</div>
+</section>
+</body>
+</html>
