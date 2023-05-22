@@ -79,7 +79,24 @@ public class KnowledgeService {
         memberDao.updatePoint(point.getKnowledgeAnswerMemberNo(), point.getKnowledgeQuestionPoint());
         knowledgeAnswerDao.update(answerNo);
         return true;
-
     }
+
+    public KnowledgeQuestionDto.myPagination myQusetionList(Integer pageno, Integer memberNo) {
+        Integer startRowNum = (pageno-1)*PAGESIZE + 1;
+        Integer endRowNum = startRowNum + PAGESIZE - 1;
+        List<KnowledgeQuestionDto.myQuestionList> myQusetionList =  knowledgeQuestionDao.findAllByMemberNo(startRowNum,endRowNum, memberNo);
+        Integer countOfFavorite = knowledgeQuestionDao.countByMemberNo(memberNo);
+        Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
+        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev+1;
+        Integer end = prev + BLOCKSIZE;
+        Integer next = end+1;
+        if(end>=countOfPage) {
+            end = countOfPage;
+            next = 0;
+        }
+        return new KnowledgeQuestionDto.myPagination(pageno, prev, start, end, next, myQusetionList);
+    }
+
 }
 
