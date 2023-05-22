@@ -53,4 +53,25 @@ public class KnowledgeQuestionDto {
         private java.util.List<KnowledgeQuestionDto.List> questions;
     }
 
+    @Data
+    public static class myQuestionList{
+        private Integer knowledgeQuestionNo;
+        private Integer answerCount;
+        private String knowledgeQuestionTitle;
+        private Integer knowledgeQuestionReadCount;
+        private Boolean knowledgeAnswerSelectionEnabled;
+        private LocalDateTime knowledgeQuestionWriteDate;
+        private Integer knowledgeQuestionPoint;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class myPagination {
+        private Integer pageNo;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private java.util.List<KnowledgeQuestionDto.myQuestionList> questions;
+    }
+
 }
