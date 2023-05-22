@@ -53,7 +53,7 @@
             try {
                 const result = await $.ajax("/api/v1/review/imfo?pageno=" + pageno);
                 console.log(result.review);
-                printNotification(result.review);
+                printReview(result.review);
                 printPagination(result);
             } catch (err) {
                 console.log(err);
