@@ -62,7 +62,7 @@ $(document).ready(async function() {
         const $notificationNo = $(this).data('notification-no');
         try {
             await $.ajax({
-                url: "/api/v1/notification/read?notificationNo=" + $notificationNo,
+                url: "/api/v1/notification/read?notificationNo=" + $notificationNo+"&_csrf="+$_csrf,
                 type: "PUT"
             });
             // 읽음 여부를 업데이트한 후의 작업을 수행
