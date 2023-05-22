@@ -262,7 +262,7 @@
         var titleElements = document.getElementsByClassName("boardTitle");
         for (var i = 0; i < titleElements.length; i++) {
             var title = titleElements[i].textContent;
-            var maxLength = 10; // 최대 길이 설정
+            var maxLength = 5; // 최대 길이 설정
             if (title.length > maxLength) {
                 titleElements[i].textContent = title.substring(0, maxLength) + "...";
             }
