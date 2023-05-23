@@ -35,12 +35,12 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
 
             if (member.getMemberLoginCount()<4){
                 memberDao.increaseMemberLoginCount(member.getMemberNo());
-                String msg = "로그인에 " + member.getMemberLoginCount() + "회 실패했습니다, 5회 이상 실패 시 계정이 비활성화 됩니다.";
+                String msg = "로그인에 " + (member.getMemberLoginCount()+1) + "회 실패했습니다, 5회 이상 실패 시 계정이 비활성화 됩니다.";
                 session.setAttribute("msg", msg);
 
             }else {
                 memberDao.increaseMemberLoginCount(member.getMemberNo());
-                memberDao.disabled(member.getMemberNo());
+                memberDao.memberEnabled(member.getMemberNo(),false);
             }
 
         } else if (exception instanceof DisabledException) {
