@@ -1,5 +1,6 @@
 package kr.kro.namohagae.member.dao;
 
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,7 +16,7 @@ public interface DogDao {
 
     public Boolean update(Integer dogNo,String introduce,Boolean notGenderEnabled,Double weight,String name,String profile);
 
-    public List<DogDto.DogList> findDogList(Integer memberNo);
+    public List<DogDto.DogList> findDogList(String url, Integer memberNo);
 
 
     public Optional<Dog> findByDog(Integer dogNo);
