@@ -5,6 +5,7 @@ import kr.kro.namohagae.global.security.MyUserDetailsService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.constants.Roles;
 import kr.kro.namohagae.member.dao.DogDao;
+import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class DogService {
     @Autowired
     private DogDao dogDao;
     @Autowired
+    private MemberDao memberDao;
+    @Autowired
     private  MyUserDetailsService myUserDetailsService;
     public void save(DogDto.Registeration dto, Integer memberNo) {
         String memberIntroduce = " ";
@@ -48,6 +51,7 @@ public class DogService {
         }
         Dog dog = dto.toEntity(memberNo, profileName, memberIntroduce);
         dogDao.register(dog);
+        memberDao.dogSignEnabled(memberNo,true);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(myUserDetailsService.createNewAuthentication(authentication,myUserDetails.getUsername()));
@@ -89,7 +93,7 @@ public class DogService {
         return a;
     }
 
-    public void resign(Integer dogNo) {
+    public void resign(Integer dogNo,Integer memberNo) {
         try {
             String profile = dogDao.findByDog(dogNo).get().getDogProfile();
             File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, profile);
@@ -98,6 +102,9 @@ public class DogService {
                 file.delete();
             }
             dogDao.delete(dogNo);
+            if(dogDao.checkDogCountByMemberNo(memberNo)==0){
+                memberDao.dogSignEnabled(memberNo,false);
+            }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
             SecurityContextHolder.getContext().setAuthentication(myUserDetailsService.createNewAuthentication(authentication,myUserDetails.getUsername()));
