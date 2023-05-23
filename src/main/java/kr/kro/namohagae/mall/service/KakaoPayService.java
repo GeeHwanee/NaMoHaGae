@@ -24,6 +24,14 @@ public class KakaoPayService {
 
 			MultiValueMap<String, Object> payParams = new LinkedMultiValueMap<String, Object>();
 
+			String os = System.getProperty("os.name").toLowerCase();
+			String pageUrl;
+			if(os.contains("linux")){
+				pageUrl = "https://namohagae.kro.kr";
+			}else {
+				pageUrl = "http://localhost:8081";
+			}
+
 			payParams.add("cid", "TC0ONETIME"); // 테스트코드
 			payParams.add("partner_order_id", uuid);
 			payParams.add("partner_user_id", "namohagae");
@@ -31,9 +39,9 @@ public class KakaoPayService {
 			payParams.add("quantity", params.get("quantity"));
 			payParams.add("total_amount", params.get("total_amount"));
 			payParams.add("tax_free_amount", params.get("tax_free_amount"));
-			payParams.add("approval_url", "http://localhost:8081/mall/order/success");
-			payParams.add("cancel_url", "http://localhost:8081/pay/cancel");
-			payParams.add("fail_url", "http://localhost:8081/pay/fail");
+			payParams.add("approval_url", pageUrl+"/mall/order/success");
+			payParams.add("cancel_url", pageUrl+"/pay/cancel");
+			payParams.add("fail_url", pageUrl+"/pay/fail");
 
 			// 카카오페이 결제준비 api 요청
 			HttpEntity<Map> request = new HttpEntity<Map>(payParams, headers);
