@@ -46,7 +46,7 @@
               <span th:text="${item.productOrderDetailPrice}"></span>원
             </td>
             <td>
-              <span th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}">
+              <span>
               <a type="button" class="btn btn-primary" th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}"  th:href="@{/mall/product/review/write(productOrderDetailNo=${item.productOrderDetailNo})}">리뷰 작성</a>
               </span>
             </td>
