@@ -6,7 +6,7 @@
 <mapper namespace="kr.kro.namohagae.board.dao.KnowledgeQuestionDao">
     <insert id="save" keyProperty="knowledgeQuestionNo" parameterType="KnowledgeQuestion">
         <selectKey keyProperty="knowledgeQuestionNo" order="BEFORE" resultType="java.lang.Integer">
-            select KNOWLEDGE_QUESTION_SEQ_KNOWLEDGE_QUESTION_NO.nextval from dual
+            select BOARD_SEQ_BOARD_NO.nextval from dual
         </selectKey>
         insert into KNOWLEDGE_QUESTION(KNOWLEDGE_QUESTION_NO, MEMBER_NO, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_ENABLED)
         values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, 0,#{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint}, 1)
