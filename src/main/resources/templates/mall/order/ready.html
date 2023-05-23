@@ -118,97 +118,67 @@
             $form.append($_csrf_input);
             $form.appendTo($('body')).submit();
         })
-    })
-</script>
-<script>
-    let inputElement;
 
-    function fullUse() {
-        const memberPointElement = document.getElementById("memberPoint");
-        const pointInputElement = document.getElementById("pointInput");
-        const orderTotalPriceElement = document.getElementById("orderTotalPrice");
+        // 결제 예정 금액
+        const printOrderTotalPrice = data.orderTotalPrice + 3000;
+        $('#orderTotalPrice').text(printOrderTotalPrice + '원');
 
-        if (memberPointElement && pointInputElement && orderTotalPriceElement) {
-            const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
-            const orderTotalPrice = parseInt(orderTotalPriceElement.textContent.replace(/[^0-9]/g, ''));
 
-            if (memberPoint >= orderTotalPrice) {
-                pointInputElement.value = orderTotalPrice;
-            } else {
-                pointInputElement.value = memberPoint;
+        $("#usePoint").click(function() {
+            let $pointInput = $('#pointInput');
+            let $pointInputValue = parseInt($pointInput.val());
+            let bonePoint = $pointInputValue;
+            const memberPoint = data.memberPoint;
+            const orderTotalPrice = data.orderTotalPrice + 3000;
+
+            if (!$pointInputValue) {
+                alert('사용할 포인트를 입력해주세요');
+                return;
             }
 
-            updateUsedPoint();
-            calculationOrderTotalPrice();
-        }
-    }
+            if ($pointInputValue > orderTotalPrice) {
+                alert('결제 금액을 초과하였습니다.')
+                $pointInput.val(orderTotalPrice);
+                $('#bonePoint').text('-' + orderTotalPrice + '원');
 
-    function updateUsedPoint() {
-        // 입력값 가져오기
-        const usedPointElement = document.getElementById("usedPoint");
-        const memberPointElement = document.getElementById("memberPoint");
-        const inputElement = document.getElementById("pointInput");
 
-        // 멤버의 현재 포인트와 입력값 비교
-        const memberPoint = parseInt(memberPointElement.textContent.replace(/[^0-9]/g, ''));
-        const usedPoint = parseInt(inputElement.value);
+            } else if ($pointInputValue > memberPoint) {
+                alert('보유한 포인트를 초과하였습니다')
+                $pointInput.val(0);
+                $('#bonePoint').text('');
 
-        if (usedPoint > memberPoint) {
-            alert('보유한 포인트가 부족합니다');
-            inputElement.value = memberPoint;
-        } else if(usedPoint < 0) {
-            alert('0포인트 이상 사용이 가능합니다');
-            inputElement.value = 0;
-        }
+            } else if ($pointInputValue < 0) {
+                alert('0포인트 이상 사용 가능합니다')
+                $pointInput.val(0);
+                $('#bonePoint').text('');
+            }
 
-        usedPointElement.innerText = "-" + inputElement.value + "원";
-        calculationOrderTotalPrice();
-    }
+            $pointInputValue = parseInt($pointInput.val());
+            bonePoint = $pointInputValue;
+            $('#bonePoint').text('-' + $pointInputValue + '원');
+            $('#orderTotalPrice').text((orderTotalPrice - bonePoint) + '원');
+        });
 
-    function calculationOrderTotalPrice() {
-        const orderTotalPriceElement = document.getElementById("orderTotalPrice");
-        const deliveryFee = 3000;
+        $("#fullUse").click(function() {
+            let $pointInput = $('#pointInput');
+            let $pointInputValue = parseInt($pointInput.val());
+            let bonePoint = $pointInputValue;
+            const memberPoint = data.memberPoint;
+            const orderTotalPrice = data.orderTotalPrice + 3000;
 
-        // 최종 결제 금액 계산
-        let totalPrice = data.orderTotalPrice;
-        if (isNaN(totalPrice)) {
-            totalPrice = 0;
-        }
-        let orderTotalPrice = totalPrice + deliveryFee;
+            if (memberPoint >= orderTotalPrice) {
+                $pointInput.val(orderTotalPrice);
+            } else {
+                $pointInput.val(memberPoint);
+            }
 
-        const inputElement = document.getElementById("pointInput");
-        if (inputElement.value !== "") {
-            orderTotalPrice -= parseInt(inputElement.value);
-        }
+            $pointInputValue = parseInt($pointInput.val());
+            bonePoint = $pointInputValue;
+            $('#bonePoint').text('-' + $pointInputValue + '원');
+            $('#orderTotalPrice').text((orderTotalPrice - bonePoint) + '원');
+        });
 
-        // 결과 표시
-        orderTotalPriceElement.innerText = orderTotalPrice + "원";
-    }
-
-    // 페이지 로드 시 초기 실행
-    window.addEventListener("load", function() {
-        inputElement = document.getElementById("pointInput");
-        calculationOrderTotalPrice();
-    });
-
-    // inputElement 값 변경 시 실행
-    window.addEventListener("load", function() {
-        if (inputElement) {
-            inputElement.addEventListener("input", function() {
-                calculationOrderTotalPrice();
-            });
-        }
-    });
-
-    function onPageLoad() {
-        inputElement = document.getElementById("pointInput");
-        if (inputElement) {
-            inputElement.addEventListener("input", updateUsedPoint);
-        }
-    }
-
-    window.addEventListener("load", onPageLoad);
-
+    })
 </script>
 </head>
 <body>
@@ -281,9 +251,10 @@
                     <span id="memberPoint" th:text="${#numbers.formatInteger(map.memberPoint,0,'COMMA')}+'원'"></span>
                 </div>
                 <div>
-                    <label for="pointInput">사용</label>
+                    <label for="pointInput">사용</label> <!-- 사용 텍스트 날리기 -->
                     <div><input type="number" id="pointInput" min="0">원</div>
-                    <button onclick="fullUse()" id="fullUse">전액사용</button>
+                    <button id="usePoint">사용</button> <!-- 사용버튼 만듦 -->
+                    <button id="fullUse">전액사용</button>
                 </div>
         </div>
     <br>
@@ -310,7 +281,7 @@
                 </div>
                 <div>
                     <span>뼈다귀 포인트 사용</span>
-                    <span id="usedPoint"></span>
+                    <span id="bonePoint"></span> <!-- usedPoint에서 변경 -->
                 </div>
         </div>
     <br>
