@@ -405,6 +405,13 @@ public class GlobalController {
         return "board/town/list";
     }
 
+    @GetMapping("/board/knowledge/main")
+    public String knowledgemain(Model model){
+            model.addAttribute("readList",knowledgeService.readList());
+            model.addAttribute("readList2",knowledgeService.readList2());
+        return "board/knowledge/main";
+    }
+
     @GetMapping("/board/knowledge/list")
     public String knowledgeList(@RequestParam(defaultValue="1")Integer pageNo, Model model){
        model.addAttribute("list",knowledgeService.questionFindAll(pageNo));

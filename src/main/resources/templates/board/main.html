@@ -23,7 +23,7 @@
        border-bottom: 1px dashed #CCC;
        height:42px;
        line-height: 42px;
-       width:80%;
+
        position:relative;
        margin:0;
        padding:0;
@@ -37,14 +37,17 @@
        position:absolute;
        right:0;
    }
-   .col-sm-6 {
-       margin-top:30px;
+   .col-sm-5 {
+
+       margin:0 auto;
+        margin-top:30px;
    }
    .title {
        color:#ec5f1f;
-        width:80%;
+
        font-weight:bold;
    }
+
     .table > a:hover {
         color:#333;
     }
@@ -71,6 +74,11 @@
             width:40%;
         }
     }
+    @media (max-width: 700px) {
+        .title_sub {
+            display:none;
+        }
+    }
     @media (max-width: 950px) {
         .title_sub {
             width:30%;
@@ -86,7 +94,7 @@
         <h1>게시판 메인</h1>
         <article>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-5" id="free">
                     <a th:href="@{free/list(change=2)}" class="title">자유인기게시물<div class="title_sub"></div></a>
                         <div th:each="board : ${ReadList}" class="table">
                             <a th:href="@{/board/free/read(boardNo=${board.boardNo})}">
@@ -96,7 +104,7 @@
                             </a>
                         </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <a th:href="@{free/list(change=3)}" class="title">자유추천게시물<div class="title_sub"></div></a>
                     <div th:each="board : ${RecommendList}" class="table">
                         <a th:href="@{/board/free/read(boardNo=${board.boardNo})}">
@@ -106,7 +114,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-5" id="town">
                     <a th:href="@{town/list}" class="title">동네인기게시물<div class="title_sub"></div></a>
                     <div th:each="board : ${TownReadList}" class="table">
                         <a th:href="@{/board/town/read(boardNo=${board.boardNo})}">
@@ -117,7 +125,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <a th:href="@{town/list}" class="title">동네추천게시물<div class="title_sub"></div></a>
                     <div th:each="board : ${TownRecommendList}" class="table">
                         <a th:href="@{/board/town/read(boardNo=${board.boardNo})}">
