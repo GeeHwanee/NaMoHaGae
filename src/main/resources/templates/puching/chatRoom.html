@@ -800,7 +800,7 @@
     //이미지 전송 -> 전송중일 때 추가로 요청보내는걸 막자 loading 중 인걸 나타내든가
     $('#sendImageButton').on('click',async function(){
         var imageInput=$('#imageInput')[0];
-
+``
         if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
             alert('이미지를 선택해주세요')
             return;
@@ -809,6 +809,7 @@
         var formData = new FormData();
         formData.append('file', imageInput.files[0]);
         formData.append('receiverNo', nowChatUser);
+        formData.append('_csrf',$_csrf);
 
         try {
             var response = await $.ajax({
