@@ -19,4 +19,6 @@ public interface DogDao {
 
 
     public Optional<Dog> findByDog(Integer dogNo);
+
+    public Integer checkDogCountByMemberNo(Integer memeberNo);
 }
