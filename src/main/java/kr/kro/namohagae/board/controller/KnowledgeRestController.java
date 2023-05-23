@@ -38,8 +38,17 @@ public class KnowledgeRestController {
     }
 
     @PostMapping("/knowledge/answer/select")
-    public ResponseEntity<String> answerSelect(Integer answerNo){
-        Boolean result = knowledgeService.answerUpdate(answerNo);
+    public ResponseEntity<String> answerSelect(Integer answerNo, Integer point){
+        Boolean result = knowledgeService.answerUpdate(answerNo, point);
+        if (result) {
+            return ResponseEntity.ok("성공");
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("실패");
+        }
+    }
+    @PostMapping("/knowledge/answer/delete")
+    public ResponseEntity<String> answerDelete(Integer answerNo){
+        Boolean result = knowledgeService.answerDelete(answerNo);
         if (result) {
             return ResponseEntity.ok("성공");
         }else {

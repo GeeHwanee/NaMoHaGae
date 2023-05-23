@@ -33,15 +33,6 @@ public class KnowledgeAnswerDto {
         private Integer knowledgeAnswerRecommend;
     }
 
-    @Data
-    public static class Point{
-        private Integer knowledgeQuestionNo;
-        private Integer knowledgeAnswerNo;
-        private Integer knowledgeQuestionMemberNo;
-        private Integer knowledgeAnswerMemberNo;
-        private Integer knowledgeQuestionPoint;
-
-    }
 //    질문 제목, 질문 작성일자,답변 내용,채택시 채택됨, 작성일 표기
     @Data
     public static class myAnswerList{
