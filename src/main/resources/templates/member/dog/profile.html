@@ -70,7 +70,7 @@
                     return;
                 }
                 const $form = $('<form>').append($_csrf_input);
-                $form.attr('action','/dog/resign').attr('method','post').appendTo($('body')).submit();
+                $form.attr('action','/dog/resign?dogNo='+$('#dogNo').val()).attr('method','post').appendTo($('body')).submit();
 
                 // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
                 // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
@@ -100,6 +100,7 @@
                     </td>
                 </tr>
                 <tr>
+                <input type="hidden" id="dogNo" name="dogNo" th:value="${dog.dogNo}">
                     <td th:text="${dog.dogName}"></td>
                     <td>
                         <input type="text" name="name" id="name" class="hide">
@@ -145,7 +146,7 @@
             </table>
             <div id="profileBtn" >
             <button id="tryUpdate" type="button" class="btn btn-warning">변경</button>
-            <button id="resign" type="button" class="btn btn-danger">탈퇴</button>
+            <button id="resign" type="button" class="btn btn-danger">삭제</button>
             </div>
             <div id="updateBtn" class="hide">
                 <button id="update" type="button"class="btn btn-warning">변경 완료</button>

@@ -31,6 +31,7 @@ import kr.kro.namohagae.puching.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -81,9 +82,11 @@ public class GlobalController {
               return "admin/main";
           }
       }
+
+      System.out.println(myUserDetails.getAuthorities().size());
         return "main";
     }
-
+    @Secured("ROLE_DOG")
     @GetMapping("/puching/main")
     public String puchingMain() {
         return "puching/main";
@@ -173,8 +176,9 @@ public class GlobalController {
         return "redirect:/";
     }
     @PostMapping("/dog/resign")
-    public String dogResign(Integer dogNo,SecurityContextLogoutHandler handler, HttpServletRequest req, HttpServletResponse res, Authentication auth, RedirectAttributes ra) {
-        dogService.resign(dogNo);
+    public String dogResign(Integer dogNo,SecurityContextLogoutHandler handler, HttpServletRequest req, HttpServletResponse res, Authentication auth, RedirectAttributes ra,@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        Integer memberNo= myUserDetails.getMemberNo();
+        dogService.resign(dogNo,memberNo);
         handler.logout(req, res, auth);
         ra.addFlashAttribute("msg", "삭제했습니다"); // 이런 메시지도 상수로 빼면 좋다
         return "redirect:/";
@@ -266,6 +270,8 @@ public class GlobalController {
     public void answer(){}
 
     // [퍼칭 파트]--------------------------------------------------------------------
+
+    @Secured("ROLE_DOG")
     @GetMapping("/puching/chatroom")
     public String chatroom(Principal principal, Model model,@RequestParam(defaultValue = "")String receiverEmail) {
         Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
@@ -274,12 +280,13 @@ public class GlobalController {
         model.addAttribute("startuser",receiverEmail);
         return "puching/chatRoom";
     }
+    @Secured("ROLE_DOG")
     @GetMapping("/puching/locationview")
     public String locationview(@RequestParam("lat")Double lat,@RequestParam("lng") Double lng){
 
         return "puching/locationview";
     };
-
+    @Secured("ROLE_DOG")
     @GetMapping("/puching/reviewwrite")
     public String reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
         System.out.println(receiverNo);
@@ -289,13 +296,14 @@ public class GlobalController {
         System.out.println(dto);
         return "puching/reviewwrite";
     }
+    @Secured("ROLE_DOG")
     @PostMapping(value="/puching/reviewwrite")
     public String write(ReviewDto.Write dto, Principal principal) {
         System.out.println(dto);
         puchingReviewService.saveReview(principal.getName(),dto);
         return "redirect:/puching/main";
     }
-
+    @Secured("ROLE_DOG")
     @GetMapping(value = "/puching/puching_introduce")
     public String introduce(){
         System.out.println("퍼칭소개글");
