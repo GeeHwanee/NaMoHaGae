@@ -353,7 +353,6 @@ public class GlobalController {
     @GetMapping("/board/town/write")
     public String boardTownWrite(Model model) {
         model.addAttribute("town",boardTownService.townList());
-        System.out.println(boardTownService.townList());
         return "board/town/write";
     }
     @PostMapping("/board/town/writepro")
