@@ -46,7 +46,7 @@
       <br>
       <div class="card bg-success text-white">
         주문일:<span th:text="${productOrderDate}"></span>
-        배송지:<span th:text="${'('+order.addressPostcode+')'+order.addressAddress+order.addressAddressDetail}"></span>
+        배송지:<span th:text="${order.productOrderAddress}"></span>
       </div>
       <br>
       <table class="table table-hover">
