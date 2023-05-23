@@ -17,10 +17,47 @@
  #search_form {
      text-align: center;
  }
+
  #button_form {
      display:flex;
+     position:relative;
  }
+ #town_write {
+    position:absolute;
+     right:0;
+ }
+ button {
+     margin-right:2px;
 
+ }
+ th {
+     border-top: 3px solid #dfaa8b;
+ }
+ .btn-primary {
+     background: #dfaa8b;
+     font-weight:bold;
+     border: none;
+ }
+ .pagination {
+     --bs-pagination-border-color:#c9dc92;
+     --bs-pagination-disabled-color:#000000;
+     --bs-pagination-border-radius: 0.375rem;
+
+ }
+ .page-link {
+     color:#000000;
+     font-weight:bold;
+ }
+  .page-link.active {
+      background: #dfaa8b;
+      border:none;
+      font-weight:bold;
+
+}
+ #search_box {
+     border:3px solid #dfaa8b;
+
+ }
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -60,26 +97,28 @@
             <form method="GET" action="/board/free/list">
                 <!-- 다른 입력 필드들 -->
                 <input type="hidden" name="change" value="1">
-                <button type="submit">전체글</button>
+                <button type="submit" class="btn btn-primary">전체글</button>
             </form>
             <form method="GET" action="/board/free/list">
                 <!-- 다른 입력 필드들 -->
                 <input type="hidden" name="change" value="2">
-                <button type="submit">조회순</button>
+                <button type="submit" class="btn btn-primary">조회순</button>
             </form>
             <form method="GET" action="/board/free/list">
                 <!-- 다른 입력 필드들 -->
                 <input type="hidden" name="change" value="3">
-                <button type="submit">추천순</button>
+                <button type="submit" class="btn btn-primary">추천순</button>
             </form>
+                <a class="btn btn-primary" th:href="@{/board/free/write}" id="town_write">글쓰기</a>
             </div>
+
             <nav aria-label="..." id="page">
                 <ul class="pagination">
                     <li th:if="${paging.page <= 1}" class="page-item disabled">
                         <span class="page-link">이전</span>
                     </li>
                     <li th:if="${paging.page > 1}" class="page-item">
-                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName},change=${change})}" class="page-link">[이전]</a>
+                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName},change=${change})}" class="page-link">이전</a>
                     </li>
                     <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item">
                         <div th:if="${i eq paging.page}">
@@ -100,11 +139,11 @@
 
             <div id="search_form">
             <form th:action="@{/board/free/list}" method="get">
-                <input type="text" name="searchName">
+                <input type="text" name="searchName" id="search_box">
                 <button type="submit" class="btn btn-primary">검색</button>
             </form>
             </div>
-            <a class="card-link" th:href="@{/board/free/write}">글쓰기</a>
+
         </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>

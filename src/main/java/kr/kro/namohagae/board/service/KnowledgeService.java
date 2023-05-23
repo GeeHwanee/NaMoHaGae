@@ -3,6 +3,7 @@ package kr.kro.namohagae.board.service;
 import kr.kro.namohagae.board.dao.KnowledgeAnswerDao;
 import kr.kro.namohagae.board.dao.KnowledgeQuestionDao;
 import kr.kro.namohagae.board.dto.KnowledgeAnswerDto;
+import kr.kro.namohagae.board.dto.KnowledgeMainDto;
 import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
 import kr.kro.namohagae.board.entity.KnowledgeAnswer;
 import kr.kro.namohagae.board.entity.KnowledgeQuestion;
@@ -114,5 +115,16 @@ public class KnowledgeService {
         }
         return new KnowledgeAnswerDto.myAnswerPagination(pageno, prev, start, end, next, myAnswerLists);
     }
+    public List<KnowledgeMainDto> readList() {
+
+        return knowledgeQuestionDao.readList();
+    }
+
+    public List<KnowledgeMainDto> readList2() {
+
+        return knowledgeQuestionDao.readList2();
+    }
+
+
 }
 
