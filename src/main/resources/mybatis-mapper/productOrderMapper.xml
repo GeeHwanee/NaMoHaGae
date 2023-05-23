@@ -40,7 +40,7 @@
             join member m on po.member_no = m.member_no
             join product p on pod.product_no = p.product_no
             join product_image pi on pod.product_no = pi.product_no and pi.PRODUCT_IMAGE_NO=1
-        where a.member_no = #{memberNo} order by po.product_order_date desc
+        where po.member_no = #{memberNo} order by po.product_order_date desc
     </select>
 
     <!-- 주문 상세 보기 -->
