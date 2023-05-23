@@ -29,14 +29,16 @@
               배송일:<span th:text="${order.productOrderDate}"></span>
             </div>
             <div style="float:right;">
-              배송지:<span th:text="${order.addressPostcode+order.addressAddress+order.addressAddressDetail}"></span>
+              배송지:<span th:text="${order.productOrderAddress}"></span>
             </div>
           </div>
         </div>
         <table class="table table-border">
           <tr th:each="item:${order.orderDetailList}">
             <td>
-              <img th:src="${item.productImage}" width="100px">
+              <a th:href="@{/mall/product/read(productNo=${item.productNo})}">
+                <img th:src="${item.productImage}" width="100px" height="100px">
+              </a>
             </td>
             <td>
               <span th:text="${item.productName}"></span>
@@ -46,7 +48,7 @@
               <span th:text="${item.productOrderDetailPrice}"></span>원
             </td>
             <td>
-              <span th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}">
+              <span>
               <a type="button" class="btn btn-primary" th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}"  th:href="@{/mall/product/review/write(productOrderDetailNo=${item.productOrderDetailNo})}">리뷰 작성</a>
               </span>
             </td>

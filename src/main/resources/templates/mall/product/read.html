@@ -206,8 +206,6 @@
             console.log(result);
             printReview(result.review);
             printPagination({prev: result.prev, start: result.start, end: result.end, next: result.next, pageno: pageno, productNo: productNo});
-
-
         } catch (err) {
             console.log(err);
         }
@@ -242,24 +240,6 @@
                 console.log(err);
             }
         });
-
-
-        /*
-        // 품절시 버튼 변경
-        const stock = document.getElementById('productStock').value;
-
-        if (stock == 0) {
-            document.getElementById("buy").style.display = "none";
-            document.getElementById("cart").style.display = "none";
-            document.getElementById("sold_out").style.display = "inline-block";
-            document.getElementById("favorite").style.display = "inline-block";
-        } else {
-            document.getElementById("buy").style.display = "inline-block";
-            document.getElementById("cart").style.display = "inline-block";
-            document.getElementById("sold_out").style.display = "none";
-            document.getElementById("favorite").style.display = "inline-block";
-        }
-         */
 
 
         // 이미지 선택
@@ -342,21 +322,11 @@
         });
 
 
-        // 품절시 버튼 변경
-        const stock = document.getElementById('productStock').value;
-        const buyButton = document.getElementById('buy');
-
-        if (stock == 0) {
-            buyButton.disabled = true;
-            buyButton.innerText = '품절';
-        } else {
-            buyButton.disabled = false;
-            buyButton.innerText = '구매하기';
+        // 총 상품 금액
+        if(data.productStock!=0) {
+            calculateTotalPrice(1);
         }
 
-
-        // 총 상품 금액
-        calculateTotalPrice(1);
 
         // 리뷰 별점 평균 출력
         printReviewStar(data.productGrade, data.reviewCount);
@@ -364,53 +334,51 @@
 </script>
 <script>
     function decreaseQuantity() {
-        const quantityElement = document.getElementById('quantity');
-        let quantity = parseInt(quantityElement.innerText);
+        const quantityValue = $('#quantity');
+        let quantity = parseInt(quantityValue.text());
 
         if (quantity > 1) {
             quantity--;
-            quantityElement.innerText = quantity.toString();
+            quantityValue.text(quantity.toString());
         } else {
-            alert('1개 이상 구매 가능합니다')
+            alert('1개 이상 구매 가능합니다');
         }
 
         calculateTotalPrice(quantity);
     }
 
     function increaseQuantity() {
-        const quantityElement = document.getElementById('quantity');
-        let quantity = parseInt(quantityElement.innerText);
+        const quantityValue = $('#quantity');
+        let quantity = parseInt(quantityValue.text());
 
-        if(quantity==[[${product.productStock}]]) {
-            alert([[${product.productStock}]]+'개보다 더 담을 수 없습니다')
+        if (quantity === parseInt([[${product.productStock}]])) {
+            alert([[${product.productStock}]]+'개보다 더 담을 수 없습니다');
+        } else {
+            quantity++;
+            quantityValue.text(quantity.toString());
         }
-        else {
-        quantity++;
-        quantityElement.innerText = quantity.toString();
-    }
+
         calculateTotalPrice(quantity);
     }
 
     function calculateTotalPrice(quantity) {
-        const totalPriceElement = document.getElementById('totalPrice');
+        const totalPriceValue = $('#totalPrice');
         const productPrice = parseInt([[${product.productPrice}]]);
 
         if (isNaN(productPrice)) {
-            totalPriceElement.innerText = "상품 가격이 유효하지 않습니다.";
+            totalPriceValue.text("상품 가격이 유효하지 않습니다.");
             return;
         }
 
         const totalPrice = productPrice * quantity;
-        totalPriceElement.innerText = totalPrice.toLocaleString() + '원';
+        totalPriceValue.text(totalPrice.toLocaleString() + '원');
     }
+
 </script>
 <script>
     function printReviewStar(productGrade, reviewCount) {
         if (productGrade === null) {
-            const productGradeElement = document.querySelector('.productGrade');
-            if (productGradeElement) {
-                productGradeElement.classList.add('hide');
-            }
+            $('.productGrade').addClass('hide');
             return;
         }
 
@@ -418,24 +386,21 @@
         const halfStar = productGrade - fullStars;
         const emptyStars = 5 - fullStars - (halfStar > 0 ? 1 : 0);
 
-        let starsHTML = '';
+        let starsPrint = '';
         for (let i = 0; i < fullStars; i++) {
-            starsHTML += '<i class="fa-solid fa-star"></i>';
+            starsPrint += '<i class="fa-solid fa-star"></i>';
         }
         if (halfStar > 0) {
-            starsHTML += '<i class="fa-solid fa-star-half-stroke"></i>';
+            starsPrint += '<i class="fa-solid fa-star-half-stroke"></i>';
         }
         for (let i = 0; i < emptyStars; i++) {
-            starsHTML += '<i class="fa-regular fa-star"></i>';
+            starsPrint += '<i class="fa-regular fa-star"></i>';
         }
 
-        const productGradeHTML = starsHTML + ' ' + productGrade.toFixed(1);
-        const reviewCountHTML = '(' + reviewCount + '건)';
+        const productGradePrint = starsPrint + ' ' + productGrade.toFixed(1);
+        const reviewCountPrint = '(' + reviewCount + '건)';
 
-        const productGradeElement = document.querySelector('.productGrade');
-        if (productGradeElement) {
-            productGradeElement.innerHTML = productGradeHTML + ' ' + reviewCountHTML;
-        }
+        $('.productGrade').html(productGradePrint + ' ' + reviewCountPrint);
     }
 </script>
 <script th:inline="javascript">
@@ -470,7 +435,7 @@
                     </div>
                     <span>
                       <div th:if="${product.productStock == 0}">
-                        <span class="productPrice" style="color: red">품절댐</span>
+                        <span class="productPrice" style="color: red">품절</span>
                       </div>
                       <div th:unless="${product.productStock == 0}">
                         <div>
@@ -502,7 +467,7 @@
                     <br>
                 <div id="buttons">
                     <input type="hidden" id="productStock" name="productStock" th:value="${product.productStock}" />
-                    <button class="btn btn-secondary" id="buy" th:disabled="${product.productStock == 0}">구매하기</button>
+                    <button class="btn btn-secondary" id="buy" th:disabled="${product.productStock == 0}" th:text="${product.productStock == 0 ? '품절' : '구매하기'}"></button>
                     <button class="btn btn-secondary" id="cart" th:disabled="${product.productStock == 0}">장바구니</button>
                     <button class="btn btn-secondary" id="favorite"><span id="favorite_text">찜하기</span></button>
                 </div>
