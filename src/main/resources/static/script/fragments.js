@@ -5,10 +5,15 @@ const board = "/board";
 const admin	= "/admin";
 let $_csrf;
 let $_csrf_input;
+let $viewportMetaTag;
 
 $(document).ready(async function() {
     $_csrf = $('meta[name="_csrf"]').attr('content');
     $_csrf_input = $('<input type="hidden" name="_csrf" value="'+ $_csrf + '">');
+    $viewportMetaTag = $('meta[name="viewport"]');
+    if (/Mobi/i.test(navigator.userAgent)) { // 모바일 기기인 경우
+        $viewportMetaTag.setAttribute('content', 'width=1200px, initial-scale=1.0, maximum-scale=1.0');
+    }
     let csrf = $('#_csrf');
     if(csrf.length){
         csrf.val($_csrf);
