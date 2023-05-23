@@ -11,6 +11,7 @@ import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -75,24 +76,36 @@ public class KnowledgeService {
         return knowledgeAnswerDao.findAll(questionNo);
     }
 
-    public Boolean answerUpdate(Integer answerNo) {
-        KnowledgeAnswerDto.Point point = knowledgeAnswerDao.findByKnowledgeAnswerNo(answerNo);
-        memberDao.updatePoint(point.getKnowledgeAnswerMemberNo(), point.getKnowledgeQuestionPoint());
+    @Transactional
+    public Boolean answerUpdate(Integer answerNo, Integer point) {
+        KnowledgeAnswer knowledgeAnswer = knowledgeAnswerDao.findByKnowledgeAnswerNo(answerNo);
+        memberDao.updatePoint(knowledgeAnswer.getMemberNo(), point);
         knowledgeAnswerDao.update(answerNo);
         return true;
     }
 
+    public Boolean answerDelete(Integer answerNo) {
+        KnowledgeAnswer knowledgeAnswer = knowledgeAnswerDao.findByKnowledgeAnswerNo(answerNo);
+        if(knowledgeAnswer.getKnowledgeAnswerSelectionEnabled()){
+            return false;
+        }else {
+            knowledgeAnswerDao.delete(answerNo);
+            return true;
+        }
+
+    }
+
     public KnowledgeQuestionDto.myPagination myQusetionList(Integer pageno, Integer memberNo) {
-        Integer startRowNum = (pageno-1)*PAGESIZE + 1;
+        Integer startRowNum = (pageno - 1) * PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<KnowledgeQuestionDto.myQuestionList> myQusetionList =  knowledgeQuestionDao.findAllByMemberNo(startRowNum,endRowNum, memberNo);
+        List<KnowledgeQuestionDto.myQuestionList> myQusetionList = knowledgeQuestionDao.findAllByMemberNo(startRowNum, endRowNum, memberNo);
         Integer countOfFavorite = knowledgeQuestionDao.countByMemberNo(memberNo);
-        Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
-        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
+        Integer countOfPage = (countOfFavorite - 1) / PAGESIZE + 1;
+        Integer prev = (pageno - 1) / BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev + 1;
         Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
+        Integer next = end + 1;
+        if (end >= countOfPage) {
             end = countOfPage;
             next = 0;
         }
@@ -100,16 +113,16 @@ public class KnowledgeService {
     }
 
     public KnowledgeAnswerDto.myAnswerPagination myAnswerList(Integer pageno, Integer memberNo) {
-        Integer startRowNum = (pageno-1)*PAGESIZE + 1;
+        Integer startRowNum = (pageno - 1) * PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<KnowledgeAnswerDto.myAnswerList> myAnswerLists =  knowledgeAnswerDao.findAllByMemberNo(startRowNum,endRowNum, memberNo);
+        List<KnowledgeAnswerDto.myAnswerList> myAnswerLists = knowledgeAnswerDao.findAllByMemberNo(startRowNum, endRowNum, memberNo);
         Integer countOfFavorite = knowledgeAnswerDao.countByMemberNo(memberNo);
-        Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
-        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
+        Integer countOfPage = (countOfFavorite - 1) / PAGESIZE + 1;
+        Integer prev = (pageno - 1) / BLOCKSIZE * BLOCKSIZE;
+        Integer start = prev + 1;
         Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
+        Integer next = end + 1;
+        if (end >= countOfPage) {
             end = countOfPage;
             next = 0;
         }
@@ -127,4 +140,5 @@ public class KnowledgeService {
 
 
 }
+
 
