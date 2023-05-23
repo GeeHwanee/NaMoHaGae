@@ -249,9 +249,9 @@
                     <span id="memberPoint" th:text="${#numbers.formatInteger(map.memberPoint,0,'COMMA')}+'원'"></span>
                 </div>
                 <div>
-                    <label for="pointInput">사용</label> <!-- 사용 텍스트 날리기 -->
+                    <label for="pointInput"></label>
                     <div><input type="number" id="pointInput" min="0">원</div>
-                    <button id="usePoint">사용</button> <!-- 사용버튼 만듦 -->
+                    <button id="usePoint">사용</button>
                     <button id="fullUse">전액사용</button>
                 </div>
         </div>
@@ -279,7 +279,7 @@
                 </div>
                 <div>
                     <span>뼈다귀 포인트 사용</span>
-                    <span id="bonePoint"></span> <!-- usedPoint에서 변경 -->
+                    <span id="bonePoint"></span>
                 </div>
         </div>
     <br>
