@@ -12,7 +12,7 @@
         INSERT INTO BOARD_COMMENT (
                                    board_no, comment_no, member_no, comment_content, comment_write_date, comment_enabled
         ) VALUES (
-            #{boardNo},SEQ_BOARD_COMMENT_NO.NEXTVAL,#{memberNo},#{commentContent},sysdate,0
+            #{boardNo},BOARD_COMMENT_SEQ_BOARD_COMMENT_NO.NEXTVAL,#{memberNo},#{commentContent},sysdate,0
             )
     </insert>
 

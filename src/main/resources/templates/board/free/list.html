@@ -73,9 +73,9 @@
                 <button type="submit">추천순</button>
             </form>
             </div>
-            <nav aria-label="Page navigation example" id="page">
+            <nav aria-label="..." id="page">
                 <ul class="pagination">
-                    <li th:if="${paging.page <= 1}">
+                    <li th:if="${paging.page <= 1}" class="page-item disabled">
                         <span class="page-link">이전</span>
                     </li>
                     <li th:if="${paging.page > 1}" class="page-item">
@@ -83,7 +83,7 @@
                     </li>
                     <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item">
                         <div th:if="${i eq paging.page}">
-                            <span th:text="${i}" class="page-link"></span>
+                            <span th:text="${i}" class="page-link active"></span>
                         </div>
                         <div th:if="${i != paging.page}">
                             <a th:href="@{/board/free/list(page=${i}, searchName=${searchName},change=${change})}" th:text="${i}" class="page-link"></a>

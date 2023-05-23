@@ -20,7 +20,7 @@
             board_enabled
         )
         SELECT
-            SEQ_BOARD_NO.NEXTVAL,
+            BOARD_SEQ_BOARD_NO.NEXTVAL,
             #{townNo},
             m.member_no,
             #{boardTitle},
