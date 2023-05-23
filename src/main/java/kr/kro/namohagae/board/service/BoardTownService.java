@@ -81,7 +81,6 @@ public class BoardTownService {
         return boardTownDao.townDeleteData(boardNo);
     }
     public List<Town> townList() {
-        System.out.println(boardTownDao.townList());
         return boardTownDao.townList();
     }
 }
