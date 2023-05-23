@@ -48,8 +48,9 @@ public class DogService {
         }
         Dog dog = dto.toEntity(memberNo, profileName, memberIntroduce);
         dogDao.register(dog);
-        MyUserDetails userDetails = (MyUserDetails) myUserDetailsService.updateSecurity(memberNo);
-        userDetails.getAuthorities().add(new SimpleGrantedAuthority(Roles.DOG.getRole()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+        SecurityContextHolder.getContext().setAuthentication(myUserDetailsService.createNewAuthentication(authentication,myUserDetails.getUsername()));
     }
 
     public DogDto.Read read(Integer dogNo) {
@@ -88,32 +89,24 @@ public class DogService {
         return a;
     }
 
-    public void resign(Integer dogNo,Integer memberNo) {
+    public void resign(Integer dogNo) {
         try {
             String profile = dogDao.findByDog(dogNo).get().getDogProfile();
             File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, profile);
-
             // 예외가 발생하면 롤백되는데, 발생 안하니까... 어떻게 처리하지? -> 작업을 중단하자(아래 코드는 설명용)
-            if (file.exists()==false) {
-                return;
-            }
-            if (profile.equals("default.jpg")==false) {
+            if (file.exists()&&profile.equals("default.jpg")==false) {
                 file.delete();
             }
             dogDao.delete(dogNo);
-            MyUserDetails userDetails = (MyUserDetails) myUserDetailsService.updateSecurity(memberNo);
-            userDetails.getAuthorities().add(new SimpleGrantedAuthority(Roles.DOG.getRole()));
-            System.out.println("123124");
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+            SecurityContextHolder.getContext().setAuthentication(myUserDetailsService.createNewAuthentication(authentication,myUserDetails.getUsername()));
         }catch(NoSuchElementException e){
             throw e;
         }
     }
 
     public List<DogDto.DogList> dogList(Integer memberNo) {
-        System.out.println("9807");
-        List<DogDto.DogList> dogList = dogDao.findDogList(memberNo);
-        dogList.get(0).setDogProfile(ImageConstants.IMAGE_DOG_URL+dogList.get(0).getDogProfile());
-        dogList.get(1).setDogProfile(ImageConstants.IMAGE_DOG_URL+dogList.get(1).getDogProfile());
-        return dogList;
+        return dogDao.findDogList(ImageConstants.IMAGE_DOG_URL,memberNo);
     }
 }
