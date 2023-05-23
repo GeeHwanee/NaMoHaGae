@@ -41,28 +41,21 @@ public class MyUserDetailsService implements UserDetailsService {
             Collection<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(Roles.USER.getRole()));
             if (dogDao.checkDogCountByMemberNo(member.getMemberNo())!=0){
-                authorities.add(new SimpleGrantedAuthority(Roles.USER.getRole()));
+                authorities.add(new SimpleGrantedAuthority(Roles.DOG.getRole()));
             }
             return new MyUserDetails(member.getMemberNo(), member.getMemberNickname(),member.getTownNo(),username, member.getMemberPassword(), member.getMemberEnabled(), authorities);
 
         }catch (NoSuchElementException e) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
         }
+
+
     }
-
-    public UserDetails updateSecurity(Integer memberNo) throws UsernameNotFoundException {
-        try {
-            Member member = memberDao.findByMember(memberNo).get();
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(Roles.USER.getRole()));
-            if (dogDao.checkDogCountByMemberNo(member.getMemberNo())!=0){
-                authorities.add(new SimpleGrantedAuthority(Roles.USER.getRole()));
-            }
-            return new MyUserDetails(member.getMemberNo(), member.getMemberNickname(),member.getTownNo(),member.getMemberEmail(), member.getMemberPassword(), member.getMemberEnabled(), authorities);
-
-        }catch (NoSuchElementException e) {
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
-        }
+    public Authentication createNewAuthentication(Authentication currentAuth, String username) {
+        UserDetails newPrincipal = loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
+        newAuth.setDetails(currentAuth.getDetails());
+        return newAuth;
     }
 
 }

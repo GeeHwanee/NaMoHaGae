@@ -82,8 +82,6 @@ public class GlobalController {
               return "admin/main";
           }
       }
-
-      System.out.println(myUserDetails.getAuthorities().size());
         return "main";
     }
     @Secured("ROLE_DOG")
@@ -178,8 +176,7 @@ public class GlobalController {
     @PostMapping("/dog/resign")
     public String dogResign(Integer dogNo,SecurityContextLogoutHandler handler, HttpServletRequest req, HttpServletResponse res, Authentication auth, RedirectAttributes ra,@AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo= myUserDetails.getMemberNo();
-        dogService.resign(dogNo,memberNo);
-        handler.logout(req, res, auth);
+        dogService.resign(dogNo);
         ra.addFlashAttribute("msg", "삭제했습니다"); // 이런 메시지도 상수로 빼면 좋다
         return "redirect:/";
     }
