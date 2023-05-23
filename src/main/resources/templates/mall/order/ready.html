@@ -61,7 +61,6 @@
     const data = [[${map}]];
 </script>
 <script>
-    // 주문에 카카오페이 로직 추가중
     let productName = undefined;
     let cartDetailCount = undefined;
     let cartTotalPrice = undefined;
@@ -93,7 +92,7 @@
 
             $.ajax({
                 type: 'get',
-                url: '/pay/start',
+                url: '/api/v1/pay/start',
                 data: {
                     item_name: productName,
                     quantity: cartDetailCount,
