@@ -7,19 +7,172 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>지식인 게시판 메인 페이지</title>
+    <title>지식인 메인</title>
 </head>
+<style>
+ * {
+     margin:0;
+     padding:0;
+     list-style:none;
+     text-decoration: none;
+ }
+ p {
+     margin:0;
+ }
+ a {
+     list-style:none;
+     text-decoration: none;
+ }
+ .row {
+     margin:0 auto;
+     padding:0;
+     width:90%;
+
+ }
+
+ .title {
+     font-weight:bold;
+     font-size:18px;
+     border-bottom:1px solid #e8e8e8;
+     margin-bottom: 20px;
+     padding-bottom:10px;
+ }
+ .table {
+     border-bottom:1px solid #e8e8e8;
+     height:100px;
+ }
+ strong {
+     font-size:20px;
+     font-weight:bold;
+     color:#28a745;
+ }
+ .col-sm-6 {
+     border-right:1px solid #e8e8e8;
+ }
+ #col-sm-66 {
+     border-right:none;
+ }
+ .questionTitle {
+     font-weight:bold;
+     color:#000000;
+ }
+ .questionContent {
+     color:#6c757d;
+     font-size:12px;
+ }
+ .read {
+     font-size:13px;
+     color: #000000;
+
+
+ }
+ .answer {
+     font-size:13px;
+     color: #8c8c8c;
+ }
+ .border {
+     height:12px;
+     width:1px;
+     display:inline-block;
+     margin:0 3px;
+     background: #e8e8e8;
+ }
+ .question_layout {
+     height:700px;
+
+ }
+ h1 {
+     text-align:center;
+     font-size:20px;
+     font-weight:bold;
+     color:#8c8c8c;
+ }
+ .question_layout {
+     width:90%;
+     margin:0 auto;
+     margin-top:50px;
+ }
+ #search_form {
+     float:right;
+ }
+ #all {
+     float:left;
+     font-weight:bold;
+     font-size:24px;
+ }
+ #all_layout {
+     margin-top:50px;
+ }
+</style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>지식인 게시판 메인 페이지</h1>
-        <article></article>
+        <h1>게시판 메인</h1>
+        <article>
+            <div class="row">
+                <div class="title">지식인인기</div>
+                <div class="col-sm-6">
+                    <div th:each="board, iterStat : ${readList}" class="table">
+                        <strong th:text="${iterStat.index + 1}+'&nbsp;'"></strong>
+                        <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${board.knowledgeQuestionNo})}"><span th:text="${board.knowledgeQuestionTitle}" class="questionTitle"></span></a>
+                        <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${board.knowledgeQuestionNo})}"><p th:text="'┕&nbsp;&nbsp;&nbsp;'+${board.knowledgeQuestionContent}" class="questionContent"></p></a>
+                        <span th:text="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;조회수 '+${board.knowledgeQuestionReadCount}" class="read"></span>
+                        <span class="border"></span>
+                        <span th:text="'답변수 '+${board.answerCount}" class="answer"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6" id="col-sm-66">
+                    <div th:each="board, iterStat : ${readList2}" class="table">
+                        <strong th:text="${iterStat.index + 6}+'&nbsp;'"></strong>
+                        <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${board.knowledgeQuestionNo})}"><span th:text="${board.knowledgeQuestionTitle}" class="questionTitle"></span></a>
+                        <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${board.knowledgeQuestionNo})}"><p th:text="'┕&nbsp;&nbsp;&nbsp;'+${board.knowledgeQuestionContent}" class="questionContent"></p></a>
+                        <span th:text="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;조회수 '+${board.knowledgeQuestionReadCount}" class="read"></span>
+                        <span class="border"></span>
+                        <span th:text="'답변수 '+${board.answerCount}" class="answer"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="question_layout">
+                <h1>답변을 기다리는 질문</h1>
+                <div id="all_layout">
+                <div id="all">전체</div>
+                <div id="search_form">
+                    <form th:action="@{/board/free/list}" method="get">
+                        <input type="text" name="searchName" id="search_box">
+                        <button type="submit" class="btn btn-primary">검색</button>
+                    </form>
+                    <span>답변적은순</span><span>최신순</span><span>내공높은순</span>
+                </div>
+
+                </div>
+            </div>
+        </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
+<script>
+    // 제목 길이 제한 함수
+    function limitTitleLength() {
+        var titleElements = document.getElementsByClassName("questionContent");
+        for (var i = 0; i < titleElements.length; i++) {
+            var title = titleElements[i].textContent;
+            var maxLength = 20; // 최대 길이 설정
+            if (title.length > maxLength) {
+                titleElements[i].textContent = title.substring(0, maxLength) + "...";
+            }
+        }
+    }
+
+    // 페이지 로드 시 호출
+    window.onload = function() {
+        limitTitleLength();
+    };
+
+
+</script>
 </html>
