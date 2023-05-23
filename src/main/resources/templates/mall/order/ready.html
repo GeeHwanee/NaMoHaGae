@@ -68,27 +68,25 @@
     let taxFreeAmount = undefined;
 
     $(document).ready(function() {
-        console.log(data);
         const orderItems = data.orderItems;
-        console.log(orderItems);
         $('#order').click(function() {
             productName = '';
             cartDetailCount = 0;
             const orderTotalPrice = $('#orderTotalPrice').text().replace("원", "").replace(",", "");
-            if(data.orderItems.length == 1){
-                productName = data.orderItems[0].productName;
-                cartDetailCount = data.orderItems[0].cartDetailCount;
+            if(orderItems.length == 1){
+                productName = orderItems[0].productName;
+                cartDetailCount = orderItems[0].cartDetailCount;
                 cartTotalPrice = orderTotalPrice;
                 taxFreeAmount = 0;
             } else {
                 let i = 0;
-                for (const item of data.orderItems) {
-                    cartDetailCount += data.orderItems[i].cartDetailCount;
+                for (const item of orderItems) {
+                    cartDetailCount += orderItems[i].cartDetailCount;
                     i++;
                 }
                 cartTotalPrice = orderTotalPrice;
                 taxFreeAmount = 0;
-                productName = data.orderItems[0].productName + ' 외 ' + ((data.orderItems.length) - 1) + '건';
+                productName = orderItems[0].productName + ' 외 ' + ((orderItems.length) - 1) + '건';
             }
 
             const totalAmount = parseInt(cartTotalPrice.replace(/[^0-9]/g, ''));
@@ -118,6 +116,7 @@
             $form.append($_csrf_input);
             $form.appendTo($('body')).submit();
         })
+
 
         // 결제 예정 금액
         const printOrderTotalPrice = data.orderTotalPrice + 3000;
@@ -177,7 +176,6 @@
             $('#bonePoint').text('-' + $pointInputValue + '원');
             $('#orderTotalPrice').text((orderTotalPrice - bonePoint) + '원');
         });
-
     })
 </script>
 </head>
