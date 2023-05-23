@@ -7,7 +7,7 @@
 
     <insert id="save">
         INSERT INTO BOARD_NOTICE
-    values (BOARD_NOTICE_SEQ_BOARD_NOTICE_NO.nextval,#{boardNoticeWriter}, #{boardNoticeTitle},#{boardNoticeContent}, #{boardNoticeWriteDate}, 0)
+    values (BOARD_SEQ_BOARD_NO.nextval,#{boardNoticeWriter}, #{boardNoticeTitle},#{boardNoticeContent}, #{boardNoticeWriteDate}, 0)
     </insert>
 
     <select id="findAll" resultType="BoardNotice" >

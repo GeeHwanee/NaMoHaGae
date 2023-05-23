@@ -6,7 +6,7 @@
 <mapper namespace="kr.kro.namohagae.board.dao.KnowledgeAnswerDao">
     <insert id="save" keyProperty="knowledgeAnswerNo" parameterType="KnowledgeAnswer">
         <selectKey keyProperty="knowledgeAnswerNo" order="BEFORE" resultType="java.lang.Integer">
-            select KNOWLEDGE_ANSWER_SEQ_KNOWLEDGE_ANSWER_NO.nextval from dual
+            select BOARD_SEQ_BOARD_NO.nextval from dual
         </selectKey>
         insert into KNOWLEDGE_ANSWER(KNOWLEDGE_QUESTION_NO, KNOWLEDGE_ANSWER_NO, MEMBER_NO, KNOWLEDGE_ANSWER_CONTENT, KNOWLEDGE_ANSWER_WRITE_DATE, KNOWLEDGE_ANSWER_SELECTION_ENABLED, KNOWLEDGE_ANSWER_RECOMMEND)
         VALUES(#{knowledgeQuestionNo},#{knowledgeAnswerNo}, #{memberNo},#{knowledgeAnswerContent}, #{knowledgeAnswerWriteDate}, 0, 0)
@@ -19,9 +19,8 @@
         where knowledge_question_no = #{questionNo}
         order by KNOWLEDGE_ANSWER_SELECTION_ENABLED desc, KNOWLEDGE_ANSWER_WRITE_DATE
     </select>
-    <select id="findByKnowledgeAnswerNo" resultType="kr.kro.namohagae.board.dto.KnowledgeAnswerDto$Point">
-        select KQ.KNOWLEDGE_QUESTION_NO, KNOWLEDGE_ANSWER_NO, KQ.MEMBER_NO as knowledge_question_member_no, KA.MEMBER_NO as knowledge_answer_member_no, KNOWLEDGE_QUESTION_POINT
-        from KNOWLEDGE_ANSWER KA join KNOWLEDGE_QUESTION KQ on KA.KNOWLEDGE_QUESTION_NO = KQ.KNOWLEDGE_QUESTION_NO
+    <select id="findByKnowledgeAnswerNo" resultType="KnowledgeAnswer">
+        select * from KNOWLEDGE_ANSWER
         where KNOWLEDGE_ANSWER_NO=#{answerNo}
     </select>
 
@@ -48,5 +47,7 @@
     <select id="countByMemberNo" resultType="Integer">
         select count(*) from knowledge_answer where member_no=#{memberNo}
     </select>
-
+    <delete id="delete">
+        delete from KNOWLEDGE_ANSWER where KNOWLEDGE_ANSWER_NO = #{answerNo}
+    </delete>
 </mapper>
