@@ -68,7 +68,8 @@ public class ProductOrderService {
 
     public Integer saveOrder(List<ProductOrderDto.OrderList> orderItems, Integer orderTotalPrice, Integer memberNo, Integer addressNo, Integer usedMemberPoint) {
         Address address = addressDao.findByMemberNoAndAddressNo(memberNo, addressNo);
-        ProductOrder productOrder = new ProductOrder(null, memberNo, address.getAddressNo(), orderTotalPrice, LocalDateTime.now());
+        String productOrderAddress = "("+address.getAddressPostcode()+") " + address.getAddressAddress() +" "+ address.getAddressAddressDetail();
+        ProductOrder productOrder = new ProductOrder(null, memberNo, orderTotalPrice, LocalDateTime.now(), productOrderAddress);
         productOrderDao.save(productOrder);
         Integer productOrderNo = productOrder.getProductOrderNo();
         List<Integer> productNos = new ArrayList<>();

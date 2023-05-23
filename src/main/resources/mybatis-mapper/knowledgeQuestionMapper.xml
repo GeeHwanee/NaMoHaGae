@@ -61,6 +61,38 @@
     <select id="countByMemberNo" resultType="Integer">
         select count(*) from KNOWLEDGE_QUESTION where member_no=#{memberNo}
     </select>
-
+    <select id="readList" resultType="kr.kro.namohagae.board.dto.KnowledgeMainDto">
+        SELECT Q.KNOWLEDGE_QUESTION_NO,Q.KNOWLEDGE_QUESTION_TITLE,Q.KNOWLEDGE_QUESTION_CONTENT,Q.KNOWLEDGE_QUESTION_READ_COUNT, COALESCE(A.answerCount, 0) AS answerCount
+        FROM KNOWLEDGE_QUESTION Q
+                 LEFT JOIN (
+            SELECT KNOWLEDGE_QUESTION_NO, COUNT(*) AS answerCount
+            FROM KNOWLEDGE_ANSWER
+            GROUP BY KNOWLEDGE_QUESTION_NO
+        ) A ON Q.KNOWLEDGE_QUESTION_NO = A.KNOWLEDGE_QUESTION_NO
+        ORDER BY Q.KNOWLEDGE_QUESTION_READ_COUNT  DESC
+        OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
+    </select>
+    <select id="readList2" resultType="kr.kro.namohagae.board.dto.KnowledgeMainDto">
+        SELECT Q.KNOWLEDGE_QUESTION_NO,Q.KNOWLEDGE_QUESTION_TITLE,Q.KNOWLEDGE_QUESTION_CONTENT,Q.KNOWLEDGE_QUESTION_READ_COUNT, COALESCE(A.answerCount, 0) AS answerCount
+        FROM KNOWLEDGE_QUESTION Q
+                 LEFT JOIN (
+            SELECT KNOWLEDGE_QUESTION_NO, COUNT(*) AS answerCount
+            FROM KNOWLEDGE_ANSWER
+            GROUP BY KNOWLEDGE_QUESTION_NO
+        ) A ON Q.KNOWLEDGE_QUESTION_NO = A.KNOWLEDGE_QUESTION_NO
+        ORDER BY Q.KNOWLEDGE_QUESTION_READ_COUNT  DESC
+        OFFSET 5 ROWS FETCH NEXT 10 ROWS ONLY
+    </select>
+    <select id="waitList" resultType="kr.kro.namohagae.board.dto.KnowledgeMainDto">
+        SELECT Q.KNOWLEDGE_QUESTION_NO, Q.KNOWLEDGE_QUESTION_TITLE, Q.KNOWLEDGE_QUESTION_CONTENT, Q.KNOWLEDGE_QUESTION_READ_COUNT, COALESCE(A.answerCount, 0) AS answerCount
+        FROM KNOWLEDGE_QUESTION Q
+                 LEFT JOIN (
+            SELECT KNOWLEDGE_QUESTION_NO, COUNT(*) AS answerCount
+            FROM KNOWLEDGE_ANSWER
+            GROUP BY KNOWLEDGE_QUESTION_NO
+        ) A ON Q.KNOWLEDGE_QUESTION_NO = A.KNOWLEDGE_QUESTION_NO WHERE Q.KNOWLEDGE_QUESTION_TITLE LIKE '%' || #{searchName} || '%' or Q.KNOWLEDGE_QUESTION_CONTENT LIKE '%' || #{searchName} || '%'
+        ORDER BY COALESCE(A.answerCount, 0)
+        OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
 
 </mapper>

@@ -34,9 +34,7 @@ public class ProductOrderDto {
         private LocalDateTime productOrderDate;
         private Integer memberNo;
         private Integer memberPoint;
-        private String addressPostcode;
-        private String addressAddress;
-        private String addressAddressDetail;
+        private String productOrderAddress;
         private List<ProductOrderDetailDto.OrderDetailList> orderDetailList;
     }
     @Data
@@ -46,9 +44,7 @@ public class ProductOrderDto {
         private Integer productOrderTotalPrice;
         private LocalDateTime productOrderDate;
         private Integer memberNo;
-        private String addressPostcode;
-        private String addressAddress;
-        private String addressAddressDetail;
+        private String productOrderAddress;
         private List<ProductOrderDetailDto.OrderDetailList> orderDetailList;
     }
     @Data
