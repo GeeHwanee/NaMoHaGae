@@ -66,7 +66,7 @@
                     const pageNum = $(this).data('page-no');
                     const result = await $.ajax("/api/v1/member/comment/list?pageno=" + pageNum);
                     console.log(result);
-                    printMyQna(result.commentList);
+                    printMyComment(result.commentList);
                     printPagination(result);
                 });
             } catch (err) {

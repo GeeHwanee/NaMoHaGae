@@ -25,5 +25,7 @@
 <select id="findByDog" resultType="Dog">
     select * from dog where dog_no = #{dogNo} and rownum=1
 </select>
-
+<select id="checkDogCountByMemberNo" resultType="Integer">
+    select count(*) from dog where member_no=#{memberNo}
+</select>
 </mapper>
