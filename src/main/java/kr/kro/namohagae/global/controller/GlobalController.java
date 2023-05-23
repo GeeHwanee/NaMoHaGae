@@ -176,7 +176,7 @@ public class GlobalController {
     @PostMapping("/dog/resign")
     public String dogResign(Integer dogNo,SecurityContextLogoutHandler handler, HttpServletRequest req, HttpServletResponse res, Authentication auth, RedirectAttributes ra,@AuthenticationPrincipal MyUserDetails myUserDetails) {
         Integer memberNo= myUserDetails.getMemberNo();
-        dogService.resign(dogNo);
+        dogService.resign(dogNo,memberNo);
         ra.addFlashAttribute("msg", "삭제했습니다"); // 이런 메시지도 상수로 빼면 좋다
         return "redirect:/";
     }
