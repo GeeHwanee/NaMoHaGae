@@ -96,7 +96,6 @@ public class MemberService {
 //                file.delete();
 //            }
             memberDao.memberEnabled(memberNo,false);
-            System.out.println("123124");
         }catch(NoSuchElementException e){
             throw e;
         }
