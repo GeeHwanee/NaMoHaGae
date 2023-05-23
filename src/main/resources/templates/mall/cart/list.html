@@ -196,12 +196,16 @@
                 <td style="width:10%;">
                     <div th:if="${item.productStock == 0}">
                         <div id="sold_out_container">
-                            <img th:src="${item.productImage}" height="75px;" width="75px;" id="sold_out_image">
-                            <span id="sold_out_text">품절</span>
+                            <a th:href="@{/mall/product/read(productNo=${item.productNo})}">
+                                <img th:src="${item.productImage}" height="75px;" width="75px;" id="sold_out_image">
+                                <span id="sold_out_text">품절</span>
+                            </a>
                         </div>
                     </div>
                     <div th:unless="${item.productStock == 0}">
-                        <img th:src="${item.productImage}" height="75px;" width="75px;">
+                        <a th:href="@{/mall/product/read(productNo=${item.productNo})}">
+                            <img th:src="${item.productImage}" height="75px;" width="75px;">
+                        </a>
                     </div>
                 </td>
                 <td style="width:60%;">

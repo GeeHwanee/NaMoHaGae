@@ -10,7 +10,7 @@
     </insert>
 
     <select id="findAll" resultType="kr.kro.namohagae.mall.dto.AddressDto$Read">
-        select address_no,address_name,address_postcode,address_address,address_address_detail from address where member_no=#{memberNo}
+        select address_no,address_name,address_postcode,address_address,address_address_detail,default_address_enabled from address where member_no=#{memberNo}
     </select>
 
     <delete id="delete">

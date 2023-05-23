@@ -61,7 +61,6 @@
     const data = [[${map}]];
 </script>
 <script>
-    // 주문에 카카오페이 로직 추가중
     let productName = undefined;
     let cartDetailCount = undefined;
     let cartTotalPrice = undefined;
@@ -93,7 +92,7 @@
 
             $.ajax({
                 type: 'get',
-                url: '/pay/start',
+                url: '/api/v1/pay/start',
                 data: {
                     item_name: productName,
                     quantity: cartDetailCount,
@@ -227,7 +226,7 @@
             <div th:each="a:${map.addresses}" class="address-container">
                 <div th:class="${a.defaultAddressEnabled==true} ? 'card bg-secondary text-white' : 'card'">
                     <div class="card-body">
-                        <input type="radio" class="form-check-input addressNo" th:checked="${a.addressNo}" th:value="${a.addressNo}" name="address">
+                        <input type="radio" class="form-check-input addressNo" th:checked="${a.defaultAddressEnabled}" th:value="${a.addressNo}" name="address">
                         (<span th:text="${a.addressName}"></span>)
                         <span th:text="${a.addressAddress}"></span>
                         <span th:text="${a.addressAddressDetail}"></span>

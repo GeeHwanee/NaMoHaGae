@@ -56,10 +56,7 @@ public class ProductReviewService {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<ProductReviewDto.MyReviewList> review =  productReviewDao.findAllByMemberNo(ImageConstants.IMAGE_PRODUCT_URL, startRowNum,endRowNum,memberNo);
-        System.out.println(review.get(0).getReviewContent());
-        System.out.println(review.get(0).getReviewStar());
         Integer countOfReview = productReviewDao.countByMemberNo(memberNo);
-        System.out.println(countOfReview);
         Integer countOfPage = (countOfReview-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
