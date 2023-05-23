@@ -35,6 +35,7 @@ public class DogDto {
     @AllArgsConstructor
     @ToString
     public static class Read {
+        private Integer dogNo;
         private String dogProfile;
         private String dogName;
         private Boolean dogGender;

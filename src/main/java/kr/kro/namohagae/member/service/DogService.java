@@ -1,15 +1,24 @@
 package kr.kro.namohagae.member.service;
 
+import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.global.security.MyUserDetailsService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.constants.Roles;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,6 +26,8 @@ import java.util.NoSuchElementException;
 public class DogService {
     @Autowired
     private DogDao dogDao;
+    @Autowired
+    private  MyUserDetailsService myUserDetailsService;
     public void save(DogDto.Registeration dto, Integer memberNo) {
         String memberIntroduce = " ";
         String profileName = "default.jpg";
@@ -37,6 +48,8 @@ public class DogService {
         }
         Dog dog = dto.toEntity(memberNo, profileName, memberIntroduce);
         dogDao.register(dog);
+        MyUserDetails userDetails = (MyUserDetails) myUserDetailsService.updateSecurity(memberNo);
+        userDetails.getAuthorities().add(new SimpleGrantedAuthority(Roles.DOG.getRole()));
     }
 
     public DogDto.Read read(Integer dogNo) {
@@ -75,7 +88,7 @@ public class DogService {
         return a;
     }
 
-    public void resign(Integer dogNo) {
+    public void resign(Integer dogNo,Integer memberNo) {
         try {
             String profile = dogDao.findByDog(dogNo).get().getDogProfile();
             File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, profile);
@@ -88,6 +101,8 @@ public class DogService {
                 file.delete();
             }
             dogDao.delete(dogNo);
+            MyUserDetails userDetails = (MyUserDetails) myUserDetailsService.updateSecurity(memberNo);
+            userDetails.getAuthorities().add(new SimpleGrantedAuthority(Roles.DOG.getRole()));
             System.out.println("123124");
         }catch(NoSuchElementException e){
             throw e;
