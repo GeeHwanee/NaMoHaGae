@@ -103,12 +103,14 @@ function printAside(){
     }else if(sideBar.startsWith(member)){
         $title.append('<li><a href="/member/main">내 정보</a></li>');
         $side_bar.append('<li><a href="/member/notification">알림함</a></li>');
-        $side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
-        $side_bar.append('<li><a href="/member/review">내게 쓴 리뷰</a></li>');
+        $side_bar.append('<li><a href="/member/information">내 정보</a></li>');
+        $side_bar.append('<li><a href="/member/puching/review">내게 작성한 리뷰</a></li>');
         $side_bar.append('<li><a href="/member/follow">팔로우 목록</a></li>');
         $side_bar.append('<li><a href="/member/mall/order">결제 내역</a></li>');
         $side_bar.append('<li><a href="/member/mall/address">배송지</a></li>');
         $side_bar.append('<li><a href="/member/mall/favorite">찜 목록</a></li>');
+        $side_bar.append('<li><a href="/member/mall/qna">내 상품 QnA 목록</a></li>');
+        $side_bar.append('<li><a href="/member/mall/review">내 상품 리뷰 목록</a></li>');
         $side_bar.append('<li><a href="/member/board/post">내가 작성한 게시물</a></li>');
         $side_bar.append('<li><a href="/member/board/comment">내가 작성한 댓글</a></li>');
         $side_bar.append('<li><a href="/member/board/question">내가 작성한 질문</a></li>');
@@ -129,6 +131,23 @@ function printAside(){
         $side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
         $side_bar.append('<li><a href="/admin/report/report">신고 관리</a></li>');
     }
+    window.addEventListener('load', function() {
+        const currentUrl = location.pathname.split("?");
+        const links = document.getElementsByTagName('a');
+
+        for (let i = 0; i < links.length; i++) {
+            const link = links[i];
+                if (link.pathname.split("?")[0]=== "/mall/product/list"){
+                    if(link.href===location.href){
+                        console.log(location.href)
+                        link.style.color = 'blue';
+                    }
+                }
+           else if (link.pathname.split("?")[0] === currentUrl[0]) {
+                link.style.color = 'blue';
+            }
+        }
+    });
 }
 
 function printEmbededImage(){
