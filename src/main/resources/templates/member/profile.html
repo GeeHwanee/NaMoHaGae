@@ -14,8 +14,13 @@
       const $tbody = $('#review');
       for(const r of review) {
         const tpl = `
-				<td>${r.reviewWriter}</td>
-				<td>${r.reviewContent}</td>
+				<div>
+                <span>작성자: ${r.reviewWriter}</span>
+				<br>
+                <span>내용: ${r.reviewContent}</span>
+				<br>
+				<br>
+				</div>
 			`;
         $tbody.append(tpl);
       }
@@ -118,15 +123,12 @@
             </label>
           </td>
         </tr>
-            <tr id="review">
-            </tr>
-            <tr>
-              <td>
+      </table>
+      <div id="review">
+
+      </div>
               <ul class="pagination" id="page_ul">
             </ul>
-              </td>
-            </tr>
-      </table>
       <button type="button" class="btn btn-primary" id="follow_btn" > <span id="follow_text">팔로우</span></button>
       <button id="chat" type="button" class="btn btn-danger"><a th:href="@{/puching/chatroom(receiverEmail=${member.memberEmail})}">채팅하기</a></button>
       <button id="report" type="button" class="btn btn-primary"><a th:href="@{/member/report(memberNo=${member.memberNo})}" target="_blank" style="color: white;">신고하기</a></button>

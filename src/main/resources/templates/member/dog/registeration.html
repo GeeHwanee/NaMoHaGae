@@ -22,6 +22,42 @@
             });
         };
 
+        function notGenderEnabledCheck(){
+            if($("#dogNotGenderEnabled").val()===null){
+                $('#dogNotGenderEnabled_msg').text("필수입력입니다").attr("class","fail");
+                return false;
+            }
+        }
+        function nameCheck(){
+            if($('#dogName').val()===""){
+                $('#dogName_msg').text("필수입력입니다").attr("class","fail");
+                return false;
+            }
+        }
+        function categoryCheck(){
+            if($('#dogCategory').val()===null){
+                $('#dogCategory_msg').text("필수입력입니다").attr("class","fail");
+            }
+        }
+        function birthDateCheck(){
+            if($('#dogBirthdayDate').val()===null){
+                $('#dogBirthDayDate_msg').text("필수입력입니다").attr("class","fail")
+            }
+        }
+
+
+        function weightCheck(){
+            if($("#dogWeight").val()===null){
+                $('#dogWeight_msg').attr("필수입력입니다").attr("class","fail")
+                return false;
+            }
+        }
+        function genderCheck(){
+            if($('#dogGender').val()===null){
+                $('#dogGender_msg').text("필수입력입니다").attr("class","fail")
+            }
+        }
+
         $(document).ready(function(){
             fetch('/dogCategory.txt')
                 .then(response => response.text())
@@ -43,6 +79,10 @@
                 $('#dogWeight_value').text(dogWeight+"kg");
             });
             $('#registeration').click(function (){
+                const result = birthDateCheck() && weightCheck() && genderCheck() && nameCheck() && notGenderEnabledCheck() &&categoryCheck();
+                if(result==false)
+                    return false;
+
                 $('#registeration_form').submit();
             });
         })
