@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -64,9 +63,13 @@ public class KnowledgeService {
     }
 
     public Boolean answerSave(KnowledgeAnswerDto.Write dto, Integer memberNo) {
-        if (Objects.equals(dto.getAnswerMemberNo(), memberNo))
+        Integer isWrited = knowledgeAnswerDao.existsByMemberNo(dto.getKnowledgeQuestionNo(),memberNo);
+        if (dto.getQuestionMemberNo().equals(memberNo)){
             return false;
-
+        }
+       if (isWrited>0) {
+            return false;
+        }
         KnowledgeAnswer knowledgeAnswer = dto.toEntity(memberNo);
         return knowledgeAnswerDao.save(knowledgeAnswer) == 1;
     }
