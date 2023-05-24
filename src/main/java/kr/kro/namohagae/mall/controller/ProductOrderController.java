@@ -1,7 +1,6 @@
 package kr.kro.namohagae.mall.controller;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dto.AddressDto;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -64,43 +61,68 @@ public class ProductOrderController {
         return new ModelAndView("mall/order/ready").addObject("map", map);
     }
 
-    @PostMapping("/order/check")
-    public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
-                             @RequestParam Integer addressNo, @RequestParam(required = false) Integer usedMemberPoint,
-                             @RequestParam String orderTotalPrice, RedirectAttributes ra) {
-        Map<String, Object> map = (Map<String, Object>)session.getAttribute("map");
-        List<ProductOrderDto.OrderList> orderItems = (List<ProductOrderDto.OrderList>)map.get("orderItems");
-        Integer totalPrice = Integer.parseInt(orderTotalPrice.replace("원", "").trim());
-        Integer productOrderNo = service.saveOrder(orderItems, totalPrice, myUserDetails.getMemberNo(), addressNo, usedMemberPoint);
+    /*
+   @PostMapping("/order/check")
+   public String placeOrder(HttpSession session, @AuthenticationPrincipal MyUserDetails myUserDetails,
+                            @RequestParam Integer addressNo, @RequestParam(required = false) Integer usedMemberPoint,
+                            @RequestParam String orderTotalPrice, RedirectAttributes ra) {
+       Map<String, Object> map = (Map<String, Object>)session.getAttribute("map");
+       List<ProductOrderDto.OrderList> orderItems = (List<ProductOrderDto.OrderList>)map.get("orderItems");
+       Integer totalPrice = Integer.parseInt(orderTotalPrice.replace("원", "").trim());
+       Integer productOrderNo = service.saveOrder(orderItems, totalPrice, myUserDetails.getMemberNo(), addressNo, usedMemberPoint);
 
-        ra.addFlashAttribute("orderNo", productOrderNo);
-        return "redirect:/mall/order/success";
-    }
+       ra.addFlashAttribute("orderNo", productOrderNo);
+       return "redirect:/mall/order/success";
+   }
 
-    // 주문 결과 보기
+   // 주문 결과 보기
+   @GetMapping("/mall/order/success")
+   public String orderSuccess(@RequestParam("pg_token") String pgToken, HttpSession session, Model model, HttpServletRequest req, RedirectAttributes ra) {
+       KakaoPayApprovalVO res = kakaoPayService.kakaoPayApprove(pgToken,session);
+       session.removeAttribute("partner_order_id");
+       session.removeAttribute("tid");
+       session.removeAttribute("checkedProductNos");
+       session.removeAttribute("productOrderDetailCount");
+       Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
+       if (paramMap != null) {
+           Integer orderNo = (Integer) paramMap.get("orderNo");
+           ProductOrderDto.OrderResult order = service.findById(orderNo);
+
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+           String productOrderDate = order.getProductOrderDate().format(formatter);
+
+           model.addAttribute("order", order);
+           model.addAttribute("productOrderDate", productOrderDate);
+           return "mall/order/success";
+       } else {
+           ra.addFlashAttribute("msg", "잘못된 작업입니다");
+           return "redirect:/mall/main";
+       }
+   }
+    */
     @GetMapping("/mall/order/success")
-    public String orderSuccess(@RequestParam("pg_token") String pgToken, HttpSession session, Model model, HttpServletRequest req, RedirectAttributes ra) {
-        KakaoPayApprovalVO res = kakaoPayService.kakaoPayApprove(pgToken,session);
+    public String orderSuccess(@RequestParam("pg_token") String pgToken, HttpSession session, Model model) {
+        KakaoPayApprovalVO res = kakaoPayService.kakaoPayApprove(pgToken, session);
         session.removeAttribute("partner_order_id");
         session.removeAttribute("tid");
         session.removeAttribute("checkedProductNos");
         session.removeAttribute("productOrderDetailCount");
-        Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(req);
-        if (paramMap != null) {
-            Integer orderNo = (Integer) paramMap.get("orderNo");
-            ProductOrderDto.OrderResult order = service.findById(orderNo);
 
+        Object orderNoObj = session.getAttribute("orderNo");
+        if (orderNoObj instanceof Integer) {
+            Integer orderNo = (Integer) orderNoObj;
+            ProductOrderDto.OrderResult order = service.findById(orderNo);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String productOrderDate = order.getProductOrderDate().format(formatter);
 
             model.addAttribute("order", order);
             model.addAttribute("productOrderDate", productOrderDate);
-            return "mall/order/success";
-        } else {
-            ra.addFlashAttribute("msg", "잘못된 작업입니다");
-            return "redirect:/mall/main";
         }
+        session.removeAttribute("orderNo");
+
+        return "mall/order/success";
     }
+
 
     // 주문 목록 보기
     @GetMapping(value = "/mall/order/list")
