@@ -67,11 +67,66 @@
     let taxFreeAmount = undefined;
 
     $(document).ready(function() {
+
         const orderItems = data.orderItems;
         $('#order').click(function() {
+            const usedMemberPoint = $('#pointInput').val();
+            const orderTotalPrice = $('#orderTotalPrice').text().replace("원", "").replace(",", "");
+
+            $.ajax({
+                type: 'post',
+                url: '/api/v1/order/check',
+                data: {
+                    usedMemberPoint: usedMemberPoint,
+                    orderTotalPrice: orderTotalPrice,
+                    addressNo: $('input[name="address"]:checked').val(),
+                    _csrf: $_csrf
+                },
+                statusCode: {
+                    200: function (res) {
+                        productName = '';
+                        cartDetailCount = 0;
+                        if (orderItems.length == 1) {
+                            productName = orderItems[0].productName;
+                            cartDetailCount = orderItems[0].cartDetailCount;
+                            cartTotalPrice = orderTotalPrice;
+                            taxFreeAmount = 0;
+                        } else {
+                            let i = 0;
+                            for (const item of orderItems) {
+                                cartDetailCount += orderItems[i].cartDetailCount;
+                                i++;
+                            }
+                            cartTotalPrice = orderTotalPrice;
+                            taxFreeAmount = 0;
+                            productName = orderItems[0].productName + ' 외 ' + ((orderItems.length) - 1) + '건';
+                        }
+
+                        const totalAmount = parseInt(cartTotalPrice.replace(/[^0-9]/g, ''));
+
+                        $.ajax({
+                            type: 'get',
+                            url: '/api/v1/pay/start',
+                            data: {
+                                item_name: productName,
+                                quantity: cartDetailCount,
+                                total_amount: totalAmount,
+                                tax_free_amount: taxFreeAmount
+                            },
+                            success: function (res) {
+                                location.href = res.next_redirect_pc_url;
+                            }
+                        });
+                    }
+                }
+            })
+        })
+
+
+            /*
             productName = '';
             cartDetailCount = 0;
-            const orderTotalPrice = $('#orderTotalPrice').text().replace("원", "").replace(",", "");
+            //const orderTotalPrice = $('#orderTotalPrice').text().replace("원", "").replace(",", "");
             if(orderItems.length == 1){
                 productName = orderItems[0].productName;
                 cartDetailCount = orderItems[0].cartDetailCount;
@@ -104,6 +159,7 @@
                 }
             });
 
+
             const usedMemberPoint = $('#pointInput').val();
             const $form = $('<form>').attr('action', "/order/check").attr('method', 'post');
             $form.append($('<input>').attr('type', 'hidden').attr('name', 'usedMemberPoint').val(usedMemberPoint));
@@ -114,7 +170,9 @@
             });
             $form.append($_csrf_input);
             $form.appendTo($('body')).submit();
+
         })
+        */
 
 
         // 결제 예정 금액
