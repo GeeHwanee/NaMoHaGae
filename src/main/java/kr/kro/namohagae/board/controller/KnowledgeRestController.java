@@ -24,9 +24,11 @@ public class KnowledgeRestController {
 
     @PostMapping("/knowledge/answer/write")
     public ResponseEntity<String> answerWrite(KnowledgeAnswerDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
+
+        System.out.println(dto.toString());
         Boolean result = knowledgeService.answerSave(dto, myUserDetails.getMemberNo());
         if (result) {
-           return ResponseEntity.ok("성공");
+           return ResponseEntity.ok().body("성공");
         }else{
            return ResponseEntity.status(HttpStatus.CONFLICT).body("실패");
         }
@@ -34,7 +36,8 @@ public class KnowledgeRestController {
 
     @GetMapping("/knowledge/answer/list")
     public ResponseEntity<List<KnowledgeAnswerDto.Read>>answerList(Integer questionNo){
-        return ResponseEntity.ok(knowledgeService.answerFindAll(questionNo));
+        System.out.println(questionNo);
+        return ResponseEntity.ok().body(knowledgeService.answerFindAll(questionNo));
     }
 
     @PostMapping("/knowledge/answer/select")
