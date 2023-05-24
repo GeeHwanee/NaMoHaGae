@@ -5,7 +5,7 @@
     <title>퍼칭 소개글</title>
     <style>@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap');
 
-    .page-div {
+    :root {
         --border-radius: 0.25rem;
 
         --color-accent: hsl(0, 0%, 35%);
@@ -88,12 +88,12 @@
         flex: 1 0 100%;
     }
 
-    .page-div aside {
+    .page-div .aside {
         margin-top: var(--space-xl);
     }
 
     @media (min-width: 800px) {
-        #body > aside {
+        #body > .aside {
             flex: 1 0 50%;
         }
     }
@@ -217,23 +217,23 @@
     }
 
     /* Container children spacing */
-    .page-div main .container >.page-div * +.page-div *:not(blockquote),
+    .page-div #main .container >.page-div * +.page-div *:not(blockquote),
     .page-div .page-footer .container >.page-div * + .page-div * {
         margin-top: var(--space-lg);
     }
 
     /* Header */
-    .page-div header p::before {
+    .page-div .header_area p::before {
         content: "‣";
         display: inline-block;
         color: var(--color-highlight);
     }
 
-    .page-div header .link-github {
+    .page-div .header_area .link-github {
         margin-top: var(--space-lg);
     }
 
-    .page-div header .link-github {
+    .page-div .header_area .link-github {
         position: relative;
         display: inline-flex;
         align-items: center;
@@ -243,36 +243,37 @@
         text-decoration: none;
     }
 
-    .page-div header .link-github:hover,
-    .page-div header .link-github:focus {
+    .page-div .header_area .link-github:hover,
+    .page-div .header_area .link-github:focus {
         color: var(--color-os);
     }
 
-    .page-div header .link-github svg {
+    .page-div .header_area .link-github svg {
         position: relative;
         top: 0.125rem;
         margin-right: var(--space-xs);
     }
 
-    .page-div  header h1 {
+    .header_button_ui {
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: var(--space-body);
+        top: 36%;
         margin: 0 auto;
         margin-left: calc(var(--space-body) * -1);
         font-family: var(--font-system);
         font-size: 0.9rem;
         text-align: center;
         padding: var(--space-sm);
-        width: calc(100% - var(--space-body) * 2);
+        width: 63%;
         max-width: var(--max-width-body);
         height: var(--height-header);
-
+        z-index: 6;
+        color: white;
     }
 
-    .page-div header h1::before {
+    .header_button_ui::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -286,19 +287,19 @@
         var(--color-os-fullscreen) calc(var(--space-md) * 2) 0;
     }
 
-    .page-div header h2 {
+    .page-div .header_area h2 {
         display: inline-flex;
         flex-wrap: wrap;
     }
 
-    .page-div header h2::before,
+    .page-div .header_area h2::before,
     .page-div .page-footer::before {
         order: -2;
         content: "~/Desktop$";
         color: var(--color-accent);
     }
 
-    .page-div header h2::after {
+    .page-div .header_area h2::after {
         order: -1;
         content: "run StyleStage.dev";
         margin-left: var(--space-sm);
@@ -307,11 +308,11 @@
     }
 
     /* Navigation */
-    .page-div nav {
+    .page-div .nav_bar {
         margin: var(--space-xl) 0 0;
     }
 
-    .page-div  nav ul,
+    .page-div  .nav_bar ul,
     .page-div  .page-footer ul {
         column-width: 240px;
         max-width: 45ch;
@@ -319,17 +320,17 @@
         padding: 0;
     }
 
-    .page-div  nav a {
+    .page-div  .nav_bar a {
         padding: var(--space-xxs) 0;
     }
 
-    .page-div  main {
+    .page-div  #main {
         outline: none;
     }
 
     /* Main */
-    .page-div main .container h2,
-    .page-div main .container h3,
+    .page-div #main .container h2,
+    .page-div #main .container h3,
     .page-div #profile-title,
     .page-div #styles h2 {
         color: var(--color-highlight);
@@ -433,37 +434,41 @@
 
     .page-div #sponsor-footer {
         margin-bottom: var(--space-body);
-    }</style>
+    }
+
+
+
+    </style>
 
 </head>
 <body>
 <section th:fragment="puching_section">
     <div class="page-div">
+            <h1 class="header_button_ui">NaMohaGae!</h1>
         <div id="body">
     <a href="puching__main.html#main" class="skip-link">Skip to main content</a>
-    <header>
+    <div class="header_area">
         <div class="container">
-            <h1>NaMohaGae!</h1>
             <a href="#" class="link-github"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
           <path d="M32 12.408l-11.056-1.607-4.944-10.018-4.944 10.018-11.056 1.607 8 7.798-1.889 11.011 9.889-5.199 9.889 5.199-1.889-11.011 8-7.798z"></path>
         </svg>
       </span>
                 Welcome Puching</a>
         </div>
-    </header>
-    <nav>
+    </div>
+    <div class="nav_bar">
         <ul>
             <li><a href="#about">About Puching</a></li>
             <li><a href="#guidelines">PuchingMap</a></li>
             <li><a href="#contribute">Chat</a></li>
             <li><a href="#files">How to Puching</a></li>
         </ul>
-    </nav>
+    </div>
 
-    <main id="main" tabIndex="-1">
+    <div id="main" tabIndex="-1">
         <div class="container">
             <article id="about">
-                <section class="container">
+                <div class="container">
                     <blockquote>
                         <p>
                             <strong>About Puching</strong>
@@ -471,8 +476,8 @@
                         <p>주변에서 산책할 사람들을 찾아 보세요!  </p>
 
                     </blockquote>
-                </section>
-                <section class="container">
+                </div>
+                <div class="container">
                     <h2>퍼칭을 하기 위해 강아지를 등록 해 주세요!</h2>
                     <p>
                         강아지를 등록하셔야 매칭이 가능합니다!
@@ -486,10 +491,10 @@
                         <li>퍼칭신청</li>
                         <li>리뷰작성</li>
                     </ul>
-                </section>
+                </div>
             </article>
             <article id="guidelines">
-                <section class="container">
+                <div class="container">
                     <h2>Puching Map</h2>
                     <p>
                         퍼칭 지도에서 주변 유저들을 볼 수 있습니다. 상대 프로필을 통해 채팅을 시작하시고 매칭까지 시도할 수 있습니다
@@ -502,10 +507,10 @@
                         채팅을 통해 실제로 만남이 이루어질 장소를 선택하실 수 있습니다.
 
                     </p>
-                </section>
+                </div>
             </article>
             <article id="contribute">
-                <section class="container">
+                <div class="container">
                     <h2>Chat</h2>
                     <p>채팅기능을 통해 실시간으로 소통하실 수 있습니다!</p>
                     <p>
@@ -514,9 +519,9 @@
                     <p>원하는 상대를 찾기위해 소통하세요!
                         <a href="/puching/chatroom">채팅방으로 이동</a>.
                     </p>
-                </section>
+                </div>
 
-                <footer id="files">
+                <div id="files">
                     <div class="container">
                         <h3>How to Puching</h3>
                     </div>
@@ -535,11 +540,11 @@
                             매칭시간이 지나면 서로에게 리뷰를 작성해주세요! 작성자에게는 뼈다귀 포인트, 수신자에게는 등급이 주어집니다!
                         </li>
                     </ol>
-                </footer>
+                </div>
             </article>
         </div>
-    </main>
-    <aside id="styles">
+    </div>
+    <div class="aside" id="styles">
         <div class="container">
             <h2>리뷰 혜택</h2>
             <ul>
@@ -547,14 +552,14 @@
                 <li>리뷰를 받으신분은 등급이 올라갑니다! 높은 등급을 받을 수록 퍼칭 신청을 많이 받거나 신청할 때 유리합니다</li>
             </ul>
         </div>
-    </aside>
-    <footer class="page-footer">
+    </div>
+    <div class="page-footer">
         <div class="container">
             <p>
                 Created by HyeonUk Kim
             </p>
         </div>
-    </footer>
+    </div>
 
         </div>
 </div>

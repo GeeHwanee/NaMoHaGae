@@ -119,14 +119,10 @@ public class BoardService {
 
         return boardDao.mainRecommendList();
     }
-    public Integer increaseReadCnt(Integer boardNo) {
 
-        return boardDao.increaseReadCnt(boardNo);
-    }
+
 
     public Boolean isLikeExists(Integer boardNo, Integer memberNo) {
-
-
 
         Integer count = boardDao.isLikeExists(boardNo,memberNo);
         System.out.println("갯수 : " + count);
@@ -147,8 +143,20 @@ public class BoardService {
         notificationService.save(member, NotificationConstants.LIKE_CONTENT,link+board.getBoardNo());
         boardDao.insertLike(boardNo,  memberNo);
     }
+    public void readCnt(Integer boardNo) {
 
+        boardDao.readCnt(boardNo);
+    }
 
+    public void updateLike(Integer boardNo, Integer memberNo) {
+
+        boardDao.updateLike(boardNo,memberNo);
+    }
+
+    public Integer findLike(Integer boardNo, Integer memberNo) {
+
+        return boardDao.findLike(boardNo, memberNo);
+    }
     public void removeLike(Integer memberNo, Integer boardNo) {
         System.out.println("갯수 : " + memberNo+boardNo);
         boardDao.removeLike(memberNo, boardNo);

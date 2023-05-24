@@ -25,7 +25,8 @@ public class KnowledgeService {
     private final NotificationService notificationService;
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
-
+    int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
+    int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
     public Integer questionSave(KnowledgeQuestionDto.Write dto, Integer memberNo) {
         Integer point = memberDao.findByMember(memberNo).get().getMemberPoint();
         if (point >= dto.getKnowledgeQuestionPoint()) {
@@ -142,6 +143,14 @@ public class KnowledgeService {
     }
 
 
+
+    public List<KnowledgeMainDto> waitList(String searchName,int page) {
+
+
+        int pagingStart = (page - 1) * pageLimit;
+
+        return knowledgeQuestionDao.waitList(searchName,pagingStart, pageLimit);
+    }
 }
 
 

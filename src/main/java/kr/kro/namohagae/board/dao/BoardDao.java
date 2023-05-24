@@ -34,11 +34,16 @@ public interface BoardDao {
     List<BoardMainList> mainRecommendList();
     public int boardCount();
 
-    public Integer increaseReadCnt(Integer boardNo);
+
 
     public Integer isLikeExists(Integer boardNo, Integer memberNo);
     public void insertLike(Integer boardNo,Integer memberNo);
     public void removeLike(Integer boardNo, Integer memberNo);
+
+    public void updateLike(Integer boardNo,Integer memberNo);
+
+    public Integer findLike(Integer boardNo, Integer memberNo);
+    public void readCnt(Integer boardNo);
 
     public void goodLike(Integer boardNo);
 

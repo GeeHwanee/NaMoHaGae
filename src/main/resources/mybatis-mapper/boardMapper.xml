@@ -44,9 +44,7 @@
     <delete id="boardDeleteData" parameterType="int">
         delete board where board_no = #{boardNo}
     </delete>
-    <update id="increaseReadCnt">
-        update board set board_read_count=board_read_count+1 where board_no = #{boardNo}
-    </update>
+
     <update id="boardUpdateData">
         update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
     </update>
@@ -113,25 +111,43 @@
         select * from BOARD where BOARD_NO = #{boardNo}
     </select>
 
+    <update id="updateRead">
+        UPDATE board
+        SET board_read_count = board_read_count + 1
+        )
+    </update>
     <update id="goodLike">
-        update board set
-            board_recommend_count=board_recommend_count+1
-        where board_no = #{boardNo}
+        UPDATE board
+        SET board_recommend_count = board_recommend_count + 1
+        WHERE board_no = #{boardNo}
+
     </update>
     <update id="badLike">
-        update board set
-            board_recommend_count=board_recommend_count-1
-        where board_no = #{boardNo}
+        UPDATE board
+        SET board_recommend_count = board_recommend_count - 1
+        WHERE board_no = #{boardNo}
+
     </update>
-    <update id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        INSERT INTO BOARD_LIKE (board_no, member_no) VALUES (#{boardNo}, #{memberNo})
+    <insert id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
+        insert into board_like values(#{boardNo},#{memberNo},0)
+    </insert>
+    <update id="updateLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
+        update BOARD_LIKE SET likes = 1 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
     </update>
     <update id="removeLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        DELETE FROM BOARD_LIKE WHERE board_no = #{boardNo} AND member_no = #{memberNo}
+        update BOARD_LIKE SET likes = 0 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
     </update>
+    <select id="findLike" resultType="int">
+        select likes from board_like where board_no = #{boardNo} and member_no = #{memberNo}
+    </select>
     <select id="isLikeExists" resultType="int">
         SELECT COUNT(*) FROM BOARD_LIKE WHERE member_no = #{memberNo} AND board_no = #{boardNo}
     </select>
+    <update id="readCnt">
+        update board set
+            board_read_count = board_read_count+1
+        where board_no = #{boardNo}
+    </update>
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.BoardDto$FindAllByMemberNo">
         select * from
             (
