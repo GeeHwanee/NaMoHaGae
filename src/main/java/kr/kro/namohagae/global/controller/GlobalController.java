@@ -11,6 +11,7 @@ import kr.kro.namohagae.board.dto.NoticeDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.*;
+import kr.kro.namohagae.global.entity.Town;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.service.TownService;
@@ -562,6 +563,10 @@ public class GlobalController {
         qnaService.update(dto);
         return "redirect:/admin/qna/list";
     }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/town/write")
+    public void adminTown(){}
 
     // -------------------------------------------------------------------------------
 
