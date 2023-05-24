@@ -6,9 +6,9 @@
         SELECT rownum rnum,m.* FROM
         (
         SELECT m.MEMBER_NO as memberNo, m.MEMBER_NICKNAME as memberNickName, m.MEMBER_LATITUDE as memberLatitude, m.MEMBER_LONGITUDE as memberLongitude,
-       round(distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}),1) as distance,#{url} || m.MEMBER_PROFILE_IMAGE as memberImage
+       round(distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}),1) as distance,#{url} || m.MEMBER_PROFILE_IMAGE as memberImage,m.member_dog_sign_enabled
         FROM MEMBER m
-        WHERE distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}) &lt;=5.0
+        WHERE distance(m.MEMBER_LATITUDE, m.MEMBER_LONGITUDE, #{latitude},#{longitude}) &lt;=5.0 and m.member_dog_sign_enabled=1
         ORDER BY distance
         ) m
         WHERE ROWNUM &lt;=#{endrownum}

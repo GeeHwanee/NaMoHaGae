@@ -208,8 +208,9 @@
                     var defalut_LatLng = new kakao.maps.LatLng(37.4398411, 126.6640894)
 
                     await map.panTo(defalut_LatLng)
-
-                    alert('위치 정보를 못가져왔넹')
+                   Swal.fire({
+                       title:'위치 정보를 찾을 수 없습니다.',
+                       icon:'warning'});
                     await $('#loading').hide();
                 }
              async function getCurrentPosBtn(){
@@ -276,7 +277,9 @@
                                  error: await function (err) {
                                      console.log(err)
                                      // 데이터 가져오기 실패
-                                     alert("데이터를 가져오는데 실패하였습니다.");
+                                     Swal.fire({
+                                         title:'유저정보를 가져올 수 없습니다.',
+                                         icon:'warning'});
                                      isLoading = false;
                                      $('#loading').hide();
                                  }

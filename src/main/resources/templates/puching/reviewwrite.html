@@ -160,12 +160,16 @@
 
               //현재시간이랑 퍼칭약속시간 비교해서 작성 못하게 하는 if문
               if(!rating){
-                  alert('별점을 눌러주세요!')
+                  Swal.fire({
+                      title:'별점을 입력해주세요!',
+                      icon:'warning'});
                   return;
               }
 
               // if(compareTime(promiseDate)==true){
-              //     alert('아직 약속시간이 지나지 않았습니다.')
+              //     Swal.fire({
+              //      title:'아직 약속시간이 지나지 않았습니다',
+              //    icon:'warning'});
               //     return;
               // }
 
@@ -173,7 +177,8 @@
                     receiverNo:receiverNo,
                     puchingNo:puchingNo,
                     content:review,
-                    starPoint:rating
+                    starPoint:rating,
+                    _csrf:$_csrf
                 }
 
 
@@ -182,12 +187,16 @@
                     type:'POST',
                     data:param
                 }).done(function(){
-                    alert('리뷰가 작성되었습니다!');
+                    Swal.fire({
+                        title:'리뷰가 작성 되었습니다!',
+                        icon:'success'});
                     location.href='/puching/chatroom';
                     // reviewText.value = '';
                     // stars.forEach(star => star.classList.remove('active'));
                 }).fail(function(){
-                    alert('리뷰작성을 실패 했습니다.')
+                    Swal.fire({
+                        title:'리뷰작성을 실패 했습니다...',
+                        icon:'error'});
                 });
               //퍼칭 작성완료하고 퍼칭리뷰를 인서트 및 상대 receiver등급에 +등급해주는 로직 ajax
 
