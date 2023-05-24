@@ -3,7 +3,8 @@ package kr.kro.namohagae.global.config;
 import jakarta.servlet.DispatcherType;
 import kr.kro.namohagae.global.security.LoginFailHandler;
 import kr.kro.namohagae.global.security.LoginSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import kr.kro.namohagae.global.security.MyAccessDeniedHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -11,14 +12,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-    @Autowired
-    private LoginSuccessHandler loginSuccessHandler;
-    @Autowired
-    private LoginFailHandler loginFailHandler;
+
+    private final MyAccessDeniedHandler myAccessDeniedHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailHandler loginFailHandler;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
@@ -31,6 +33,7 @@ public class SecurityConfig {
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/");
+        http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
 
         return http.build();
     }
