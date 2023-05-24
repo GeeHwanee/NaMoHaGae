@@ -29,16 +29,16 @@ import kr.kro.namohagae.puching.dto.ReviewDto;
 import kr.kro.namohagae.puching.service.ChatService;
 import kr.kro.namohagae.puching.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -74,14 +74,21 @@ public class GlobalController {
     private final WebSocketService webSocketService;
 
     // [Global 파트]--------------------------------------------------------------------
+
+
     @GetMapping(value = {"/", "/main"})
-    public String main(@AuthenticationPrincipal MyUserDetails myUserDetails){
+    public String main(Model model, HttpSession session,@AuthenticationPrincipal MyUserDetails myUserDetails){
       if(myUserDetails!=null) {
           String username = myUserDetails.getUsername();
           if (username.equals("admin")) {
               return "admin/main";
           }
       }
+        if (session.getAttribute("errorMessage") != null) {
+            String errorMessage = (String) session.getAttribute("errorMessage");
+            session.removeAttribute("errorMessage");
+            model.addAttribute("message", errorMessage);
+        }
         return "main";
     }
     @Secured("ROLE_DOG")

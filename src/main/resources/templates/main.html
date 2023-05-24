@@ -105,6 +105,12 @@
     </style>
 </head>
 <body>
+<script th:inline="javascript">
+    const message = [[${message}]];
+    if(message!=null){
+        alert(message);
+    }
+</script>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
