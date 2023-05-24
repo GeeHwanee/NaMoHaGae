@@ -66,10 +66,7 @@ public class BoardTownService {
         return boardTownDao.boardTownRead(boardNo);
     }
 
-    public Integer townReadCnt(Integer boardNo) {
 
-        return boardTownDao.townReadCnt(boardNo);
-    }
 
     public void townUpdateData(Board board) {
 
