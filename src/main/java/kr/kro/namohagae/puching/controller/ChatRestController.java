@@ -32,12 +32,12 @@ public class ChatRestController {
     }
 
     @GetMapping(value="/findchatroom")
-    public ResponseEntity<ChatRoomDto.Read> findChatRoomByreceiverNo(Principal principal,String receiverEmail){
+    public ResponseEntity<ChatRoomDto.Read> findChatRoomByReceiverNo(Principal principal,String receiverEmail){
         return ResponseEntity.ok().body(service.findChatRoom(principal.getName(),receiverEmail));
     }
 
     @GetMapping(value = "/existchatroom")
-    public ResponseEntity<ChatRoomDto.Read> existchatroom(Principal principal,String receiverEmail){
+    public ResponseEntity<ChatRoomDto.Read> existChatroom(Principal principal,String receiverEmail){
 
         return ResponseEntity.ok().body(service.existchatRoom(principal.getName(),receiverEmail));
     }
