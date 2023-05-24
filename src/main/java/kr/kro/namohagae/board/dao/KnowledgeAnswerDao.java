@@ -20,4 +20,6 @@ public interface KnowledgeAnswerDao {
     public Integer countByMemberNo(Integer memberNo);
 
     public void delete(Integer answerNo);
+
+    public Integer existsByMemberNo(Integer knowledgeQuestionNo, Integer memberNo);
 }
