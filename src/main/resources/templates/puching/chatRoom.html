@@ -189,7 +189,7 @@
     </style>
     <!--채팅방 스타일-->
     <style>
-       .inbox_chat :hover{
+        .inbox_chat :hover{
 
             background-color: #e38d5f;
             cursor: pointer;
@@ -362,7 +362,7 @@
             width: 100%;
         }
         .msg_history {
-            height: 516px;
+            height: 536px;
             overflow-y: auto;
             overflow-x: hidden;
         }
@@ -436,6 +436,7 @@
             left:40px;
             top: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -473,7 +474,6 @@
                     </div>
                     <div class="mesgs">
                         <div class="msg_history">
-
                         </div>
                         <div class="type_msg">
                             <div class="input_msg_write">
@@ -542,7 +542,9 @@
     openPopupButton.addEventListener("click", async function() {
 
         if(!nowChatUser){
-           alert('채팅상대를 지정해주새요')
+           Swal.fire({
+               title:'채팅상대를 지정해주새요',
+                icon:'warning'});
             return;
         }
         try {
@@ -553,7 +555,9 @@
             })
 
         }catch (err){
-            alert('이미 퍼칭이 진행중입니다')
+            Swal.fire({
+                title:'이미 퍼칭이 진행 중 입니다.',
+                icon:'warning'});
             return;
         }
 
@@ -600,7 +604,9 @@
 
             map.panTO(defalut_LatLng);
 
-            alert("위치 정보를 못가져왔넹");
+            Swal.fire({
+                title:'위치 정보를 못 가져 왔습니다.',
+                icon:'error'});
         }
 
         kakao.maps.event.addListener(map, 'dragend', function() {
@@ -693,7 +699,8 @@
                 url: "/api/v1/findchatroom",
                 type: "GET",
                 data: {
-                    receiverEmail: senderUsername
+                    receiverEmail: senderUsername,
+                    _csrf:$_csrf
                 }
             })
                 .then(function(data) {
@@ -790,19 +797,33 @@
             $('.msg_history').append(content)
              $('.msg_history').scrollTop($('.msg_history')[0].scrollHeight);
         } catch (err) {
-           alert("socket 메세지전송실패")
+            Swal.fire({
+                icon: 'error',
+                title: '메세지 전송을 실패했습니다.',
+                text: '잠시후에 다시 시도하거나 채팅방에 재접속 해주세요.'
+            })
         }finally {
             messageInput.value = "";
         }
 
 
     }
+
+
     //이미지 전송 -> 전송중일 때 추가로 요청보내는걸 막자 loading 중 인걸 나타내든가
     $('#sendImageButton').on('click',async function(){
         var imageInput=$('#imageInput')[0];
-``
+        if(nowChatUser==undefined){
+          await  Swal.fire({
+               title:'채팅상대를 지정해주세요!',
+                icon:'warning'
+            });
+          return;
+        }
         if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
-            alert('이미지를 선택해주세요')
+          await Swal.fire({
+                title:'이미지를 선택하신 후 전송 버튼을 눌러주세요!',
+                icon:'warning'});
             return;
         }
 
@@ -843,6 +864,9 @@
         } catch (error) {
             console.log(error);
             console.log("이미지 전송실패")
+            Swal.fire({
+                title:'이미지 전송을 실패했습니다.',
+                icon:'error'});
         }finally {
             imageInput.val(null);
         }
@@ -927,7 +951,9 @@
             },
             error: function(xhr, status, error) {
                 console.log("Error while getting chat log: " + error);
-                alert('채팅기록을 못 불러왔습니다.')
+                Swal.fire({
+                    title:'채팅 기록을 못 불러 왔습니다.',
+                    icon:'error'});
             }
         });
 
@@ -991,23 +1017,34 @@
        var $time=$('#time').val()
         var date=$day+" "+$time
        if(compareDate(date)){
-            alert("날짜를 정확하게 입력해주세요")
+           Swal.fire({
+               title:'날짜를 정확하게 입력해주세요',
+               icon:'warning'});
            return;
        }
        if($day==null||$day==""||$day==undefined){
-           alert('날짜를 입력해주세요')
+           Swal.fire({
+               title:'날짜를 입력해주세요',
+               icon:'warning'});
            return
        }
        if($time==null||$time==""||$time==undefined){
-           alert('시간을 입력해주세요')
+           Swal.fire({
+               title:'퍼칭 시간을 입력해주세요',
+               icon:'warning'});
+
            return
        }
        if((pulng || pulat)==null||""||undefined){
-           alert('장소를 지정해주세요')
+           Swal.fire({
+               title:'퍼칭장소를 지정해주세요!',
+               icon:'warning'});
            return;
        }
        if(nowChatEmail==undefined||""||null){
-           alert('퍼칭상대를 지정해주세요')
+           Swal.fire({
+               title:'퍼칭상대를 지정해주세요!',
+               icon:'warning'});
            return;
        }
        var param={
@@ -1016,7 +1053,8 @@
            "lng":pulng,
            "day":$day,
            "time":$time,
-           "address":address
+           "address":address,
+           "_csrf":$_csrf
        }
       try {
           await $.ajax({
@@ -1024,7 +1062,9 @@
               type:'POST',
               data:param
           }).done(function(data){
-              alert(nowChatNick+'님에게 퍼칭신청을 보냈습니다!')
+              Swal.fire({
+                  title:nowChatNick+'님에게 퍼칭신청을 보냈습니다!',
+                  icon:'success'});
               popupBackground.style.display = "none";
               console.log(data)
               //content링 messageNo를 이용해서 append시키고 전송
@@ -1033,7 +1073,8 @@
               var puchingMessageToSend = {
                   "message": puchingMessage,
                   "receiverUsername": nowChatEmail,  //상대이메일
-                  "messageType":'puching'
+                  "messageType":'puching',
+                  "_csrf":$_csrf
               };
               var jsonData=JSON.stringify(puchingMessageToSend)
               socket.send(jsonData);
@@ -1051,7 +1092,9 @@
           })
       }catch (err){
            console.log(err)
-          alert('퍼칭신청을 보내지 못했습니다')
+          Swal.fire({
+              title:'퍼칭신청을 보내지 못했습니다',
+              icon:'error'});
       }
    }
 
@@ -1167,7 +1210,9 @@
             $(this).parent().empty().append(content);
 
         }catch (err){
-            alert('퍼칭신청을 취소하지 못했습니다')
+            Swal.fire({
+                title:'퍼칭신청을 취소하지 못했습니다',
+                icon:'error'});
         }
 
     });
@@ -1185,13 +1230,17 @@
             $('.puching-info .disaccept-button').remove()
             $('.msg_history .puching-info').last().append(content);
         }catch (err){
-            alert('퍼칭신청을 수락하지 못했습니다')
+            Swal.fire({
+                title:'퍼칭신청을 수락하지 못했습니다',
+                icon:'warning'});
         }
 
     });
     $(document).on('click','.review-button',async function(){
         if (!nowChatEmail) {
-            alert('리뷰를 작성할 상대의 채팅방을 클릭해주세요');
+            Swal.fire({
+                title:'리뷰를 작성할 상대의 채팅방을 클릭해주세요',
+                icon:'warning'});
             return;
         }
 
@@ -1206,7 +1255,9 @@
             console.log('리뷰작성으로 넘어가 버리기')
         } catch (err) {
             console.log(err);
-            alert('해당 유저에게 작성할 퍼칭 리뷰가 없습니다');
+            Swal.fire({
+                title:'해당 유저에게 작성할 퍼칭 리뷰가 없습니다!',
+                icon:'warning'});
         }
 
 

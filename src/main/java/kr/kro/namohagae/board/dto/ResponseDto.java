@@ -15,4 +15,11 @@ public class ResponseDto {
     private List<BoardTownListDto> boardTownReadCountDto;
     private List<BoardTownListDto> boardTownRecommendCountDto;
 
+
+    @Data
+    @AllArgsConstructor
+    public static class waitList {
+        private PageDto pageDto;
+        private List<KnowledgeMainDto> knowledgeMainDto;
+    }
 }

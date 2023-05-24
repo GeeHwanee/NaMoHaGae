@@ -55,14 +55,26 @@ public class BoardController {
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page ,
                                     @RequestParam(value ="searchName", defaultValue = "") String searchName,
                                     @RequestParam(value ="change", defaultValue = "1") int change,Model model,Principal principal) {
-        boardService.increaseReadCnt(boardNo);
-        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
 
+
+
+
+        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
         if(isLiked){
+
+
+        }
+        else {
+            boardService.insertLike(boardNo, memberDao.findNoByUsername(principal.getName()));
+            boardService.readCnt(boardNo);
+
+        }
+        if(boardService.findLike(boardNo,memberDao.findNoByUsername(principal.getName())) == 1) {
             model.addAttribute("good","좋아요취소");
         } else {
             model.addAttribute("good","좋아요");
         }
+
         model.addAttribute("change", change);
         model.addAttribute("searchName", searchName);
         model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
@@ -101,16 +113,18 @@ public class BoardController {
     @PostMapping("/like")
     public ResponseEntity<?> boardLike(Integer boardNo, Integer memberNo){
 
-        boolean isLiked = boardService.isLikeExists(boardNo,memberNo);
-        if(isLiked) {
+
+
+        if(boardService.findLike(boardNo,memberNo) == 1) {
             boardService.removeLike(boardNo,memberNo);
             boardService.badLike(boardNo);
-
-
-        } else {
-            boardService.insertLike(boardNo,memberNo);
+        }
+        else {
+            boardService.updateLike(boardNo,memberNo);
             boardService.goodLike(boardNo);
         }
+
+
 
         return ResponseEntity.ok(boardService.boardFreeReadData(boardNo));
     }

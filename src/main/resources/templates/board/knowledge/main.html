@@ -103,6 +103,7 @@
  #all_layout {
      margin-top:50px;
  }
+
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -140,14 +141,12 @@
                 <div id="all_layout">
                 <div id="all">전체</div>
                 <div id="search_form">
-                    <form th:action="@{/board/free/list}" method="get">
-                        <input type="text" name="searchName" id="search_box">
-                        <button type="submit" class="btn btn-primary">검색</button>
-                    </form>
+
                     <span>답변적은순</span><span>최신순</span><span>내공높은순</span>
                 </div>
-
                 </div>
+
+                <div class="layout2"></div>
             </div>
         </article>
     </section>
@@ -172,7 +171,82 @@
     window.onload = function() {
         limitTitleLength();
     };
+    function onSearch() {
+        const searchName = $('#searchName').val();
+        onChangePage(1, searchName);
+    }
+    function printSearch(searchName){
+        const $layout3 = $('#search_form');
+        $layout3.empty();
 
+        let tpl = `<input type="text" name="searchName" id="searchName">
+            <button type="submit" onclick="onSearch()" class="btn btn-primary">검색</button>`
 
+        $layout3.append(tpl);
+    }
+    function printPaging(paging) {
+        const $layout2 = $('.layout2');
+        $layout2.empty();
+
+        const startPage = paging.startPage;
+        const endPage = paging.endPage;
+        const currentPage = paging.page;
+        const maxPage = paging.maxPage;
+
+        let tpl = '<ul class="pagination">';
+        if (currentPage <= 1) {
+            tpl += '<li class="page-item disabled"><span class="page-link">이전</span></li>';
+        } else {
+            tpl += `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage - 1}">이전</a></li>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i === currentPage) {
+                tpl += `<li class="page-item"><div><span class="page-link active">${i}</span></div></li>`;
+            } else {
+                tpl += `<li><div><a href="#" class="page-link" data-page="${i}">${i}</a></div></li>`;
+            }
+        }
+
+        if (currentPage >= maxPage) {
+            tpl += '<li class="page-item"><span class="page-link">다음</span></li>';
+        } else {
+            tpl += `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage + 1}">다음</a></li>`;
+        }
+
+        tpl += '</ul>';
+
+        $layout2.append(tpl);
+
+        // 페이지 링크 클릭 이벤트 등록
+        $layout2.find('a[data-page]').on('click', function (e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            onChangePage(page);
+        });
+
+    }
+    function onSuccess(board) {
+        const knowledgeMainDto = board.knowledgeMainDto;
+        printBoard(knowledgeMainDto);
+        const searchName = "";
+        printSearch(searchName);
+        const paging = board.pageDto;
+        printPaging(paging);
+    }
+
+    function onChangePage(page,searchName) {
+        let url = `/api/v1/knowledge/main?page=${page}`;
+        if(searchName) {
+            url += `&searchName=${encodeURIComponent(searchName)}`;
+        }
+        $.ajax({
+            url : url,
+            method : 'GET',
+            success : onSuccess,
+            error : onError
+        });
+        onChangePage(1, '');
+    }
 </script>
 </html>
