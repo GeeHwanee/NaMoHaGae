@@ -1,6 +1,7 @@
 package kr.kro.namohagae.board.controller;
 
-import kr.kro.namohagae.board.dto.KnowledgeAnswerDto;
+import kr.kro.namohagae.board.dto.*;
+import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.KnowledgeService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.service.MemberService;
@@ -8,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +19,7 @@ import java.util.List;
 public class KnowledgeRestController {
     private final KnowledgeService knowledgeService;
     private final MemberService memberService;
+    private final BoardService boardService;
 
     @PostMapping("/knowledge/answer/write")
     public ResponseEntity<String> answerWrite(KnowledgeAnswerDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -31,6 +30,18 @@ public class KnowledgeRestController {
            return ResponseEntity.status(HttpStatus.CONFLICT).body("실패");
         }
     }
+    @GetMapping("/knowledge/main")
+    public ResponseEntity<?> boardTownList(
+                                           @RequestParam(value ="searchName",  defaultValue = "") String searchName,
+                                           @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
+        PageDto pageDTO = boardService.pagingParam(page);
+
+        List<KnowledgeMainDto> knowledgeMainDto = knowledgeService.waitList(searchName,page);
+
+        ResponseDto.waitList responseDto = new ResponseDto.waitList(pageDTO,knowledgeMainDto);
+        return ResponseEntity.ok(responseDto);
+    }
+
 
     @GetMapping("/knowledge/answer/list")
     public ResponseEntity<List<KnowledgeAnswerDto.Read>>answerList(Integer questionNo){

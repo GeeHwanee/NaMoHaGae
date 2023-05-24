@@ -6,4 +6,5 @@ import lombok.Data;
 public class BoardLikeDto {
     private Integer boardNo;
     private Integer memberNo;
+    private Integer likes;
 }

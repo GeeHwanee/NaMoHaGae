@@ -367,12 +367,19 @@ public class GlobalController {
     @GetMapping("/board/town/read")
     public String boardTownRead(Model model, Integer boardNo,Principal principal) {
 
-        boardTownService.townReadCnt(boardNo);
 
-        boolean isLiked;
-        isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
 
+        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
         if(isLiked){
+
+
+        }
+        else {
+            boardService.insertLike(boardNo, memberDao.findNoByUsername(principal.getName()));
+            boardService.readCnt(boardNo);
+
+        }
+        if(boardService.findLike(boardNo,memberDao.findNoByUsername(principal.getName())) == 1) {
             model.addAttribute("good","좋아요취소");
         } else {
             model.addAttribute("good","좋아요");
