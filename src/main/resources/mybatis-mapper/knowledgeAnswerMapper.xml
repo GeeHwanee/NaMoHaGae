@@ -50,4 +50,8 @@
     <delete id="delete">
         delete from KNOWLEDGE_ANSWER where KNOWLEDGE_ANSWER_NO = #{answerNo}
     </delete>
+
+    <select id="existsByMemberNo" resultType="java.lang.Integer">
+        select count(*) from KNOWLEDGE_ANSWER where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo} and  MEMBER_NO=${memberNo} and ROWNUM=1
+    </select>
 </mapper>
