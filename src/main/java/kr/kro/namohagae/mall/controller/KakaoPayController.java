@@ -4,7 +4,6 @@ import kr.kro.namohagae.mall.service.CartService;
 import kr.kro.namohagae.mall.service.KakaoPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 
 // 날려도댐
 @Controller
@@ -44,7 +43,7 @@ public class KakaoPayController {
         session.removeAttribute("tid");
         return "mall/pay/success";
     }
-    */
+
     
     @GetMapping("/pay/cancel")
     public String cancel() {
@@ -55,4 +54,5 @@ public class KakaoPayController {
     public String fail() {
         return "mall/pay/fail";
     }
+    */
 }
