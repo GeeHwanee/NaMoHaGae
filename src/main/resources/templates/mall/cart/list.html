@@ -46,7 +46,6 @@
     const totalPrice = function (){
         let sum =0;
         $('.item_price').each(function(){
-            console.log($(this).text());
             sum += parseInt($(this).text());
         })
         $('#total_price').text(sum);
@@ -118,24 +117,6 @@
         });
 
 
-        /*
-        // 상품들을 선택해 주문 페이지로 이동
-        $('#order').click(function() {
-            // 선택한 장바구니 상품이 없으면 처리 중단
-            if($('.productNo').prop('checked')==false) {
-                alert("구매할 상품을 선택해주세요");
-                return;
-            }
-
-            const $form = $('<form>').attr("action","/mall/order").attr("method","post").appendTo($('#formArea'));
-            $.each($('.productNo'), function(idx, element) {
-                if($(this).prop('checked')==true)
-                    $form.append($('<input>').attr('type','hidden').attr('name','checkedProductNos').val($(this).attr("data-productNo")));
-            });
-            $form.submit();
-        });
-         */
-
         // 상품들을 선택해 주문 페이지로 이동
         $('#order').click(function() {
             // 선택한 장바구니 상품이 없으면 처리 중단
@@ -155,13 +136,6 @@
             $form.submit();
         });
 
-
-        /*
-        // 상품 전체 선택
-        $('#check_all').click(function() {
-            $('.productNo').prop('checked', !$('.productNo').prop('checked'));
-        })
-         */
 
         // 상품 전체 선택(품절 제외)
         $('#check_all').click(function() {
@@ -186,8 +160,8 @@
                     <input type="checkbox" id="check_all">
                 </th>
                 <th colspan="2">상품 정보</th>
-                <th>구매예정금액</th>
-                <th>선택</th>
+                <th style="text-align: center">구매예정금액</th>
+                <th style="text-align: center">선택</th>
             </tr>
             <tr th:each="item:${map.items}">
                 <td style="width:5%;">
@@ -213,7 +187,6 @@
                         <span th:text="${item.productName}"></span>
                     </div>
                     <div class="lower">
-                    <!-- 재고가 0이면 버튼 비활성화 -->
                         <button type="button" class="btn btn-primary minus" th:attr="data-productNo=${item.productNo}" th:disabled="${item.productStock == 0}">-</button>
                         <button type="button" class="btn btn-outline-primary count" th:text="${item.cartDetailCount}" th:disabled="${item.productStock == 0}"></button>
                         <button type="button" class="btn btn-primary plus" th:attr="data-productNo=${item.productNo}" th:disabled="${item.productStock == 0}">+</button>
