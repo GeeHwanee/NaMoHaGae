@@ -22,11 +22,12 @@
 
     function printKnowledgeAnswer(){
         const $questionNo = $('#question_no').val();
-
+        console.log(typeof  $questionNo);
         $.ajax({
             url:'/api/v1/knowledge/answer/list?questionNo='+$questionNo,
             type:'get',
             success(result){
+                console.log(result);
                 if(result.length>0){
                 const $answer_select = $('#answer_select');
                 const $answers = $('#answers').empty();
@@ -63,7 +64,6 @@
 
     $(document).ready(function (){
         printKnowledgeAnswer();
-        console.log(isWriter);
 
         $('#answers').on('click', '.select', async function (){
             const $memberNickname = $(this).parent().parent().find('.username').text();
@@ -139,7 +139,9 @@
         <hr>
             <div id="textbox_layout">
             <form action="/api/v1/knowledge/answer/write" method="post" id="answer_form">
+                <input type="hidden" id="_csrf" name="_csrf">
                 <input type="hidden" id="question_no" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
+                <input type="hidden" name="questionMemberNo" th:value="${question.memberNo}">
                 <input type="hidden" name="answerMemberNo" th:value="${memberNo}">
                 <textarea name="knowledgeAnswerContent" id="answer_content"></textarea>
                 <button type="button" id="answer_write" class="btn btn-primary">답변 작성</button>
