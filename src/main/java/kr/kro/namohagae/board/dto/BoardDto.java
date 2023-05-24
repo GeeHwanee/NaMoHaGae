@@ -25,6 +25,12 @@ public class BoardDto {
     }
 
     @Data
+    public static class readCnt {
+        private Integer boardNo;
+        private Integer memberNo;
+    }
+
+    @Data
     public static class FindAllByMemberNo {
         private Integer boardNo;
         private Integer townNo;
