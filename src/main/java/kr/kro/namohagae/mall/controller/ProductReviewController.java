@@ -28,6 +28,6 @@ public class ProductReviewController {
             Integer memberNo = myUserDetails.getMemberNo();
             service.write(dto, memberNo);
         }
-        return "redirect:/mall/order/list";
+        return "redirect:/member/mall/order";
     }
 }

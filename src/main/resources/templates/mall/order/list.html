@@ -12,6 +12,10 @@
     .hide {
       display: none;
     }
+    .productInfo {
+      text-align: center;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -34,20 +38,26 @@
           </div>
         </div>
         <table class="table table-border">
+          <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+          </colgroup>
           <tr th:each="item:${order.orderDetailList}">
-            <td>
+            <td class="productInfo">
               <a th:href="@{/mall/product/read(productNo=${item.productNo})}">
                 <img th:src="${item.productImage}" width="100px" height="100px">
               </a>
             </td>
-            <td>
+            <td class="productInfo">
               <span th:text="${item.productName}"></span>
             </td>
-            <td>
+            <td class="productInfo">
               <span th:text="${item.productOrderDetailCount}"></span>개/
               <span th:text="${item.productOrderDetailPrice}"></span>원
             </td>
-            <td>
+            <td class="productInfo">
               <span>
               <a type="button" class="btn btn-primary" th:classappend="${item.productOrderDetailReviewEnabled? '':'hide'}"  th:href="@{/mall/product/review/write(productOrderDetailNo=${item.productOrderDetailNo})}">리뷰 작성</a>
               </span>

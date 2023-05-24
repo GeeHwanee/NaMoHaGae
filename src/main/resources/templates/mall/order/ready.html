@@ -51,11 +51,6 @@
         text-align: center;
         font-size: 28px;
     }
-
-    .orderDetailTable {
-        border-collapse: collapse;
-        width: 70%;
-    }
 </style>
 <script th:inline="javascript">
     const data = [[${map}]];
@@ -121,58 +116,6 @@
                 }
             })
         })
-
-
-            /*
-            productName = '';
-            cartDetailCount = 0;
-            //const orderTotalPrice = $('#orderTotalPrice').text().replace("원", "").replace(",", "");
-            if(orderItems.length == 1){
-                productName = orderItems[0].productName;
-                cartDetailCount = orderItems[0].cartDetailCount;
-                cartTotalPrice = orderTotalPrice;
-                taxFreeAmount = 0;
-            } else {
-                let i = 0;
-                for (const item of orderItems) {
-                    cartDetailCount += orderItems[i].cartDetailCount;
-                    i++;
-                }
-                cartTotalPrice = orderTotalPrice;
-                taxFreeAmount = 0;
-                productName = orderItems[0].productName + ' 외 ' + ((orderItems.length) - 1) + '건';
-            }
-
-            const totalAmount = parseInt(cartTotalPrice.replace(/[^0-9]/g, ''));
-
-            $.ajax({
-                type: 'get',
-                url: '/api/v1/pay/start',
-                data: {
-                    item_name: productName,
-                    quantity: cartDetailCount,
-                    total_amount: totalAmount,
-                    tax_free_amount: taxFreeAmount
-                },
-                success: function(res) {
-                    location.href = res.next_redirect_pc_url;
-                }
-            });
-
-
-            const usedMemberPoint = $('#pointInput').val();
-            const $form = $('<form>').attr('action', "/order/check").attr('method', 'post');
-            $form.append($('<input>').attr('type', 'hidden').attr('name', 'usedMemberPoint').val(usedMemberPoint));
-            $form.append($('<input>').attr('type', 'hidden').attr('name', 'orderTotalPrice').val(orderTotalPrice));
-            $.each($(".addressNo"), function (idx, element) {
-                if ($(element).attr("checked") == "checked")
-                    $('<input type="hidden" name="addressNo">').val($(element).val()).appendTo($form);
-            });
-            $form.append($_csrf_input);
-            $form.appendTo($('body')).submit();
-
-        })
-        */
 
 
         // 결제 예정 금액
@@ -276,7 +219,6 @@
     </div>
     <br>
     <br>
-
     <div>
         <div class="title">배송지정보</div>
         <br>
@@ -297,7 +239,6 @@
         </div>
         <br>
     </div>
-
         <div style="text-align: center">
             <div class="title">뼈다귀 포인트 사용</div>
             <br>
@@ -314,7 +255,6 @@
         </div>
     <br>
     <br>
-
     <div style="text-align: center">
         <div class="title">결제방법</div>
         <br>
@@ -322,7 +262,6 @@
     </div>
     <br>
     <br>
-
         <div style="text-align: center">
             <div class="title">결제상세</div>
             <br>
@@ -341,7 +280,6 @@
         </div>
     <br>
     <br>
-
         <div style="text-align: center">
             <div class="title">결제예정금액</div>
             <br>
@@ -349,7 +287,6 @@
         </div>
     <br>
     <br>
-
         <div style="text-align: center">
             <button id="order" type="button" class="btn btn-primary btn-block">결제하기</button>
         </div>
