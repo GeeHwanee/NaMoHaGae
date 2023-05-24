@@ -13,6 +13,7 @@ public class KnowledgeAnswerDto {
     @Data
     public static class Write{
         private Integer knowledgeQuestionNo;
+        private Integer questionMemberNo;
         private Integer answerMemberNo;
         private String knowledgeAnswerContent;
 
