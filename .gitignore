@@ -35,3 +35,4 @@ build/
 
 application.properties
 keystore.p12
+ConnectorConfig.java
