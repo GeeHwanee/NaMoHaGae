@@ -54,6 +54,9 @@
                         }
                     }
 
+                }else if (isWriter){
+                    $('#deleteQuestion').removeClass('hide');
+
                 }
             },
             error(error){
@@ -64,7 +67,9 @@
 
     $(document).ready(function (){
         printKnowledgeAnswer();
-
+        if(isWriter){
+            $('#textbox_layout').addClass('hide');
+        }
         $('#answers').on('click', '.select', async function (){
             const $memberNickname = $(this).parent().parent().find('.username').text();
             const $answerNo = $(this).data('no');
@@ -112,6 +117,11 @@
                 }
             })
         })
+        $('#deleteQuestion').click(async function() {
+            const $questionNo = $('#question_no').val();
+            $('<form>').append($_csrf_input).append($(`<input type="hidden" name="knowledgeQuestionNo" value="${$questionNo}">`)).attr("action","/board/knowledge/question/delete").attr("method","post")
+                .appendTo($('body')).submit();
+        })
     })
 </script>
 <body>
@@ -121,7 +131,9 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>지식인 게시판 읽기 페이지</h1>
-        <a href="/board/knowledge/list">목록으로</a>
+        <a type="button" href="/board/knowledge/list" class="btn btn-primary">목록으로</a>
+        <button type="button" id="deleteQuestion" class="btn btn-warning hide">삭제</button>
+
 <hr>
         <article id="question">
             <h2 th:text="${question.knowledgeQuestionTitle}"></h2>
