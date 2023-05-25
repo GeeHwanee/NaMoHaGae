@@ -1,7 +1,6 @@
 package kr.kro.namohagae.mall.service;
 
 import kr.kro.namohagae.global.util.constants.ImageConstants;
-import kr.kro.namohagae.mall.dao.ProductCategoryDao;
 import kr.kro.namohagae.mall.dao.ProductDao;
 import kr.kro.namohagae.mall.dao.ProductImageDao;
 import kr.kro.namohagae.mall.dto.ProductDto;
@@ -20,16 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-    private final ProductCategoryDao productCategoryDao;
     private final ProductDao productDao;
     private final ProductImageDao productImageDao;
 
     private final Integer PAGESIZE = 9;
     private final Integer BLOCKSIZE = 5;
-
-//    public List<ProductCategory> findAll() {
-//        return productCategoryDao.findAll();
-//    }
 
     @Transactional
     public Integer add(ProductDto.Add dto) {
@@ -147,7 +141,7 @@ public class ProductService {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
         List<ProductDto.ReadAll> products = productDao.findByProductName(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo, productName);
-        Integer countOfProduct = productDao.count(categoryNo);
+        Integer countOfProduct = productDao.countByProductName(categoryNo, productName);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
