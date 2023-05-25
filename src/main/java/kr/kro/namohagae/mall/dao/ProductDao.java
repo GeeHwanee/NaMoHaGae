@@ -16,6 +16,9 @@ public interface ProductDao {
     // 특정 카테고리의 상품 개수를 조회
     public Integer count(Integer categoryNo);
 
+    // 상품명 검색시 상품 개수를 조회
+    public Integer countByProductName(Integer categoryNo, String productName);
+
     // 상품 목록 조회
     public List<ProductDto.ReadAll> findAll(String url,Integer startRowNum, Integer endRowNum, Integer categoryNo, Integer memberNo);
 
@@ -23,11 +26,7 @@ public interface ProductDao {
     public ProductDto.Read findByProductNo(String url, Integer productNo);
 
     // 상품 번호 찾아서 재고 업데이트
-    //public void updateStockByProductNo(List<Integer> productNos, Integer productOrderDetailNo);
     public void updateStockByProductNo(Map<String, Object> params);
-
-    // 상품 상세 보기에서 주문시 재고 업데이트
-    public void updateStockByOrderFromProduct(Map<String, Object> params);
 
     // 상품 번호로 상품 정보 불러오기
     public Integer findInformationByProductNo(Integer productNo);
