@@ -29,7 +29,6 @@ $(document).ready(async function() {
             console.log(err)
         }
 
-    printEmbededImage();
     // Bside
     if (url.includes("namohagae.kro.kr")){
         notificationSocket = new WebSocket('wss://namohagae.kro.kr/notification');
