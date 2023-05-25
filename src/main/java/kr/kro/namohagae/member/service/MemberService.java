@@ -178,5 +178,9 @@ public class MemberService {
     public Boolean changePassword(String memberPassword,String memberEmail) {
         return memberDao.changePassword(memberPassword,memberEmail);
     }
+
+    public Integer findMemberPointByMemberNo(Integer memberNo) {
+        return memberDao.findMemberPointByMemberNo(memberNo);
+    }
 }
 

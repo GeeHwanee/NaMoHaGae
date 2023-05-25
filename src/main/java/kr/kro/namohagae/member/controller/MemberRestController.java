@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,4 +61,9 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.findEmailByNicknameAndPhone(nickname,phone));
     }
 
+    @GetMapping("/api/v1/member/point")
+    public ResponseEntity<Integer> findMemberPointByMemberNo(@AuthenticationPrincipal MyUserDetails myUserDetails){
+       Integer result = memberService.findMemberPointByMemberNo(myUserDetails.getMemberNo());
+       return ResponseEntity.ok(result);
+    }
 }
