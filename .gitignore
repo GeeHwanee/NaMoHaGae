@@ -35,4 +35,3 @@ build/
 
 application.properties
 keystore.p12
-**/src/main/java/kr/kro/namohagae/global/config/
