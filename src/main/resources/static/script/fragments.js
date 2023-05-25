@@ -156,15 +156,6 @@ function printAside(){
     });
 }
 
-function printEmbededImage(){
-    $('#logo_main').attr('src','/api/v1/image/embeded?name=Logo_Main.png');
-    $('#logo_notion').attr('src','/api/v1/image/embeded?name=Logo_Notion.png');
-    $('#logo_github').attr('src','/api/v1/image/embeded?name=Logo_Github.png');
-    $('#logo_swagger').attr('src','/api/v1/image/embeded?name=Logo_Swagger.png');
-    $('#logo_kakao').attr('src','/api/v1/image/embeded?name=kakao_login_large_wide.png');
-
-}
-
 function printBsideNotification(result) {
     const $notification = $('#notification');
     result.forEach(n => {
