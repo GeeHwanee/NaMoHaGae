@@ -21,7 +21,7 @@
                 if(irumCheck()==false)
                     return false;
                 try {
-                    const result= await $.ajax('/member/checkNickname?nickname=' + $('#nickname').val());
+                    const result= await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#nickname').val());
                     if (result==false){
                         $("#nickname_msg").text("사용 가능한 별명입니다").attr("class","success");
                     }  else {
@@ -51,9 +51,12 @@
           $('#updateCancle').click(function (){changeBasic(checkKaKao);})
 
           $('#update').click(async function(){
+                const formData = new FormData();
                 // FormData 처리 방식
                 // 1. new FormData($('폼아이디')[0]);
                 // 2. new FormData() -> 원소를 하나씩 append
+                  if($('#sample4_roadAddress').val()!=null){
+
               try {
                   result = await $.ajax("/api/v1/town/gulist");
                   console.log(result);
@@ -80,15 +83,25 @@
 
 
                       if(addressCheck(result)==true){
-                const formData = new FormData();
 
-                if($('#profile')[0].files[0]!=undefined) {
-                    formData.append('profile', $('#profile')[0].files[0]);
-                }
                 formData.append('latitude',$('#memberLatitude').val());
                 formData.append('longitude',$('#memberLongitude').val());
                 formData.append('password',$('#password').val());
                 formData.append('townDong',$('#memberDong').val());
+
+                // 1. Multipart-formdata: contentType: false
+                // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
+                //		{username:'spring', nai:20} -> ?username=spring&nai=20}
+
+                      }
+                  },error: function(xhr, status, error){
+                      console.log(error);
+                  }
+            });
+                  }
+                if($('#profile')[0].files[0]!=undefined) {
+                    formData.append('profile', $('#profile')[0].files[0]);
+                }
                 formData.append('phone',$('#phone').val());
                 formData.append('nickname', $('#nickname').val());
                 formData.append('introduce', $('#introduce').val());
@@ -98,12 +111,9 @@
                 for(let key of formData.keys()){
                     console.log(key+" : "+formData.get(key));
                 }
-                // 1. Multipart-formdata: contentType: false
-                // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
-                //		{username:'spring', nai:20} -> ?username=spring&nai=20}
                 try{
                     $.ajax({
-                        url: "/member/update",
+                        url: "/api/v1/member/update",
                         method:'post',
                         data: formData,
                         processData:false, 	// urlencoded 자동 변환 옵션
@@ -114,12 +124,6 @@
                 }catch(err){
                     alert('변경 실패');
                 }
-
-                      }
-                  },error: function(xhr, status, error){
-                      console.log(error);
-                  }
-            });
         });
           $('#resign').click(function(){
                 console.log("11")
@@ -129,7 +133,7 @@
                     return;
                 }
                 const $form = $('<form>').append($_csrf_input);
-                $form.attr('action','/member/resign').attr('method','post').appendTo($('body')).submit();
+                $form.attr('action','/api/v1/member/resign').attr('method','post').appendTo($('body')).submit();
 
                 // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
                 // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
@@ -229,6 +233,7 @@
             $('#update_btn').removeClass('hidden');
             $('#addressTr').removeClass('hidden');
             $('.basic').addClass('hidden');
+            $('#profile').removeClass('hidden')
         }
         function changeBasic(checkKaKao){
             $('#profile').addClass('hidden');
@@ -242,6 +247,8 @@
             $('#update_btn').addClass('hidden');
             $('#addressTr').addClass('hidden');
             $('.basic').removeClass('hidden');
+            $('#profile').addClass('hidden')
+
         }
 
         function printBoard(dogList) {
@@ -305,14 +312,14 @@
                 <tr>
                     <td colspan="2">
                         <img id="show-profile" th:src="${member.memberProfile}" width="240px">
-                        <input type="file" id="profile" name="profile">
+                        <input class="hidden" type="file" id="profile" name="profile">
                     </td>
                 </tr>
                 <tr>
                     <td class="basic">
                         <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span th:text="${member.memberGrade}"></span><span>)도  (</span><span th:text="${member.memberPoint}"></span><span>)포인트</span></td>
                     <td>
-                        <input type="text" class="hidden" name="nickname" id="nickname" th:value="${member.memberNickname}">
+                        <input type="text" class="hidden" name="nickname" id="nickname" >
                         <span id="nickname_msg"></span>
                     </td>
                 </tr>

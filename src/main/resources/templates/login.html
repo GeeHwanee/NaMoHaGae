@@ -32,17 +32,18 @@
               // extract email and name from the response
               const email = response.kakao_account.email;
               const name = response.properties.nickname;
+              const reuslt = await $.ajax("/api/v1/member/checkEmail?email="+email);
               // send email and name to Spring Boot controller
-              const result = await $.ajax('/member/checkEmail?email=' + email);
-              if(result==true){
+              if(reuslt==true){
                 document.getElementById("username").value = email;
                 document.getElementById("password").value = email;
-                $('#login').attr('action','/api/v1/login').attr('method','post').submit();
+                $('#login').append($_csrf_input).attr('action','/api/v1/login').attr('method','post').submit();
               }else{
                 document.getElementById("kakaoEmail").value = email;
                 document.getElementById("kakaoName").value = name;
                 $('#kakaoJoin').attr('action','/member/kakaoJoin').attr('method','post').submit();
               }
+
               // redirect to a page after successful login and data submission
             } else if (xhr.readyState === 4) {
               console.log('Failed to retrieve user information from Kakao:', xhr.status);
@@ -57,7 +58,7 @@
     }
     $(document).ready(function () {
       Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
-      $('#kakao-btn').click(function (){
+      $('#kakao-btn').click(async function (){
         loginWithKakao();
       })
 

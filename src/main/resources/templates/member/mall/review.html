@@ -43,7 +43,7 @@
                 console.log(ReviewStarIcon);
                     const tpl = `<tr>
                     <td>${r.productName} ${ReviewStarIcon} </td>
-                     <td><a href="http://localhost:8081/mall/product/read?productNo=${r.productNo}"><img id="show-profile" src="${r.productImage}" width="150px" height="150px"></a></td>
+                     <td><a href="/mall/product/read?productNo=${r.productNo}"><img id="show-profile" src="${r.productImage}" width="150px" height="150px"></a></td>
                     <td>${formatDateAnswer(r.reviewWriteDate)}</td>
                     <td>${r.reviewContent}</td>
 			    </tr>`;
