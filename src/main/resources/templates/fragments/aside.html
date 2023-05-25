@@ -2,8 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <aside th:fragment="aside" id="aside">
-	<ul id="aside_title"></ul>
-	<ul id="side_bar" class="side_bar"></ul>
+	<ul id="aside_title" sec:authorize="isAuthenticated()" ></ul>
+	<ul id="side_bar" class="side_bar" sec:authorize="isAuthenticated()"></ul>
 </aside>
 </body>
 </html>

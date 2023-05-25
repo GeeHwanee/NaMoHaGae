@@ -28,11 +28,12 @@ public class KnowledgeService {
     int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
     int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
     public Integer questionSave(KnowledgeQuestionDto.Write dto, Integer memberNo) {
-        Integer point = memberDao.findByMember(memberNo).get().getMemberPoint();
-        if (point >= dto.getKnowledgeQuestionPoint()) {
+        Integer memberPoint = memberDao.findByMember(memberNo).get().getMemberPoint();
+        if (memberPoint >= dto.getKnowledgeQuestionPoint()) {
+            Integer negativePoint = -dto.getKnowledgeQuestionPoint();
             KnowledgeQuestion knowledgeQuestion = dto.toEntity(memberNo);
             knowledgeQuestionDao.save(knowledgeQuestion);
-            memberDao.updatePoint(memberNo, (-point));
+            memberDao.updatePoint(memberNo, negativePoint);
             return knowledgeQuestion.getKnowledgeQuestionNo();
         } else {
             return 0;
