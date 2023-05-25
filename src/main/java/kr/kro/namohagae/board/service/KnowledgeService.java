@@ -152,6 +152,10 @@ public class KnowledgeService {
 
         return knowledgeQuestionDao.waitList(searchName,pagingStart, pageLimit);
     }
+
+    public Integer questionDelete(Integer knowledgeQuestionNo) {
+       return knowledgeQuestionDao.delete(knowledgeQuestionNo);
+    }
 }
 
 

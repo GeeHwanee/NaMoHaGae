@@ -462,6 +462,12 @@ public class GlobalController {
         return "board/knowledge/read";
     }
 
+    @PostMapping("board/knowledge/question/delete")
+    public String knowledgeQuestionDelelte(Integer knowledgeQuestionNo){
+        Integer result = knowledgeService.questionDelete(knowledgeQuestionNo);
+        return "redirect:/board/knowledge/list";
+    }
+
     // [쇼핑몰 파트]--------------------------------------------------------------------
     @GetMapping("/mall/cart")
     public void cart(){
