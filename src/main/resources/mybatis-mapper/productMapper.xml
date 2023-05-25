@@ -35,6 +35,12 @@
         <if test="categoryNo!=null"> where product_category_no = #{categoryNo} </if>
     </select>
 
+    <!-- 상품명 검색시 상품 개수를 조회 -->
+    <select id="countByProductName" resultType="java.lang.Integer">
+        select count(*) from PRODUCT
+        <if test="categoryNo!=null"> where product_category_no = #{categoryNo} and product_name like '%' || #{productName} || '%' </if>
+    </select>
+
     <!-- 상품 목록 조회 -->
     <resultMap id="readAllMap" type="kr.kro.namohagae.mall.dto.ProductDto$ReadAll">
         <id column="product_no" property="productNo" />
@@ -109,32 +115,6 @@
             WHERE pod.product_no = p.product_no and pod.product_order_detail_no=#{productOrderDetailNo}
         )
         WHERE p.product_no = #{productNo}
-    </update>
-
-    <!--
-    <update id="updateStockByProductNo" parameterType="java.util.List">
-    UPDATE PRODUCT p
-    SET product_stock = product_stock - (
-        SELECT pod.product_order_detail_count
-        FROM PRODUCT_ORDER_DETAIL pod
-        WHERE pod.product_no = p.product_no and pod.product_order_detail_no=#{item.productOrderDetailNo}
-    )
-    WHERE p.product_no in (
-        <foreach collection="items" item="item" open="(" close=")" separator=",">
-            #{item.productNo}
-        </foreach>
-    )
-    </update>
-    -->
-
-    <!-- 상품 상세 보기에서 주문시 재고 업데이트 -->
-    <update id="updateStockByOrderFromProduct" parameterType="java.util.Map">
-        UPDATE PRODUCT p
-        SET p.product_stock = p.product_stock - (SELECT pod.product_order_detail_count
-            FROM PRODUCT_ORDER_DETAIL pod
-            WHERE pod.product_no = p.product_no and pod.product_order_detail_no=#{productOrderDetailNo}
-            )
-        where p.product_no = #{productNo}
     </update>
 
     <!-- 상품 번호로 상품 정보 불러오기 -->
@@ -217,7 +197,7 @@
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by p.product_grade desc
+        order by p.product_grade desc, review_count desc
         ) p
         where rownum&lt;=#{endRowNum}
         )

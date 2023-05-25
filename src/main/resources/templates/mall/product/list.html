@@ -92,16 +92,6 @@
     }
 
 
-    /*
-    function sortProducts(sortBy) {
-        const params = {
-            sortBy: sortBy,
-        };
-        const queryString = updateUrlParams(params);
-        window.location.href = '/mall/product/list?' + queryString;
-    }
-     */
-
     function sortProducts(sortBy) {
         const params = {
             sortBy: sortBy,
@@ -219,13 +209,6 @@
         </div>
         <br>
         <div class="filter-and-search">
-            <!--
-            <div class="product-filter">
-                <button class="btn btn-danger mt-3" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</button>
-                <button class="btn btn-danger mt-3" id="sortByName" onclick="sortProducts('ProductName')">상품명</button>
-                <button class="btn btn-danger mt-3" id="sortByBest" onclick="sortProducts('BestProduct')">인기순</button>
-            </div>
-            -->
             <div class="product-filter">
                 <span class="filter-text" id="sortByNew" onclick="sortProducts('NewProduct')">최신순</span>
                 <span> ㅣ </span>
@@ -278,7 +261,6 @@
             </div>
             <div id="product"></div>
         </div>
-
         <ul class="pagination" id="page_ul">
             <li th:if="${list.prev>0}" class="page-item">
                 <a class="page-link" th:href="@{/mall/product/list(categoryNo=${list.categoryNo},pageNo=list.prev)}">이전으로</a>
