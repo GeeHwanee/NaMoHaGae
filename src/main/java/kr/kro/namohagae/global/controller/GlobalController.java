@@ -30,6 +30,7 @@ import kr.kro.namohagae.puching.service.ChatService;
 import kr.kro.namohagae.puching.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -128,6 +129,7 @@ public class GlobalController {
         return "member/report";
     }
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public void login(HttpSession session, Model model){
         if (session.getAttribute("msg")!=null) {
@@ -137,9 +139,11 @@ public class GlobalController {
     }
 
     // [회원 파트]--------------------------------------------------------------------
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/join")
     public void join(){}
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/member/join")
     public String join(@Valid MemberDto.Join dto, BindingResult br, RedirectAttributes ra,Model model){
         if(br.hasErrors()) {
@@ -152,12 +156,14 @@ public class GlobalController {
         return "member/addJoin";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/member/kakaoJoin")
     public String kakao(String kakaoEmail,String kakaoName,Model model){
         model.addAttribute("dto",memberService.kakaoJoin(kakaoEmail,kakaoName));
         return "member/addJoin";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/member/addJoin")
     public String addJoin(MemberDto.Join dto){
         memberService.join(dto);
@@ -191,6 +197,7 @@ public class GlobalController {
     @GetMapping("/member/dog/registeration")
     public  void dogRegisteration(){}
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/find")
     public void find(){}
 
