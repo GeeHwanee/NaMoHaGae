@@ -101,25 +101,41 @@ public class MemberService {
         }
     }
 
-    public Boolean update(MultipartFile profile, String nickname, Integer memberNo,String password,String phone,String townDong,String introduce,Double lognitude,Double latitude) {
-        Integer townNo = townDao.findNoByDong(townDong);
-
+    public Boolean update(MultipartFile profile, String nickname, Integer memberNo,String password,String phone,String townDong,String introduce,Double longitude,Double latitude) {
+       Integer townNo = null;
+        if(townDong!=null){
+        townNo = townDao.findNoByDong(townDong);
+        }
+        String newPassword=null;
+        if(password!=null){
+            newPassword=passwordEncoder.encode(password);
+        }
         if (profile==null || profile.isEmpty()==true) {
             System.out.println("11");
-            memberDao.updateMember(memberNo,password,nickname,phone,townNo,null,lognitude,latitude,introduce);
+            memberDao.updateMember(memberNo,newPassword,nickname,phone,townNo,null,longitude,latitude,introduce);
             return true;
         }else {    // else는 Don't care -> 신경쓰지 않는다
         }
         int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
         String ext = profile.getOriginalFilename().substring(postionOfDot);
-        File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, memberNo + ext);
+        System.out.println(ext+"afdfbdfb");
+        File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, nickname + ext);
         try {
             profile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Boolean a = memberDao.updateMember(memberNo,passwordEncoder.encode(password),nickname,phone,townNo,memberNo+ext,lognitude,latitude,introduce);
+        Boolean a = memberDao.updateMember(memberNo,newPassword,nickname,phone,townNo,nickname+ext,longitude,latitude,introduce);
+        System.out.println(memberNo);
+        System.out.println(newPassword);
+        System.out.println(nickname+":!313");
+        System.out.println(phone);
+        System.out.println(townNo);
+        System.out.println(nickname+ext);
+        System.out.println(longitude);
+        System.out.println(latitude);
+        System.out.println(introduce);
         System.out.println("11");
         return a;
 
@@ -129,7 +145,7 @@ public class MemberService {
     public Boolean checkUpdateNickanme(Integer memberNo, String nickname) {
         Member member = memberDao.findByMember(memberNo).get();
         Boolean resultDB = memberDao.existsByNickname(nickname);                                // 기존 DB에 이메일이 있다면 false 리턴
-        Boolean resultUser = !member.getMemberNickname().equals(nickname);
+        Boolean resultUser = member.getMemberNickname().equals(nickname);
         System.out.println(nickname);
        if(resultDB==false){
            System.out.println("rhjf");

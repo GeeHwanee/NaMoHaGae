@@ -54,7 +54,7 @@ $(document).ready(function() {
 
     $('#sendEmail').click(async function (){
         try {
-            const url = "/member/sendAudenticationCode?email=" + $("#memberEmail").val();
+            const url = "/api/v1/member/sendAudenticationCode?email=" + $("#memberEmail").val();
             // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
             // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
             const result = await $.ajax({url:url, method:"patch"})
@@ -67,7 +67,7 @@ $(document).ready(function() {
     });
     $('#checkCode').click(async function(){
         try {
-            const url = "/member/checkAudenticationCode?code=" + $("#code").val();
+            const url = "/api/v1/member/checkAudenticationCode?code=" + $("#code").val();
             // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
             // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
             const result = await $.ajax({url:url, method:"get"});
@@ -82,11 +82,12 @@ $(document).ready(function() {
         if(emailCheck()==false)
             return false;
         try {
-            const result = await $.ajax('/member/checkEmail?email=' + $('#memberEmail').val());
+            const result = await $.ajax('/api/v1/member/checkEmail?email=' + $('#memberEmail').val());
             if (result==false){
             $("#memberEmail_msg").text("사용 가능한 이메일 입니다").attr("class","success");
             }
             else {
+                console.log(result);
             $("#memberEmail_msg").text("사용중입니다").attr("class","fail");
             }
         } catch(err) {
@@ -99,7 +100,7 @@ $(document).ready(function() {
         if(irumCheck()==false)
             return false;
         try {
-          const result= await $.ajax('/member/checkNickname?nickname=' + $('#memberNickname').val());
+          const result= await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#memberNickname').val());
           if (result==false){
           $("#memberNickname_msg").text("사용 가능한 별명입니다").attr("class","success");
           }  else {
@@ -120,8 +121,8 @@ $(document).ready(function() {
             return false;
 
         try {
-            await $.ajax('/member/checkEmail?email=' + $('#memberEmail').val());
-            await $.ajax('/member/checkNickname?nickname=' + $('#memberNickname').val());
+            await $.ajax('/api/v1/member/checkEmail?email=' + $('#memberEmail').val());
+            await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#memberNickname').val());
             $('#join_form').submit();
         } catch(err) {
             console.log(err);

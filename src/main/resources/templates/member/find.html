@@ -53,7 +53,7 @@
 
         try{
           $.ajax({
-            url: "/member/change/password",
+            url: "/api/v1/member/change/password",
             method:'post',
             data: formData,
             processData:false, 	// urlencoded 자동 변환 옵션
@@ -67,7 +67,7 @@
       });
       $('#sendEmail').click(async function (){
         try {
-          const url = "/member/sendAudenticationCode?email=" + $("#memberEmail").val()+"&_csrf="+$_csrf;
+          const url = "/api/v1/member/sendAudenticationCode?email=" + $("#memberEmail").val()+"&_csrf="+$_csrf;
           // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
           // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
           const result = await $.ajax({url:url, method:"patch"})
@@ -79,7 +79,7 @@
       });
       $('#checkCode').click(async function(){
         try {
-          const url = "/member/checkAudenticationCode?code=" + $("#code").val();
+          const url = "/ap1/v1/member/checkAudenticationCode?code=" + $("#code").val();
           // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
           // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
           const result = await $.ajax({url:url, method:"get"});
@@ -91,7 +91,7 @@
       });
       $('#findEmail').click(async function(){
         try {
-          const url = "/member/findEmail?nickname=" + $("#nickname").val()+"&phone="+$('#phone').val();
+          const url = "/api/v1/member/findEmail?nickname=" + $("#nickname").val()+"&phone="+$('#phone').val();
           // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
           // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
           const result = await $.ajax({url:url, method:"get"});
