@@ -190,9 +190,12 @@
                     Swal.fire({
                         title:'리뷰가 작성 되었습니다!',
                         icon:'success'});
-                    location.href='/puching/chatroom';
-                    // reviewText.value = '';
-                    // stars.forEach(star => star.classList.remove('active'));
+
+
+                    setTimeout(function(){
+                        location.href='/puching/chatroom';
+                    },3000);
+
                 }).fail(function(){
                     Swal.fire({
                         title:'리뷰작성을 실패 했습니다...',

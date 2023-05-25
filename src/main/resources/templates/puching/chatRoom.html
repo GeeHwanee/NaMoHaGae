@@ -375,6 +375,12 @@
             align-items: center;
             justify-content: center;
         }
+        .btn-area span{
+            position: absolute;
+            font-size: 10px;
+            font-weight: bold;
+            color: #ea986b;
+        }
         #openPopupButton{
             position: absolute;
             top: 60%;
@@ -483,6 +489,10 @@
                         </div>
                     </div>
                     <div class="btn-area">
+                        <span style="top:20%">이미지선택</span>
+                        <span style="top:35%">이미지전송</span>
+                        <span style="top:50%;left: 3px;">퍼칭리뷰</span>
+                        <span style="top:65%;left: 2px;">퍼칭신청</span>
                         <label id="imageLabel" for="imageInput"><i class="fa-solid fa-image fa-2xl" style="color: #f4984e;"></i> </label>
                         <input type="file" id="imageInput" style="display: none;">
                         <a id="sendImageButton"><i class="fa-solid fa-arrow-up-right-from-square fa-2xl" style="color:#f4984e;"></i></a>
@@ -824,6 +834,33 @@
           await Swal.fire({
                 title:'이미지를 선택하신 후 전송 버튼을 눌러주세요!',
                 icon:'warning'});
+            return;
+        }
+
+        var SwalWithImage = Swal.mixin({
+            customClass: {
+                image: 'custom-swal-image',
+                confirmButton: 'custom-swal-confirm-button',
+                cancelButton: 'custom-swal-cancel-button',
+            },
+            buttonsStyling: true,
+        });
+
+        var result = await SwalWithImage.fire({
+            title: '이 이미지를 전송하시겠습니까?',
+            text: '이미지는 한 번에 한 개씩 전송 가능합니다.',
+            imageUrl: URL.createObjectURL(imageInput.files[0]),
+            imageWidth: 400,
+            imageHeight: 400,
+            imageAlt: 'chat image',
+            showCancelButton: true,
+            confirmButtonText: '전송',
+            cancelButtonText: '취소',
+            reverseButtons: true,
+        });
+        if(result.isConfirmed){
+
+        } else if(result.dismiss === Swal.DismissReason.cancel){
             return;
         }
 
@@ -1225,7 +1262,7 @@
             var jsondata=JSON.stringify(acceptParam)
             puchingSocket.send(jsondata)
             //파칭수락한거 바로 어펜드 시키는 로직
-            var content=`<span class="puching-description">퍼칭성공!</span>;`
+            var content=`<span class="puching-description">퍼칭성공!</span>`
             $('.puching-info .accept-button').remove()
             $('.puching-info .disaccept-button').remove()
             $('.msg_history .puching-info').last().append(content);
