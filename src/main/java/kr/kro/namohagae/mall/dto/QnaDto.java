@@ -15,10 +15,11 @@ public class QnaDto {
 
     @Data
     public static class QnaList {
-        // 내용 작성자 작성일, 답변내용 답변일자
         private String qnaContent;
-        private Integer qnaWriter;
+        private String memberNickname;
+        private LocalDateTime qnaWriteDate;
         private String qnaAnswerContent;
+        private LocalDateTime qnaAnswerWriteDate;
     }
     
     // 페이지네이션
