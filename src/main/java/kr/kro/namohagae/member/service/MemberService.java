@@ -101,42 +101,59 @@ public class MemberService {
         }
     }
 
-    public Boolean update(MultipartFile profile, String nickname, Integer memberNo,String password,String phone,String townDong,String introduce,Double longitude,Double latitude) {
-       Integer townNo = null;
-        if(townDong!=null){
-        townNo = townDao.findNoByDong(townDong);
+    public Boolean update(MemberDto.UpdateMember dto,Integer memberNo) {
+        String newPassword = "";
+        Integer townNo = null;
+        Double latitude =null;
+        Double longitude = null;
+        String newNickname="";
+        if(dto.getLatitude()!=null){
+        String strLatitude= dto.getLatitude().substring(0,11);
+        latitude = Double.parseDouble(strLatitude);
         }
-        String newPassword=null;
-        if(password!=null){
-            newPassword=passwordEncoder.encode(password);
+        if (!dto.getNickname().equals("")){
+            if (checkUpdateNickanme(memberNo,dto.getNickname())){
+                newNickname=dto.getNickname();
+            }
         }
-        if (profile==null || profile.isEmpty()==true) {
+        if(dto.getLongitude()!=null){
+        String strLongitude= dto.getLongitude().substring(0,11);
+        longitude = Double.parseDouble(strLongitude);}
+        if (!dto.getPassword().equals("")){
+            newPassword=passwordEncoder.encode(dto.getPassword());
+        }
+        if(dto.getTownDong()!=null) {
+            townNo = townDao.findNoByDong(dto.getTownDong());
+        }
+        if (dto.getProfile()==null || dto.getProfile().isEmpty()==true) {
             System.out.println("11");
-            memberDao.updateMember(memberNo,newPassword,nickname,phone,townNo,null,longitude,latitude,introduce);
+            System.out.println(latitude);
+            System.out.println(longitude);
+            System.out.println(memberNo);
+            System.out.println(newNickname);
+            System.out.println(newPassword);
+            System.out.println(dto.getPhone());
+            System.out.println(townNo);
+            System.out.println(dto.getIntroduce());
+            memberDao.updateMember(memberNo,newPassword,newNickname,dto.getPhone(),townNo,null,longitude,latitude, dto.getIntroduce());
             return true;
         }else {    // else는 Don't care -> 신경쓰지 않는다
         }
-        int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
-        String ext = profile.getOriginalFilename().substring(postionOfDot);
+        int postionOfDot = dto.getProfile().getOriginalFilename().lastIndexOf(".");
+        String ext = dto.getProfile().getOriginalFilename().substring(postionOfDot);
         System.out.println(ext+"afdfbdfb");
-        File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, nickname + ext);
+        if(dto.getNickname().equals("")){
+            Member member= memberDao.findByMember(memberNo).get();
+            newNickname=member.getMemberNickname();
+        }
+        File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, newNickname + ext);
         try {
-            profile.transferTo(file);
+            dto.getProfile().transferTo(file);
         } catch (IllegalStateException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Boolean a = memberDao.updateMember(memberNo,newPassword,nickname,phone,townNo,nickname+ext,longitude,latitude,introduce);
-        System.out.println(memberNo);
-        System.out.println(newPassword);
-        System.out.println(nickname+":!313");
-        System.out.println(phone);
-        System.out.println(townNo);
-        System.out.println(nickname+ext);
-        System.out.println(longitude);
-        System.out.println(latitude);
-        System.out.println(introduce);
-        System.out.println("11");
+        Boolean a = memberDao.updateMember(memberNo,newPassword,newNickname,dto.getPhone(),townNo, newNickname+ext,longitude,latitude, dto.getIntroduce());
         return a;
 
     }
