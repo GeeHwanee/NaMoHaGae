@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--기본 CND, Script, CSS 내장 삽입-->
@@ -10,130 +10,135 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>내 정보</title>
     <style>
-        .hidden { display: none;}
+        .hidden {
+            display: none;
+        }
     </style>
     <script>
-        $(document).ready(async function(){
+        $(document).ready(async function () {
+            let result;
             $('#password').blur(passwordCheck);
             $('#password2').blur(password2Check);
             $('#phone').blur(phoneCheck);
-            $('#nickname').blur(async function() {
-                if(irumCheck()==false)
+            $('#nickname').blur(async function () {
+                if (irumCheck() == false)
                     return false;
                 try {
-                    const result= await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#nickname').val());
-                    if (result==false){
-                        $("#nickname_msg").text("사용 가능한 별명입니다").attr("class","success");
-                    }  else {
-                        $("#nickname_msg").text("사용중입니다").attr("class","fail");
+                    const result = await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#nickname').val());
+                    console.log(result)
+                    if (result == false) {
+                        $("#nickname_msg").text("사용 가능한 별명입니다").attr("class", "success");
+                    } else {
+                        $("#nickname_msg").text("사용중입니다").attr("class", "fail");
                     }
-                } catch(err) {
+                } catch (err) {
                     console.log(err);
                 }
             });
 
             try {
-                const result = await $.ajax("/api/v1/dog/list");
-                console.log(result);
+                result = await $.ajax("/api/v1/dog/list");
                 printBoard(result);
-            }catch (err){
-              console.log(err)
+            } catch (err) {
+                console.log(err)
             }
 
 
-          $('#profile').change(loadProfile);
-            console.log($('#memberCheckKaKao').val());
+            $('#profile').change(loadProfile);
             const memberCheckKaKaoValue = $('#memberCheckKaKao').val();
             const memberCheckKaKaoString = String(memberCheckKaKaoValue).toLowerCase();
             const checkKaKao = memberCheckKaKaoString === 'true';
 
-          $('#updateCheck').click(function (){changeUpdate(checkKaKao);})
-          $('#updateCancle').click(function (){changeBasic(checkKaKao);})
+            $('#updateCheck').click(function () {
+                changeUpdate(checkKaKao);
+            })
+            $('#updateCancle').click(function () {
+                changeBasic(checkKaKao);
+            })
 
-          $('#update').click(async function(){
+            $('#update').click(async function () {
                 const formData = new FormData();
                 // FormData 처리 방식
                 // 1. new FormData($('폼아이디')[0]);
                 // 2. new FormData() -> 원소를 하나씩 append
-                  if($('#sample4_roadAddress').val()!=null){
-
-              try {
-                  result = await $.ajax("/api/v1/town/gulist");
-                  console.log(result);
-                  addressCheck(result);
-              }catch (err){
-                  console.log(err)
-              }
+                if ($('#sample4_roadAddress').val() != "") {
+                    console.log("asdasdads")
+                    try {
+                        result = await $.ajax("/api/v1/town/gulist");
+                      addressCheck(result);
 
 
-              $.ajax({
-                  url:'https://dapi.kakao.com/v2/local/search/address.json?query='+encodeURIComponent(document.getElementById("sample4_roadAddress").value),
-                  type:'GET',
-                  headers: { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' },
-                  dataType: 'json',
-                  success: function(data){
-                      const latitude = data.documents[0].road_address.x;
-                      const longitude = data.documents[0].road_address.y;
-                      const gu = data.documents[0].address.region_2depth_name;
-                      const dong = data.documents[0].address.region_3depth_h_name;
-                      document.getElementById("memberDong").value = dong;
-                      document.getElementById("memberGu").value = gu;
-                      document.getElementById("memberLatitude").value = longitude;
-                      document.getElementById("memberLongitude").value = latitude;
+                        const data = await $.ajax({
+                            url: 'https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(document.getElementById("sample4_roadAddress").value),
+                            type: 'GET',
+                            headers: {'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445'},
+                            dataType: 'json',
+                        });
+                        const latitude = data.documents[0].road_address.x;
+                        const longitude = data.documents[0].road_address.y;
+                        const gu = data.documents[0].address.region_2depth_name;
+                        const dong = data.documents[0].address.region_3depth_h_name;
+                        document.getElementById("memberDong").value = dong;
+                        document.getElementById("memberGu").value = gu;
+                        document.getElementById("memberLatitude").value = longitude;
+                        document.getElementById("memberLongitude").value = latitude;
+                        console.log($('#memberLatitude').val());
+                        console.log($('#memberLongitude').val());
+                        console.log($('#memberDong').val());
 
+                        if (addressCheck(result) == true) {
+                            console.log(addressCheck(result));
+                            console.log("여기 작동해요");
+                            formData.append('latitude', $('#memberLatitude').val());
+                            formData.append('longitude', $('#memberLongitude').val());
+                            formData.append('townDong', $('#memberDong').val());
 
-                      if(addressCheck(result)==true){
+                            // 1. Multipart-formdata: contentType: false
+                            // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
+                            //		{username:'spring', nai:20} -> ?username=spring&nai=20}
+                        }
 
-                formData.append('latitude',$('#memberLatitude').val());
-                formData.append('longitude',$('#memberLongitude').val());
-                formData.append('password',$('#password').val());
-                formData.append('townDong',$('#memberDong').val());
+                    } catch (err) {
+                        console.log(err)
+                    }
 
-                // 1. Multipart-formdata: contentType: false
-                // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
-                //		{username:'spring', nai:20} -> ?username=spring&nai=20}
-
-                      }
-                  },error: function(xhr, status, error){
-                      console.log(error);
-                  }
-            });
-                  }
-                if($('#profile')[0].files[0]!=undefined) {
+                }
+                if ($('#profile')[0].files[0] != undefined) {
                     formData.append('profile', $('#profile')[0].files[0]);
                 }
-                formData.append('phone',$('#phone').val());
+                formData.append('password', $('#password').val())
+                formData.append('phone', $('#phone').val());
                 formData.append('nickname', $('#nickname').val());
                 formData.append('introduce', $('#introduce').val());
                 formData.append('_csrf', $_csrf);
 
                 // formData 객체 출력하기 - forOf 반복문으로만 출력 가능
-                for(let key of formData.keys()){
-                    console.log(key+" : "+formData.get(key));
+                for (let key of formData.keys()) {
+                    console.log(key + " : " + formData.get(key));
                 }
                 try{
-                    $.ajax({
-                        url: "/api/v1/member/update",
-                        method:'post',
-                        data: formData,
-                        processData:false, 	// urlencoded 자동 변환 옵션
-                        contentType:false 	// Multipart-formdata 지정 옵션
-                    });
-                    alert('변경 성공');
-                    location.reload();
-                }catch(err){
-                    alert('변경 실패');
-                }
-        });
-          $('#resign').click(function(){
+                   await $.ajax({
+                         url: "/api/v1/member/update",
+                         method:'post',
+                         data: formData,
+                         processData:false, 	// urlencoded 자동 변환 옵션
+                         contentType:false 	// Multipart-formdata 지정 옵션
+                     });
+                     alert('변경 성공');
+                     location.reload();
+                 }catch(err){
+                     alert('변경 실패');
+                 }
+            });
+            $('#resign').click(function () {
                 console.log("11")
                 const result = confirm("정말 탈퇴하시겠습니까?");
-                if(result==false){
+                if (result == false) {
                     alert("열심히 하겠습니다, 감사합니다.");
                     return;
                 }
                 const $form = $('<form>').append($_csrf_input);
-                $form.attr('action','/api/v1/member/resign').attr('method','post').appendTo($('body')).submit();
+                $form.attr('action', '/api/v1/member/resign').attr('method', 'post').appendTo($('body')).submit();
 
                 // Hidden Http Method: GET과 POST만 지원하는 브라우저에서 delete를 보내고 싶다면
                 // 우선 POST로 보내고 data:'_Method:delete'를 추가 설정한다면 delete로 맵핑이 들어간다
@@ -143,23 +148,19 @@
     </script>
 
 
-
-
-
-
     <script>
 
         function sample4_execDaumPostcode() {
             new daum.Postcode({
-                oncomplete : function(data) {
+                oncomplete: function (data) {
                     var roadAddr = data.roadAddress;
                     var extraRoadAddr = '';
 
-                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
                         extraRoadAddr += data.bname;
                     }
                     if (data.buildingName !== '' && data.apartment === 'Y') {
-                        extraRoadAddr += (extraRoadAddr !== '' ? ', '	+ data.buildingName : data.buildingName);
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                     }
                     if (extraRoadAddr !== '') {
                         extraRoadAddr = ' (' + extraRoadAddr + ')';
@@ -182,7 +183,7 @@
                         guideTextBox.style.display = 'block';
                     } else if (data.autoJibunAddress) {
                         var expJibunAddr = data.autoJibunAddress;
-                        guideTextBox.innerHTML = '(예상 지번 주소 : '		+ expJibunAddr + ')';
+                        guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
                         guideTextBox.style.display = 'block';
                     } else {
                         guideTextBox.innerHTML = '';
@@ -191,41 +192,42 @@
                 }
             }).open();
         }
-            function check(value, pattern, message, element) {
-            console.log(value);
-            if(value!=""){
-                if(pattern.test(value)==false) {
-                    element.text(message).attr("class","fail");
+
+        function check(value, pattern, message, element) {
+            if (value != "") {
+                if (pattern.test(value) == false) {
+                    element.text(message).attr("class", "fail");
                     return false;
                 }
             }
-                return true;
-            }
+            return true;
+        }
+
         function addressCheck(gu) {
             $('#address_msg').text("");
             let a = true;
             const value = $('#sample4_roadAddress').val();
             console.log(value)
 
-            if(value!=""){
-            for (let i = 0; i < gu.length; i++) {
-                a = gu[i].townGu === $('#memberGu').val();
-                if (!a) {
-                    $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
-                    break;
+            if (value != "") {
+                for (let i = 0; i < gu.length; i++) {
+                    a = gu[i].townGu === $('#memberGu').val();
+                    if (!a) {
+                        $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
+                        break;
+                    }
                 }
-            }
             }
             return a;
 
         }
 
-        function changeUpdate(checkKaKao){
+        function changeUpdate(checkKaKao) {
             console.log(checkKaKao);
             $('#profile').removeClass('hidden');
             $('#nickname').removeClass('hidden');
             $('#introduce').removeClass('hidden');
-            if(checkKaKao===false){
+            if (checkKaKao === false) {
                 $('#passwordTr').removeClass('hidden');
                 $('#password2Tr').removeClass('hidden');
             }
@@ -235,13 +237,14 @@
             $('.basic').addClass('hidden');
             $('#profile').removeClass('hidden')
         }
-        function changeBasic(checkKaKao){
+
+        function changeBasic(checkKaKao) {
             $('#profile').addClass('hidden');
             $('#nickname').addClass('hidden');
             $('#introduce').addClass('hidden');
-            if (checkKaKao===false){
-            $('#passwordTr').addClass('hidden');
-            $('#password2Tr').addClass('hidden');
+            if (checkKaKao === false) {
+                $('#passwordTr').addClass('hidden');
+                $('#password2Tr').addClass('hidden');
             }
             $('#phoneTr').addClass('hidden');
             $('#update_btn').addClass('hidden');
@@ -262,37 +265,42 @@
                 $tdog.append(tpl);
             });
         }
-        function  phoneCheck(){
+
+        function phoneCheck() {
             $('#phone_msg').text("");
             const pattern = /^[0-9]{11}$/;
-            return check($('#phone').val(),pattern,"전화번호는 11자리 숫자입니다",$("#phone_msg"));
+            return check($('#phone').val(), pattern, "전화번호는 11자리 숫자입니다", $("#phone_msg"));
         }
+
         function irumCheck() {
             $('#nickname_msg').text("");
             const pattern = /^[가-힣a-z]{2,8}$/;
             return check($('#nickname').val(), pattern, "별명은 한,영자 2~8자입니다", $("#nickname_msg"));
         }
+
         function passwordCheck() {
             $('#password_msg').text("");
             const pattern = /^[0-9a-zA-Z]{8,16}$/;
             return check($('#password').val(), pattern, "비밀번호는 영숫자 8~16자입니다", $("#password_msg"));
         }
+
         function password2Check() {
             $('#password2_msg').text("");
-            const value =$('#password').val();
-            if($('#password').val()!=""){
-            if(value=="")	{
-                $('#password2_msg').text("필수입력입니다").attr("class","fail");
-                return false;
+            const value = $('#password').val();
+            if ($('#password').val() != "") {
+                if (value == "") {
+                    $('#password2_msg').text("필수입력입니다").attr("class", "fail");
+                    return false;
+                }
             }
-            }
-            if(value!=$('#pssword2').val()) {
-                $('#password2_msg').text("비밀번호가 일치하지 않습니다.").attr("class","fail");
+            if (value != $('#pssword2').val()) {
+                $('#password2_msg').text("비밀번호가 일치하지 않습니다.").attr("class", "fail");
                 return false;
             }
         }
+
         const apiUrl = 'https://dapi.kakao.com/v2/local/search/address.json';
-        const headers = { 'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445' };
+        const headers = {'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445'};
         const address = document.getElementById("sample4_roadAddress").value();
 
     </script>
@@ -304,7 +312,7 @@
     <main>
         <aside th:replace="~{fragments/aside :: aside}"></aside>
         <section>
-            <table class ="table table-hover">
+            <table class="table table-hover">
                 <colgroup>
                     <col width="30%">
                     <col width="70%">
@@ -312,14 +320,16 @@
                 <tr>
                     <td colspan="2">
                         <img id="show-profile" th:src="${member.memberProfile}" width="240px">
-                        <input class="hidden" type="file" id="profile" name="profile">
+                        <input class="hidden" id="profile" name="profile" type="file">
                     </td>
                 </tr>
                 <tr>
                     <td class="basic">
-                        <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span th:text="${member.memberGrade}"></span><span>)도  (</span><span th:text="${member.memberPoint}"></span><span>)포인트</span></td>
+                        <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span
+                            th:text="${member.memberGrade}"></span><span>)도  (</span><span
+                            th:text="${member.memberPoint}"></span><span>)포인트</span></td>
                     <td>
-                        <input type="text" class="hidden" name="nickname" id="nickname" >
+                        <input class="hidden" id="nickname" name="nickname" type="text">
                         <span id="nickname_msg"></span>
                     </td>
                 </tr>
@@ -331,18 +341,18 @@
                     <td>이메일</td>
                     <td th:text="${member.memberEmail}"></td>
                 </tr>
-                <tr id="passwordTr" class="hidden">
+                <tr class="hidden" id="passwordTr">
                     <td>비밀번호</td>
                     <td>
-                        <input type="password" name="password" id="password">
+                        <input id="password" name="password" type="password">
                         <span id="password_msg"></span>
                     </td>
 
                 </tr>
-                <tr id="password2Tr" class="hidden">
+                <tr class="hidden" id="password2Tr">
                     <td>비밀번호 확인</td>
                     <td>
-                        <input type="password" id="password2">
+                        <input id="password2" type="password">
                         <span id="password2_msg"></span>
                     </td>
                 </tr>
@@ -350,48 +360,52 @@
                     <td>자기소개</td>
                     <td class="basic" th:text="${member.memberIntroduce}"></td>
                     <td>
-                        <textarea id="introduce" class="hidden" maxlength="300" name="introduce"></textarea>
+                        <textarea class="hidden" id="introduce" maxlength="300" name="introduce"></textarea>
                     </td>
                 </tr>
-                <tr id="phoneTr" class="hidden">
+                <tr class="hidden" id="phoneTr">
                     <td>전화번호</td>
                     <td>
-                        <input type="text" name="phone" id="phone">
+                        <input id="phone" name="phone" type="text">
                         <span id="phone_msg"></span>
                     </td>
                 </tr>
-                <tr id="addressTr" class="hidden">
+                <tr class="hidden" id="addressTr">
                     <td>
-                        <input type="text" class="form-control" id="sample4_postcode" placeholder="우편번호" name="zipcode">
-                        <input type="button" class="btn btn-outline-primary" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
+                        <input class="form-control" id="sample4_postcode" name="zipcode" placeholder="우편번호" type="text">
+                        <input class="btn btn-outline-primary" onclick="sample4_execDaumPostcode()" type="button"
+                               value="우편번호 찾기">
                         <span id="address_msg"></span>
                     </td>
 
                     <td>
-                        <input type="text" class="form-control" id="sample4_roadAddress" placeholder="도로명주소" name="address1">
-                        <input type="text" id="sample4_jibunAddress" placeholder="지번주소" style="display:none;">
+                        <input class="form-control" id="sample4_roadAddress" name="address1" placeholder="도로명주소"
+                               type="text">
+                        <input id="sample4_jibunAddress" placeholder="지번주소" style="display:none;" type="text">
                         <span id="guide" style="color: #999; display: none"></span>
                     </td>
                     <td>
-                        <input type="text" class="form-control hidden" id="sample4_detailAddress" placeholder="상세주소" name="address2">
-                        <input type="text" class="hidden" id="sample4_extraAddress" placeholder="참고항목" style="display:none;">
+                        <input class="form-control hidden" id="sample4_detailAddress" name="address2" placeholder="상세주소"
+                               type="text">
+                        <input class="hidden" id="sample4_extraAddress" placeholder="참고항목" style="display:none;"
+                               type="text">
                     </td>
                 </tr>
             </table>
             <div class="basic">
-                <button id="updateCheck" type="button" class="btn btn-warning">변경</button>
-               <a type="button" class="btn btn-primary" href="/member/dog/registeration">강아지 등록</a>
-                <button id="resign" type="button" class="btn btn-danger">탈퇴</button>
+                <button class="btn btn-warning" id="updateCheck" type="button">변경</button>
+                <a class="btn btn-primary" href="/member/dog/registeration" type="button">강아지 등록</a>
+                <button class="btn btn-danger" id="resign" type="button">탈퇴</button>
             </div>
-            <div id="update_btn" class="hidden">
-                <button id="update" type="button" class="btn btn-warning">변경완료</button>
-                <button id="updateCancle" type="button" class="btn btn-danger">변경 취소</button>
+            <div class="hidden" id="update_btn">
+                <button class="btn btn-warning" id="update" type="button">변경완료</button>
+                <button class="btn btn-danger" id="updateCancle" type="button">변경 취소</button>
             </div>
-            <input type="hidden" id="memberCheckKaKao" th:value="${member.memberCheckKaKao}">
-            <input type="hidden" id="memberLatitude" name="latitude">
-            <input type="hidden" id="memberLongitude" name="longitude">
-            <input type="hidden" id="memberDong" name="townDong">
-            <input type="hidden" id="memberGu" name="townGu">
+            <input id="memberCheckKaKao" th:value="${member.memberCheckKaKao}" type="hidden">
+            <input id="memberLatitude" name="latitude" type="hidden">
+            <input id="memberLongitude" name="longitude" type="hidden">
+            <input id="memberDong" name="townDong" type="hidden">
+            <input id="memberGu" name="townGu" type="hidden">
         </section>
         <aside th:replace="~{fragments/bside :: bside}"></aside>
     </main>
