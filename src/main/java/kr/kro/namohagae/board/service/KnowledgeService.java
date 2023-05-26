@@ -41,10 +41,17 @@ public class KnowledgeService {
 
     }
 
+    public void insertLike(Integer boardNo, Integer memberNo) {
 
+        knowledgeQuestionDao.insertLike(boardNo, memberNo);
+    }
     public KnowledgeQuestionDto.Read questionRead(Integer knowledgeQuestionNo) {
-        knowledgeQuestionDao.update(knowledgeQuestionNo);
+
         return knowledgeQuestionDao.findByKnowledgeQuestionNo(knowledgeQuestionNo);
+    }
+    public int update() {
+
+        return knowledgeQuestionDao.update();
     }
 
     public KnowledgeQuestionDto.Pagination questionFindAll(Integer pageNo) {

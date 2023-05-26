@@ -96,10 +96,11 @@ public class BoardService {
     public PageDto pagingParam(int page,Integer townNo) {
         // 전체 글 갯수 조회
         int boardCount = 0;
-        if(townNo == 0) {
-            boardCount = boardDao.boardCount();
-        } else {
+        if(townNo != 0) {
             boardCount = boardTownDao.boardTownCount(townNo);
+
+        } else {
+            boardCount = boardDao.boardCount();
         }
 
         // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
