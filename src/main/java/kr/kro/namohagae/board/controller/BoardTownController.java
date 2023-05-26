@@ -29,7 +29,7 @@ public class BoardTownController {
     public ResponseEntity<?> boardTownList(@RequestParam("townNo") Integer townNo,
                                            @RequestParam(value ="searchName",  defaultValue = "") String searchName,
                                            @RequestParam(value ="page", required = false, defaultValue = "1") int page) {
-        PageDto pageDTO = boardService.pagingParam(page);
+        PageDto pageDTO = boardService.pagingParam(page,townNo);
 
         List<BoardTownListDto> boardTownListDto = boardTownService.boardTownList(townNo,searchName,page);
         List<BoardTownListDto> boardTownReadCountDto = boardTownService.boardTownReadCountList(townNo, searchName, page);
@@ -39,8 +39,8 @@ public class BoardTownController {
             return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping("/board/town/update")
-    public ResponseEntity<String> boardTownUpdate(Board board) {
+    @GetMapping("/board/town/update")
+    public ResponseEntity<?> boardTownUpdate(Board board) {
             boardTownService.townUpdateData(board);
         return ResponseEntity.ok().body("변경성공");
     }

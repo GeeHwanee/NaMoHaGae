@@ -15,6 +15,8 @@ public interface BoardTownDao {
 
     public void boardTownInsertData(Board board);
 
+    public int boardTownCount(Integer townNo);
+
     public List<Town> townList();
     public List<BoardTownListDto> boardTownList(Integer townNo,@Param("searchName") String searchName, @Param("start") int start, @Param("limit") int limit);
 
