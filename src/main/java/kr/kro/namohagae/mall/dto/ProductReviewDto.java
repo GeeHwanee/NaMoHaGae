@@ -16,7 +16,7 @@ public class ProductReviewDto {
     public static class ReviewList {
         private Integer productReviewStar;
         private String productReviewContent;
-        private Integer productReviewWriter;
+        private String memberNickname;
         private LocalDateTime productReviewWriteDate;
     }
     

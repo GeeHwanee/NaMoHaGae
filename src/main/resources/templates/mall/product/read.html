@@ -124,7 +124,7 @@
             const tpl = `<tr>
         <td>${ReviewStarIcon}</td>
         <td>${r.productReviewContent}</td>
-				<td>${r.productReviewWriter}</td>
+				<td>${r.memberNickname}</td>
 				<td>${formatDate(r.productReviewWriteDate)}</td>
 			</tr>`;
             $tbody.append(tpl);
@@ -159,7 +159,7 @@
           <span class="qna-icon">Q</span>
           ${q.qnaContent}
         </td>
-        <td>${q.qnaWriter}</td>
+        <td>${q.memberNickname}</td>
         <td>${formatDate(q.qnaWriteDate)}</td>
       </tr>`;
             if (q.qnaAnswerContent !== null) {
