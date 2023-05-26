@@ -38,15 +38,18 @@ public class MemberDto {
 
     @Data
     public static class UpdateMember{
-        private String memberPassword;
-        private String memberNickname;
-        private String memberIntroduce;
-        private String memberPhone;
-        private Integer townNo;
+        private MultipartFile profile;
+        private String password;
+        private String nickname;
+        private String introduce;
+        private String phone;
+        private String townDong;
+        private String latitude;
+        private String longitude;
 
-        public Member toEntity(String encodedPassword) {
+        public Member toEntity(String encodedPassword,String nickname,String introduce,String phone,String profile,Integer memberNo,Integer townNo,Double latitude,Double longitude) {
 
-            return Member.builder().memberPassword(encodedPassword).memberPhone(memberPhone).townNo(townNo).memberNickname(memberNickname).build();
+            return Member.builder().memberNo(memberNo).memberProfileImage(profile).memberPassword(encodedPassword).memberPhone(phone).townNo(townNo).memberNickname(nickname).memberLatitude(latitude).memberLongitude(longitude).memberIntroduce(introduce).build();
         }
     }
     @Getter
