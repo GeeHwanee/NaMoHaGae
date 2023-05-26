@@ -105,7 +105,7 @@
  }
 
 </style>
-<body>
+<body onload="onChangePage(1)">
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
@@ -185,75 +185,45 @@
         $layout3.append(tpl);
     }
 
-    function printPaging(paging) {
-        const $layout2 = $('.layout2');
-        $layout2.empty();
+    function printBoard(knowledgeMainDto) {
+        const $tbody = $('#tbody');
+        $tbody.empty(); // tbody 비우기
 
-        const startPage = paging.startPage;
-        const endPage = paging.endPage;
-        const currentPage = paging.page;
-        const maxPage = paging.maxPage;
-
-        let tpl = '<ul class="pagination">';
-        if (currentPage <= 1) {
-            tpl += '<li class="page-item disabled"><span class="page-link">이전</span></li>';
-        } else {
-            tpl += `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage - 1}">이전</a></li>`;
+        for (const b of knowledgeMainDto) {
+            const tpl = `<tr>
+                 <td>${b.boardNo}</td>
+                 <td>${b.townNo}</td>
+                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
+                 <td>${b.memberNickname}</td>
+                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
+                 <td>${b.boardReadCount}</td>
+                 <td>${b.boardRecommendCount}</td>
+                </tr>`;
+            $tbody.append(tpl);
         }
+    };
 
-        for (let i = startPage; i <= endPage; i++) {
-            if (i === currentPage) {
-                tpl += `<li class="page-item"><div><span class="page-link active">${i}</span></div></li>`;
-            } else {
-                tpl += `<li><div><a href="#" class="page-link" data-page="${i}">${i}</a></div></li>`;
-            }
-        }
-
-        if (currentPage >= maxPage) {
-            tpl += '<li class="page-item"><span class="page-link">다음</span></li>';
-        } else {
-            tpl += `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage + 1}">다음</a></li>`;
-        }
-
-        tpl += '</ul>';
-
-
-        $layout2.append(tpl);
-
-        // 페이지 링크 클릭 이벤트 등록
-        $layout2.find('a[data-page]').on('click', function (e) {
-            e.preventDefault();
-            const page = $(this).data('page');
-            onChangePage(page);
-        });
-    }
-
-    function onSuccess(board) {
-        const knowledgeMainDto = board.knowledgeMainDto;
-        printBoard(knowledgeMainDto);
-        const searchName = "";
-        printSearch(searchName);
-        const paging = board.pageDto;
-        printPaging(paging);
-        console.log('ㄴㅁㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁ'+board)
-    }
 
     function onChangePage(page, searchName) {
-        let url = `/api/v1/knowledge/main?page=${page}`;
-        if (searchName) {
-            url += `&searchName=${encodeURIComponent(searchName)}`;
-        }
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: onSuccess,
-            error: onError
 
-        });
-        onChangePage(1, '');
-        console.log(onSuccess());
+        $.ajax({
+            type:"get",
+            url : "/api/v1/knowledge/main",
+            success : function(board) {
+                console.log("성공",board)
+                printBoard(knowledgeMainDto);
+                printSearch(searchName);
+            },
+            error : function() {
+                console.log("실패");
+            }
+        })
+
     }
 
+    $(document).ready(function() {
+        onChangePage(1,''); // 페이지 로드 시 onChangePage 함수 호출
+    });
 
 </script>
 </html>
