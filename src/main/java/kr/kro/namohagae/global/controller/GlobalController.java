@@ -457,8 +457,17 @@ public class GlobalController {
 
     @GetMapping("/board/knowledge/read")
     public String knowledgeRead(Integer knowledgeQuestionNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
+        boolean isLiked = boardService.isLikeExists(knowledgeQuestionNo,myUserDetails.getMemberNo());
+        if(isLiked){
+        }
+        else {
+            boardService.insertLike(knowledgeQuestionNo,myUserDetails.getMemberNo());
+            knowledgeService.update();
+
+        }
         model.addAttribute("question", knowledgeService.questionRead(knowledgeQuestionNo));
         model.addAttribute("memberNo", myUserDetails.getMemberNo());
+
         return "board/knowledge/read";
     }
 

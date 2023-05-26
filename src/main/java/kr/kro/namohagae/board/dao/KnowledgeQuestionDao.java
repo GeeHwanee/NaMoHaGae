@@ -12,7 +12,9 @@ import java.util.List;
 public interface KnowledgeQuestionDao {
    public Integer save(KnowledgeQuestion knowledgeQuestion);
 
-    public void update(Integer knowledgeQuestionNo);
+    public int update();
+
+    public void insertLike(Integer boardNo, Integer memberNo);
 
     public KnowledgeQuestionDto.Read findByKnowledgeQuestionNo(Integer knowledgeQuestionNo);
 

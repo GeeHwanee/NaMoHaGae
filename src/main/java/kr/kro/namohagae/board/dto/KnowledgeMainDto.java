@@ -9,5 +9,6 @@ public class KnowledgeMainDto {
     private String KnowledgeQuestionContent;
     private Integer KnowledgeQuestionReadCount;
     private Integer answerCount;
+    private Integer knowledgeQuestionPoint;
 
 }
