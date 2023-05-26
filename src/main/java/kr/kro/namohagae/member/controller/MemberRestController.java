@@ -1,33 +1,30 @@
 package kr.kro.namohagae.member.controller;
 
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequestMapping("api/v1")
 public class MemberRestController {
     @Autowired
     private MemberService memberService;
     @PostMapping("/member/update")
-    public ResponseEntity<Void> update(MultipartFile profile, String nickname,String password,Authentication auth,String phone,String townDong,String introduce,Double longitude,Double latitude) {
-        Integer memberNo = ((MyUserDetails)auth.getPrincipal()).getMemberNo();
+    public ResponseEntity<Void> update(@AuthenticationPrincipal MyUserDetails myUserDetails, MemberDto.UpdateMember dto) {
+        Integer memberNo = myUserDetails.getMemberNo();
         // profile은 null이 될 수 있다 -> 서비스에서 null 체크 -> null이면 변경하지 않는다
         // email은 중복 여부를 확인해야 한다 -> 중복되지 않는 경우 업데이트
         // 사진 + 이메일 -> 이메일이 겹치면 실패 -> 409를 보낸다
-			// 기존 내 이메일과 일치한다면 false 리턴
-		if (!memberService.checkUpdateNickanme(memberNo, nickname)) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-		}
-        Boolean result = memberService.update(profile,nickname,memberNo,password,phone,townDong,introduce,longitude,latitude);
+        // 기존 내 이메일과 일치한다면 false 리턴
+        Boolean result = memberService.update(dto,memberNo);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
     @PostMapping("/member/change/password")
@@ -48,12 +45,14 @@ public class MemberRestController {
     }
     @GetMapping("/member/checkEmail")
     public ResponseEntity<Boolean> checkEmail(String email){
+        System.out.println("asdasd");
         Boolean a = memberService.checkEmail(email);
+        System.out.println(a);
         return  ResponseEntity.ok(a);
     }
     @GetMapping("/member/checkNickname")
     public ResponseEntity<Boolean> checkNickname(String nickname){
-        Boolean a = memberService.checkEmail(nickname);
+        Boolean a = memberService.checkNickname(nickname);
         return  ResponseEntity.ok(a);
     }
     @GetMapping("/member/findEmail")
@@ -61,9 +60,4 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.findEmailByNicknameAndPhone(nickname,phone));
     }
 
-    @GetMapping("/api/v1/member/point")
-    public ResponseEntity<Integer> findMemberPointByMemberNo(@AuthenticationPrincipal MyUserDetails myUserDetails){
-       Integer result = memberService.findMemberPointByMemberNo(myUserDetails.getMemberNo());
-       return ResponseEntity.ok(result);
-    }
 }
