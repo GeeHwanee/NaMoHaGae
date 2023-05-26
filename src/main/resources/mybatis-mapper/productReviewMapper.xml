@@ -26,7 +26,13 @@
         (
             select rownum as rnum, r.* from
             (
-                select * from PRODUCT_REVIEW where product_no=#{productNo} order by product_review_no desc
+                select
+                pr.product_review_star, pr.product_review_content,
+                m.member_nickname as member_nickname, pr.product_review_write_date
+                from PRODUCT_REVIEW pr
+                join MEMBER m on pr.product_review_writer = m.member_no
+                where pr.product_no = #{productNo}
+                order by pr.product_review_no desc
             ) r
         where rownum&lt;=#{endRowNum}
         )
