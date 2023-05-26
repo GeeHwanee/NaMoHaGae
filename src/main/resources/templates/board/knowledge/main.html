@@ -141,8 +141,6 @@
                 <div id="all_layout">
                 <div id="all">전체</div>
                 <div id="search_form">
-
-                    <span>답변적은순</span><span>최신순</span><span>내공높은순</span>
                 </div>
                 </div>
 
@@ -170,20 +168,23 @@
     // 페이지 로드 시 호출
     window.onload = function() {
         limitTitleLength();
+
     };
     function onSearch() {
         const searchName = $('#searchName').val();
         onChangePage(1, searchName);
     }
+
     function printSearch(searchName){
         const $layout3 = $('#search_form');
         $layout3.empty();
 
         let tpl = `<input type="text" name="searchName" id="searchName">
-            <button type="submit" onclick="onSearch()" class="btn btn-primary">검색</button>`
+        <button type="submit" onclick="onSearch()" class="btn btn-primary">검색</button>`
 
         $layout3.append(tpl);
     }
+
     function printPaging(paging) {
         const $layout2 = $('.layout2');
         $layout2.empty();
@@ -216,6 +217,7 @@
 
         tpl += '</ul>';
 
+
         $layout2.append(tpl);
 
         // 페이지 링크 클릭 이벤트 등록
@@ -224,8 +226,8 @@
             const page = $(this).data('page');
             onChangePage(page);
         });
-
     }
+
     function onSuccess(board) {
         const knowledgeMainDto = board.knowledgeMainDto;
         printBoard(knowledgeMainDto);
@@ -233,20 +235,25 @@
         printSearch(searchName);
         const paging = board.pageDto;
         printPaging(paging);
+        console.log('ㄴㅁㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁ'+board)
     }
 
-    function onChangePage(page,searchName) {
+    function onChangePage(page, searchName) {
         let url = `/api/v1/knowledge/main?page=${page}`;
-        if(searchName) {
+        if (searchName) {
             url += `&searchName=${encodeURIComponent(searchName)}`;
         }
         $.ajax({
-            url : url,
-            method : 'GET',
-            success : onSuccess,
-            error : onError
+            url: url,
+            method: 'GET',
+            success: onSuccess,
+            error: onError
+
         });
         onChangePage(1, '');
+        console.log(onSuccess());
     }
+
+
 </script>
 </html>

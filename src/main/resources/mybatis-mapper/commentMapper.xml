@@ -17,11 +17,12 @@
     </insert>
 
     <select id="commentList" resultType="kr.kro.namohagae.board.dto.CommentDto$CommentList">
-        SELECT bc.member_no,bc.board_no,bc.comment_no, m.member_nickname, bc.comment_content, bc.comment_write_date
+        SELECT bc.member_no, bc.board_no, bc.comment_no, m.member_nickname, bc.comment_content, bc.comment_write_date
         FROM board b
                  JOIN board_comment bc ON b.board_no = bc.board_no
                  JOIN member m ON bc.member_no = m.member_no
         WHERE b.board_no = #{boardNo}
+        ORDER BY bc.comment_no
     </select>
 
     <update id="commentUpdate">
