@@ -106,7 +106,9 @@
             b.board_recommend_count DESC
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
-
+    <select id="boardTownCount" resultType="Integer">
+        SELECT COUNT(BOARD_NO) FROM BOARD where town_no = #{townNo}
+    </select>
     <select id="boardTownRead" resultType="kr.kro.namohagae.board.entity.BoardList">
         SELECT b.*, m.member_nickname AS memberNickname
         FROM board b

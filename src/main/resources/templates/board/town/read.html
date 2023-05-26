@@ -173,6 +173,7 @@
                 </div>
             </div>
             <div class="layout">
+                <span th:text="${board.boardNo}" style="display:none" id="boardNo"></span>
                 <input id="boardTitle" type="text">
                 <textarea id="boardContent"></textarea>
                 <button onclick="update()" class="btn btn-primary">수정완료</button>
@@ -314,12 +315,13 @@
         $('#board-list').hide();
 
     }
+
     function update() {
         const boardNo = $('#boardNo').text(); // 게시물 번호 가져오기
         const boardTitle = $('#boardTitle').val();
         const boardContent = $('#boardContent').val();
 
-        $('#update-form').hide();
+        $('.layout').hide();
         $('#board-list').show();
         console.log(boardNo);
         console.log(boardTitle);
@@ -331,18 +333,19 @@
         };
 
         $.ajax({
-            type: "POST",
-            url: `/api/v1/board/town/update`,
+            type: "GET",
+            url: "/api/v1/board/town/update",
             data: board,
+
 
             success: function (res) {
                 console.log(res);
-                $('#update-form').empty(); // 해당 요소의 내용 삭제
+                $('.layout').empty(); // 해당 요소의 내용 삭제
                 location.reload(); // 페이지 새로고침
             },
             error: function () {
                 console.log("실패");
-
+                console.log('board ' + board.boardContent);
             }
         });
     }
