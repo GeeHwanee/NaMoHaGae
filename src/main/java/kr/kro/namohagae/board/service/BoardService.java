@@ -2,6 +2,7 @@ package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.dao.BoardNoticeDao;
+import kr.kro.namohagae.board.dao.BoardTownDao;
 import kr.kro.namohagae.board.dto.BoardDto;
 import kr.kro.namohagae.board.dto.BoardMainList;
 import kr.kro.namohagae.board.dto.PageDto;
@@ -22,6 +23,8 @@ public class BoardService {
 
     @Autowired
     BoardDao boardDao;
+    @Autowired
+    BoardTownDao boardTownDao;
     @Autowired
     BoardNoticeDao boardNoticeDao;
     @Autowired
@@ -90,9 +93,15 @@ public class BoardService {
         return boardDao.recommendCountList(searchName,pagingStart,pageLimit);
     }
 
-    public PageDto pagingParam(int page) {
+    public PageDto pagingParam(int page,Integer townNo) {
         // 전체 글 갯수 조회
-        int boardCount = boardDao.boardCount();
+        int boardCount = 0;
+        if(townNo == 0) {
+            boardCount = boardDao.boardCount();
+        } else {
+            boardCount = boardTownDao.boardTownCount(townNo);
+        }
+
         // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
         int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
         // 시작 페이지 값 계산(1, 4, 7, 10, ~~~~)

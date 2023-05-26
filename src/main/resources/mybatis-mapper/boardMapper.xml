@@ -95,7 +95,7 @@
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
     <select id="boardCount" resultType="Integer">
-        SELECT COUNT(BOARD_NO) FROM BOARD
+        SELECT COUNT(BOARD_NO) FROM BOARD where town_no = 0
     </select>
 
     <select id="boardSearch" resultType="kr.kro.namohagae.board.entity.BoardList">
