@@ -38,8 +38,12 @@
         where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo}
 
     </select>
+    <insert id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
+        insert into board_insight values(#{boardNo},#{memberNo},0)
+    </insert>
     <update id="update">
-        update KNOWLEDGE_QUESTION set KNOWLEDGE_QUESTION_READ_COUNT= KNOWLEDGE_QUESTION_READ_COUNT+1 where KNOWLEDGE_QUESTION_NO =#{knowledgeQuestionNo}
+        update knowledge_question set KNOWLEDGE_QUESTION_READ_COUNT= KNOWLEDGE_QUESTION_READ_COUNT+1
+
     </update>
 
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$myQuestionList">
@@ -84,7 +88,7 @@
         OFFSET 5 ROWS FETCH NEXT 10 ROWS ONLY
     </select>
     <select id="waitList" resultType="kr.kro.namohagae.board.dto.KnowledgeMainDto">
-        SELECT Q.KNOWLEDGE_QUESTION_NO, Q.KNOWLEDGE_QUESTION_TITLE, Q.KNOWLEDGE_QUESTION_CONTENT, Q.KNOWLEDGE_QUESTION_READ_COUNT, COALESCE(A.answerCount, 0) AS answerCount
+        SELECT Q.KNOWLEDGE_QUESTION_NO, Q.KNOWLEDGE_QUESTION_TITLE, Q.KNOWLEDGE_QUESTION_CONTENT, Q.KNOWLEDGE_QUESTION_READ_COUNT,Q.KNOWLEDGE_QUESTION_POINT, COALESCE(A.answerCount, 0) AS answerCount
         FROM KNOWLEDGE_QUESTION Q
                  LEFT JOIN (
             SELECT KNOWLEDGE_QUESTION_NO, COUNT(*) AS answerCount
