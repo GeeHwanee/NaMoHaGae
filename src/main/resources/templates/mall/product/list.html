@@ -83,23 +83,12 @@
     }
 </style>
 <script>
-    function updateUrlParams(params) {
-        const urlParams = new URLSearchParams(window.location.search);
-        for (const [key, value] of Object.entries(params)) {
-            urlParams.set(key, value);
-        }
-        return urlParams.toString();
-    }
-
-
     function sortProducts(sortBy) {
         const params = {
             sortBy: sortBy,
         };
 
-        $('.filter-text').each(function() {
-            $(this).removeClass('filterBold');
-        });
+        $('.filter-text').removeClass('filterBold');
 
         const queryString = updateUrlParams(params);
         window.location.href = '/mall/product/list?' + queryString;
@@ -108,25 +97,21 @@
     function updateUrlParams(params) {
         const urlParams = new URLSearchParams(window.location.search);
 
-        for (const key in params) {
-            if (params.hasOwnProperty(key)) {
-                const value = params[key];
-                if (value) {
-                    urlParams.set(key, value);
-                } else {
-                    urlParams.delete(key);
-                }
+        for (const [key, value] of Object.entries(params)) {
+            if (value) {
+                urlParams.set(key, value);
+            } else {
+                urlParams.delete(key);
             }
         }
-
         return urlParams.toString();
     }
 
 
     function searchProduct(event) {
-        if (event.key === 'Enter' || event.keyCode === 13 || event.target.classList.contains('searchIcon')) {
-            const searchInput = document.getElementById('searchInput');
-            const searchProduct = searchInput.value;
+        if (event.key === 'Enter' || event.keyCode === 13 || $(event.target).hasClass('searchIcon')) {
+            const searchInput = $('#searchInput');
+            const searchProduct = searchInput.val();
 
             const params = {
                 searchProduct: searchProduct,
@@ -152,7 +137,6 @@
     $(document).ready(function(){
         $('.product-favorite').click(async function(){
            let $productNo = $(this).data('productno');
-           console.log(typeof $productNo);
             try{
                 const result = await $.ajax({url:'/api/v1/favorite/add?productNo='+$productNo+"&_csrf="+$_csrf, method:"patch"});
                 if(result.favorite){
