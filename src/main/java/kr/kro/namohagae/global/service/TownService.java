@@ -32,8 +32,6 @@ public class TownService {
     public Boolean save(TownDto.save dto){
         String strLongitude= dto.getTownLongitude().substring(0,11);
         String strLatitude= dto.getTownLatitude().substring(0,11);
-        System.out.println(strLatitude);
-        System.out.println(strLongitude);
         Double longitude = Double.parseDouble(strLongitude);
         Double latitude = Double.parseDouble(strLatitude);
        Town town = dto.toEntity(latitude,longitude);
