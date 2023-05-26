@@ -74,7 +74,6 @@
 <style>
   /* Grid */
 
-
   .no > a {
     margin-right:6px;
     list-style: none;
@@ -186,7 +185,56 @@
     padding: 1rem 0;
   }
 </style>
-<body>
+<!--오른쪽 박스 스타일 및 배경색 변경하는 스타일-->
+<style>
+  @import url(https://fonts.googleapis.com/css?family=Signika:700,300,600);
+
+  #bg {
+    transition: all 2s ease-out;
+    background: #006064;
+  }
+  .right-container, .right-box { height: 100%; }
+  .right-box { display: flex; justify-content: center; align-items: center; margin:20px 0; text-align:center;  overflow:hidden; }
+
+  .right-box h1 {
+    font-size:5em;
+    font:bold 7.5vw/1.6 'Signika', sans-serif;
+    user-select:none;
+  }
+
+  .right-box h1 span { display:inline-block; animation:float .2s ease-in-out infinite; font-size: 45px}
+  @keyframes float {
+    0%,100%{ transform:none; }
+    33%{ transform:translateY(-1px) rotate(-2deg); }
+    66%{ transform:translateY(1px) rotate(2deg); }
+  }
+  .right-box:hover span { animation:bounce .6s; }
+  @keyframes bounce {
+    0%,100%{ transform:translate(0); }
+    25%{ transform:rotateX(20deg) translateY(2px) rotate(-3deg); }
+    50%{ transform:translateY(-20px) rotate(3deg) scale(1.1);  }
+  }
+
+  .right-box  span:nth-child(4n) { color:hsl(50, 75%, 55%); text-shadow:1px 1px hsl(50, 75%, 45%), 2px 2px hsl(50, 45%, 45%), 3px 3px hsl(50, 45%, 45%), 4px 4px hsl(50, 75%, 45%); }
+  .right-box span:nth-child(4n-1) { color:hsl(135, 35%, 55%); text-shadow:1px 1px hsl(135, 35%, 45%), 2px 2px hsl(135, 35%, 45%), 3px 3px hsl(135, 35%, 45%), 4px 4px hsl(135, 35%, 45%); }
+  .right-box span:nth-child(4n-2) { color:hsl(155, 35%, 60%); text-shadow:1px 1px hsl(155, 25%, 50%), 2px 2px hsl(155, 25%, 50%), 3px 3px hsl(155, 25%, 50%), 4px 4px hsl(140, 25%, 50%); }
+  .right-box span:nth-child(4n-3) { color:hsl(30, 65%, 60%); text-shadow:1px 1px hsl(30, 45%, 50%), 2px 2px hsl(30, 45%, 50%), 3px 3px hsl(30, 45%, 50%), 4px 4px hsl(30, 45%, 50%); }
+
+  .right-box h1 span:nth-child(2){ animation-delay:.05s; }
+  .right-box h1 span:nth-child(3){ animation-delay:.1s; }
+  .right-box  h1 span:nth-child(4){ animation-delay:.15s; }
+  .right-box h1 span:nth-child(5){ animation-delay:.2s; }
+  .right-box  h1 span:nth-child(6){ animation-delay:.25s; }
+  .right-box h1 span:nth-child(7){ animation-delay:.3s; }
+  .right-box  h1 span:nth-child(8){ animation-delay:.35s; }
+  .right-box  h1 span:nth-child(9){ animation-delay:.4s; }
+  .right-box h1 span:nth-child(10){ animation-delay:.45s; }
+  .right-box h1 span:nth-child(11){ animation-delay:.5s; }
+  .right-box  h1 span:nth-child(12){ animation-delay:.55s; }
+  .right-box  h1 span:nth-child(13){ animation-delay:.6s; }
+  .right-box  h1 span:nth-child(14){ animation-delay:.65s; }
+</style>
+<body id="bg">
 <!-- Nav -->
 
 
@@ -236,8 +284,10 @@
 
       <!--            </form>-->
     </div>
-    <div style="color:white">산책하는 사진이나 나 모하개 소개
-      <a href="/">메인으로</a>
+    <div class="right-container">
+      <div class="right-box">
+        <h1><span>N</span><span>A</span><span>M</span><span>O</span><span>H</span><span> </span><span>A</span><span>G</span><span>A</span><span>E</span><span> </span><span>?</span><span>!</span><span>?</span></h1>
+        </div>
     </div>
   </article>
 </main>
@@ -254,6 +304,17 @@
     <span>여기는 각자맡은파트나 깃허브주소 그런거 올리면될듯요</span>
   </small>
 </footer>
+<script>
+  var bg = document.getElementById("bg");
 
+  setInterval(function(){
+    var color = Math.random()*0xffffff;
+    color = parseInt(color);
+    color = color.toString(16);
+
+    bg.style.background = "#" + color;
+
+  },3000);
+</script>
 </body>
 </html>
