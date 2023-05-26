@@ -9,15 +9,15 @@
     </insert>
 
     <update id="updateMember">
-        update member
-        <trim prefix="set" suffixOverrides=",">
-        <if test="password != null"> member_password = #{password},</if>
-        <if test="nickname != null">member_nickname = #{nickname},</if>
-        <if test="phone != null">member_phone = #{phone},</if>
+        update member set
+        <trim suffixOverrides=",">
+        <if test="password != ''"> member_password = #{password},</if>
+        <if test="nickname != ''">member_nickname = #{nickname},</if>
+        <if test="phone != ''">member_phone = #{phone},</if>
         <if test="townNo != null">town_no = #{townNo},</if>
         <if test="latitude != null">member_latitude = #{latitude},</if>
         <if test="longitude != null">member_longitude = #{longitude},</if>
-        <if test="introduce != null">member_introduce = #{introduce}</if>
+        <if test="introduce != ''">member_introduce = #{introduce},</if>
         <if test="profile != null">member_profile_image = #{profile},</if>
         </trim>
         where member_no = #{no} and rownum=1

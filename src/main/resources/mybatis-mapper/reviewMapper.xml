@@ -23,7 +23,7 @@
                 select rownum as rnum, r.* from
                     (
                         select
-                            puching_review_receiver,(select member_nickname from member where member_no= review.puching_review_receiver) reviewReceiver,puching_review_content as reviewContent,(select puching_promise_date from puching where puching_no=review.puching_no) as puchingPromiseDate
+                            puching_review_receiver as receiverNo,(select member_nickname from member where member_no= review.puching_review_receiver) reviewReceiver,puching_review_content as reviewContent,(select puching_promise_date from puching where puching_no=review.puching_no) as puchingPromiseDate
                         from PUCHING_REVIEW review where puching_review_writer = #{memberNo}
                     ) r
                 where rownum&lt;=#{endRownum}
