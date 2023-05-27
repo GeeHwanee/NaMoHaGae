@@ -57,7 +57,6 @@
                         url: "/api/v1/address/delete?addressNo=" + no+"&_csrf="+$_csrf,
                         type: "POST"
                     });
-                    // 읽음 여부를 업데이트한 후의 작업을 수행
                 } catch (err) {
                     console.log(err);
                 }
@@ -80,6 +79,8 @@
                 } catch (err) {
                     console.log(err);
                 }
+                alert('기본 배송지로 설정되었습니다')
+                location.reload();
             });
         });
     </script>
