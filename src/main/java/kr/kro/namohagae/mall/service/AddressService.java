@@ -23,11 +23,6 @@ public class AddressService {
         }
 
         Address address = dto.toEntity(memberNo, name, defaultAddressEnabled);
-        System.out.println(address.getAddressAddress());
-        System.out.println(address.getAddressAddressDetail());
-        System.out.println(address.getAddressName());
-        System.out.println(address.getMemberNo());
-        System.out.println(address.getAddressPostcode());
         return dao.save(address);
     }
 
