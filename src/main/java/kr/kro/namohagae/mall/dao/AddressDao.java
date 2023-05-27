@@ -22,4 +22,6 @@ public interface AddressDao {
 
     public Integer setDefault(Integer addressNo);
 
+    public boolean existsByMemberNo(Integer memberNo);
+
 }
