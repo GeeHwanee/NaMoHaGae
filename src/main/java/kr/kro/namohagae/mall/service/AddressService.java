@@ -12,12 +12,17 @@ import java.util.List;
 public class AddressService {
     @Autowired
     private AddressDao dao;
-    public Boolean save(Integer memberNo,AddressDto.save dto){
+    public Boolean save(Integer memberNo,AddressDto.save dto) {
         String name = "";
-        if (dto.getAddressName()!=null){
-            name=dto.getAddressName();
+        if (dto.getAddressName() != null) {
+            name = dto.getAddressName();
         }
-        Address address = dto.toEntity(memberNo,name);
+        boolean defaultAddressEnabled = false;
+        if (!dao.existsByMemberNo(memberNo)) {
+            defaultAddressEnabled = true;
+        }
+
+        Address address = dto.toEntity(memberNo, name, defaultAddressEnabled);
         System.out.println(address.getAddressAddress());
         System.out.println(address.getAddressAddressDetail());
         System.out.println(address.getAddressName());

@@ -32,4 +32,8 @@
     <update id="setDefault">
         update address set default_address_enabled=1 where address_no=#{addressNo}
     </update>
+
+    <select id="existsByMemberNo" resultType="boolean">
+        select count(*) from address where member_no=#{memberNo} and rownum=1
+    </select>
 </mapper>
