@@ -11,8 +11,8 @@ public class AddressDto {
         private String addressAddress;
         private String addressAddressDetail;
 
-        public Address toEntity(Integer memberNo,String name){
-            return Address.builder().addressAddress(addressAddress).addressName(name).addressAddressDetail(addressAddressDetail).addressPostcode(addressPostcode).memberNo(memberNo).defaultAddressEnabled(false).build();
+        public Address toEntity(Integer memberNo,String name, boolean defaultAddressEnabled){
+            return Address.builder().addressAddress(addressAddress).addressName(name).addressAddressDetail(addressAddressDetail).addressPostcode(addressPostcode).memberNo(memberNo).defaultAddressEnabled(defaultAddressEnabled).build();
         }
     }
 
