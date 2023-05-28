@@ -10,6 +10,79 @@
             font-family: 'Dongle', sans-serif;
             font-size: 20px;
         }
+
+    </style>
+    <!--탭메뉴 스타일-->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;800&display=swap');
+
+        .tabs {
+            position:relative;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:90%;
+            height:90%;
+            background:#f5f5f5;
+            padding:20px 30px;
+            overflow:hidden;
+            border-radius:50px;
+            box-shadow:5px 10px 5px #ccc;
+
+        }
+        .tabs .tab-header {
+            height:60px;
+            display:flex;
+            align-items:center;
+        }
+        .tabs .tab-header > div {
+            width:calc(100% / 4);
+            text-align:center;
+            color:#888;
+            font-weight:900;
+            cursor:pointer;
+            font-size:20px;
+            text-transform:uppercase;
+            outline:none;
+        }
+        .tabs .tab-header > div > i {
+            display:block;
+            margin-bottom:5px;
+        }
+        .tabs .tab-header > div.active {
+            color: #ea986b;
+        }
+        .tabs .tab-indicator {
+            position:relative;
+            width:calc(100% / 4);
+            height:5px;
+            background:#ea986b;
+            left:0px;
+            border-radius:5px;
+            transition:all 500ms ease-in-out;
+        }
+        .tabs .tab-body {
+            position:relative;
+            height:calc(100% - 60px);
+            padding:10px 5px;
+        }
+        .tabs .tab-body > div {
+            position:absolute;
+            top:-200%;
+            opacity:0;
+            transform:scale(0.9);
+            transition:opacity 500ms ease-in-out 0ms,
+            transform 500ms ease-in-out 0ms;
+        }
+        .tabs .tab-body > div.active {
+            top:0px;
+            opacity:1;
+            transform:scale(1);
+        }
+        .tab-body{
+            overflow-y: auto;
+
+        }
     </style>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>멤버 메인(내정보 페이지)</title>
@@ -20,25 +93,69 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>나 뭐개?</h1>
-        <h2>정보</h2>
-        <article><a style="color: #19130d" href="/member/notification">알림함</a></article>
-        <article><a style="color: #19130d" href="/member/information">내정보</a></article>
-        <h2>퍼칭!</h2>
-        <article><a style="color: #19130d" href="/member/puching/follow">나의 팔로우</a></article>
-        <article><a style="color:black;" href="/member/puching/review">내가 작성한 리뷰</a></article>
-        <h2>뼈다귀 몰</h2>
-        <article><a style="color: #19130d" href="/member/mall/address">배송지</a></article>
-        <article><a style="color: #19130d" href="/member/mall/favorite">찜목록</a></article>
-        <article><a style="color:black;" href="/member/mall/order"></a></article>
-        <article><a style="color:black;" href="/mall/cart">장바구니</a></article>
-        <h2>커뮤니티</h2>
-        <article><a style="color:black;" href="/member/board/post">내가 작성한 게시글</a></article>
-        <article><a style="color:black;" href="/member/board/comment">내가 작성한 댓글</a></article>
-        <article><a style="color:black;" href="/member/board/question">내가 작성한 질문</a></article>
-        <article><a style="color:black;" href="/member/board/answer">내가 답변해준 질문</a></article>
-        <article><a style="color:black;" href="/board/notice/list">공지사항!</a></article>
+        <div class="tabs">
+            <div class="tab-header">
+                <div class="active">
+                    내정보
+                </div>
+                <div>
+                    퍼칭
+                </div>
+                <div>
+                    뼈다귀몰
+                </div>
+                <div>
+                    커뮤니티
+                </div>
+            </div>
+            <div class="tab-indicator"></div>
+            <div class="tab-body">
+                <div class="active">
+                    <h2>내정보</h2>
+                    <article><a style="color: #19130d" href="/member/notification">알림함</a></article>
+                    <article><a style="color: #19130d" href="/member/information">내정보</a></article>
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div>
+                    <h2>퍼칭</h2>
+                    <article><a style="color: #19130d" href="/member/follow">나의 팔로우</a></article>
+                    <article><a style="color:black;" href="/member/puching/review">내가 작성한 리뷰</a></article>
+                </div>
+                <div>
+                    <h2>뼈다귀몰</h2>
+                    <article><a style="color: #19130d" href="/member/mall/address">배송지</a></article>
+                    <article><a style="color: #19130d" href="/member/mall/favorite">찜목록</a></article>
+                    <article><a style="color:black;" href="/member/mall/order"></a></article>
+                    <article><a style="color:black;" href="/mall/cart">장바구니</a></article>
+                </div>
+                <div>
+                    <h2>커뮤니티</h2>
+                    <article><a style="color:black;" href="/member/board/post">내가 작성한 게시글</a></article>
+                    <article><a style="color:black;" href="/member/board/comment">내가 작성한 댓글</a></article>
+                    <article><a style="color:black;" href="/member/board/question">내가 작성한 질문</a></article>
+                    <article><a style="color:black;" href="/member/board/answer">내가 답변해준 질문</a></article>
+                    <article><a style="color:black;" href="/board/notice/list">공지사항!</a></article>
+                </div>
+            </div>
+        </div>
+        <script>
+            let tabHeader = document.getElementsByClassName("tab-header")[0];
+            let tabIndicator = document.getElementsByClassName("tab-indicator")[0];
+            let tabBody = document.getElementsByClassName("tab-body")[0];
 
+            let tabsPane = tabHeader.getElementsByTagName("div");
+
+            for(let i=0;i<tabsPane.length;i++){
+                tabsPane[i].addEventListener("click",function(){
+                    tabHeader.getElementsByClassName("active")[0].classList.remove("active");
+                    tabsPane[i].classList.add("active");
+                    tabBody.getElementsByClassName("active")[0].classList.remove("active");
+                    tabBody.getElementsByTagName("div")[i].classList.add("active");
+
+                    tabIndicator.style.left = `calc(calc(100% / 4) * ${i})`;
+                });
+            }
+        </script>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
