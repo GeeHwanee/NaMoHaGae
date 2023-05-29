@@ -137,8 +137,8 @@
 
             if ($pointInputValue > orderTotalPrice) {
                 alert('결제 금액을 초과하였습니다.')
-                $pointInput.val(orderTotalPrice);
-                $('#bonePoint').text('-' + orderTotalPrice + '원');
+                $pointInput.val(orderTotalPrice-1000);
+                $('#bonePoint').text('-' + (orderTotalPrice-1000) + '원');
 
 
             } else if ($pointInputValue > memberPoint) {
@@ -166,7 +166,8 @@
             const orderTotalPrice = data.orderTotalPrice + 3000;
 
             if (memberPoint >= orderTotalPrice) {
-                $pointInput.val(orderTotalPrice);
+                alert('1000원 이상 결제하셔야 주문이 가능합니다')
+                $pointInput.val(orderTotalPrice-1000);
             } else {
                 $pointInput.val(memberPoint);
             }
