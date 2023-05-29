@@ -141,6 +141,11 @@
                 $('#bonePoint').text('-' + (orderTotalPrice-1000) + '원');
 
 
+            } else if ($pointInputValue == orderTotalPrice) {
+                alert('1000원 이상 결제하셔야 주문이 가능합니다')
+                $pointInput.val(orderTotalPrice-1000);
+                $('#bonePoint').text('-' + (orderTotalPrice-1000) + '원');
+
             } else if ($pointInputValue > memberPoint) {
                 alert('보유한 포인트를 초과하였습니다')
                 $pointInput.val(0);
