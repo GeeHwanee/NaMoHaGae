@@ -20,4 +20,8 @@ public interface TownDao {
     public Boolean save(Town town);
     public Boolean delete(Integer townNo);
     public Boolean checkDong(String townDong);
+    public List<TownDto.FindAll> findAll(Integer startRownum,Integer endRownum);
+    public List<TownDto.FindAll> findAllByGu(String gu,Integer startRownum,Integer endRownum);
+    public Integer countAll();
+    public Integer countAllByGu(String gu);
 }
