@@ -126,15 +126,6 @@ public class MemberService {
             townNo = townDao.findNoByDong(dto.getTownDong());
         }
         if (dto.getProfile()==null || dto.getProfile().isEmpty()==true) {
-            System.out.println("11");
-            System.out.println(latitude);
-            System.out.println(longitude);
-            System.out.println(memberNo);
-            System.out.println(newNickname);
-            System.out.println(newPassword);
-            System.out.println(dto.getPhone());
-            System.out.println(townNo);
-            System.out.println(dto.getIntroduce());
             memberDao.updateMember(memberNo,newPassword,newNickname,dto.getPhone(),townNo,null,longitude,latitude, dto.getIntroduce());
             return true;
         }else {    // else는 Don't care -> 신경쓰지 않는다
@@ -165,11 +156,9 @@ public class MemberService {
         Boolean resultUser = member.getMemberNickname().equals(nickname);
         System.out.println(nickname);
        if(resultDB==false){
-           System.out.println("rhjf");
            return true;
        }
        if(resultUser==false){
-           System.out.println("gkgk");
            return false;
        }
         return true;
