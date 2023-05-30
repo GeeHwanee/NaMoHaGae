@@ -14,7 +14,6 @@ import kr.kro.namohagae.board.service.*;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.service.TownService;
-import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.dto.QnaDto;
 import kr.kro.namohagae.mall.service.AddressService;
@@ -72,7 +71,6 @@ public class GlobalController {
     private final ChatService chatService;
     private final MemberDao memberDao;
     private final ReviewService puchingReviewService;
-    private final WebSocketService webSocketService;
 
     // [Global 파트]--------------------------------------------------------------------
 

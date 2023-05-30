@@ -5,16 +5,15 @@ import kr.kro.namohagae.global.dto.NotificationDto;
 import kr.kro.namohagae.global.entity.Notification;
 import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.member.entity.Member;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@RequiredArgsConstructor
 @Service
 public class NotificationService {
-    @Autowired
-    private NotificationDao notificationDao;
-    @Autowired
-    private WebSocketService webSocketService;
+    private final NotificationDao notificationDao;
+    private final WebSocketService webSocketService;
     private final static Integer PAGESIZE=5;
     private final static Integer BLOCKSIZE=3;
 
