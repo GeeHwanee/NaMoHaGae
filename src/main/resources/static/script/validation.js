@@ -54,7 +54,7 @@ $(document).ready(function() {
 
     $('#sendEmail').click(async function (){
         try {
-            const url = "/api/v1/member/sendAudenticationCode?email=" + $("#memberEmail").val();
+            const url = "/api/v1/member/sendAudenticationCode?email=" + $("#memberEmail").val()+'&_csrf='+$_csrf;
             // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
             // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
             const result = await $.ajax({url:url, method:"patch"})
@@ -67,7 +67,7 @@ $(document).ready(function() {
     });
     $('#checkCode').click(async function(){
         try {
-            const url = "/api/v1/member/checkAudenticationCode?code=" + $("#code").val();
+            const url = "/api/v1/member/checkAudenticationCode?code=" + $("#code").val()+'&_csrf='+$_csrf;
             // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
             // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
             const result = await $.ajax({url:url, method:"get"});
@@ -121,8 +121,8 @@ $(document).ready(function() {
             return false;
 
         try {
-            await $.ajax('/api/v1/member/checkEmail?email=' + $('#memberEmail').val());
-            await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#memberNickname').val());
+            await $.ajax('/api/v1/member/checkEmail?email=' + $('#memberEmail').val()+'&_csrf='+$_csrf);
+            await $.ajax('/api/v1/member/checkNickname?nickname=' + $('#memberNickname').val()+'&_csrf='+$_csrf);
             $('#join_form').submit();
         } catch(err) {
             console.log(err);
