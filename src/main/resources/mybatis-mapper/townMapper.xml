@@ -19,6 +19,36 @@
     <select id="checkDong" resultType="Boolean">
         select count(*) from town where town_dong=#{townDong}
     </select>
+    <select id="findAll" resultType="kr.kro.namohagae.global.dto.TownDto$FindAll">
+        select * from
+            (
+                select rownum as rnum, t.* from
+                    (
+                        select
+                           town_no,town_gu,town_dong from town
+                    ) t
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+    <select id="findAllByGu" resultType="kr.kro.namohagae.global.dto.TownDto$FindAll">
+        select * from
+            (
+                select rownum as rnum, t.* from
+                    (
+                        select
+                            town_no,town_gu,town_dong from town where town_gu = #{gu}
+                    ) t
+                where rownum&lt;=#{endRownum}
+            )
+        where rnum&gt;=#{startRownum}
+    </select>
+    <select id="countAll" resultType="Integer">
+        select count(*) from town
+    </select>
+    <select id="countAllByGu" resultType="Integer">
+        select count(*) from town where town_gu=#{gu}
+    </select>
     <insert id="save">
         insert into town(town_no,town_gu,town_dong,town_latitude,town_longitude) values(TOWN_SEQ_PUCHING_TOWN_NO.nextval,#{townGu},#{townDong},#{townLatitude},#{townLongitude})
     </insert>

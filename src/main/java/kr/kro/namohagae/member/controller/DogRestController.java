@@ -28,8 +28,13 @@ public class DogRestController {
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
     @GetMapping(value="/dog/list", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> dogList(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        Integer memberNo = myUserDetails.getMemberNo();
+    public ResponseEntity<?> dogList(@AuthenticationPrincipal MyUserDetails myUserDetails,Integer profileMemberNo){
+        Integer memberNo = 0;
+        if (profileMemberNo!=null){
+            memberNo=profileMemberNo;
+        }else{
+            memberNo=myUserDetails.getMemberNo();
+        }
         return ResponseEntity.ok(dogService.dogList(memberNo));
     }
 }

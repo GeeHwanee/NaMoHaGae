@@ -69,7 +69,6 @@
         $(document).ready(async function() {
             const param = new URLSearchParams(location.search);
             const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
-            console.log("asd");
             try {
                 const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
                 console.log(result);
@@ -117,11 +116,6 @@
                 } catch (err) {
                     console.log(err);
                 }
-            });
-            $(document).on("click","button[id^='block-']",async function(){
-                const index = $(this).attr('id').split('-')[1];
-                const memberNo=$(`#memberNo-${index}`).val();
-
             });
         });
 

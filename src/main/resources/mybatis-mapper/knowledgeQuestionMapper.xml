@@ -52,9 +52,12 @@
         select rownum as rnum, a.* from
         (
         select
-        q.KNOWLEDGE_QUESTION_NO,(select count(*) from knowledge_answer) as answerCount, q.KNOWLEDGE_QUESTION_TITLE, q.KNOWLEDGE_QUESTION_POINT, q.KNOWLEDGE_QUESTION_READ_COUNT,a.knowledge_answer_selection_enabled ,q.KNOWLEDGE_QUESTION_WRITE_DATE
+        q.KNOWLEDGE_QUESTION_NO,(select count(*) from knowledge_answer) as answerCount, q.KNOWLEDGE_QUESTION_TITLE, q.KNOWLEDGE_QUESTION_POINT, q.KNOWLEDGE_QUESTION_READ_COUNT,COALESCE(
+                (SELECT COUNT(*) FROM KNOWLEDGE_ANSWER WHERE a.KNOWLEDGE_ANSWER_SELECTION_ENABLED = 1),
+                0
+            ) as knowledgeAnswerSelectionEnabled,q.KNOWLEDGE_QUESTION_WRITE_DATE
         from KNOWLEDGE_QUESTION q
-        join knowledge_answer a on a.KNOWLEDGE_QUESTION_NO = q.KNOWLEDGE_QUESTION_NO
+                 full join knowledge_answer a on a.KNOWLEDGE_QUESTION_NO = q.KNOWLEDGE_QUESTION_NO
         where q.KNOWLEDGE_QUESTION_ENABLED =1 and q.MEMBER_NO=#{memberNo}
         order by q.KNOWLEDGE_QUESTION_NO desc
         ) a
