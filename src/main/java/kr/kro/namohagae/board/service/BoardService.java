@@ -12,25 +12,21 @@ import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.entity.Member;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
 public class BoardService {
 
-    @Autowired
-    BoardDao boardDao;
-    @Autowired
-    BoardTownDao boardTownDao;
-    @Autowired
-    BoardNoticeDao boardNoticeDao;
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private MemberDao memberDao;
+
+    private final BoardDao boardDao;
+    private final BoardTownDao boardTownDao;
+    private final BoardNoticeDao boardNoticeDao;
+    private final NotificationService notificationService;
+    private final MemberDao memberDao;
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 

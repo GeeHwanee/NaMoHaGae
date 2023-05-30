@@ -3,30 +3,25 @@ package kr.kro.namohagae.board.service;
 
 import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.dao.CommentDao;
-import kr.kro.namohagae.board.dto.BoardDto;
 import kr.kro.namohagae.board.dto.CommentDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardComment;
 import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
 public class CommentService {
 
-    @Autowired
-    private BoardDao boardDao;
-    @Autowired
-    CommentDao commentDao;
-    @Autowired
-    MemberDao memberDao;
-    @Autowired
-    private NotificationService notificationService;
+    private final BoardDao boardDao;
+    private final CommentDao commentDao;
+    private final MemberDao memberDao;
+    private final NotificationService notificationService;
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
