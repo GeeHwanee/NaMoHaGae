@@ -24,24 +24,15 @@
             const minutes = ('0' + date.getMinutes()).slice(-2);
             return `${year}-${month}-${day} ${hours}:${minutes}`;
         }
-        function printMyProductReview(reports) {
+        function printMyTownList(towns) {
             $('#tbody').empty();
             const $tbody = $('#tbody');
-            reports.forEach((r, i)=> {
+            towns.forEach((t)=> {
                     const tpl = `
-
                 <tr>
-                    <td>${r.memberNickname} </td>
-                     <td>${r.reportMemberNickname}</td>
-                    <td>${r.reportDate}</td>
-                    <td>${r.reportCategory}</td>
+                    <td>${t.townGu} </td>
+                     <td>${t.townDong}</td>
 			    </tr>
-                 <tr>
-                <td>${r.reportContent}</td>
-                <td><button type="button" id="delete-${i}" class="btn btn-primary btn-block">삭제</button></td>
-                <td><a type="button" href="/admin/report/block?memberNo=${r.memberNo}&reportNo=${r.reportNo}" target="_blank" class="btn btn-danger" style="color: beige;">계정 정지</a></td>
-                </tr>
-                <input type="hidden" id="reportNo-${i}" value="${r.reportNo}">
                     `;
                     $tbody.append(tpl);
                 }
@@ -70,18 +61,18 @@
             const param = new URLSearchParams(location.search);
             const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
             try {
-                const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
+                const result = await $.ajax("/api/v1/admin/town/list?pageno=" + pageno + "&gu="+$('#serchGu').val());
                 console.log(result);
-                printMyProductReview(result.reports);
+                printMyTownList(result.towns);
                 printPagination(result)
 
 
                 $('#page_ul').on('click', '.page-link', async function (e) {
                     e.preventDefault();
                     const pageNum = $(this).data('page-no');
-                    const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
+                    const result = await $.ajax("/api/v1/admin/town/list?pageno=" + pageNum + "&gu="+$('#serchGu').val());
                     console.log(result);
-                    printMyProductReview(result.reports);
+                    printMyTownList(result.towns);
                     printPagination(result);
                 });
             } catch (err) {
@@ -89,34 +80,25 @@
             }
             $('#serch_btn').click(async function (){
                 try {
-                    const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
+                    const result = await $.ajax("/api/v1/admin/town/list?pageno=" + pageno + "&gu="+$('#serchGu').val());
                     console.log(result);
-                    printMyProductReview(result.reports);
+                    printMyTownList(result.towns);
                     printPagination(result)
 
 
                     $('#page_ul').on('click', '.page-link', async function (e) {
                         e.preventDefault();
                         const pageNum = $(this).data('page-no');
-                        const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
+                        const result = await $.ajax("/api/v1/admin/town/list?pageno=" + pageNum + "&gu="+$('#serchGu').val());
                         console.log(result);
-                        printMyProductReview(result.reports);
+                        printMyTownList(result.towns);
                         printPagination(result);
                     });
                 } catch (err) {
                     console.log(err);
                 }
             });
-            $(document).on("click", "button[id^='delete-']", async function () {
-                const index = $(this).attr('id').split('-')[1];
-                const reportNo = $(`#reportNo-${index}`).val();
-                try {
-                    await $.ajax({ url: '/api/v1/report/delete?reportNo=' + reportNo, method: "post" });
-                    location.reload();
-                } catch (err) {
-                    console.log(err);
-                }
-            });
+
         });
 
     </script>
@@ -129,15 +111,21 @@
         <aside th:replace="~{fragments/aside :: aside}"></aside>
         </aside>
         <section>
-            <input type="text" id="serchNickname">
-            <button type="button" class="btn btn-primary btn-block" id="serch_btn">검색</button>
+            <input type="text" id="serchGu">
+            <button type="button" class="btn btn-primary btn-block" id="serch_btn">구 검색</button>
             <table class="table table-hover vertical-table">
+                <thead>
+                <tr>
+                    <th>구</th><th>동</th>
+                </tr>
+                </thead>
                 <tbody id="tbody">
 
                 </tbody>
             </table>
             <ul class="pagination" id="page_ul">
             </ul>
+            <a type="button" class="btn btn-primary" href="/admin/town/write">동네 등록</a>
         </section>
         <aside th:replace="~{fragments/bside :: bside}"></aside>
     </main>

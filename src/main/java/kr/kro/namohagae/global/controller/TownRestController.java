@@ -42,4 +42,14 @@ public class TownRestController {
     public ResponseEntity<Boolean> checkTownDong(String townDong){
         return ResponseEntity.ok(townService.checkDong(townDong));
     }
+    @GetMapping(value = "/admin/town/list",produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>townList(Integer pageno,String gu){
+        if(gu.trim().equals("")==false){
+            System.out.println(gu);
+        return ResponseEntity.ok(townService.findAllByGu(pageno,gu));
+        }
+        System.out.println(gu);
+
+        return ResponseEntity.ok(townService.findAll(pageno));
+    }
 }
