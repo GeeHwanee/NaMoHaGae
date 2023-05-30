@@ -47,7 +47,7 @@ public class ChatService {
             cdao.saveMessage(message);
 
         Boolean a= cdao.existsByChatRoom(senderNo,receiverNo);
-        notificationService.save(member,NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
+        notificationService.save(member,member.getMemberNickname()+"님에게 "+NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
 
         if(cdao.existsByChatRoom(senderNo,receiverNo)==false){
 

@@ -820,6 +820,7 @@
     }
 
 
+
     //이미지 전송 -> 전송중일 때 추가로 요청보내는걸 막자 loading 중 인걸 나타내든가
     $('#sendImageButton').on('click',async function(){
         var imageInput=$('#imageInput')[0];
@@ -1311,6 +1312,41 @@
                 $(this).removeClass('fa-bounce');
             }
         );
+
+        function validateImage(imageInput) {
+            var maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+            var allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+            var file = imageInput.files[0];
+
+            // 파일 유무 확인
+
+            // 파일 크기 확인
+            if (file.size > maxSizeInBytes) {
+                Swal.fire({
+                    title:'이미지 크기는 5MB 이하여야 합니다.',
+                    icon:'warning'});
+                imageInput.value = null;
+                return;
+            }
+
+            // 확장자 확인
+            var fileName = file.name.toLowerCase();
+            var fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                Swal.fire({
+                    title:'지원되는 이미지 형식은 jpg, jpeg, png, gif 입니다.',
+                    icon:'warning'});
+                imageInput.value = null;
+                return;
+            }
+        };
+
+        $('#imageInput').on('change', function() {
+            validateImage(this);
+        });
+
 
 
     });
