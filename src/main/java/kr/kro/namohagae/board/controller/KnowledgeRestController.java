@@ -7,6 +7,7 @@ import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +71,7 @@ public class KnowledgeRestController {
         }
     }
 
-    @GetMapping("/member/knowledge/question")
+    @GetMapping(value = "/member/knowledge/question",produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> myQuestionList(Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails){
         Integer memberNo = myUserDetails.getMemberNo();
         return  ResponseEntity.ok(knowledgeService.myQusetionList(pageno,memberNo));
