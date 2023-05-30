@@ -132,6 +132,7 @@ function printAside(){
     }else if(sideBar.startsWith(admin)){
         $title.append('<li><a href="/admin/main">관리자</a></li>');
         $side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
+        $side_bar.append('<li><a href="/admin/town/list">동네 등록</a></li>');
         $side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
         $side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
         $side_bar.append('<li><a href="/admin/report/report">신고 관리</a></li>');
