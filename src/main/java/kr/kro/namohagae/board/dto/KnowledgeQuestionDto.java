@@ -1,5 +1,6 @@
 package kr.kro.namohagae.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.kro.namohagae.board.entity.KnowledgeQuestion;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
