@@ -41,12 +41,29 @@
       if(next>0)
         $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
     }
-
+    function printDogList(dogList) {
+      const $tdog = $('#dog');
+      console.log(dogList);
+      dogList.forEach(d => {
+        const tpl = `
+            <img id="show-profile" src="${d.dogProfile}" width="100px" height="100px">
+             <a href="/member/dog/profile?dogNo=${d.dogNo}">${d.dogName}</a>
+        `;
+        $tdog.append(tpl);
+      });
+    }
     $(document).ready(async function() {
     let result = undefined;
       const param = new URLSearchParams(location.search);
       const memberNo = param.get('memberNo');
       const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+      console.log(memberNo);
+      try {
+        result = await $.ajax("/api/v1/dog/list?profileMemberNo="+memberNo);
+        printDogList(result);
+      } catch (err) {
+        console.log(err)
+      }
       try {
         result = await $.ajax("/api/v1/review/list?pageno="+pageno+"&memberNo="+memberNo);
         console.log(result);
