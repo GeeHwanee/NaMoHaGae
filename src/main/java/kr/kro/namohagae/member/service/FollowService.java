@@ -6,21 +6,19 @@ import kr.kro.namohagae.member.dao.FollowDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.FollowDto;
 import kr.kro.namohagae.member.entity.Member;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class FollowService {
-    @Autowired
-    private FollowDao followDao;
-    @Autowired
-    private MemberDao memberDao;
-    @Autowired
-    private NotificationService notificationService;
+    private final FollowDao followDao;
+    private final MemberDao memberDao;
+    private final NotificationService notificationService;
 
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
