@@ -110,11 +110,15 @@ function printAside(){
         $side_bar.append('<li><a href="/member/information">내 정보 수정</a></li>');
         $side_bar.append('<li><a href="/member/puching/review">내가 작성한 리뷰</a></li>');
         $side_bar.append('<li><a href="/member/follow">팔로우 목록</a></li>');
+        $side_bar.append('<li><a href="/member/mall/order">결제 내역</a></li>');
         $side_bar.append('<li><a href="/member/mall/address">배송지</a></li>');
         $side_bar.append('<li><a href="/member/mall/favorite">찜 목록</a></li>');
         $side_bar.append('<li><a href="/member/mall/order">주문 내역</a></li>');
         $side_bar.append('<li><a href="/member/mall/qna">상품 문의내역</a></li>');
         $side_bar.append('<li><a href="/member/mall/review">상품 리뷰</a></li>');
+        $side_bar.append('<li><a href="/mall/cart">장바구니</a></li>');
+        $side_bar.append('<li><a href="/member/mall/qna">내가 작성한 QnA</a></li>');
+        $side_bar.append('<li><a href="/member/mall/review">내가 작성한 상품 리뷰</a></li>');
         $side_bar.append('<li><a href="/member/board/post">내가 작성한 게시물</a></li>');
         $side_bar.append('<li><a href="/member/board/comment">내가 작성한 댓글</a></li>');
         $side_bar.append('<li><a href="/member/board/question">내가 작성한 질문</a></li>');
