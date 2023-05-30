@@ -152,11 +152,11 @@ function printAside(){
             if (link.pathname.split("?")[0]=== "/mall/product/list"){
                 if(link.href===location.href){
                     console.log(location.href)
-                    link.style.color = 'blue';
+                    link.style.color = '#007bff';
                 }
             }
             else if (link.pathname.split("?")[0] === currentUrl[0]) {
-                link.style.color = 'blue';
+                link.style.color = '#007bff';
             }
         }
     });
