@@ -603,6 +603,9 @@ public class GlobalController {
     @GetMapping("/admin/town/write")
     public void adminTown(){}
 
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/town/list")
+    public void townList(){}
     // -------------------------------------------------------------------------------
 
 }
