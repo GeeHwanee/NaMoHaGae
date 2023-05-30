@@ -1,9 +1,15 @@
 package kr.kro.namohagae.global.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jdk.jfr.DataAmount;
 import kr.kro.namohagae.global.entity.Town;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class TownDto {
 
@@ -33,6 +39,22 @@ public class TownDto {
             return Town.builder().townGu(townGu).townDong(townDong).townLatitude(latitude).townLongitude(longitude).build();
         }
     }
+    @Data
+    public static class FindAll{
+        private Integer townNo;
+        private String townGu;
+        private String townDong;
+    }
 
-
+    @Data
+    @ToString
+    @AllArgsConstructor
+    public static class Pagination {
+        private Integer pageno;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private List<TownDto.FindAll> towns;
+    }
 }
