@@ -166,12 +166,12 @@
                   return;
               }
 
-              // if(compareTime(promiseDate)==true){
-              //     Swal.fire({
-              //      title:'아직 약속시간이 지나지 않았습니다',
-              //    icon:'warning'});
-              //     return;
-              // }
+              if(compareTime(promiseDate)==true){
+                  Swal.fire({
+                   title:'아직 약속시간이 지나지 않았습니다',
+                 icon:'warning'});
+                  return;
+              }
 
                 const param={
                     receiverNo:receiverNo,

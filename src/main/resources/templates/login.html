@@ -62,6 +62,20 @@
         loginWithKakao();
       })
 
+      $('#username').on('keypress', function(event) {
+        if (event.which === 13) { // Enter 키의 keyCode는 13입니다.
+          event.preventDefault(); // 기본 동작인 폼 제출을 막습니다.
+          $('#form_button').click(); // form_button을 클릭합니다.
+        }
+      });
+      $('#password').on('keypress', function(event) {
+        if (event.which === 13) { // Enter 키의 keyCode는 13입니다.
+          event.preventDefault(); // 기본 동작인 폼 제출을 막습니다.
+          $('#form_button').click(); // form_button을 클릭합니다.
+        }
+      });
+
+
 
       $('#form_button').click(function (){
         $('#login').append($_csrf_input).attr('action','/api/v1/login').attr('method','post').submit();

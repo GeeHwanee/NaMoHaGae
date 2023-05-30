@@ -38,7 +38,6 @@ public class ChatRestController {
 
     @GetMapping(value = "/existchatroom")
     public ResponseEntity<ChatRoomDto.Read> existChatroom(Principal principal,String receiverEmail){
-
         return ResponseEntity.ok().body(service.existchatRoom(principal.getName(),receiverEmail));
     }
 
