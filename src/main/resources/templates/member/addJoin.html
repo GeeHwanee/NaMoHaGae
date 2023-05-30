@@ -31,8 +31,7 @@
             for (let i = 0; i < gu.length; i++) {
                 a = gu[i].townGu === $('#memberGu').val()
                 console.log(a);
-                if (a===false) {
-                    $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
+                if (a===true) {
                     break;
                 }
             }
@@ -116,6 +115,8 @@
                         if(addressCheck(result)==true){
                             console.log(addressCheck(result))
                         $('#join_form').submit();
+                        }else{
+                    $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
                         }
                     },error: function(xhr, status, error){
                         console.log(error);
