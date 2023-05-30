@@ -96,6 +96,8 @@
                             // 1. Multipart-formdata: contentType: false
                             // 2. $.ajax는 js 객체를 자동으로 urlencoded로 변환(processData)
                             //		{username:'spring', nai:20} -> ?username=spring&nai=20}
+                        }else {
+                            $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
                         }
 
                     } catch (err) {
@@ -212,8 +214,7 @@
             if (value != "") {
                 for (let i = 0; i < gu.length; i++) {
                     a = gu[i].townGu === $('#memberGu').val();
-                    if (!a) {
-                        $('#address_msg').text("서비스 하지 않는 지역입니다").attr("class", "fail");
+                    if (a===true) {
                         break;
                     }
                 }
