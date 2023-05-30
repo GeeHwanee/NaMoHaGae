@@ -117,6 +117,8 @@ function printAside(){
         $side_bar.append('<li><a href="/member/mall/qna">상품 문의내역</a></li>');
         $side_bar.append('<li><a href="/member/mall/review">상품 리뷰</a></li>');
         $side_bar.append('<li><a href="/mall/cart">장바구니</a></li>');
+        $side_bar.append('<li><a href="/member/mall/qna">내가 작성한 QnA</a></li>');
+        $side_bar.append('<li><a href="/member/mall/review">내가 작성한 상품 리뷰</a></li>');
         $side_bar.append('<li><a href="/member/board/post">내가 작성한 게시물</a></li>');
         $side_bar.append('<li><a href="/member/board/comment">내가 작성한 댓글</a></li>');
         $side_bar.append('<li><a href="/member/board/question">내가 작성한 질문</a></li>');
@@ -134,6 +136,7 @@ function printAside(){
     }else if(sideBar.startsWith(admin)){
         $title.append('<li><a href="/admin/main">관리자</a></li>');
         $side_bar.append('<li><a href="/admin/notice/list">공지사항</a></li>');
+        $side_bar.append('<li><a href="/admin/town/list">동네 등록</a></li>');
         $side_bar.append('<li><a href="/admin/qna/list">QnA</a></li>');
         $side_bar.append('<li><a href="/admin/product/list">상품 목록</a></li>');
         $side_bar.append('<li><a href="/admin/report/report">신고 관리</a></li>');
