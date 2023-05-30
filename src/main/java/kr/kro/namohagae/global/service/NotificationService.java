@@ -24,6 +24,7 @@ public class NotificationService {
         webSocketService.sendMessage(member.getMemberEmail(), notificationRead);
     }
 
+
     public NotificationDto.Pagination findAll(Integer pageno, Integer memberNo) {
         Integer countOfProduct = notificationDao.count(memberNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
