@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface TownDao {
 
     public Integer findNoByDong(String townDong);
-    public List<TownDto.Gu> findGu();
+    public List<TownDto.Dong> findDong();
     public List<TownDto.Read> findTownDongByGu(String townGu);
     public TownDto.userGuAndDong findFuck(Integer memberNo);
     public Boolean save(Town town);
