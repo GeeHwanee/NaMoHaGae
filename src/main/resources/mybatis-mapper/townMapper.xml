@@ -7,8 +7,8 @@
     <select id="findNoByDong" resultType="Integer">
         select town_no from town where town_dong=#{townDong}
     </select>
-    <select id="findGu" resultType="kr.kro.namohagae.global.dto.TownDto$Gu">
-        select town_gu from town
+    <select id="findDong" resultType="kr.kro.namohagae.global.dto.TownDto$Dong">
+        select town_dong from town
     </select>
     <select id="findTownDongByGu" resultType="kr.kro.namohagae.global.dto.TownDto$Read">
         select town_no, town_dong from town where town_gu=#{townGu}
