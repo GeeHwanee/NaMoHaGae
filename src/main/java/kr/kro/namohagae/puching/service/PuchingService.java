@@ -2,6 +2,7 @@ package kr.kro.namohagae.puching.service;
 
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.entity.Member;
 import kr.kro.namohagae.puching.dao.ChatDao;
 import kr.kro.namohagae.puching.dao.Puchingdao;
 import kr.kro.namohagae.puching.dto.PuchingDto;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PuchingService {
@@ -64,6 +66,14 @@ public class PuchingService {
         Integer senderNo=mdao.findNoByUsername(senderEmail);
         return pdao.findPuchingNoBySenderNoAndReceiverNo(senderNo,receiverNo);
     };
+
+    public Optional<Member> findMember(String usernick){
+        Integer memberNo=mdao.findMemberNoByNickname(usernick);
+        if(memberNo==null){
+            return null;
+        }
+        return mdao.findByMember(memberNo);
+    }
 
 
 }

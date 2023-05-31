@@ -315,9 +315,16 @@ public class GlobalController {
     @Secured("ROLE_DOG")
     @GetMapping(value = "/puching/puching_introduce")
     public String introduce(){
-        System.out.println("퍼칭소개글");
         return "puching/puching_introduce";
     }
+
+    @Secured("ROLE_DOG")
+    @GetMapping(value = "/puching/search")
+    public String search(){
+        return "puching/search";
+    }
+
+
 
     // [게시판 파트]--------------------------------------------------------------------
 
