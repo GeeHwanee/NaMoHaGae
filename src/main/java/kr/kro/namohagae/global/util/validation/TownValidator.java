@@ -12,8 +12,8 @@ public class TownValidator implements ConstraintValidator<Town,String> {
     public boolean isValid(String town, ConstraintValidatorContext context) {
         if(town == null){return false;}
            Boolean a =  null;
-        for (int i = 0; i < dao.findGu().size(); i++) {
-           a= town.matches(dao.findGu().get(i).getTownGu());
+        for (int i = 0; i < dao.findDong().size(); i++) {
+           a= town.matches(dao.findDong().get(i).getTownDong());
            if (a==false){
                break;
            }
