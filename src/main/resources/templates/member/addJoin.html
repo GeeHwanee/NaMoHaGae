@@ -29,7 +29,7 @@
             }
 
             for (let i = 0; i < gu.length; i++) {
-                a = gu[i].townGu === $('#memberGu').val()
+                a = gu[i].townGu === $('#memberDong').val()
                 console.log(a);
                 if (a===true) {
                     break;
@@ -89,7 +89,7 @@
             let result = null
             $('#joinAdd').click(async function (){
                 try {
-                    result = await $.ajax("/api/v1/town/gulist");
+                    result = await $.ajax("/api/v1/town/dongList");
                     console.log(result);
                      addressCheck(result);
                 }catch (err){
