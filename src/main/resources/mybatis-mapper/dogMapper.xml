@@ -15,7 +15,7 @@
         <if test="notGenderEnabled != null">dog_not_gender_enabled = #{notGenderEnabled},</if>
         <if test="weight != null">dog_weight = #{weight},</if>
         <if test="name != null">dog_name = #{name},</if>
-        <if test="profile != null">dog_pofile = #{profile},</if>
+        <if test="profile != null">dog_profile = #{profile},</if>
     </trim>
    where dog_no = #{dogNo} and rownum=1
 </update>
