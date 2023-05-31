@@ -8,6 +8,7 @@ import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
+import kr.kro.namohagae.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ public class DogService {
     @Autowired
     private  MyUserDetailsService myUserDetailsService;
     public void save(DogDto.Registeration dto, Integer memberNo) {
+        Member member = memberDao.findByMember(memberNo).get();
         String memberIntroduce = " ";
         String profileName = "default.jpg";
         if(dto.getDogIntroduce()!=null){
@@ -41,10 +43,10 @@ public class DogService {
         if(mf!=null && !mf.isEmpty()) {
             int postionOfDot = mf.getOriginalFilename().lastIndexOf(".");
             String ext = mf.getOriginalFilename().substring(postionOfDot);
-            File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, dto.getDogName() + ext);
+            File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, member.getMemberNickname()+dto.getDogName() + ext);
             try {
                 mf.transferTo(file);
-                profileName = dto.getDogName() + ext;
+                profileName = member.getMemberNickname()+dto.getDogName() + ext;
             } catch (IllegalStateException | IOException e) {
                 e.printStackTrace();
             }
@@ -69,27 +71,45 @@ public class DogService {
         return dog.toReadDto(dogNotGenderEnbled);
     }
 
-    public Boolean update(MultipartFile profile, String name,String introduce, Boolean notGenderEnabled,Double weight,Integer dogNo) {
-        File file = null;
-        String ext = "";
+    public Boolean update(Integer memberNo,MultipartFile profile, String name,String introduce, String notGenderEnabled,String weight,Integer dogNo) {
+        Member member= memberDao.findByMember(memberNo).get();
+        Double newWeight = null;
+        Boolean newNotGenderEnabled  =null;
+        String newIntroduce = null;
+        String newName=null;
+        if(!name.equals("")){
+            newName =name;
+        }
+        if (!introduce.equals("")){
+            newIntroduce=introduce;
+        }
+        if(!weight.equals("")){
+            newWeight = Double.parseDouble(weight);}
+        if (!notGenderEnabled.equals("")) {
+            Integer intNotGenderEnabled = Integer.parseInt(notGenderEnabled);
+            newNotGenderEnabled = intNotGenderEnabled == 1 ? true : false;
+        }
 
         if (profile==null || profile.isEmpty()==true) {
-            dogDao.update(dogNo,introduce,notGenderEnabled,weight,name,null);
+            dogDao.update(dogNo,newIntroduce,newNotGenderEnabled,newWeight,newName,null);
             return true;
         }else {    // else는 Don't care -> 신경쓰지 않는다
         }
-        if(name!=null||name.trim().equals("")==false){
-            int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
-            ext = profile.getOriginalFilename().substring(postionOfDot);
-            file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, name + ext);
-        } else{}
+        int postionOfDot = profile.getOriginalFilename().lastIndexOf(".");
+        String ext = profile.getOriginalFilename().substring(postionOfDot);
+        System.out.println(ext+"afdfbdfb");
+        if(name.equals("")){
+            Dog dog = dogDao.findByDog(dogNo).get();
+            newName=dog.getDogName();
+        }
+        File file = new File(ImageConstants.IMAGE_DOG_DIRECTORY, member.getMemberNickname()+ newName + ext);
         try {
             profile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Boolean a = dogDao.update(dogNo,introduce,notGenderEnabled,weight,name,name+ext);
+        Boolean a = dogDao.update(dogNo,newIntroduce,newNotGenderEnabled,newWeight,newName,member.getMemberNickname()+ newName + ext);
         return a;
     }
 
