@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <!------------------------------------------------------------------------------------------------------------------------------>
+  <!--기본 CND, Script, CSS 내장 삽입-->
+  <th:block th:replace="~{fragments/head :: head}"></th:block>
+  <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+  <!--서치바 스타일-->
+  <style>
+    ::selection {
+      background: #eaad8a;
+    }
+
+    .search-wrapper {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top:40%;
+      left:50%;
+    }
+    .search-wrapper.active {}
+
+    .search-wrapper .input-holder {
+      height: 70px;
+      width:70px;
+      overflow: hidden;
+      background: rgb(237, 158, 113);
+      border-radius:6px;
+      position: relative;
+      transition: all 0.3s ease-in-out;
+    }
+    .search-wrapper.active .input-holder {
+      width:450px;
+      border-radius: 50px;
+      background: rgb(230, 177, 147,0.5);
+      transition: all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+    }
+    .search-wrapper .input-holder .search-input {
+      width:100%;
+      height: 50px;
+      padding:0px 70px 0 20px;
+      opacity: 0;
+      position: absolute;
+      top:0px;
+      left:0px;
+      background: transparent;
+      box-sizing: border-box;
+      border:none;
+      outline:none;
+      font-family:"Open Sans", Arial, Verdana;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #090303;
+      transform: translate(0, 60px);
+      transition: all .3s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+      transition-delay: 0.3s;
+    }
+    .search-wrapper.active .input-holder .search-input {
+      opacity: 1;
+      transform: translate(0, 10px);
+    }
+    .search-wrapper .input-holder .search-icon {
+      width:70px;
+      height:70px;
+      border:none;
+      border-radius:6px;
+      background: #ff9557;
+      padding:0px;
+      outline:none;
+      position: relative;
+      z-index: 2;
+      float:right;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .search-wrapper.active .input-holder .search-icon {
+      width: 50px;
+      height:50px;
+      margin: 10px;
+      border-radius: 30px;
+    }
+    .search-wrapper .input-holder .search-icon .search-span {
+      width:22px;
+      height:22px;
+      display: inline-block;
+      vertical-align: middle;
+      position:relative;
+      transform: rotate(45deg);
+      transition: all .4s cubic-bezier(0.650, -0.600, 0.240, 1.650);
+    }
+    .search-wrapper.active .input-holder .search-icon .search-span {
+      transform: rotate(-45deg);
+    }
+    .search-wrapper .input-holder .search-icon .search-span::before, .search-wrapper .input-holder .search-icon .search-span::after {
+      position: absolute;
+      content:'';
+    }
+    .search-wrapper .input-holder .search-icon .search-span::before {
+      width: 4px;
+      height: 11px;
+      left: 9px;
+      top: 16px;
+      border-radius: 2px;
+      background: #ffffff;
+    }
+    .search-wrapper .input-holder .search-icon .search-span::after {
+      width: 21px;
+      height: 21px;
+      left: 0px;
+      bottom: 6px;
+      border-radius: 16px;
+      border: 4px solid #ffffff;
+    }
+    .search-wrapper .close {
+      position: absolute;
+      z-index: 1;
+      top:24px;
+      right:20px;
+      width:25px;
+      height:25px;
+      cursor: pointer;
+      transform: rotate(-180deg);
+      transition: all .3s cubic-bezier(0.285, -0.450, 0.935, 0.110);
+      transition-delay: 0.2s;
+    }
+    .search-wrapper.active .close {
+      right:-50px;
+      transform: rotate(45deg);
+      transition: all .6s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+      transition-delay: 0.5s;
+    }
+    .search-wrapper .close::before, .search-wrapper .close::after {
+      position:absolute;
+      content:'';
+      background: #ff9557;
+      border-radius: 2px;
+    }
+    .search-wrapper .close::before {
+      width: 5px;
+      height: 25px;
+      left: 10px;
+      top: 0px;
+    }
+    .search-wrapper .close::after {
+      width: 25px;
+      height: 5px;
+      left: 0px;
+      top: 10px;
+    }
+    .search-container{
+
+      width: 70%;
+      height: 60%;
+      border: 4px solid #ea986b;
+      border-radius: 10px;
+      display: flex;
+      position: relative;
+      top: 20%;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+    }
+    .search-container p {
+      font-size: 1.0em;
+      font-family: 'Nanum Gothic', sans-serif;
+      border: 1px solid red;
+
+    }
+.user-img-wrap{
+  position: relative;
+  padding: 15px 15px 15px 15px;
+  border: 2px solid #374956;
+  width: 45%;
+  height: 90%;
+  margin: 20px 15px 20px 15px;
+  overflow-y: auto;
+}
+
+.user-info-wrap{
+  position: relative;
+  padding: 15px 15px 15px 15px;
+  border: 2px solid #374956;
+  width: 45%;
+  height: 90%;
+  margin: 20px 15px 20px 15px;
+}
+.user-img{
+  width: 100%;
+  height: 50%;
+}
+.user-img img{
+  width: 100%;
+  border-radius: 10px;
+}
+.user-introduce{
+  margin-top: 15px;
+  width: 100%;
+  height: 40%;
+  overflow-y: auto;
+  display: inline-block;
+}
+.profile-btn{
+  width: 100%;
+  height: 20%;
+  border-radius: 10px;
+  border: 2px solid #f4984e;
+  background-color: #ecae8c;
+  font-family: "Nanum Gothic",sans-serif;
+  font-size: 20px;
+  color: white;
+  font-weight: 600;
+  margin-top: 10%;
+
+
+}
+  </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/nav :: nav}"></nav>
+<main>
+  <aside th:replace="~{fragments/aside :: aside}"></aside>
+  <section>
+    <div class="search-wrapper">
+      <div class="input-holder">
+        <input type="text" class="search-input" placeholder="Type to search" />
+        <button class="search-icon" onclick="searchToggle(this, event);"><strong class="search-span"></strong></button>
+      </div>
+      <strong class="close search-span" onclick="searchToggle(this, event);"></strong>
+    </div>
+    <div class="search-container">
+<div class="user-img-wrap">
+<div class="user-img">
+  <img src="data:image/jpeg;base64,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" alt="profileimage">
+</div>
+  <button>프로필</button>
+</div>
+<div class="user-info-wrap">
+  <p>이름:떙떙떙</p>
+  <p>이메일:kkk123123@naver.com</p>
+  <p>퍼칭온도:37.1</p>
+  <p>강아지등록여부</p>
+  <div class="user-introduce">
+    <p>자기소개 어쩌꾸쩌쩌쩌쩌쩌꾸꾸꾸꾸꾸꾸꾺꾸ㅜ</p>
+  </div>
+</div>
+    </div>
+<script>
+  let isLoading=false;
+
+  function searchToggle(obj, evt){
+    var container = $(obj).closest('.search-wrapper');
+    if(!container.hasClass('active')){
+      container.addClass('active');
+      evt.preventDefault();
+    }
+    else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+      container.removeClass('active');
+      // clear input
+      container.find('.search-input').val('');
+    }
+  };
+
+  $('.search-input').on('keypress', function (event){
+    if($(this).is(':focus') && event.key === 'Enter'){
+      event.preventDefault();
+      $('.search-icon').click();
+    }
+
+  });
+
+  $('.search-icon').on('click',async function(){
+    const $input=$('.search-input').val();
+    const $schcontainer=$('.search-container');
+    if(!$input){
+      return;
+    };
+    const param={
+      usernick:$input
+    };
+    console.log(param)
+    try{
+      $schcontainer.empty();
+      const res= await $.ajax({
+      url:'/api/v1/puching/searchuser',
+      method:'GET',
+      data:param
+    });
+      console.log(res);
+
+    const tql=`<div class="user-img-wrap">
+<div class="user-img">
+  <img src=`+res.memberProfile+` alt="profileimage">
+</div>
+  <a href="/member/profile?memberNo=`+res.memberNo+`"><button class="profile-btn">프로필</button></a>
+</div>
+<div class="user-info-wrap">
+  <p>닉네임: `+res.memberNickname+`</p>
+  <p>이메일: `+res.memberEmail+`</p>
+  <p>퍼칭온도: `+res.memberGrade+`</p>
+  <p>`+res.memberDogSignEnabled+`</p>
+  <div class="user-introduce">
+    <p>자기소개 : `+res.memberIntroduce+`</p>
+  </div>
+</div>`;
+
+      $schcontainer.append(tql);
+
+    }catch (err){
+      console.log(err)
+      $schcontainer.empty();
+      $schcontainer.append(`<span class="no-user">유저를 찾을 수 없습니다.</span>`)
+    };
+
+  });
+</script>
+
+  </section>
+  <aside th:replace="~{fragments/bside :: bside}"></aside>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -126,6 +126,7 @@ function printAside(){
         $title.append('<li><a href="/puching/main">퍼칭</a></li>');
         $side_bar.append('<li><a href="/puching/chatroom">채팅방</a></li>');
         $side_bar.append('<li><a href="/puching/puching_introduce">퍼칭소개</a></li>');
+        $side_bar.append('<li><a href="/puching/search">상대찾기</a></li>');
     }else if(sideBar.startsWith(board)){
         $title.append('<li><a href="/board/main">커뮤니티</a></li>');
         $side_bar.append('<li><a href="/board/notice/list">공지사항</a></li>');

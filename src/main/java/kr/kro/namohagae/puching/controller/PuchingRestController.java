@@ -1,5 +1,7 @@
 package kr.kro.namohagae.puching.controller;
 
+import kr.kro.namohagae.member.dto.MemberDto;
+import kr.kro.namohagae.member.entity.Member;
 import kr.kro.namohagae.puching.dto.PuchingDto;
 import kr.kro.namohagae.puching.service.PuchingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -55,5 +59,14 @@ public class PuchingRestController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
-
+    @GetMapping(value = "/puching/searchuser")
+    public ResponseEntity<MemberDto.Read> searchuser(String usernick){
+            Optional<Member> member= service.findMember(usernick);
+        if(member==null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+          MemberDto.Read dto=  member.get().toReadDto();
+        System.out.println(dto.getMemberProfile());
+        return ResponseEntity.ok().body(dto);
+    }
 }
