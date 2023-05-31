@@ -26,9 +26,9 @@ public class TownRestController {
         return ResponseEntity.ok(townService.findTownDongByGu(townGu));
     }
 
-    @GetMapping(value = "/town/gulist",produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>guList(){
-        return  ResponseEntity.ok(townService.findGu());
+    @GetMapping(value = "/town/dongList",produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>dongList(){
+        return  ResponseEntity.ok(townService.findDong());
     }
     @PostMapping("/admin/town/save")
     public ResponseEntity<Boolean> townSave(TownDto.save dto){
