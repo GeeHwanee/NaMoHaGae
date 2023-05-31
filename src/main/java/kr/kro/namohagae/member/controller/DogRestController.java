@@ -21,10 +21,10 @@ public class DogRestController {
     @Autowired
     private DogService dogService;
     @PostMapping("/dog/update")
-    public ResponseEntity<Void> update(MultipartFile profile, String name, String introduce,Boolean notGenderEnabled,Double weight, Authentication auth, Integer dogNo) {
+    public ResponseEntity<Void> update(MultipartFile profile, String name, String introduce,String notGenderEnabled,String weight,@AuthenticationPrincipal MyUserDetails myUserDetails, Integer dogNo) {
         System.out.println("12313");
-
-        Boolean result = dogService.update(profile,name,introduce,notGenderEnabled,weight,dogNo);
+        Integer memberNo= myUserDetails.getMemberNo();
+        Boolean result = dogService.update(memberNo,profile,name,introduce,notGenderEnabled,weight,dogNo);
         return result? ResponseEntity.ok(null):ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
     @GetMapping(value="/dog/list", produces= MediaType.APPLICATION_JSON_VALUE)
