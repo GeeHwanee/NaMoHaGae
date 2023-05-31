@@ -53,6 +53,12 @@ $(document).ready(function() {
     $('#memberPhone').blur(phoneCheck);
 
     $('#sendEmail').click(async function (){
+        if(emailCheck()==false)
+            return false;
+        try {
+            const result = await $.ajax('/api/v1/member/checkEmail?email=' + $('#memberEmail').val());
+            if (result==false){
+                $("#memberEmail_msg").text("사용 가능한 이메일 입니다").attr("class","success");
         try {
             const url = "/api/v1/member/sendAudenticationCode?email=" + $("#memberEmail").val()+'&_csrf='+$_csrf;
             // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
@@ -63,6 +69,14 @@ $(document).ready(function() {
             $('#checkCodeArea').removeClass('hidden');
         } catch(err) {
             $("#memberEmail_msg").text("이메일을 찾지 못했습니다").attr("class","fail");
+        }
+            }
+            else {
+                console.log(result);
+                $("#memberEmail_msg").text("사용중입니다").attr("class","fail");
+            }
+        } catch(err) {
+            console.log(err);
         }
     });
     $('#checkCode').click(async function(){
@@ -116,7 +130,7 @@ $(document).ready(function() {
     $('#join').click(async function() {
 
         //  필수입력에 대한 널 체크, 패턴 체크 수행
-        const result = emailCheck() && passwordCheck() && password2Check() && irumCheck() && emailCheck() &&phoneCheck() && a;
+        const result = emailCheck() && passwordCheck() && password2Check() && irumCheck() && emailCheck() &&phoneCheck();
         if(result==false)
             return false;
 
