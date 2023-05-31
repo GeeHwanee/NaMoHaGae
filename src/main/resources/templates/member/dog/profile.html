@@ -51,7 +51,7 @@
                 //		{username:'spring', nai:20} -> ?username=spring&nai=20}
                 try{
                     $.ajax({
-                        url: "/api/v1/dog/update",
+                        url: "/api/v1/dog/update?dogNo="+$('#dogNo').val(),
                         method:'post',
                         data: formData,
                         processData:false, 	// urlencoded 자동 변환 옵션
@@ -83,7 +83,7 @@
     </script>
 </head>
 <body>
-<div th:text="${dog}"></div>
+<div th:text="${dog}" class="hide"></div>
 <div id="page">
     <header th:replace="~{fragments/header :: header}"></header>
     <nav th:replace="~{fragments/nav :: nav}"></nav>
@@ -127,6 +127,7 @@
                     <td th:text="${dog.dogNotGenderEnabled}" id="notGenderEnabledText"></td>
                    <td>
                     <select id="notGenderEnabled" name="notGenderEnabled" class="hide">
+                        <option></option>
                         <option value="0">안함</option>
                         <option value="1">완료</option>
                     </select>
