@@ -19,8 +19,8 @@ public class TownDto {
         private String townDong;
     }
     @Data
-    public static class Gu{
-        private String townGu;
+    public static class Dong{
+        private String townDong;
     }
     @Data
     public static class userGuAndDong{
