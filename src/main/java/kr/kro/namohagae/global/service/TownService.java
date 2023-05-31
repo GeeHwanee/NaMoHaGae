@@ -20,7 +20,7 @@ public class TownService {
         return townDao.findTownDongByGu(townGu);
     }
 
-    public List<TownDto.Gu> findGu(){return  townDao.findGu();}
+    public List<TownDto.Dong> findDong(){return  townDao.findDong();}
 
     public TownDto.userGuAndDong findFuck(Integer memberNo){
 
