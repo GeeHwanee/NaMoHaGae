@@ -64,7 +64,7 @@
                 if ($('#sample4_roadAddress').val() != "") {
                     console.log("asdasdads")
                     try {
-                        result = await $.ajax("/api/v1/town/gulist");
+                        result = await $.ajax("/api/v1/town/dongList");
                       addressCheck(result);
 
 
@@ -205,15 +205,15 @@
             return true;
         }
 
-        function addressCheck(gu) {
+        function addressCheck(dong) {
             $('#address_msg').text("");
             let a = true;
             const value = $('#sample4_roadAddress').val();
             console.log(value)
 
             if (value != "") {
-                for (let i = 0; i < gu.length; i++) {
-                    a = gu[i].townGu === $('#memberGu').val();
+                for (let i = 0; i < dong.length; i++) {
+                    a = dong[i].townDong === $('#memberDong').val();
                     if (a===true) {
                         break;
                     }
