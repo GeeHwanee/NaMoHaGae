@@ -55,10 +55,10 @@
         .review-form textarea {
             width: 100%;
             height: 100%;
-            resize: vertical;
             border-radius: 3%;
             border: 2px solid #ea986b;
             display: inline-block;
+            resize:none;
         }
         .review-form button {
             margin-top: 10px;
@@ -114,7 +114,7 @@
       </div>
 
       <div class="review-form">
-          <textarea id="review-text" placeholder="혐오발언이나 욕설을 하지 말아주세요" maxlength="150"></textarea>
+          <label for="review-text"></label><textarea id="review-text" placeholder="혐오발언이나 욕설을 하지 말아주세요" maxlength="150"></textarea>
           <button id="submit-review">리뷰 작성</button>
       </div>
 </div>

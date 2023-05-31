@@ -442,7 +442,17 @@
             left:40px;
             top: 10px;
         }
-
+        @keyframes fadein {
+            from{
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .msg_history div{
+            animation: fadein 1s;
+        }
     </style>
 </head>
 <body>
@@ -454,7 +464,6 @@
     <input id="myMemberNo" type="hidden" th:value="${mymemberNo}">
     <section>
         <div class="container">
-
             <div class="messaging">
                 <div class="inbox_msg">
                     <div class="inbox_people">
@@ -1346,8 +1355,6 @@
         $('#imageInput').on('change', function() {
             validateImage(this);
         });
-
-
 
     });
 </script>
