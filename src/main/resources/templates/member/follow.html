@@ -13,13 +13,18 @@
             width: 300px;
             margin: 0 auto;
         }
+        .follow_btn{
+            font-size: 2em;
+            color: #007bff;
+        }
+
     </style>
     <script>
         function printFavorite(follow) {
             const $tbody = $('#tbody');
             follow.forEach((f, i) => {
                 const tpl = `<tr>
-                <td><button id="follow_btn-${i}" type="button"></button></td>
+                <td><i id="follow_btn-${i}" class="follow_btn"></i></td>
                 <input type="hidden" id="checkfollow-${i}" value="${f.followMemberNo}">
 				<td>
 					<a href="/member/profile?memberNo=${f.followMemberNo}">${f.memberNickname}</a>
@@ -60,42 +65,51 @@
             } catch (err) {
                 console.log(err);
             }
-            $("button[id^='follow_btn-']").each(async function() {
+            $("i[id^='follow_btn-']").each(async function() {
                 const index = $(this).attr('id').split('-')[1];
                 const followMemberNo = $(`#checkfollow-${index}`).val();
                 try {
                     const result = await $.ajax({ url: '/api/v1/follow/check?memberNo=' + followMemberNo, method: "get" });
+                    $(this).removeClass('fa-solid fa-toggle-off fa-solid fa-toggle-on');
                     if (result == true) {
-                        $(this).text("팔로우 취소");
+                        $(this).addClass('fa-solid fa-toggle-off');
+                        console.log(result);
                     } else {
-                        $(this).text("팔로우");
+                        $(this).addClass('fa-solid fa-toggle-on');
+                        console.log(result);
                     }
                 } catch (err) {
                     console.log(err);
                 }
             });
 
-            $(document).on("click", "button[id^='follow_btn-']", async function () {
+            $(document).on("click", "i[id^='follow_btn-']", async function () {
                 const index = $(this).attr('id').split('-')[1];
                 const followMemberNo = $(`#checkfollow-${index}`).val();
                 console.log(followMemberNo);
                 try{
                     // 추천하면 서버는 새로운 추천수를 리턴한다 -> #good_cnt를 업데이트
                     const result =await $.ajax({url:'/api/v1/member/follow?memberNo='+followMemberNo+"&_csrf="+$_csrf, method:"patch",});
-                    if(result.follow == true){
-                        $('#follow_text').text("팔로우취소 ");
+                    $(this).removeClass('fa-solid fa-toggle-off fa-solid fa-toggle-on');
+                    if (result.follow == true) {
+                        $(this).addClass('fa-solid fa-toggle-off');
+                        console.log(result);
                     } else {
-                        $('#follow_text').text("팔로우")
+                        $(this).addClass('fa-solid fa-toggle-on');
+                        console.log(result);
                     }
                 }catch (err){
                     console.log(err)
                 }
                 try {
                     const result = await $.ajax({ url: '/api/v1/follow/check?memberNo=' + followMemberNo, method: "get" });
+                    $(this).removeClass('fa-solid fa-toggle-off fa-solid fa-toggle-on');
                     if (result == true) {
-                        $(this).text("팔로우 취소");
+                        $(this).addClass('fa-solid fa-toggle-off');
+                        console.log(result);
                     } else {
-                        $(this).text("팔로우");
+                        $(this).addClass('fa-solid fa-toggle-on');
+                        console.log(result);
                     }
                 } catch (err) {
                     console.log(err);
