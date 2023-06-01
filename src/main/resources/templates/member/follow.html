@@ -23,13 +23,16 @@
         function printFavorite(follow) {
             const $tbody = $('#tbody');
             follow.forEach((f, i) => {
+            const grade = f.memberGrade/10;
+            const date = f.puchingDate!=null?f.puchingDate:"매칭정보 없음"
                 const tpl = `<tr>
                 <td><i id="follow_btn-${i}" class="follow_btn"></i></td>
                 <input type="hidden" id="checkfollow-${i}" value="${f.followMemberNo}">
+                <td>${date}</td>
 				<td>
 					<a href="/member/profile?memberNo=${f.followMemberNo}">${f.memberNickname}</a>
 				</td>
-				<td>${f.memberGrade}</td>
+				<td>${grade}</td>
 			</tr>`;
                 $tbody.append(tpl);
 
@@ -128,7 +131,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                   <th>팔로우 상태</th><th>이름</th><th>온도</th>
+                   <th>팔로우 상태</th><th>최근 퍼칭일</th><th>이름</th><th>온도</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">

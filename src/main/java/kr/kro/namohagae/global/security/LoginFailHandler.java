@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Autowired
     private MemberDao memberDao;
     @Autowired
@@ -30,7 +29,8 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
                                         AuthenticationException exception) throws IOException, ServletException {
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
-        Member member = memberDao.findByUsername(username).get();
+        if ( memberDao.findByUsername(username).isPresent()){
+            Member member = memberDao.findByUsername(username).get();
         if (exception instanceof BadCredentialsException){
 
             if (member.getMemberLoginCount()<4){
@@ -54,6 +54,9 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
                 session.setAttribute("msg", "비활성화된 계정입니다. 관리자에게 문의 하세요");
             }
 
+        }
+        }else {
+            session.setAttribute("msg", "회원 정보가 없는 회원입니다.다시 입력해주세요");
         }
         System.out.println(session.getAttribute("msg"));
         response.sendRedirect("/login");
