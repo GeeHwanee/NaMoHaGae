@@ -64,6 +64,7 @@ public class MemberDto {
         private String memberEmail;
         private String memberIntroduce;
         private Boolean memberCheckKaKao;
+        private Boolean memberDogSignEnabled;
     }
     @Getter
     @AllArgsConstructor
