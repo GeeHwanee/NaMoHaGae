@@ -27,7 +27,7 @@ function password2Check() {
         $('#memberPassword2_msg').text("필수입력입니다").attr("class","fail");
         return false;
     }
-    if(value!=$('#memberPassword2').val()) {
+    if(value!=$('#memberPassword').val()) {
         $('#memberPassword2_msg').text("비밀번호가 일치하지 않습니다.").attr("class","fail");
         return false;
     }
@@ -47,6 +47,7 @@ function  phoneCheck(){
 }
 
 $(document).ready(function() {
+    console.log("asdasd")
     $('#memberProfileImage').change(loadProfile);
     $('#memberPassword').blur(passwordCheck);
     $('#memberPassword2').blur(password2Check);
