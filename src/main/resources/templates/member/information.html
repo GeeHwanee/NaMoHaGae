@@ -16,6 +16,7 @@
     </style>
     <script>
         $(document).ready(async function () {
+            $('#memberGrade').text($('#grade').val()/10);
             let result;
             $('#password').blur(passwordCheck);
             $('#password2').blur(password2Check);
@@ -300,9 +301,6 @@
             }
         }
 
-        const apiUrl = 'https://dapi.kakao.com/v2/local/search/address.json';
-        const headers = {'Authorization': 'KakaoAK 3aebe1c5743b1fcc93a6bfb52e8ff445'};
-        const address = document.getElementById("sample4_roadAddress").value();
 
     </script>
 </head>
@@ -327,7 +325,7 @@
                 <tr>
                     <td class="basic">
                         <span th:text="${member.memberNickname}"></span><span>님의 정보   (</span><span
-                            th:text="${member.memberGrade}"></span><span>)도  (</span><span
+                            id="memberGrade"></span><span>)도  (</span><span
                             th:text="${member.memberPoint}"></span><span>)포인트</span></td>
                     <td>
                         <input class="hidden" id="nickname" name="nickname" type="text">
@@ -407,6 +405,7 @@
             <input id="memberLongitude" name="longitude" type="hidden">
             <input id="memberDong" name="townDong" type="hidden">
             <input id="memberGu" name="townGu" type="hidden">
+            <input id="grade" type="hidden" th:value="${member.memberGrade}">
         </section>
         <aside th:replace="~{fragments/bside :: bside}"></aside>
     </main>
