@@ -16,7 +16,9 @@
                 select rownum as rnum, a.* from
                     (
                         select
-                                follow_member_no,(select member_nickname from member where member_no=f.follow_member_no) as memberNickname,(select member_grade from member where member_no=f.follow_member_no) as memberGrade
+                                follow_member_no,
+                       nvl((SELECT PUCHING_PROMISE_DATE FROM PUCHING WHERE MESSAGE_NO IN ( SELECT MESSAGE_NO FROM MESSAGE WHERE (MESSAGE_SENDER = f.follow_member_no AND MESSAGE_RECEIVER = f.member_no) OR (MESSAGE_SENDER = f.member_no AND MESSAGE_RECEIVER = f.follow_member_no) and ROWNUM=1)),null) as puchingDate
+                                ,(select member_nickname from member where member_no=f.follow_member_no) as memberNickname,(select member_grade from member where member_no=f.follow_member_no) as memberGrade
                         from follow f where member_no=#{memberNo}
                     ) a
                 where rownum&lt;=#{endRownum}
