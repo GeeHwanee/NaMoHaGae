@@ -15,11 +15,11 @@
                     <div class="card bg-success text-white">
                     <div class="card-body" style="overflow:hidden;">
                     <div style="float:left;">
-                    <span><a style="color: white" href="/board/knowledge/read?knowledgeQuestionNo=${a.knowledgeQuestionNo}">질문 제목:${a.knowledgeQuestionTitle} </a></span><span> 질문 작성일:${formatDateAnswer(a.knowledgeQuestionWriteDate)}</span>
+                    <span style="padding-right: 10px;"><a style="color: white" href="/board/knowledge/read?knowledgeQuestionNo=${a.knowledgeQuestionNo}">질문 제목:${a.knowledgeQuestionTitle} </a></span><span style="padding-left: 10px;"> 질문 작성일:${formatDateAnswer(a.knowledgeQuestionWriteDate)}</span>
 
                     </div>
                     <div style="float:right;">
-                    <span>채택 여부:${selectAnswer(a.knowledgeAnswerSelectionEnabled)}</span><span>답변 작성일:${formatDateAnswer(a.knowledgeAnswerWriteDate)}</span>
+                    <span style="padding-right: 10px;">채택 여부:${selectAnswer(a.knowledgeAnswerSelectionEnabled)}</span><span style="padding-left: 10px;">답변 작성일:${formatDateAnswer(a.knowledgeAnswerWriteDate)}</span>
                     </div>
                       </div>
                 </div>
