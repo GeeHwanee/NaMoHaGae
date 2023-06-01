@@ -35,7 +35,7 @@ public class Member {
 
     public MemberDto.Read toReadDto() {
 
-       return new MemberDto.Read(memberNo, ImageConstants.IMAGE_PROFILE_URL +memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce,memberCheckKaKao);
+       return new MemberDto.Read(memberNo, ImageConstants.IMAGE_PROFILE_URL +memberProfileImage,memberNickname,memberGrade,memberPoint,memberEmail,memberIntroduce,memberCheckKaKao,memberDogSignEnabled);
     }
 
 }
