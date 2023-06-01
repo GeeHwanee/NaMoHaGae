@@ -146,13 +146,18 @@ function printAside(){
 
         for (let i = 0; i < links.length; i++) {
             const link = links[i];
-            if (link.pathname.split("?")[0]=== "/mall/product/list"){
-                if(link.href===location.href){
-                    console.log(location.href)
+
+            // <section> 요소와 그 자손 요소를 건너뛰기
+            if (link.closest('section') !== null) {
+                continue;
+            }
+
+            if (link.pathname.split("?")[0] === "/mall/product/list") {
+                if (link.href === location.href) {
+                    console.log(location.href);
                     link.style.color = '#007bff';
                 }
-            }
-            else if (link.pathname.split("?")[0] === currentUrl[0]) {
+            } else if (link.pathname.split("?")[0] === currentUrl[0]) {
                 link.style.color = '#007bff';
             }
         }
