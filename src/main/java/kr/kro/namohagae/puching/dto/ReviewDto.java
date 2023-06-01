@@ -15,6 +15,7 @@ public class ReviewDto {
     public static class profile {
         private String reviewWriter;
         private String reviewContent;
+        private Integer reviewStar;
     }
 
     @Data
