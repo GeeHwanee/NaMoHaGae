@@ -13,6 +13,7 @@ import kr.kro.namohagae.puching.entity.Message;
 import kr.kro.namohagae.puching.entity.Puching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -34,23 +35,22 @@ public class ChatService {
 
 
     public List<ChatRoomDto.Read> findAllChatRoom(Integer myMemberNo) {
-        List<ChatRoomDto.Read> list = cdao.findAllChatRoom(ImageConstants.IMAGE_PROFILE_URL,myMemberNo);
-        return list;
+        return cdao.findAllChatRoom(ImageConstants.IMAGE_PROFILE_URL,myMemberNo);
     }
 
-    //나중에 파라미터 값을 멤버 넘버로 받도록 고치자
+
     public Integer saveTextMessage(String senderEmail, String receiverEmail, String messageContent,String messageType){
-        Integer senderNo=mdao.findNoByUsername(senderEmail);
-        Member member = mdao.findByUsername(receiverEmail).get();
-        Integer receiverNo=member.getMemberNo();
+        Member rmember = mdao.findByUsername(receiverEmail).get();
+        Member smember =mdao.findByUsername(senderEmail).get();
+        Integer senderNo=smember.getMemberNo();
+        Integer receiverNo=rmember.getMemberNo();
         Message message =  new MessageDto.MessageSave(senderNo,receiverNo,messageContent).toEntity(messageType);
             cdao.saveMessage(message);
 
-        Boolean a= cdao.existsByChatRoom(senderNo,receiverNo);
-        notificationService.save(member,member.getMemberNickname()+"님에게 "+NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
+        Boolean exists= cdao.existsByChatRoom(senderNo,receiverNo);
+        notificationService.save(rmember,smember.getMemberNickname()+"님에게 "+NotificationConstants.CHAT_CONTENT, NotificationConstants.CHATROOM_LINK);
 
-        if(cdao.existsByChatRoom(senderNo,receiverNo)==false){
-
+        if(!exists){
             cdao.saveChatRoom(senderNo,receiverNo);
             cdao.saveChatRoom(receiverNo,senderNo);  //첫 메세지시 채팅방 2개 생성 각자 채팅방이 생성
             return 2;
@@ -107,11 +107,9 @@ public class ChatService {
         String img = "image";
         Message message= new MessageDto.ImageMessageSave(senderNo,receiverNo).toEntity(img,imageName);
         cdao.saveImage(message);
-
-
     return message;
     }
-
+    @Transactional
     public Message savePuchingMessage(MessageDto.PuchingMessageSave dto,String senderEmail){
         Integer senderNo=mdao.findNoByUsername(senderEmail);
         Integer receiverNo= mdao.findNoByUsername(dto.getReceiverUsername());
@@ -140,7 +138,7 @@ public class ChatService {
 
         return message;//readDto; //퍼칭 메세지를 저장후 메세지 번호를 리턴한걸 퍼칭도 저장후 퍼칭번호에 메세진 번호 넣어서 저장 후 퍼칭번호를 리턴
     };
-
+    @Transactional
     public void cancelPuchingMessage(String senderEmail,String receiverEmail,String content){
         Integer senderNo=mdao.findNoByUsername(senderEmail);
         Integer receiverNo=mdao.findNoByUsername(receiverEmail);
@@ -150,6 +148,7 @@ public class ChatService {
         cdao.updatePuchingMessage(messageNo,"text",content); //텍스트내용과 타입을 바꿔야함메세지 내용 바꾸는 sql
     };
 
+    @Transactional
     public void aceeptPuchingMessage(String senderEmail,String receiverEmail){
         Integer senderNo= mdao.findNoByUsername(senderEmail);
         Integer receiverNo=mdao.findNoByUsername(receiverEmail);
