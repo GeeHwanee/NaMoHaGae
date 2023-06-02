@@ -39,7 +39,6 @@ public class PuchingRestController {
 
     @GetMapping(value="/puching/checkpuching")
     public ResponseEntity<Void> checkpuching(Principal principal,Integer receiverNo){
-
       Integer result = service.checkpuching(principal.getName(),receiverNo);
       if (result==0){
           return ResponseEntity.ok().body(null);
@@ -66,7 +65,6 @@ public class PuchingRestController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
           MemberDto.Read dto=  member.get().toReadDto();
-        System.out.println(dto.getMemberProfile());
         return ResponseEntity.ok().body(dto);
     }
 }

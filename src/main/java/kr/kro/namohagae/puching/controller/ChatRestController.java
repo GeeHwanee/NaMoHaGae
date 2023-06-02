@@ -43,7 +43,6 @@ public class ChatRestController {
 
     @PostMapping(value = "/savechatimage")
     public ResponseEntity<Message> saveImage(MultipartFile file, Principal principal, Integer receiverNo){
-      System.out.println("saveImage실행");
       String userEmail=principal.getName();
        Message message= service.saveImage(file,userEmail,receiverNo);
 
