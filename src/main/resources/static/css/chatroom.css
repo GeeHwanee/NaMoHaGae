@@ -1,0 +1,458 @@
+.map_wrap {position:relative;width:100%;height:350px; border:2px solid #ea986b; border-radius: 3px}
+.title {font-weight:bold;display:block;}
+.hAddr {position:absolute;left:56px;top:20px;border-radius:5px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;
+    border:2px solid #ea986b; text-align: center;
+}
+#centerAddr {display:block;margin-top:2px;font-weight: normal;}
+
+.bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+
+.main-content {
+    height: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#closePopupButton{
+    float: right;
+    position: relative;
+    bottom:40px;
+
+}
+#closePopupButton:hover{
+    cursor: pointer;
+
+}
+.popup-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    width: 50vw;
+    overflow: auto;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #ea986b;
+    font-weight: bold;
+    font-family: "Nanum Gothic";
+
+}
+
+.popup-content p {
+    margin-bottom: 20px;
+}
+.nowpos:hover{
+    cursor: pointer;
+    background-color: #ded7d7;
+}
+.nowpos{
+    display: flex;
+    width: 29px;
+    height: 29px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    position:absolute;
+    right:10px;
+    top:10px;
+    z-index: 1;
+
+}
+
+.puching-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    width: 200px;
+
+}
+
+.puching-button img {
+    width: 200px;
+    height: 150px;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+.puching-info {
+    display: inline-block;
+    flex-direction: column;
+    justify-content: center;
+
+    background-color: #ea986b;
+
+}
+
+.puching-title {
+    display: inline-block;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+    color: #ffffff;
+    width: 100%;
+}
+
+.puching-description {
+    display: inline-block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    text-align: center;
+    width: 100%;
+    color: white;
+    font-family: "Nanum Gothic";
+    font-weight: bold;
+}
+
+.location-button,
+.accept-button,
+.disaccept-button{
+
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px 16px 16px 10px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    background-color: #ef7e3f;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+
+
+}
+
+.location-button:hover,
+.accept-button:hover,
+.disaccept-button:hover{
+    background-color: #dfaa8b;
+}
+
+.location-button:focus,
+.accept-button:focus,
+.disaccept-button:focus{
+    outline: none;
+    box-shadow: 0 0 0 2px #dfaa8b;
+}
+
+.sent_msg .accept-button{
+    display: none;
+}
+#nowchatusernick{
+    font-family: "Nanum Gothic";
+    font-size: 20px;
+    color: white;
+    border-radius: 10px;
+    background-color: #ec5f1f;
+    padding: 5px 5px 5px 5px;
+}
+
+.inbox_chat :hover{
+
+    background-color: #e38d5f;
+    cursor: pointer;
+}
+.inbox_chat :active {
+    /* 마우스 hover 및 클릭시 적용될 스타일 */
+    background-color: #e38d5f;
+}
+
+.container{max-width:1000px; margin:auto;}
+img{ max-width:100%;}
+.inbox_people {
+    background: #ea986b none repeat scroll 0 0;
+    float: left;
+    overflow: hidden;
+    width: 40%; border-right:1px solid #c4c4c4;
+}
+.inbox_msg {
+    border: 3px solid #ea986b;
+    clear: both;
+    overflow: hidden;
+    border-radius: 3%;
+}
+
+
+
+.recent_heading {float: left; width:40%;}
+
+.headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
+
+.recent_heading h4 {
+    color: #ffffff;
+    font-size: 21px;
+    margin: auto;
+}
+
+
+.chat_ib h5{
+    font-size:18px; color:#464646; margin:5px 0 8px 0;
+    font-family: "Nanum Gothic";
+    font-weight: bold;
+}
+.chat_ib h5 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+
+    width: 21%;
+
+}
+.chat_img img{
+    border-radius: 60%;
+}
+.chat_ib {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 88%;
+
+}
+
+.chat_people{ overflow:hidden; clear:both;}
+.chat_list {
+    border-bottom: 1px solid #c4c4c4;
+    margin: 0;
+    padding: 18px 16px 10px;
+}
+.inbox_chat { height: 550px; overflow-y: scroll;}
+
+.active_chat{ background: #e68550;}
+
+.incoming_msg_img {
+    display: inline-block;
+    width: 10%;
+
+}
+.received_msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    max-width: 92%;
+}
+.received_withd_msg p {
+    background: #ebebeb none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #646464;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+    word-break:break-all;
+
+}
+p img{
+    border-radius: 5px;
+}
+.incoming_msg_img + p {
+    margin-bottom: 3px;
+}
+.received_withd_msg .puching-info{
+    background-color: #ebebeb;
+}
+.received_withd_msg .puching-title,.puching-description{
+    color: #19130d;
+}
+.received_withd_msg button{
+    background-color: #979292;
+}
+.sent_msg span{
+    color: white;
+}
+.sent_msg .time_date{
+    color:#979292;
+}
+
+.time_date {
+    color: #747474;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 5px;
+
+}
+.sent_msg .time_date{
+    float: right;
+}
+.received_msg .time_date{
+    float: left;
+    width: 200px;
+}
+
+.received_withd_msg { width: 57%;}
+.mesgs {
+    float: left;
+    padding: 20px 15px 0 35px;
+    width: 52%;
+    border-right: 1px solid #ea986b;
+}
+
+.sent_msg p {
+    background: #ea986b none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0; color:#fff;
+    padding: 5px 10px 5px 12px;
+    width:100%;
+    float: right;
+    word-break:break-all;
+
+}
+.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
+.sent_msg {
+    float: right;
+    max-width: 46%;
+
+
+}
+.input_msg_write input {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #4c4c4c;
+    font-size: 15px;
+    min-height: 48px;
+    width: 100%;
+}
+
+.type_msg {border-top: 1px solid #ea986b;position: relative;}
+.msg_send_btn {
+    background: #ea986b none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    height: 33px;
+    position: absolute;
+    right: 0;
+    top: 11px;
+    width: 33px;
+}
+.messaging {
+    padding: 0 0 50px 0;
+    width: 100%;
+}
+.msg_history {
+    height: 536px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.btn-area{
+    width: 60px;
+    height: 590px;
+    float: right;
+    background-color: #ffffff;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+.btn-area span{
+    position: absolute;
+    font-size: 10px;
+    font-weight: bold;
+    color: #ea986b;
+}
+#openPopupButton{
+    position: absolute;
+    top: 60%;
+    right: 30%;
+}
+#sendImageButton{
+    position: absolute;
+    top:30%;
+    right: 34%;
+}
+#imageLabel{
+    position: absolute;
+    top: 15%;
+    right: 34%;
+}
+#imageLabel:hover,
+#sendImageButton:hover,
+#openPopupButton:hover,
+.review-button:hover{
+    cursor: pointer;
+}
+.review-button{
+    position: absolute;
+    top: 45%;
+    right: 34%;
+}
+.popup-puching-btn{
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px 16px 16px 10px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    background-color: #ef7e3f;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+.date-wrap{
+    position: absolute;
+    z-index: 1;
+    padding: 30px 30px 30px 30px;
+    margin: 40px 10px 10px 10px;
+    width: 40%;
+    top: 9%;
+}
+.date-wrap #day{
+    margin: 20px 20px 20px 20px;
+    float: left;
+    left:40px;
+    top: 10px;
+
+}
+.date-wrap #time{
+    margin: 20px 20px 20px 20px;
+    float: left;
+    left:40px;
+    top: 10px;
+}
+@keyframes fadein {
+    from{
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.msg_history div{
+    animation: fadein 1s;
+}
+
+.msg_history::-webkit-scrollbar {
+    width: 10px;  /* 스크롤바의 너비 */
+}
+
+.msg_history::-webkit-scrollbar-thumb {
+    height: 14%; /* 스크롤바의 길이 */
+    background: #ef7e3f; /* 스크롤바의 색상 */
+    border-radius: 10px;
+}
+
+.msg_history::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);  /*스크롤바 뒷 배경 색상*/
+}
+

@@ -9,6 +9,7 @@ import kr.kro.namohagae.puching.dto.ReviewDto;
 import kr.kro.namohagae.puching.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -78,12 +79,11 @@ public class ReviewService {
         return dto;
     }
 
-
-    public void saveReview(String username, ReviewDto.Write dto){
+    @Transactional
+    public void saveReview(String username,ReviewDto.Write dto){
         Integer memberNo=memberDao.findNoByUsername(username);
         Review review= dto.toEntity(memberNo);
         Integer bonePoint=300;
-        System.out.println(review);
             reviewDao.save(review);
             reviewDao.updateMemberPoint(bonePoint,memberNo);
             reviewDao.updateMemberGrade(dto.getStarPoint(),dto.getReceiverNo());
