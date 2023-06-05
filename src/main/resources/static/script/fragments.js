@@ -7,89 +7,90 @@ let $_csrf;
 let $_csrf_input;
 let $viewportMetaTag;
 
+
 $(document).ready(async function() {
-    $_csrf = $('meta[name="_csrf"]').attr('content');
-    $_csrf_input = $('<input type="hidden" name="_csrf" value="'+ $_csrf + '">');
-    $viewportMetaTag = $('meta[name="viewport"]');
-    if (/Mobi/i.test(navigator.userAgent)) { // 모바일 기기인 경우
-        $viewportMetaTag.attr('content', 'width=1200, initial-scale=0.4');
-    }
-    let csrf = $('#_csrf');
-    if(csrf.length){
-        csrf.val($_csrf);
-        console.log(csrf.val());
-    }
-    const url = location.host;
-    let notificationSocket;
+        $_csrf = $('meta[name="_csrf"]').attr('content');
+        $_csrf_input = $('<input type="hidden" name="_csrf" value="' + $_csrf + '">');
+        $viewportMetaTag = $('meta[name="viewport"]');
+        if (/Mobi/i.test(navigator.userAgent)) { // 모바일 기기인 경우
+            $viewportMetaTag.attr('content', 'width=1200, initial-scale=0.4');
+        }
+        let csrf = $('#_csrf');
+        if (csrf.length) {
+            csrf.val($_csrf);
+        }
+        const url = location.host;
+    if (isLogin) {
+        let notificationSocket;
         printAside();
         try {
             const result = await $.ajax("/api/v1/notification/aside/list");
             printBsideNotification(result);
-        }catch (err){
+        } catch (err) {
             console.log(err)
         }
 
-    // Bside
-    if (url.includes("namohagae.kro.kr")){
-        notificationSocket = new WebSocket('wss://namohagae.kro.kr/notification');
-    }else if(url.includes("localhost:8081")){
-        notificationSocket = new WebSocket('ws://localhost:8081/notification');
-    }
-
-    notificationSocket.addEventListener('open', function (event) {
-        // 연결이 성공한 경우 실행되는 코드
-        console.log('Notification Service On');
-    });
-
-    notificationSocket.addEventListener('message', function (event) {
-        // 메시지를 받은 경우 실행되는 코드
-        const data = event.data;
-        const notification = JSON.parse(data).notification;
-        let $li = $(`<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`);
-        $li.css('background-color', '#c9dc92');
-        $('#notification').prepend($li);
-        setTimeout(function(){
-            $li.css('background-color', '');
-        },2000);
-    });
-
-    notificationSocket.addEventListener('close', function (event) {
-        console.log('Notification Service Off');
-        // 연결이 종료된 경우 실행되는 코드
-    });
-
-    notificationSocket.addEventListener('error', function (event) {
-        console.log('Notification Service Error');
-        // 에러가 발생한 경우 실행되는 코드
-    });
-    $('#notification').on("click", "#read", async function () {
-        const $notificationNo = $(this).data('notification-no');
-        try {
-            await $.ajax({
-                url: "/api/v1/notification/read?notificationNo=" + $notificationNo+"&_csrf="+$_csrf,
-                type: "PUT"
-            });
-            // 읽음 여부를 업데이트한 후의 작업을 수행
-        } catch (err) {
-            console.log(err);
+        // Bside
+        if (url.includes("namohagae.kro.kr")) {
+            notificationSocket = new WebSocket('wss://namohagae.kro.kr/notification');
+        } else if (url.includes("localhost:8081")) {
+            notificationSocket = new WebSocket('ws://localhost:8081/notification');
         }
-    })
-    let currentPosition = parseInt($(".quickMenu").css("top"));
-    $(window).scroll(function() {
-        const position = $(window).scrollTop();
-        $(".quickMenu").stop().animate({"top":position+currentPosition+"px"},1000);
-    });
 
-    // Header
-    $("#logout").click(function() {
-        // body.append(form) -> body,  form.appendTo(body) -> form
-        $('<form>').append($_csrf_input).attr("action","/logout").attr("method","post")
-            .appendTo($('body')).submit();
-    })
-    $('.header_logo').click(function (){
-        location.href='/';
-    })
+        notificationSocket.addEventListener('open', function (event) {
+            // 연결이 성공한 경우 실행되는 코드
+            console.log('Notification Service On');
+        });
 
+        notificationSocket.addEventListener('message', function (event) {
+            // 메시지를 받은 경우 실행되는 코드
+            const data = event.data;
+            const notification = JSON.parse(data).notification;
+            let $li = $(`<li><a data-notification-no="${notification.notificationNo}" id="read" href="${notification.notificationLink}">${notification.notificationContent}</a></li>`);
+            $li.css('background-color', '#c9dc92');
+            $('#notification').prepend($li);
+            setTimeout(function () {
+                $li.css('background-color', '');
+            }, 2000);
+        });
+
+        notificationSocket.addEventListener('close', function (event) {
+            console.log('Notification Service Off');
+            // 연결이 종료된 경우 실행되는 코드
+        });
+
+        notificationSocket.addEventListener('error', function (event) {
+            console.log('Notification Service Error');
+            // 에러가 발생한 경우 실행되는 코드
+        });
+        $('#notification').on("click", "#read", async function () {
+            const $notificationNo = $(this).data('notification-no');
+            try {
+                await $.ajax({
+                    url: "/api/v1/notification/read?notificationNo=" + $notificationNo + "&_csrf=" + $_csrf,
+                    type: "PUT"
+                });
+                // 읽음 여부를 업데이트한 후의 작업을 수행
+            } catch (err) {
+                console.log(err);
+            }
+        })
+        let currentPosition = parseInt($(".quickMenu").css("top"));
+        $(window).scroll(function () {
+            const position = $(window).scrollTop();
+            $(".quickMenu").stop().animate({"top": position + currentPosition + "px"}, 1000);
+        });
+
+        // Header
+        $("#logout").click(function () {
+            // body.append(form) -> body,  form.appendTo(body) -> form
+            $('<form>').append($_csrf_input).attr("action", "/logout").attr("method", "post")
+                .appendTo($('body')).submit();
+        })
+        $('.header_logo').click(function () {
+            location.href = '/';
+        })
+    }
 })
 
 function printAside(){
