@@ -9,7 +9,7 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>qna</title>
+    <title>report</title>
     <style>
 
 
@@ -111,7 +111,7 @@
                 const index = $(this).attr('id').split('-')[1];
                 const reportNo = $(`#reportNo-${index}`).val();
                 try {
-                    await $.ajax({ url: '/api/v1/report/delete?reportNo=' + reportNo, method: "post" });
+                    await $.ajax({ url: '/api/v1/report/delete?reportNo=' + reportNo+"&_csrf="+$_csrf, method: "post" });
                     location.reload();
                 } catch (err) {
                     console.log(err);
@@ -127,7 +127,6 @@
     <nav th:replace="~{fragments/nav :: nav}"></nav>
     <main>
         <aside th:replace="~{fragments/aside :: aside}"></aside>
-        </aside>
         <section>
             <input type="text" id="serchNickname">
             <button type="button" class="btn btn-primary btn-block" id="serch_btn">검색</button>
