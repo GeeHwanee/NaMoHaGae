@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/admin")
 public class AdminRestController {
 
     private final ProductService productService;
     private final TownService townService;
 
     // [상품 수정]--------------------------------------------------------------------
-    @PostMapping("/admin/product/put")
+    @PostMapping("/product/put")
     public ResponseEntity<ProductDto.Read> productPut(ProductDto.Put dto) {
         System.out.println(dto.toString());
         Integer result = productService.put(dto);
@@ -31,7 +31,7 @@ public class AdminRestController {
 
     // [Town 수정]--------------------------------------------------------------------
 
-    @GetMapping(value = "/admin/town/list",produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/town/list",produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?>townList(Integer pageno,String gu){
         if(gu.trim().equals("")==false){
             System.out.println(gu);
@@ -41,16 +41,16 @@ public class AdminRestController {
 
         return ResponseEntity.ok(townService.findAll(pageno));
     }
-    @GetMapping("/admin/town/checkDong")
+    @GetMapping("/town/checkDong")
     public ResponseEntity<Boolean> checkTownDong(String townDong){
         return ResponseEntity.ok(townService.checkDong(townDong));
     }
 
-    @PostMapping("/admin/town/save")
+    @PostMapping("/town/save")
     public ResponseEntity<Boolean> townSave(TownDto.save dto){
         return ResponseEntity.ok(townService.save(dto));
     }
-    @PostMapping("/admin/town/delete")
+    @PostMapping("/town/delete")
     public ResponseEntity<Boolean> towndelete(Integer townNo){
         return  ResponseEntity.ok(townService.delete(townNo));
     }
