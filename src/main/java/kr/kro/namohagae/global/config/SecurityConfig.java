@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/api/v1/login").defaultSuccessUrl("/",true)
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
-        http.logout().logoutUrl("/logout").logoutSuccessUrl("/");
+        http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
         http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
 
         return http.build();
