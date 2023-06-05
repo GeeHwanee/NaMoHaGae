@@ -1,6 +1,8 @@
 package kr.kro.namohagae.admin.controller;
 
+import kr.kro.namohagae.global.dto.BlockDto;
 import kr.kro.namohagae.global.dto.TownDto;
+import kr.kro.namohagae.global.service.BlockService;
 import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.service.ProductService;
@@ -19,6 +21,7 @@ public class AdminRestController {
 
     private final ProductService productService;
     private final TownService townService;
+    private final BlockService blockService;
 
     // [상품 수정]--------------------------------------------------------------------
     @PostMapping("/product/put")
@@ -45,7 +48,6 @@ public class AdminRestController {
     public ResponseEntity<Boolean> checkTownDong(String townDong){
         return ResponseEntity.ok(townService.checkDong(townDong));
     }
-
     @PostMapping("/town/save")
     public ResponseEntity<Boolean> townSave(TownDto.save dto){
         return ResponseEntity.ok(townService.save(dto));
@@ -54,4 +56,12 @@ public class AdminRestController {
     public ResponseEntity<Boolean> towndelete(Integer townNo){
         return  ResponseEntity.ok(townService.delete(townNo));
     }
+
+    // [Town 수정]--------------------------------------------------------------------
+
+    @PostMapping("/block/save")
+    public ResponseEntity<Boolean> save(BlockDto.save dto){
+        return  ResponseEntity.ok(blockService.save(dto));
+    }
+
 }
