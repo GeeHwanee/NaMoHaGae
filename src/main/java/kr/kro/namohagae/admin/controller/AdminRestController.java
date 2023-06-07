@@ -10,10 +10,7 @@ import kr.kro.namohagae.mall.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -55,11 +52,24 @@ public class AdminRestController {
         return  ResponseEntity.ok(townService.delete(townNo));
     }
 
-    // [Town 수정]--------------------------------------------------------------------
-
+    // [Report & Block]--------------------------------------------------------------------
     @PostMapping("/block/save")
     public ResponseEntity<Boolean> blockSave(BlockDto.save dto){
         return  ResponseEntity.ok(blockService.save(dto));
+    }
+
+    @GetMapping(value="/report/findAll", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findAll(@RequestParam(defaultValue="1") Integer pageno, String nickname) {
+        Integer memberNo = reportService.findMemberNoByNickname(nickname);
+        if (memberNo!=null&&nickname.trim().equals("")==false){
+            return ResponseEntity.ok(reportService.findAllByMemberNo(pageno,memberNo));
+        }
+        return ResponseEntity.ok(reportService.findAll(pageno));
+    }
+
+    @PostMapping("/report/delete")
+    public ResponseEntity<Boolean> delete(Integer reportNo){
+        return ResponseEntity.ok(reportService.delete(reportNo));
     }
 
 }

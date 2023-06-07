@@ -70,7 +70,7 @@
             const param = new URLSearchParams(location.search);
             const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
             try {
-                const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
+                const result = await $.ajax("/api/v1/admin/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
                 console.log(result);
                 printMyProductReview(result.reports);
                 printPagination(result)
@@ -79,7 +79,7 @@
                 $('#page_ul').on('click', '.page-link', async function (e) {
                     e.preventDefault();
                     const pageNum = $(this).data('page-no');
-                    const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
+                    const result = await $.ajax("/api/v1/admin/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
                     console.log(result);
                     printMyProductReview(result.reports);
                     printPagination(result);
@@ -89,7 +89,7 @@
             }
             $('#serch_btn').click(async function (){
                 try {
-                    const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
+                    const result = await $.ajax("/api/v1/admin/report/findAll?pageno=" + pageno + "&nickname="+$('#serchNickname').val());
                     console.log(result);
                     printMyProductReview(result.reports);
                     printPagination(result)
@@ -98,7 +98,7 @@
                     $('#page_ul').on('click', '.page-link', async function (e) {
                         e.preventDefault();
                         const pageNum = $(this).data('page-no');
-                        const result = await $.ajax("/api/v1/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
+                        const result = await $.ajax("/api/v1/admin/report/findAll?pageno=" + pageNum + "&nickname="+$('#serchNickname').val());
                         console.log(result);
                         printMyProductReview(result.reports);
                         printPagination(result);
@@ -111,7 +111,7 @@
                 const index = $(this).attr('id').split('-')[1];
                 const reportNo = $(`#reportNo-${index}`).val();
                 try {
-                    await $.ajax({ url: '/api/v1/report/delete?reportNo=' + reportNo+"&_csrf="+$_csrf, method: "post" });
+                    await $.ajax({ url: '/api/v1/admin/report/delete?reportNo=' + reportNo+"&_csrf="+$_csrf, method: "post" });
                     location.reload();
                 } catch (err) {
                     console.log(err);

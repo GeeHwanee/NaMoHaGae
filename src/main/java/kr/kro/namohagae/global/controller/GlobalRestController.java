@@ -2,9 +2,11 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.kro.namohagae.global.dto.NotificationDto;
+import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.dto.TownDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.NotificationService;
+import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class GlobalRestController {
 
     private final NotificationService notificationService;
     private final TownService townService;
+
 
     // [이미지 로딩]--------------------------------------------------------------------
     @GetMapping(value = {"/image/board", "/image/dog","/image/embeded", "/image/product", "/image/profile", "/image/temp", "/image/chat"}, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
