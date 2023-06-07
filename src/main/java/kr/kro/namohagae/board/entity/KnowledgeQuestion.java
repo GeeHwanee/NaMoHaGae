@@ -12,7 +12,6 @@ public class KnowledgeQuestion {
     private Integer memberNo;
     private String knowledgeQuestionTitle;
     private String knowledgeQuestionContent;
-    private Integer knowledgeQuestionReadCount;
     private LocalDateTime knowledgeQuestionWriteDate;
     private Integer knowledgeQuestionPoint;
 }

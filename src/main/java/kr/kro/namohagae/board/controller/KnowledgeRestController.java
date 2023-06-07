@@ -1,6 +1,7 @@
 package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.dto.*;
+import kr.kro.namohagae.board.service.BoardInsightService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.KnowledgeService;
 import kr.kro.namohagae.global.security.MyUserDetails;
@@ -21,6 +22,7 @@ public class KnowledgeRestController {
     private final KnowledgeService knowledgeService;
     private final MemberService memberService;
     private final BoardService boardService;
+    private final BoardInsightService boardInsightService;
 
     @PostMapping("/knowledge/answer/write")
     public ResponseEntity<String> answerWrite(KnowledgeAnswerDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -69,6 +71,16 @@ public class KnowledgeRestController {
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("실패");
         }
+    }
+
+    @PostMapping("/knowledge/answer/recommend")
+    public ResponseEntity<?> answerRecommend(Integer answerNo, Integer boardMemberNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
+        Boolean isRead = boardInsightService.existsByBoardNoAndMemberNo(answerNo, myUserDetails.getMemberNo());
+        if(!isRead){
+            boardInsightService.save(answerNo, myUserDetails.getMemberNo());
+        }
+        boardInsightService.updateBoardRecommendEnabled(answerNo, boardMemberNo, myUserDetails.getMemberNo());
+        return ResponseEntity.ok().body(boardInsightService.findBoardRecommendEnabled(answerNo, myUserDetails.getMemberNo()));
     }
 
     @GetMapping(value = "/member/knowledge/question",produces= MediaType.APPLICATION_JSON_VALUE)

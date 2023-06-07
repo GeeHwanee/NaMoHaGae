@@ -1,10 +1,10 @@
 package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
-import kr.kro.namohagae.board.service.*;
+import kr.kro.namohagae.board.service.BoardInsightService;
+import kr.kro.namohagae.board.service.BoardService;
+import kr.kro.namohagae.board.service.KnowledgeService;
 import kr.kro.namohagae.global.security.MyUserDetails;
-import kr.kro.namohagae.global.service.TownService;
-import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class KnowledgeController {
     private final BoardService boardService;
     private final KnowledgeService knowledgeService;
+    private final BoardInsightService boardInsightService;
+
     @GetMapping("/board/knowledge/main")
     public String knowledgemain(Model model){
         model.addAttribute("readList",knowledgeService.readList());
@@ -50,14 +52,11 @@ public class KnowledgeController {
 
     @GetMapping("/board/knowledge/read")
     public String knowledgeRead(Integer knowledgeQuestionNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
-        boolean isLiked = boardService.isLikeExists(knowledgeQuestionNo,myUserDetails.getMemberNo());
-        if(isLiked){
+        Boolean isRead = boardInsightService.existsByBoardNoAndMemberNo(knowledgeQuestionNo, myUserDetails.getMemberNo());
+        if(!isRead){
+            boardInsightService.save(knowledgeQuestionNo, myUserDetails.getMemberNo());
         }
-        else {
-            boardService.insertLike(knowledgeQuestionNo,myUserDetails.getMemberNo());
-            knowledgeService.update();
 
-        }
         model.addAttribute("question", knowledgeService.questionRead(knowledgeQuestionNo));
         model.addAttribute("memberNo", myUserDetails.getMemberNo());
 
