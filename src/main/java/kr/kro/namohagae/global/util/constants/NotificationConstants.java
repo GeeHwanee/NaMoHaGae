@@ -14,7 +14,7 @@ public interface NotificationConstants {
     public final static String CHATROOM_LINK = "/puching/chatroom";
     public final static String BOARD_FREE_LINK = "/board/free/read?boardNo=";
     public final static String BOARD_TOWN_LINK = "/board/town/read?boardNo=";
-    public final static String BOARD_KNOWLEDGE_LINK = "/board/knowledge/read?boardNo=";
+    public final static String BOARD_KNOWLEDGE_LINK = "/board/knowledge/read?QuestionNo=";
     public final static String QNA_LINK = "/member/mall/qna";
 
 
