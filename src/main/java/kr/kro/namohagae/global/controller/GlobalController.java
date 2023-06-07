@@ -355,8 +355,10 @@ public class GlobalController {
     }
     @GetMapping("/board/notice/read")
     public String noticeRead(Model model,Integer boardNoticeNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
-
-        boardService.insertLike(boardNoticeNo, myUserDetails.getMemberNo());
+        Boolean result = boardService.isLikeExists(boardNoticeNo, myUserDetails.getMemberNo());
+        if(!result){
+            boardService.insertLike(boardNoticeNo, myUserDetails.getMemberNo());
+        }
         model.addAttribute("read",boardNoticeService.findByBoardNoticeNo(boardNoticeNo));
 
         return "board/notice/read";
@@ -365,7 +367,7 @@ public class GlobalController {
     @GetMapping("/board/notice/list")
     public String noticeList(Model model) {
 
-        model.addAttribute("list", boardNoticeService.list());
+        model.addAttribute("preview", boardNoticeService.preview());
 
         return "board/notice/list";
     }
