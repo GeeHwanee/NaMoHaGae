@@ -13,11 +13,9 @@ public interface BoardNoticeDao {
 
     public List<BoardNotice> findAll();
 
-    public BoardNotice read(Integer boardNoticeNo);
+    public BoardNotice findByBoardNoticeNo(Integer boardNoticeNo);
 
     public Integer delete(Integer boardNoticeNo);
-
-    public Integer increaseReadCnt(Integer boardNoticeNo);
 
     public void update(BoardNotice boardNotice);
 }
