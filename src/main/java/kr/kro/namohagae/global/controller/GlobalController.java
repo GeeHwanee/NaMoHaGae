@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.kro.namohagae.board.dto.BoardTownDto;
 import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
-import kr.kro.namohagae.board.dto.PageDto;
-import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.*;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.ReportService;
@@ -40,7 +38,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.List;
 
 /*
     작성자: 박지환
@@ -324,35 +321,7 @@ public class GlobalController {
 
     // [게시판 파트]--------------------------------------------------------------------
 
-    @GetMapping("/board/free/list")
-    public String paging(Model model,
-                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,
-                         @RequestParam(value ="searchName", defaultValue = "") String searchName,
-                         @RequestParam(value ="change", defaultValue = "1") int change,Integer townNo) {
-        List<BoardList> pagingList = boardService.pagingList(searchName,page);
-        PageDto pageDTO = boardService.pagingParam(page,0);
-        model.addAttribute("change", change);
-        if (searchName != null && !searchName.isEmpty()) {
-            model.addAttribute("searchName", searchName);
-        }
-        if(change == 3) {
-            model.addAttribute("list",boardService.recommendCountList(searchName, page));
-            model.addAttribute("paging", pageDTO);
-            System.out.println(boardService.recommendCountList(searchName, page));
-        }
 
-        if(change == 2) {
-            model.addAttribute("list",boardService.readCountList(searchName, page));
-            model.addAttribute("paging", pageDTO);
-
-        }
-        if (change == 1) {
-            model.addAttribute("list", pagingList);
-            model.addAttribute("paging", pageDTO);
-        }
-
-        return "board/free/list";
-    }
     @GetMapping("/board/notice/read")
     public String noticeRead(Model model,Integer boardNoticeNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
         Boolean result = boardService.isLikeExists(boardNoticeNo, myUserDetails.getMemberNo());
