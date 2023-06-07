@@ -18,7 +18,7 @@
     </select>
 
     <update id="updateBoardLikeEnabled">
-        update BOARD_INSIGHT set BOARD_LIKE_ENABLED=#{boardLikeEnabled} where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
+        update BOARD_INSIGHT set BOARD_LIKE_ENABLED= decode(BOARD_LIKE_ENABLED,0,1,1,0) where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
     </update>
 
 </mapper>

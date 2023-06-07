@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface BoardInsightDao {
 
-    public Integer save(Integer boardNo, Integer MemberNo);
+    public Integer save(Integer boardNo, Integer memberNo);
 
-    public Boolean existsByBoardNoAndMemberNo(Integer boardNo, Integer MemberNo);
+    public Boolean existsByBoardNoAndMemberNo(Integer boardNo, Integer memberNo);
 
-    public Boolean findBoardLikeEnabledByBoardNoAndMemberNo(Integer boardNo, Integer MemberNo);
+    public Boolean findBoardLikeEnabledByBoardNoAndMemberNo(Integer boardNo, Integer memberNo);
 
-    public Integer updateBoardLikeEnabled(Boolean boardLikeEnabled, Integer boardNo, Integer MemberNo);
+    public void updateBoardLikeEnabled(Integer boardNo, Integer memberNo);
 
 }
