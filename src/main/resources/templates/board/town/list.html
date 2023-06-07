@@ -278,7 +278,24 @@
         onChangePage(1);
     }
 
-    $(document).ready(function () {
+    $(document).ready(async function () {
+        const selectElement = document.getElementById('townGu');
+        try{
+        const result = await $.ajax("/api/v1/town/guList")
+            console.log(result);
+            for (let i = 0; i < result.length; i++) {
+                    const option = document.createElement('option');
+                    option.text =result[i].townGu;
+                    option.value = result[i].townGu;
+                const existingOption = selectElement.querySelector(`option[value="${option.value}"]`);
+                if (!existingOption) {
+                    selectElement.appendChild(option);
+                }
+            }
+
+        }catch (err){
+            console.log(err);
+        }
         printTownDong();
         // select 요소 값 변경 이벤트 등록
         $('select[name="townDong"]').on('change', onChangeTownNo);
