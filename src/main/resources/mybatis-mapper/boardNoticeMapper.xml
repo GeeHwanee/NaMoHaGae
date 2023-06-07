@@ -9,6 +9,7 @@
         INSERT INTO BOARD_NOTICE
     values (BOARD_SEQ_BOARD_NO.nextval,#{boardNoticeWriter}, #{boardNoticeTitle},#{boardNoticeContent}, #{boardNoticeWriteDate})
     </insert>
+
     <select id="preview" resultType="kr.kro.namohagae.board.dto.BoardNoticeDto$Preview">
         select BOARD_NOTICE_NO, BOARD_NOTICE_WRITER, BOARD_NOTICE_TITLE, BOARD_NOTICE_WRITE_DATE,
                (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD_NOTICE_NO) as BOARD_NOTICE_READ_COUNT
