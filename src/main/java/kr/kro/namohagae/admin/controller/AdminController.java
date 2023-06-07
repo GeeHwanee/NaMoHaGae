@@ -1,6 +1,6 @@
 package kr.kro.namohagae.admin.controller;
 
-import kr.kro.namohagae.board.dto.NoticeDto;
+import kr.kro.namohagae.board.dto.BoardNoticeDto;
 import kr.kro.namohagae.board.service.BoardNoticeService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.TownService;
@@ -36,7 +36,7 @@ public class AdminController {
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/notice/list")
     public String adminNoticeList(Model model){
-        model.addAttribute("list", boardNoticeService.list());
+        model.addAttribute("list", boardNoticeService.preview());
         return "admin/notice/list";
     }
 
@@ -48,7 +48,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/notice/write")
-    public String adminNoticeWrite(NoticeDto.Add dto){
+    public String adminNoticeWrite(BoardNoticeDto.Add dto){
         boardNoticeService.addNotice(dto);
 
         return "redirect:/admin/notice/list";
@@ -77,7 +77,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/notice/update")
-    public String adminNoticeUpdate(Model model,NoticeDto.Update noticeDto) {
+    public String adminNoticeUpdate(Model model, BoardNoticeDto.Update noticeDto) {
         boardNoticeService.update(noticeDto);
         return "redirect:/admin/notice/list";
     }
