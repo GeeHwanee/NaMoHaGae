@@ -8,8 +8,10 @@ public interface BoardInsightDao {
 
     public Integer save(Integer boardNo, Integer MemberNo);
 
-    public Integer existsByBoardNoAndMemberNo(Integer boardNo, Integer MemberNo);
+    public Boolean existsByBoardNoAndMemberNo(Integer boardNo, Integer MemberNo);
 
-    public Integer findBoardLikeEnabledByBoardNoAndMemberNo(Integer boardNo, Integer MemberNo);
+    public Boolean findBoardLikeEnabledByBoardNoAndMemberNo(Integer boardNo, Integer MemberNo);
+
+    public Integer updateBoardLikeEnabled(Boolean boardLikeEnabled, Integer boardNo, Integer MemberNo);
 
 }
