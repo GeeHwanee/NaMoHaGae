@@ -87,4 +87,8 @@ public class TownService {
         return new TownDto.Pagination(pageno, prev, start, end, next, towns);
     }
 
+    public List<TownDto.Gu> findGu() {
+        System.out.println("toititit");
+        return townDao.findGu();
+    }
 }
