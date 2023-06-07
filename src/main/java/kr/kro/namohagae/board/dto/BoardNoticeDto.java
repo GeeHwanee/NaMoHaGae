@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
-public class NoticeDto {
+public class BoardNoticeDto {
     @Data
     public static class Add{
         private String boardNoticeTitle;
@@ -27,6 +27,25 @@ public class NoticeDto {
         public BoardNotice toEntity(){
             return BoardNotice.builder().boardNoticeNo(boardNoticeNo).boardNoticeTitle(boardNoticeTitle).boardNoticeContent(boardNoticeContent).build();
         }
+    }
+
+    @Data
+    public static class Preview{
+        private Integer boardNoticeNo;
+        private String boardNoticeWriter;
+        private String boardNoticeTitle;
+        private LocalDateTime boardNoticeWriteDate;
+        private Integer boardNoticeReadCount;
+    }
+
+    @Data
+    public static class Read{
+        private Integer boardNoticeNo;
+        private String boardNoticeWriter;
+        private String boardNoticeTitle;
+        private String boardNoticeContent;
+        private LocalDateTime boardNoticeWriteDate;
+        private Integer boardNoticeReadCount;
     }
 
 }
