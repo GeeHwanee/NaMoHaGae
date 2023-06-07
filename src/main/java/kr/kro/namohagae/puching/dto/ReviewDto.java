@@ -1,5 +1,6 @@
 package kr.kro.namohagae.puching.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.kro.namohagae.puching.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class ReviewDto {
         private Integer receiverNo;
         private String reviewReceiver;
         private String reviewContent;
+        @JsonFormat(pattern = "yy년 MM월 dd일 hh:mm:ss")
         private LocalDateTime puchingPromiseDate;
     }
 
