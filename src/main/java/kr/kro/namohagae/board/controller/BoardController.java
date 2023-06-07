@@ -34,7 +34,7 @@ public class BoardController {
     CommentService commentService;
 
 
-    @GetMapping("/board/free/list")
+    @GetMapping("/list")
     public String paging(Model model,
                          @RequestParam(value ="page", required = false, defaultValue = "1") int page,
                          @RequestParam(value ="searchName", defaultValue = "") String searchName,
