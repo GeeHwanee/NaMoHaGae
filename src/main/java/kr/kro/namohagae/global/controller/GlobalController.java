@@ -478,11 +478,4 @@ public class GlobalController {
         return "redirect:/board/knowledge/list";
     }
 
-    // [쇼핑몰 파트]--------------------------------------------------------------------
-    @GetMapping("/mall/cart")
-    public void cart(){
-    }
-
-
-
 }
