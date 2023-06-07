@@ -15,8 +15,6 @@
             board_title,
             board_content,
             board_write_date,
-            board_read_count,
-            board_recommend_count,
             board_enabled
         )
         SELECT
@@ -26,8 +24,6 @@
             #{boardTitle},
             #{boardContent},
             sysdate,
-            0,
-            0,
             0
         FROM
             member m
@@ -51,7 +47,6 @@
         FROM board b
                  JOIN member m ON b.member_No = m.member_No
         WHERE b.town_no = #{townNo} AND b.board_title LIKE '%' || #{searchName} || '%'
-        ORDER BY b.board_read_count DESC
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
     <select id="boardTownRecommendCountList" resultType="kr.kro.namohagae.board.dto.BoardTownListDto">
@@ -59,7 +54,6 @@
         FROM board b
                  JOIN member m ON b.member_No = m.member_No
         WHERE b.town_no = #{townNo} AND b.board_title LIKE '%' || #{searchName} || '%'
-        ORDER BY b.board_recommend_count DESC
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
     <select id="mainReadList" resultType="kr.kro.namohagae.board.dto.BoardMainList">
@@ -80,8 +74,6 @@
                  LEFT JOIN town t ON b.town_no = t.town_no -- town 테이블 조인
         WHERE
             b.town_no != 0
-        ORDER BY
-            b.board_read_count DESC
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
     <select id="mainRecommendList" resultType="kr.kro.namohagae.board.dto.BoardMainList">
@@ -102,8 +94,6 @@
                  LEFT JOIN town t ON b.town_no = t.town_no -- town 테이블 조인
         WHERE
             b.town_no != 0
-        ORDER BY
-            b.board_recommend_count DESC
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
     <select id="boardTownCount" resultType="Integer">
@@ -118,9 +108,7 @@
     <select id="count" resultType="int">
         select count(town_no) from board where town_no <![CDATA[>]]> 0
     </select>
-    <update id="townReadCnt">
-        update board set board_read_count=board_read_count+1 where board_no = #{boardNo}
-    </update>
+
     <update id="townUpdateData">
         update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
     </update>
