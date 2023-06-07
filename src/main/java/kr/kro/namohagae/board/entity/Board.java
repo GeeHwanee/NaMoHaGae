@@ -1,11 +1,7 @@
 package kr.kro.namohagae.board.entity;
 
-import kr.kro.namohagae.member.entity.Member;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-
 
 import java.time.LocalDateTime;
 
@@ -19,8 +15,6 @@ public class Board {
         private String boardTitle;
         private String boardContent;
         private LocalDateTime boardWriteDate;
-        private Integer boardReadCount;
-        private Integer boardRecommendCount;
         private Boolean boardEnabled;
 }
 
