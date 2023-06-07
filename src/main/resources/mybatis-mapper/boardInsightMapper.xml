@@ -9,13 +9,16 @@
         insert into  BOARD_INSIGHT values (#{boardNo},#{memberNo},0)
     </insert>
 
-    <select id="existsByBoardNoAndMemberNo" resultType="int">
+    <select id="existsByBoardNoAndMemberNo" resultType="Boolean">
         select count(*) from BOARD_INSIGHT where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
     </select>
 
-    <select id="findBoardLikeEnabledByBoardNoAndMemberNo">
+    <select id="findBoardLikeEnabledByBoardNoAndMemberNo" resultType="Boolean">
         select BOARD_LIKE_ENABLED from BOARD_INSIGHT where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
     </select>
 
+    <update id="updateBoardLikeEnabled">
+        update BOARD_INSIGHT set BOARD_LIKE_ENABLED=#{boardLikeEnabled} where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
+    </update>
 
 </mapper>
