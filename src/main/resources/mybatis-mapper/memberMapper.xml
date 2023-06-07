@@ -23,7 +23,7 @@
         where member_no = #{no} and rownum=1
     </update>
 
-    <select id="findByMember" resultType="Member">
+    <select id="findByMemberNo" resultType="Member">
         select * from MEMBER where member_no=#{no} and rownum=1
     </select>
 
