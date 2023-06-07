@@ -38,7 +38,7 @@
                         const tpl = `
                             <div class="answer" style="text-align: left">
                                 <i class="fa-solid fa-user fa-lg"></i>  <span class="username">${answer.memberNickname}</span> |
-                                <i class="fa-regular fa-thumbs-up fa-lg"></i> <span >${answer.knowledgeAnswerRecommend}</span> |
+                                <i class="fa-regular fa-thumbs-up fa-lg recommend" data-no="${answer.knowledgeAnswerNo}"></i> <span >${answer.knowledgeAnswerRecommend}</span> |
                                 <i class="fa-regular fa-calendar fa-lg"></i>  <span>${answer.knowledgeAnswerWriteDate}</span> |
                                 <span class="select_area">${(isWriter&&!isSelected&&!answer.knowledgeAnswerSelectionEnabled) ? $button[0].outerHTML : ''}</span>
                             </div>
@@ -121,6 +121,21 @@
             const $questionNo = $('#question_no').val();
             $('<form>').append($_csrf_input).append($(`<input type="hidden" name="knowledgeQuestionNo" value="${$questionNo}">`)).attr("action","/board/knowledge/question/delete").attr("method","post")
                 .appendTo($('body')).submit();
+        })
+        $(document).on('click', '.recommend', async function (){
+            const $answerNo = $(this).data('no');
+            await $.ajax({
+                url: '/api/v1/knowledge/answer/recommend?answerNo='+$answerNo+'&_csrf='+$_csrf,
+                method:'post',
+                success(){
+                    printKnowledgeAnswer();
+                },
+                error(error){
+                    console.log(error);
+                }
+            })
+
+
         })
     })
 </script>
