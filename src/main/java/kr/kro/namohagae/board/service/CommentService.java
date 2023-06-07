@@ -36,7 +36,7 @@ public class CommentService {
             link = NotificationConstants.BOARD_FREE_LINK;
         }
 
-        notificationService.save(memberDao.findByMember(boardOrigin.getMemberNo()).get(), NotificationConstants.COMMENT_CONTENT,link+boardComment.getBoardNo());
+        notificationService.save(memberDao.findByMemberNo(boardOrigin.getMemberNo()).get(), NotificationConstants.COMMENT_CONTENT,link+boardComment.getBoardNo());
          return commentDao.commentData(boardComment);
     };
 
