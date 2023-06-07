@@ -3,24 +3,19 @@ package kr.kro.namohagae.member.service;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.security.MyUserDetailsService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
-import kr.kro.namohagae.global.util.constants.Roles;
 import kr.kro.namohagae.member.dao.DogDao;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.dto.DogDto;
 import kr.kro.namohagae.member.entity.Dog;
 import kr.kro.namohagae.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,7 +28,7 @@ public class DogService {
     @Autowired
     private  MyUserDetailsService myUserDetailsService;
     public void save(DogDto.Registeration dto, Integer memberNo) {
-        Member member = memberDao.findByMember(memberNo).get();
+        Member member = memberDao.findByMemberNo(memberNo).get();
         String memberIntroduce = " ";
         String profileName = "default.jpg";
         if(dto.getDogIntroduce()!=null){
@@ -72,7 +67,7 @@ public class DogService {
     }
 
     public Boolean update(Integer memberNo,MultipartFile profile, String name,String introduce, String notGenderEnabled,String weight,Integer dogNo) {
-        Member member= memberDao.findByMember(memberNo).get();
+        Member member= memberDao.findByMemberNo(memberNo).get();
         Double newWeight = null;
         Boolean newNotGenderEnabled  =null;
         String newIntroduce = null;
