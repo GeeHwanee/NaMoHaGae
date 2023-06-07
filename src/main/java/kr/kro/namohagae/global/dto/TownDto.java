@@ -23,6 +23,10 @@ public class TownDto {
         private String townDong;
     }
     @Data
+    public static class Gu{
+        private String townGu;
+    }
+    @Data
     public static class userGuAndDong{
         private Integer townNo;
         private String townGu;
