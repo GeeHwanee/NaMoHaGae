@@ -56,9 +56,7 @@ public class AdminController {
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/notice/read")
     public String adminNoticeRead(Model model,Integer boardNoticeNo) {
-
-        boardNoticeService.increaseReadCnt(boardNoticeNo);
-        model.addAttribute("read", boardNoticeService.read(boardNoticeNo));
+        model.addAttribute("read", boardNoticeService.findByBoardNoticeNo(boardNoticeNo));
         return "admin/notice/read";
     }
     @Secured("ROLE_ADMIN")
@@ -72,7 +70,7 @@ public class AdminController {
     @GetMapping("/admin/notice/modify")
     public String adminNoticeModify(Model model,Integer boardNoticeNo){
 
-        model.addAttribute("read",boardNoticeService.read(boardNoticeNo));
+        model.addAttribute("read",boardNoticeService.findByBoardNoticeNo(boardNoticeNo));
 
         return "admin/notice/modify";
     }
@@ -80,7 +78,6 @@ public class AdminController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/notice/update")
     public String adminNoticeUpdate(Model model,NoticeDto.Update noticeDto) {
-        System.out.println(noticeDto);
         boardNoticeService.update(noticeDto);
         return "redirect:/admin/notice/list";
     }
