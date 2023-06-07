@@ -68,7 +68,7 @@ public class PuchingService {
         if(memberNo==null){
             return null;
         }
-        return mdao.findByMember(memberNo);
+        return mdao.findByMemberNo(memberNo);
     }
 
 
