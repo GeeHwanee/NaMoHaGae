@@ -20,9 +20,11 @@
         select *
         from BOARD_NOTICE
     </select>
-    <select id="findByBoardNoticeNo" resultType="BoardNotice">
-        select *
-        from BOARD_NOTICE where BOARD_NOTICE_NO = #{boardNoticeNo}
+    <select id="findByBoardNoticeNo" resultType="kr.kro.namohagae.board.dto.BoardNoticeDto$Read">
+        select BOARD_NOTICE_NO, BOARD_NOTICE_WRITER, BOARD_NOTICE_TITLE, BOARD_NOTICE_CONTENT, BOARD_NOTICE_WRITE_DATE,
+               (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD_NOTICE_NO) as BOARD_NOTICE_READ_COUNT
+        from BOARD_NOTICE
+        where BOARD_NOTICE_NO = #{boardNoticeNo}
     </select>
     <delete id="delete" parameterType="int">
         delete BOARD_NOTICE where BOARD_NOTICE_NO = #{boardNoticeNo}

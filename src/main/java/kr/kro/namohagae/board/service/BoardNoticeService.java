@@ -22,7 +22,7 @@ public class BoardNoticeService {
         return boardNoticeDao.preview();
     }
 
-    public BoardNotice findByBoardNoticeNo(Integer boardNoticeNo) {
+    public BoardNoticeDto.Read findByBoardNoticeNo(Integer boardNoticeNo) {
 
         return boardNoticeDao.findByBoardNoticeNo(boardNoticeNo);
     }

@@ -16,7 +16,7 @@ public interface BoardNoticeDao {
 
     public List<BoardNoticeDto.Preview> preview();
 
-    public BoardNotice findByBoardNoticeNo(Integer boardNoticeNo);
+    public BoardNoticeDto.Read findByBoardNoticeNo(Integer boardNoticeNo);
 
     public Integer delete(Integer boardNoticeNo);
 
