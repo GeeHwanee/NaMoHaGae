@@ -1,11 +1,10 @@
 package kr.kro.namohagae.board.controller;
 
 
-
 import kr.kro.namohagae.board.dto.BoardDto;
-
-import kr.kro.namohagae.board.dto.BoardLikeDto;
+import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
+import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.global.security.MyUserDetails;
@@ -15,10 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -32,7 +34,35 @@ public class BoardController {
     CommentService commentService;
 
 
+    @GetMapping("/board/free/list")
+    public String paging(Model model,
+                         @RequestParam(value ="page", required = false, defaultValue = "1") int page,
+                         @RequestParam(value ="searchName", defaultValue = "") String searchName,
+                         @RequestParam(value ="change", defaultValue = "1") int change,Integer townNo) {
+        List<BoardList> pagingList = boardService.pagingList(searchName,page);
+        PageDto pageDTO = boardService.pagingParam(page,0);
+        model.addAttribute("change", change);
+        if (searchName != null && !searchName.isEmpty()) {
+            model.addAttribute("searchName", searchName);
+        }
+        if(change == 3) {
+            model.addAttribute("list",boardService.recommendCountList(searchName, page));
+            model.addAttribute("paging", pageDTO);
+            System.out.println(boardService.recommendCountList(searchName, page));
+        }
 
+        if(change == 2) {
+            model.addAttribute("list",boardService.readCountList(searchName, page));
+            model.addAttribute("paging", pageDTO);
+
+        }
+        if (change == 1) {
+            model.addAttribute("list", pagingList);
+            model.addAttribute("paging", pageDTO);
+        }
+
+        return "board/free/list";
+    }
 
 
 
