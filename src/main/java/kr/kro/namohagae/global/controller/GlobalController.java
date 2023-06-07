@@ -354,10 +354,10 @@ public class GlobalController {
         return "board/free/list";
     }
     @GetMapping("/board/notice/read")
-    public String noticeRead(Model model,Integer boardNoticeNo){
+    public String noticeRead(Model model,Integer boardNoticeNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
 
-        boardNoticeService.increaseReadCnt(boardNoticeNo);
-        model.addAttribute("read",boardNoticeService.read(boardNoticeNo));
+        boardService.insertLike(boardNoticeNo, myUserDetails.getMemberNo());
+        model.addAttribute("read",boardNoticeService.findByBoardNoticeNo(boardNoticeNo));
 
         return "board/notice/read";
     }
