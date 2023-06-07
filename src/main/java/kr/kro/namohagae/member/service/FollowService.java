@@ -1,6 +1,7 @@
 package kr.kro.namohagae.member.service;
 
 import kr.kro.namohagae.global.service.NotificationService;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.FollowDao;
 import kr.kro.namohagae.member.dao.MemberDao;
@@ -46,7 +47,7 @@ public class FollowService {
     public FollowDto.Pagination list(Integer pageNo, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<FollowDto.FollowList> follow =  followDao.findFollowList(startRowNum, endRowNum, memberNo);
+        List<FollowDto.FollowList> follow =  followDao.findFollowList(startRowNum, endRowNum, memberNo,ImageConstants.IMAGE_PROFILE_URL);
         Integer countOfFavorite = followDao.count(memberNo);
         Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
