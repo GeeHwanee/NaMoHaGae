@@ -70,20 +70,25 @@
       console.log(res);
       const membergrade=res.memberGrade/10
       const ondo =membergrade.toFixed(1);
+      const dogSign=res.memberDogSignEnabled;
+      let dog='O';
+      if(!dogSign){
+        dog='X';
+      }
     const tql=`<div class="user-img-wrap">
 <div class="user-img">
   <img src=`+res.memberProfile+` alt="profileimage">
 </div>
-  <a href="/member/profile?memberNo=`+res.memberNo+`"><button class="profile-btn">프로필</button></a>
 </div>
 <div class="user-info-wrap">
-  <p>닉네임: `+res.memberNickname+`</p>
+  <p class="nick">`+res.memberNickname+`</p>
   <p>이메일: `+res.memberEmail+`</p>
   <p>퍼칭온도: `+ondo+`</p>
-  <p>`+res.memberDogSignEnabled+`</p>
+  <p>강아지등록여부: `+dog+`</p>
   <div class="user-introduce">
     <p>자기소개 : `+res.memberIntroduce+`</p>
   </div>
+  <a href="/member/profile?memberNo=`+res.memberNo+`"><button class="profile-btn">프로필</button></a>
 </div>`;
       $schcontainer.append(tql);
     }catch (err){
