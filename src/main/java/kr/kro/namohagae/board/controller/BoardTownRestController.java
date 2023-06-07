@@ -6,19 +6,16 @@ import kr.kro.namohagae.board.dto.ResponseDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.BoardTownService;
-import kr.kro.namohagae.global.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
 @RequestMapping("/api/v1")
 @RestController
-public class BoardTownController {
+public class BoardTownRestController {
 
     @Autowired
     BoardTownService boardTownService;
