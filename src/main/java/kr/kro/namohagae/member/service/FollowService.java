@@ -29,8 +29,8 @@ public class FollowService {
     }
 
     public Map<String,Boolean> follow(Integer memberNo, Integer myMemberNo) {
-        Member member = memberDao.findByMember(memberNo).get();
-        Member followMember = memberDao.findByMember(myMemberNo).get();
+        Member member = memberDao.findByMemberNo(memberNo).get();
+        Member followMember = memberDao.findByMemberNo(myMemberNo).get();
         Boolean alreadyFollow = followDao.existsByMemberNoAndFollowMemberNo(memberNo,myMemberNo);
         Map<String,Boolean> map = new HashMap<>();
         if (alreadyFollow==false) {

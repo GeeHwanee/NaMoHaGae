@@ -59,7 +59,7 @@ public class QnaService {
     }
     public Integer update(QnaDto.Put dto){
         Qna qna = dto.toEntity();
-        Member member = memberDao.findByMember(qna.getQnaWriter()).get();
+        Member member = memberDao.findByMemberNo(qna.getQnaWriter()).get();
         qnaDao.update(qna);
         notificationService.save(member, NotificationConstants.QNA_CONTENT,NotificationConstants.QNA_LINK);
         return 1;
