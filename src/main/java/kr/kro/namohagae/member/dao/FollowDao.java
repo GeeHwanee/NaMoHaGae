@@ -12,7 +12,7 @@ public interface FollowDao {
 
     public Integer delete(Integer memberNo,Integer myMemberNo);
 
-    public List<FollowDto.FollowList> findFollowList(Integer startRownum, Integer endRownum, Integer memberNo);
+    public List<FollowDto.FollowList> findFollowList(Integer startRownum, Integer endRownum, Integer memberNo,String url);
 
     public Boolean existsByMemberNoAndFollowMemberNo(Integer memberNo,Integer myMemberNo);
 
