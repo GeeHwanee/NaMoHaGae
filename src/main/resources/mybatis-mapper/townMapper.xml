@@ -55,4 +55,7 @@
     <delete id="delete">
         delete from town where townNo=#{townNo}
     </delete>
+    <select id="findGu" resultType="kr.kro.namohagae.global.dto.TownDto$Gu">
+        select town_gu from town
+    </select>
 </mapper>
