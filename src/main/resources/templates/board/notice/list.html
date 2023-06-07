@@ -30,7 +30,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="board : ${list}">
+            <tr th:each="board : ${preview}">
                 <td th:text="${board.boardNoticeNo}"></td>
                 <td>
                     <a th:href="@{/board/notice/read(boardNoticeNo=${board.boardNoticeNo})}" th:text="${board.boardNoticeTitle}">게시물 제목</a>
