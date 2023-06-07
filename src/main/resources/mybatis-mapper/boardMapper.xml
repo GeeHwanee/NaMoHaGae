@@ -57,7 +57,7 @@
         FROM board b
                  JOIN member m ON b.member_No = m.member_No
         WHERE b.board_title LIKE '%' || #{searchName} || '%' AND b.town_no = 0
-        ORDER BY b.board_read_count DESC
+
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
     <select id="recommendCountList" resultType="kr.kro.namohagae.board.entity.BoardList">
@@ -65,7 +65,7 @@
         FROM board b
                  JOIN member m ON b.member_No = m.member_No
         WHERE b.board_title LIKE '%' || #{searchName} || '%' AND b.town_no = 0
-        ORDER BY b.board_recommend_count DESC
+
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
     <select id="mainReadList" resultType="kr.kro.namohagae.board.dto.BoardMainList">
@@ -76,7 +76,7 @@
             FROM BOARD_COMMENT
             GROUP BY board_no
         ) c ON b.board_no = c.board_no where B.TOWN_NO = 0
-        ORDER BY b.board_read_count  DESC
+
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
     <select id="mainRecommendList" resultType="kr.kro.namohagae.board.dto.BoardMainList">
@@ -87,7 +87,7 @@
             FROM BOARD_COMMENT
             GROUP BY board_no
         ) c ON b.board_no = c.board_no where B.town_no = 0
-        ORDER BY b.board_recommend_count DESC
+
         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
     </select>
     <select id="boardCount" resultType="Integer">
@@ -128,29 +128,27 @@
         insert into board_insight values(#{boardNo},#{memberNo},0)
     </insert>
     <update id="updateLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        update board_insight SET BOARD_LIKE_ENABLED = 1 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
+        update board_insight SET BOARD_RECOMMEND_ENABLED = 1 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
     </update>
     <update id="removeLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        update board_insight SET BOARD_LIKE_ENABLED = 0 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
+        update board_insight SET BOARD_RECOMMEND_ENABLED = 0 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
     </update>
     <select id="findLike" resultType="int">
-        select BOARD_LIKE_ENABLED from board_insight where board_no = #{boardNo} and member_no = #{memberNo}
+        select BOARD_RECOMMEND_ENABLED from board_insight where board_no = #{boardNo} and member_no = #{memberNo}
     </select>
     <select id="isLikeExists" resultType="int">
         SELECT COUNT(*) FROM board_insight WHERE member_no = #{memberNo} AND board_no = #{boardNo}
     </select>
-    <update id="readCnt">
-        update board set
-            board_read_count = board_read_count+1
-        where board_no = #{boardNo}
-    </update>
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.BoardDto$FindAllByMemberNo">
         select * from
             (
                 select rownum as rnum, a.* from
                     (
                         select
-                           b.board_no,b.town_no,b.board_title,b.board_read_count,b.board_recommend_count,(select count(*) from board_comment c where c.board_no=b.board_no ) as commentCount, board_write_date
+                           b.board_no,b.town_no,b.board_title,
+                           (select count(*) from BOARD_INSIGHT where b.BOARD_NO=BOARD_INSIGHT.BOARD_NO) as board_read_count,
+                           (select count(*) from BOARD_INSIGHT where b.BOARD_NO=BOARD_INSIGHT.BOARD_NO and BOARD_INSIGHT.BOARD_RECOMMEND_ENABLED=1) AS board_recommend_count,
+                           (select count(*) from board_comment c where c.board_no=b.board_no ) as commentCount, board_write_date
                         from board b where b.member_no =#{memberNo} and board_enabled = 0
                     ) a
                 where rownum&lt;=#{endRownum}
