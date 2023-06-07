@@ -13,7 +13,7 @@ public interface MemberDao {
     public Boolean updateMember(@Param("no") Integer no, @Param("password") String password, @Param("nickname") String nickname,@Param("phone")String phone,
                                 @Param("townNo")Integer townNo,@Param("profile")String profile,@Param("longitude")Double longitude,@Param("latitude")Double latitude,@Param("introduce")String introduce);
 
-    public Optional<Member> findByMember(Integer no);
+    public Optional<Member> findByMemberNo(Integer no);
 
     public Integer findNoByUsername(String email);
 
