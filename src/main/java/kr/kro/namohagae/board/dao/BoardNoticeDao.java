@@ -1,5 +1,6 @@
 package kr.kro.namohagae.board.dao;
 
+import kr.kro.namohagae.board.dto.BoardNoticeDto;
 import kr.kro.namohagae.board.entity.BoardNotice;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +13,8 @@ public interface BoardNoticeDao {
     public void save(BoardNotice boardNotice);
 
     public List<BoardNotice> findAll();
+
+    public List<BoardNoticeDto.Preview> preview();
 
     public BoardNotice findByBoardNoticeNo(Integer boardNoticeNo);
 
