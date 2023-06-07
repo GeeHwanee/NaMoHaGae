@@ -262,6 +262,7 @@ img{ max-width:100%;}
 p img{
     border-radius: 5px;
 }
+
 .incoming_msg_img + p {
     margin-bottom: 3px;
 }
@@ -442,6 +443,20 @@ p img{
     animation: fadein 1s;
 }
 
+.inbox_chat::-webkit-scrollbar {
+    width: 10px;  /* 스크롤바의 너비 */
+}
+
+.inbox_chat::-webkit-scrollbar-thumb {
+    height: 14%; /* 스크롤바의 길이 */
+    background: #ef7e3f; /* 스크롤바의 색상 */
+    border-radius: 10px;
+}
+
+.msg_history::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);  /*스크롤바 뒷 배경 색상*/
+}
+
 .msg_history::-webkit-scrollbar {
     width: 10px;  /* 스크롤바의 너비 */
 }
@@ -455,4 +470,3 @@ p img{
 .msg_history::-webkit-scrollbar-track {
     background: rgb(255, 255, 255);  /*스크롤바 뒷 배경 색상*/
 }
-
