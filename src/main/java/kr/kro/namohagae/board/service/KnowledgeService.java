@@ -8,7 +8,9 @@ import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
 import kr.kro.namohagae.board.entity.KnowledgeAnswer;
 import kr.kro.namohagae.board.entity.KnowledgeQuestion;
 import kr.kro.namohagae.global.service.NotificationService;
+import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
+import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +72,7 @@ public class KnowledgeService {
         }
         return new KnowledgeQuestionDto.Pagination(pageNo, prev, start, end, next, questions);
     }
-
+    @Transactional
     public Boolean answerSave(KnowledgeAnswerDto.Write dto, Integer memberNo) {
         Integer isWrited = knowledgeAnswerDao.existsByMemberNo(dto.getKnowledgeQuestionNo(),memberNo);
         if (dto.getQuestionMemberNo().equals(memberNo)){
@@ -79,8 +81,15 @@ public class KnowledgeService {
        if (isWrited>0) {
             return false;
         }
+        Member member = memberDao.findByMember(dto.getQuestionMemberNo()).get();
         KnowledgeAnswer knowledgeAnswer = dto.toEntity(memberNo);
-        return knowledgeAnswerDao.save(knowledgeAnswer) == 1;
+        Integer result = knowledgeAnswerDao.save(knowledgeAnswer);
+        if (result==1){
+            notificationService.save(member, NotificationConstants.KNOWLEDGE_CONTENT,NotificationConstants.BOARD_KNOWLEDGE_LINK+dto.getKnowledgeQuestionNo());
+            return true;
+        }else {
+            return false;
+        }
     }
 
 
@@ -92,8 +101,15 @@ public class KnowledgeService {
     public Boolean answerUpdate(Integer answerNo, Integer point) {
         KnowledgeAnswer knowledgeAnswer = knowledgeAnswerDao.findByKnowledgeAnswerNo(answerNo);
         memberDao.updatePoint(knowledgeAnswer.getMemberNo(), point);
-        knowledgeAnswerDao.update(answerNo);
-        return true;
+        Integer result = knowledgeAnswerDao.update(answerNo);
+
+        if(result==1){
+            Member member = memberDao.findByMember(knowledgeAnswer.getMemberNo()).get();
+            notificationService.save(member, NotificationConstants.KNOWLEDGE_SELECT_CONTENT, NotificationConstants.BOARD_KNOWLEDGE_LINK+knowledgeAnswer.getKnowledgeQuestionNo());
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public Boolean answerDelete(Integer answerNo) {
