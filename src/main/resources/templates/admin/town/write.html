@@ -10,7 +10,7 @@
     <title>블락</title>
     <script>
         $(document).ready(function (){
-            $('#inputGu').click(function (){
+            $('#inputGu').click(async function (){
                 $('#townDong').empty();
                 $.ajax({
                     url: 'https://dapi.kakao.com/v2/local/search/address.json',
@@ -26,14 +26,16 @@
                             const selectElement = document.getElementById('townDong');
 
                             // Clear existing options
-                            selectElement.innerHTML = '';
-                            document.getElementById("townGu").value = data.documents[0].address.region_2depth_name;
                             // Create and append new options
+
                             for (let i = 0; i < addresses.length; i++) {
+                                if(data.documents[i].address.region_3depth_h_name!=""){
                                 const option = document.createElement('option');
-                                option.text = data.documents[i].address.region_3depth_h_name;
+                                document.getElementById("townGu").value = data.documents[i].address.region_2depth_name;
+                                option.text = data.documents[i].address.region_2depth_name +" "+ data.documents[i].address.region_3depth_h_name;
                                 option.value = data.documents[i].address.region_3depth_h_name;
                                 selectElement.appendChild(option);
+                                }
                             }
                         } else {
                             console.log('No addresses found');
@@ -43,6 +45,12 @@
                         console.log(error);
                     }
                 })
+                const result = await $.ajax('/api/v1/admin/town/checkDong?townDong='+$('#townDong').val());
+                if(result===false){
+                    $('#town').prop('disabled', false);
+                }else{
+                    $('#town').prop('disabled',true)
+                }
             });
             $('#townDong').change(async function (){
                 console.log($('#townDong').val());
@@ -50,6 +58,8 @@
                 console.log(result)
                 if(result===false){
                     $('#town').prop('disabled', false);
+                }else{
+                    $('#town').prop('disabled',true)
                 }
             });
             $('#town').click(async function(){
