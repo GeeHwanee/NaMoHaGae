@@ -1,19 +1,23 @@
 package kr.kro.namohagae.member.controller;
 
+import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
 public class MemberRestController {
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+    private final ReportService reportService;
+
     @PostMapping("/member/update")
     public ResponseEntity<Void> update(@AuthenticationPrincipal MyUserDetails myUserDetails, MemberDto.UpdateMember dto) {
         Integer memberNo = myUserDetails.getMemberNo();
@@ -61,4 +65,13 @@ public class MemberRestController {
     public ResponseEntity<Integer> findPointByMemberNo(@AuthenticationPrincipal MyUserDetails myUserDetails){
         return ResponseEntity.ok(memberService.findMemberPointByMemberNo(myUserDetails.getMemberNo()));
     }
+
+    // [Report]--------------------------------------------------------------------
+    @PostMapping("report/save")
+    public ResponseEntity<Boolean> save(@AuthenticationPrincipal MyUserDetails myUserDetails, ReportDto.Save dto){
+        Integer reportMemberNo = myUserDetails.getMemberNo();
+        return ResponseEntity.ok(reportService.save(dto,reportMemberNo));
+    }
+
+
 }
