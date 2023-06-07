@@ -254,7 +254,14 @@
                  const logintownNo = [[${logintownNo}]];
                 console.log('이거값뭐야'+logintownNo);
                     $('select[name="townDong"]').val(logintownNo);
+                    console.log($('select[name="townDong"]').val());
+                    if($('select[name="townDong"]').val()==null){
+                        console.log("rtrth")
+                        $('select[name="townDong"]').prop('selectedIndex', 1);
+                        console.log("dsfgdfg")
+                    }else{
 
+                    }
 
                 // 페이지를 1로 초기화하고 API 요청
                 onChangePage(1, '');
@@ -292,11 +299,14 @@
                     selectElement.appendChild(option);
                 }
             }
-
+            printTownDong();
         }catch (err){
             console.log(err);
         }
-        printTownDong();
+        $('#townGu').change(async function (){
+                printTownDong();
+
+        });
         // select 요소 값 변경 이벤트 등록
         $('select[name="townDong"]').on('change', onChangeTownNo);
     });
