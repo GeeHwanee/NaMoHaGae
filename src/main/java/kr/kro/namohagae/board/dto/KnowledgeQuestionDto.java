@@ -1,6 +1,5 @@
 package kr.kro.namohagae.board.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.kro.namohagae.board.entity.KnowledgeQuestion;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class KnowledgeQuestionDto {
@@ -34,7 +34,7 @@ public class KnowledgeQuestionDto {
     }
 
     @Data
-    public static class List{
+    public static class Preview{
         private Integer knowledgeQuestionNo;
         private String memberNickname;
         private String knowledgeQuestionTitle;
@@ -51,7 +51,7 @@ public class KnowledgeQuestionDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private java.util.List<KnowledgeQuestionDto.List> questions;
+        private List<KnowledgeQuestionDto.Preview> questions;
     }
 
     @Data
@@ -72,7 +72,7 @@ public class KnowledgeQuestionDto {
         private Integer start;
         private Integer end;
         private Integer next;
-        private java.util.List<KnowledgeQuestionDto.myQuestionList> questions;
+        private List<myQuestionList> questions;
     }
 
 }

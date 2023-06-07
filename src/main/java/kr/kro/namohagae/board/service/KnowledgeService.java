@@ -30,7 +30,7 @@ public class KnowledgeService {
     int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
     int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
     public Integer questionSave(KnowledgeQuestionDto.Write dto, Integer memberNo) {
-        Integer memberPoint = memberDao.findByMember(memberNo).get().getMemberPoint();
+        Integer memberPoint = memberDao.findByMemberNo(memberNo).get().getMemberPoint();
         if (memberPoint >= dto.getKnowledgeQuestionPoint()) {
             Integer negativePoint = -dto.getKnowledgeQuestionPoint();
             KnowledgeQuestion knowledgeQuestion = dto.toEntity(memberNo);
@@ -59,7 +59,7 @@ public class KnowledgeService {
     public KnowledgeQuestionDto.Pagination questionFindAll(Integer pageNo) {
         Integer startRowNum = (pageNo - 1) * PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<KnowledgeQuestionDto.List> questions = knowledgeQuestionDao.findAll(startRowNum, endRowNum);
+        List<KnowledgeQuestionDto.Preview> questions = knowledgeQuestionDao.findAll(startRowNum, endRowNum);
         Integer countOfQuestion = knowledgeQuestionDao.count();
         Integer countOfPage = (countOfQuestion - 1) / PAGESIZE + 1;
         Integer prev = (pageNo - 1) / BLOCKSIZE * BLOCKSIZE;
@@ -81,7 +81,7 @@ public class KnowledgeService {
        if (isWrited>0) {
             return false;
         }
-        Member member = memberDao.findByMember(dto.getQuestionMemberNo()).get();
+        Member member = memberDao.findByMemberNo(dto.getQuestionMemberNo()).get();
         KnowledgeAnswer knowledgeAnswer = dto.toEntity(memberNo);
         Integer result = knowledgeAnswerDao.save(knowledgeAnswer);
         if (result==1){
@@ -104,7 +104,7 @@ public class KnowledgeService {
         Integer result = knowledgeAnswerDao.update(answerNo);
 
         if(result==1){
-            Member member = memberDao.findByMember(knowledgeAnswer.getMemberNo()).get();
+            Member member = memberDao.findByMemberNo(knowledgeAnswer.getMemberNo()).get();
             notificationService.save(member, NotificationConstants.KNOWLEDGE_SELECT_CONTENT, NotificationConstants.BOARD_KNOWLEDGE_LINK+knowledgeAnswer.getKnowledgeQuestionNo());
             return true;
         }else {

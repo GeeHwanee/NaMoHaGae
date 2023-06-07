@@ -8,17 +8,19 @@
         <selectKey keyProperty="knowledgeQuestionNo" order="BEFORE" resultType="java.lang.Integer">
             select BOARD_SEQ_BOARD_NO.nextval from dual
         </selectKey>
-        insert into KNOWLEDGE_QUESTION(KNOWLEDGE_QUESTION_NO, MEMBER_NO, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_ENABLED)
-        values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, 0,#{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint}, 1)
+        insert into KNOWLEDGE_QUESTION(KNOWLEDGE_QUESTION_NO, MEMBER_NO, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_ENABLED)
+        values (#{knowledgeQuestionNo}, #{memberNo},#{knowledgeQuestionTitle},#{knowledgeQuestionContent}, #{knowledgeQuestionWriteDate},#{knowledgeQuestionPoint}, 1)
     </insert>
 
-    <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$List">
+    <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$Preview">
         select * from
             (
                 select rownum as rnum, a.* from
                     (
                         select
-                            KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_NO, M.MEMBER_Nickname, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE
+                            KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_NO, M.MEMBER_Nickname, KNOWLEDGE_QUESTION_TITLE,
+                            (select count(BOARD_INSIGHT.MEMBER_NO) from BOARD_INSIGHT where BOARD_NO = KNOWLEDGE_QUESTION_NO) as KNOWLEDGE_QUESTION_READ_COUNT,
+                            KNOWLEDGE_QUESTION.KNOWLEDGE_QUESTION_POINT, KNOWLEDGE_QUESTION_WRITE_DATE
                         from KNOWLEDGE_QUESTION
                         join MEMBER M on KNOWLEDGE_QUESTION.MEMBER_NO = M.MEMBER_NO
                         where KNOWLEDGE_QUESTION_ENABLED =1
@@ -33,7 +35,9 @@
     </select>
 
     <select id="findByKnowledgeQuestionNo" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$Read">
-        select KNOWLEDGE_QUESTION_NO, KNOWLEDGE_QUESTION.MEMBER_NO, m.MEMBER_NICKNAME, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT, KNOWLEDGE_QUESTION_READ_COUNT, KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT
+        select KNOWLEDGE_QUESTION_NO, KNOWLEDGE_QUESTION.MEMBER_NO, m.MEMBER_NICKNAME, KNOWLEDGE_QUESTION_TITLE, KNOWLEDGE_QUESTION_CONTENT,
+               (select count(BOARD_INSIGHT.MEMBER_NO) from BOARD_INSIGHT where BOARD_NO = KNOWLEDGE_QUESTION_NO) as KNOWLEDGE_QUESTION_READ_COUNT,
+               KNOWLEDGE_QUESTION_WRITE_DATE, KNOWLEDGE_QUESTION_POINT
         from KNOWLEDGE_QUESTION join MEMBER M on M.MEMBER_NO = KNOWLEDGE_QUESTION.MEMBER_NO
         where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo}
 
@@ -41,10 +45,7 @@
     <insert id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
         insert into board_insight values(#{boardNo},#{memberNo},0)
     </insert>
-    <update id="update">
-        update knowledge_question set KNOWLEDGE_QUESTION_READ_COUNT= KNOWLEDGE_QUESTION_READ_COUNT+1
 
-    </update>
 
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$myQuestionList">
         select * from
