@@ -14,16 +14,13 @@
         select *
         from BOARD_NOTICE
     </select>
-    <select id="read" resultType="BoardNotice">
+    <select id="findByBoardNoticeNo" resultType="BoardNotice">
         select *
         from BOARD_NOTICE where BOARD_NOTICE_NO = #{boardNoticeNo}
     </select>
     <delete id="delete" parameterType="int">
         delete BOARD_NOTICE where BOARD_NOTICE_NO = #{boardNoticeNo}
     </delete>
-    <update id="increaseReadCnt">
-        update BOARD_NOTICE set BOARD_NOTICE_READ_COUNT=BOARD_NOTICE_READ_COUNT+1 where BOARD_NOTICE_NO = #{boardNoticeNo}
-    </update>
     <update id="update">
         update BOARD_NOTICE set BOARD_NOTICE_TITLE = #{boardNoticeTitle} , BOARD_NOTICE_CONTENT = #{boardNoticeContent} where BOARD_NOTICE_NO = #{boardNoticeNo}
     </update>
