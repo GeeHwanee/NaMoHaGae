@@ -24,4 +24,6 @@ public interface TownDao {
     public List<TownDto.FindAll> findAllByGu(String gu,Integer startRownum,Integer endRownum);
     public Integer countAll();
     public Integer countAllByGu(String gu);
+
+    public List<TownDto.Gu> findGu();
 }
