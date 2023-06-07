@@ -13,12 +13,12 @@
         select count(*) from BOARD_INSIGHT where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
     </select>
 
-    <select id="findBoardLikeEnabledByBoardNoAndMemberNo" resultType="Boolean">
-        select BOARD_LIKE_ENABLED from BOARD_INSIGHT where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
+    <select id="findBoardRecommendEnabledByBoardNoAndMemberNo" resultType="Boolean">
+        select BOARD_RECOMMEND_ENABLED from BOARD_INSIGHT where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
     </select>
 
-    <update id="updateBoardLikeEnabled">
-        update BOARD_INSIGHT set BOARD_LIKE_ENABLED= decode(BOARD_LIKE_ENABLED,0,1,1,0) where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
+    <update id="updateBoardRecommendEnabled">
+        update BOARD_INSIGHT set BOARD_RECOMMEND_ENABLED= decode(BOARD_RECOMMEND_ENABLED,0,1,1,0) where BOARD_NO = #{boardNo} and MEMBER_NO = #{memberNo} and ROWNUM=1
     </update>
 
 </mapper>
