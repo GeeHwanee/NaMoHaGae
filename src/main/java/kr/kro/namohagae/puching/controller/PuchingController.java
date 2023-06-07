@@ -40,17 +40,13 @@ public class PuchingController {
     @Secured("ROLE_DOG")
     @GetMapping("/puching/reviewwrite")
     public String reviewwrite(@RequestParam("receiverNo")Integer receiverNo,@RequestParam("puchingNo")Integer puchingNo,Principal principal,Model model){
-        System.out.println(receiverNo);
-        System.out.println(puchingNo);
         ReviewDto.Writeview dto=puchingReviewService.findWriteViewInfo(principal.getName(),receiverNo,puchingNo);
         model.addAttribute("list",dto);
-        System.out.println(dto);
         return "puching/reviewwrite";
     }
     @Secured("ROLE_DOG")
     @PostMapping(value="/puching/reviewwrite")
     public String write(ReviewDto.Write dto, Principal principal) {
-        System.out.println(dto);
         puchingReviewService.saveReview(principal.getName(),dto);
         return "redirect:/puching/main";
     }
