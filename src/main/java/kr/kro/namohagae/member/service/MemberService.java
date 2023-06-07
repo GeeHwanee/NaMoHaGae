@@ -76,7 +76,7 @@ public class MemberService {
     }
 
     public MemberDto.Read read(Integer memberNo) {
-        Member member = memberDao.findByMember(memberNo).get();
+        Member member = memberDao.findByMemberNo(memberNo).get();
         return member.toReadDto();
     }
 
@@ -134,7 +134,7 @@ public class MemberService {
         String ext = dto.getProfile().getOriginalFilename().substring(postionOfDot);
         System.out.println(ext+"afdfbdfb");
         if(dto.getNickname().equals("")){
-            Member member= memberDao.findByMember(memberNo).get();
+            Member member= memberDao.findByMemberNo(memberNo).get();
             newNickname=member.getMemberNickname();
         }
         File file = new File(ImageConstants.IMAGE_PROFILE_DIRECTORY, newNickname + ext);
@@ -151,7 +151,7 @@ public class MemberService {
 
 
     public Boolean checkUpdateNickanme(Integer memberNo, String nickname) {
-        Member member = memberDao.findByMember(memberNo).get();
+        Member member = memberDao.findByMemberNo(memberNo).get();
         Boolean resultDB = memberDao.existsByNickname(nickname);                                // 기존 DB에 이메일이 있다면 false 리턴
         Boolean resultUser = member.getMemberNickname().equals(nickname);
         System.out.println(nickname);
