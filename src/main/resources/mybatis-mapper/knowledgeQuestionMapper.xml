@@ -42,11 +42,6 @@
         where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo}
 
     </select>
-    <insert id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        insert into board_insight values(#{boardNo},#{memberNo},0)
-    </insert>
-
-
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.KnowledgeQuestionDto$myQuestionList">
         select * from
             (

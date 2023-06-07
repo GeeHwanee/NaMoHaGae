@@ -107,38 +107,6 @@
         select * from BOARD where BOARD_NO = #{boardNo}
     </select>
 
-    <update id="updateRead">
-        UPDATE board
-        SET board_read_count = board_read_count + 1
-
-    </update>
-    <update id="goodLike">
-        UPDATE board
-        SET board_recommend_count = board_recommend_count + 1
-        WHERE board_no = #{boardNo}
-
-    </update>
-    <update id="badLike">
-        UPDATE board
-        SET board_recommend_count = board_recommend_count - 1
-        WHERE board_no = #{boardNo}
-
-    </update>
-    <insert id="insertLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        insert into board_insight values(#{boardNo},#{memberNo},0)
-    </insert>
-    <update id="updateLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        update board_insight SET BOARD_RECOMMEND_ENABLED = 1 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
-    </update>
-    <update id="removeLike" parameterType="kr.kro.namohagae.board.dto.BoardLikeDto">
-        update board_insight SET BOARD_RECOMMEND_ENABLED = 0 WHERE board_no = #{boardNo} AND member_no = #{memberNo}
-    </update>
-    <select id="findLike" resultType="int">
-        select BOARD_RECOMMEND_ENABLED from board_insight where board_no = #{boardNo} and member_no = #{memberNo}
-    </select>
-    <select id="isLikeExists" resultType="int">
-        SELECT COUNT(*) FROM board_insight WHERE member_no = #{memberNo} AND board_no = #{boardNo}
-    </select>
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.BoardDto$FindAllByMemberNo">
         select * from
             (
