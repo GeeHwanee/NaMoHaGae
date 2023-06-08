@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.kro.namohagae.board.dao.BoardDao">
 
-    <insert id="boardFreeInsertData" parameterType="kr.kro.namohagae.board.entity.Board">
+    <insert id="save" parameterType="kr.kro.namohagae.board.entity.Board">
         INSERT INTO board (
             board_no,
             town_no,
@@ -15,18 +15,8 @@
             board_write_date,
             board_enabled
         )
-        SELECT
-            BOARD_SEQ_BOARD_NO.NEXTVAL,
-            0,
-            m.member_no,
-            #{boardTitle},
-            #{boardContent},
-            sysdate,
-            0
-        FROM
-            member m
-        WHERE
-            m.member_no = #{memberNo}
+        values (BOARD_SEQ_BOARD_NO.NEXTVAL, #{townNo}, #{memberNo}, #{boardTitle}, #{boardContent}, #{boardWriteDate}, 1)
+
     </insert>
     <select id="preview" resultType="kr.kro.namohagae.board.dto.BoardDto$Preview">
         select BOARD_NO, BOARD.TOWN_NO, T.TOWN_DONG, BOARD.MEMBER_NO, M.MEMBER_NICKNAME, BOARD_TITLE, BOARD_WRITE_DATE,
@@ -34,7 +24,7 @@
                (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD.BOARD_NO) as board_read_count,
                (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD.BOARD_NO and BOARD_RECOMMEND_ENABLED=1) as board_recommend_count
         from BOARD join MEMBER M on BOARD.MEMBER_NO = M.MEMBER_NO join TOWN T on board.TOWN_NO = T.TOWN_NO
-        where BOARD.TOWN_NO = #{townNo}
+        where BOARD.TOWN_NO = #{townNo} and BOARD_ENABLED=1
         <if test="searchName!=null">
           and BOARD_TITLE LIKE '%' || #{searchName} || '%'
         </if>
@@ -61,7 +51,7 @@
             (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD.BOARD_NO) as board_read_count,
             (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD.BOARD_NO and BOARD_RECOMMEND_ENABLED=1) as board_recommend_count
         from BOARD join MEMBER M on BOARD.MEMBER_NO = M.MEMBER_NO
-        where BOARD.BOARD_NO= #{boardNo}
+        where BOARD.BOARD_NO= #{boardNo} and BOARD_ENABLED=1
     </select>
 
     <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.BoardList" parameterType="int">
