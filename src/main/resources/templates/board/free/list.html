@@ -7,8 +7,101 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>메인</title>
+    <title>자유게시판</title>
+    <script>
+        let sorting = "";
+        let search = "";
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+        function printFree(preview) {
+            $('#tbody').empty();
+            const $tbody = $('#tbody');
+            preview.forEach(n => {
+                    const writeDate=formatDateAnswer(n.boardWriteDate)
+                    const tpl = `
+                    <tr>
+                        <td>${n.boardNo}</td>
+                        <td><a href="/board/free/read?boardNo=${n.boardNo}">${n.boardTitle}</a></td>
+                        <td><a href="/member/profile?memberNo=${n.memberNo}">${n.memberNickname}</a></td>
+                        <td>${writeDate}</td>
+                        <td>${n.boardReadCount}</td>
+                        <td>${n.boardRecommendCount}</td>
+                    </tr>
+                    `;
+                    $tbody.append(tpl);
+                }
+            )
+        }
+        function printPagination({prev, start, end, next, pageNo}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageNo==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+        $(document).ready(async function (){
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
+            try {
+                const result = await $.ajax("/api/v1/board/free/list?pageNo=" + pageno);
+                console.log(result);
+                printFree(result.preview);
+                printPagination(result);
 
+                $('.sorting').click( async function(e) {
+                    e.preventDefault();
+                    sorting = $(this).val();
+                    const param = new URLSearchParams(location.search);
+                    const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
+                    const result = await $.ajax("/api/v1/board/free/list?pageNo=" + pageno+"&sorting="+sorting+"&searchName="+search);
+                    console.log(result);
+                    printFree(result.preview);
+                    printPagination(result);
+                })
+
+                $('.search').click( async function(e) {
+                    e.preventDefault();
+                    search = $('#searchName').val();
+                    const param = new URLSearchParams(location.search);
+                    const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
+                    const result = await $.ajax("/api/v1/board/free/list?pageNo=" + pageno+"&sorting="+sorting+"&searchName="+search);
+                    console.log(result);
+                    printFree(result.preview);
+                    printPagination(result);
+                })
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/board/free/list?pageNo="+pageNum+"&sorting="+sorting+"&searchName="+search);
+                    console.log(result);
+                    printFree(result.preview);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+
+
+
+        });
+    </script>
 </head>
 <style>
  #page {
@@ -65,9 +158,7 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>메인 페이지</h1>
         <article>
-
                 <table class="table table-hover table-striped text-center">
                     <thead>
                     <tr>
@@ -79,69 +170,25 @@
                         <th>추천수</th>
                     </tr>
                     </thead>
-                    <tbody>
-                        <tr th:each="board : ${list}">
-                            <td th:text="${board.boardNo}">1</td>
-                            <td>
-                                <a th:href="@{/board/free/read(boardNo=${board.boardNo},page=${paging.page},searchName=${searchName},change=${change})}" th:text="${board.boardTitle}" class="boardTitle">게시물 제목</a>
-                            </td>
-                            <td th:text="${board.memberNickname}"></td>
-                            <td th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                            <td th:text="${board.boardReadCount}"></td>
-                            <td th:text="${board.boardRecommendCount}"></td>
-                        </tr>
+                    <tbody id="tbody">
                     </tbody>
 
                 </table>
             <div id="button_form">
-            <form method="GET" action="/board/free/list">
-                <!-- 다른 입력 필드들 -->
-                <input type="hidden" name="change" value="1">
-                <button type="submit" class="btn btn-primary">전체글</button>
-            </form>
-            <form method="GET" action="/board/free/list">
-                <!-- 다른 입력 필드들 -->
-                <input type="hidden" name="change" value="2">
-                <button type="submit" class="btn btn-primary">조회순</button>
-            </form>
-            <form method="GET" action="/board/free/list">
-                <!-- 다른 입력 필드들 -->
-                <input type="hidden" name="change" value="3">
-                <button type="submit" class="btn btn-primary">추천순</button>
-            </form>
+                <button type="button" value="" class="sorting btn btn-primary">최신순</button>
+                <button type="button" value="boardReadCount" class="sorting btn btn-primary">조회순</button>
+                <button type="button" value="boardRecommendCount" class="sorting btn btn-primary">추천순</button>
                 <a class="btn btn-primary" th:href="@{/board/free/write}" id="town_write">글쓰기</a>
             </div>
 
             <nav aria-label="..." id="page">
-                <ul class="pagination">
-                    <li th:if="${paging.page <= 1}" class="page-item disabled">
-                        <span class="page-link">이전</span>
-                    </li>
-                    <li th:if="${paging.page > 1}" class="page-item">
-                        <a th:href="@{/board/free/list(page=${paging.page - 1}, searchName=${searchName},change=${change})}" class="page-link">이전</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item">
-                        <div th:if="${i eq paging.page}">
-                            <span th:text="${i}" class="page-link active"></span>
-                        </div>
-                        <div th:if="${i != paging.page}">
-                            <a th:href="@{/board/free/list(page=${i}, searchName=${searchName},change=${change})}" th:text="${i}" class="page-link"></a>
-                        </div>
-                    </li>
-                    <li th:if="${paging.page >= paging.maxPage}" class="page-item">
-                        <span class="page-link">다음</span>
-                    </li>
-                    <li th:if="${paging.page < paging.maxPage}" class="page-item">
-                        <a th:href="@{/board/free/list(page=${paging.page + 1}, searchName=${searchName},change=${change})}" class="page-link">다음</a>
-                    </li>
+                <ul class="pagination" id="page_ul">
                 </ul>
             </nav>
 
             <div id="search_form">
-            <form th:action="@{/board/free/list}" method="get">
-                <input type="text" name="searchName" id="search_box">
-                <button type="submit" class="btn btn-primary">검색</button>
-            </form>
+                <input type="text" name="searchName" id="searchName">
+                <button type="button" class="search btn btn-primary">검색</button>
             </div>
 
         </article>
