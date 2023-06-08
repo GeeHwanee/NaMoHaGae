@@ -5,7 +5,17 @@
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+<style>
+    .page-link {
+        color: #000000;
+        font-weight: bold;
+    }
 
+
+    #page {
+        border: none;
+    }
+</style>
     <!------------------------------------------------------------------------------------------------------------------------------>
     <script>
         function formatDateAnswer(dateStr) {
@@ -17,25 +27,35 @@
             const minutes = ('0' + date.getMinutes()).slice(-2);
             return `${year}-${month}-${day} ${hours}:${minutes}`;
         }
+
         function printQusetion(questions) {
-            $('#tbody').empty();
             const $tbody = $('#tbody');
-            questions.forEach(q => {
-                    const writeDate=formatDateAnswer(q.knowledgeQuestionWriteDate)
-                    const tpl = `
-                    <tr>
-                        <td>${q. knowledgeQuestionNo}</td>
-                        <td><a href="/board/knowledge/read?knowledgeQuestionNo=${q.knowledgeQuestionNo}">${q.knowledgeQuestionTitle}</a></td>
-                        <td>${q.memberNickname}</td>
-                        <td>${writeDate}</td>
-                        <td>${q.knowledgeQuestionReadCount}</td>
-                        <td>${q.knowledgeQuestionPoint}</td>
-                    </tr>
-                    `;
-                    $tbody.append(tpl);
-                }
-            )
+            $tbody.empty(); // tbody 비우기
+
+            const maxRows = 10; // 최대 행 개수
+
+            const numRows = questions.length < maxRows ? maxRows : questions.length; // 행 개수 결정
+
+            for (let i = 0; i < numRows; i++) {
+                const q = questions[i] || {}; // 빈 객체로 초기화
+
+                const writeDate=formatDateAnswer(q.knowledgeQuestionWriteDate)
+
+                const tpl = `
+        <tr>
+            <td>${q.knowledgeQuestionNo || ''}</td>
+            <td><a href="/board/knowledge/read?knowledgeQuestionNo=${q.knowledgeQuestionNo || ''}">${q.knowledgeQuestionTitle || ''}</a></td>
+            <td height="41px">${q.memberNickname || ''}</td>
+            <td>${(q.knowledgeQuestionWriteDate ? q.knowledgeQuestionWriteDate.replace('T', ' ').slice(0, 16) : '')}</td>
+            <td>${q.knowledgeQuestionReadCount || ''}</td>
+            <td>${q.knowledgeQuestionPoint || ''}</td>
+        </tr>
+    `;
+
+                $tbody.append(tpl); // tbody에 행 추가
+            }
         }
+
         function printPagination({prev, start, end, next, pageno}) {
             $('#page_ul').empty();
             const $ul = $('#page_ul');
@@ -103,8 +123,10 @@
 
             </tbody>
         </table>
+        <nav aria-label="..." id="page">
         <ul class="pagination" id="page_ul">
         </ul>
+        </nav>
         <h2></h2>
 
 
