@@ -326,7 +326,7 @@
         console.log(memberNo);
         $.ajax({
             type: "POST",
-            url: "/board/free/like",
+            url: "/api/v1/board/free/recommend",
             data: {
                 "boardNo": boardNo,
                 "memberNo": memberNo,
