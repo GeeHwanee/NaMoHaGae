@@ -37,7 +37,7 @@ public class BoardInsightService {
         return boardInsightDao.findBoardRecommendEnabledByBoardNoAndMemberNo(boardNo, memberNo);
     }
     @Transactional
-    public void updateBoardRecommendEnabled(BoardType boardType, Integer boardNo, Integer memberNo){
+    public Boolean updateBoardRecommendEnabled(BoardType boardType, Integer boardNo, Integer memberNo){
 
         String link ="";
         Member member = null;
@@ -59,6 +59,10 @@ public class BoardInsightService {
             }
         }
         boardInsightDao.updateBoardRecommendEnabled(boardNo, memberNo);
-        notificationService.save(member, NotificationConstants.RECOMMEND_CONTENT, link);
+        Boolean result = boardInsightDao.findBoardRecommendEnabledByBoardNoAndMemberNo(boardNo,memberNo);
+        if(result) {
+            notificationService.save(member, NotificationConstants.RECOMMEND_CONTENT, link);
+        }
+        return result;
     }
 }
