@@ -15,7 +15,13 @@
                (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD_NOTICE_NO) as BOARD_NOTICE_READ_COUNT
         from BOARD_NOTICE
     </select>
-
+    <select id="noticeList" resultType="kr.kro.namohagae.board.dto.BoardNoticeDto$Preview">
+        select BOARD_NOTICE_NO, BOARD_NOTICE_WRITER, BOARD_NOTICE_TITLE, BOARD_NOTICE_WRITE_DATE,
+               (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD_NOTICE_NO) as BOARD_NOTICE_READ_COUNT
+        from BOARD_NOTICE
+        order by board_notice_no desc
+        offset #{start}-1 rows fetch next #{end} rows only
+    </select>
 
     <select id="findAll" resultType="BoardNotice" >
         select *
@@ -33,6 +39,10 @@
     <update id="update">
         update BOARD_NOTICE set BOARD_NOTICE_TITLE = #{boardNoticeTitle} , BOARD_NOTICE_CONTENT = #{boardNoticeContent} where BOARD_NOTICE_NO = #{boardNoticeNo}
     </update>
+
+    <select id="count" resultType="Integer">
+        select count(*) from board_notice
+    </select>
 
 </mapper>
 
