@@ -30,13 +30,9 @@ public class BoardService {
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
-    public void boardFreeInsertData(BoardDto.Write boardDto, String userEmail) {
-
-
-        Board board = boardDto.toEntity(memberDao.findNoByUsername(userEmail), boardDto.getTitle(), boardDto.getContent());
-
-
-        boardDao.boardFreeInsertData(board);
+    public void save(BoardDto.Write boardDto, Integer memberNo) {
+        Board board = boardDto.toEntity(boardDto.getTownNo(), memberNo, boardDto.getTitle(), boardDto.getContent());
+        boardDao.save(board);
     }
 
     public BoardDto.PaginationPreview preview(Integer townNo, String searchName, String sorting, Integer pageNo) {
