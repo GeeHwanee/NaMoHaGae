@@ -12,6 +12,7 @@
         let sorting = "";
         let search = "";
         function formatDateAnswer(dateStr) {
+            console.log("변경 시간 "+dateStr);
             const date = new Date(dateStr);
             const year = date.getFullYear();
             const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -24,6 +25,7 @@
             $('#tbody').empty();
             const $tbody = $('#tbody');
             preview.forEach(n => {
+                console.log("원래 시간 "+n.boardWriteDate);
                     const writeDate=formatDateAnswer(n.boardWriteDate)
                     const tpl = `
                     <tr>
