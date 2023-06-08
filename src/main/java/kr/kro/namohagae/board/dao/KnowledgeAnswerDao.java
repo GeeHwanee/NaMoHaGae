@@ -13,6 +13,7 @@ public interface KnowledgeAnswerDao {
     public List<KnowledgeAnswerDto.Read> findAll(Integer questionNo);
 
     public Integer update(Integer answerNo);
+
     public KnowledgeAnswer findByKnowledgeAnswerNo(Integer answerNo);
 
     public List<KnowledgeAnswerDto.myAnswerList> findAllByMemberNo(Integer startRowNum, Integer endRowNum, Integer memberNo);
@@ -22,4 +23,6 @@ public interface KnowledgeAnswerDao {
     public void delete(Integer answerNo);
 
     public Integer existsByMemberNo(Integer knowledgeQuestionNo, Integer memberNo);
+
+    public Integer findMemberNoByBoardNo(Integer boardNo);
 }

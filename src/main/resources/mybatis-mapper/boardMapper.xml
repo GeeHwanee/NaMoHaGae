@@ -127,5 +127,10 @@
         select count(*) from board where member_no=#{memberNo}
     </select>
 
+    <select id="findMemberNoByBoardNo" resultType="int">
+        select MEMBER_NO from BOARD where BOARD_NO = #{boardNo}
+    </select>
+
+
 </mapper>
 

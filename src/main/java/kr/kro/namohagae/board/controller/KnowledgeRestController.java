@@ -5,6 +5,7 @@ import kr.kro.namohagae.board.service.BoardInsightService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.KnowledgeService;
 import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.global.util.constants.BoardType;
 import kr.kro.namohagae.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -79,7 +80,7 @@ public class KnowledgeRestController {
         if(!isRead){
             boardInsightService.save(answerNo, myUserDetails.getMemberNo());
         }
-        boardInsightService.updateBoardRecommendEnabled(answerNo, boardMemberNo, myUserDetails.getMemberNo());
+        boardInsightService.updateBoardRecommendEnabled(BoardType.KNOWLEDGE_ANSWER, answerNo, myUserDetails.getMemberNo());
         return ResponseEntity.ok().body(boardInsightService.findBoardRecommendEnabled(answerNo, myUserDetails.getMemberNo()));
     }
 
