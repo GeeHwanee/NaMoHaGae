@@ -15,10 +15,12 @@ public interface BoardNoticeDao {
     public List<BoardNotice> findAll();
 
     public List<BoardNoticeDto.Preview> preview();
+    public List<BoardNoticeDto.Preview> noticeList(Integer start, Integer end);
 
     public BoardNoticeDto.Read findByBoardNoticeNo(Integer boardNoticeNo);
 
     public Integer delete(Integer boardNoticeNo);
 
     public void update(BoardNotice boardNotice);
+    public Integer count();
 }
