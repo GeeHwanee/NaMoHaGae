@@ -30,7 +30,7 @@ public class BoardService {
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
-    public void boardFreeInsertData(BoardDto.write boardDto, String userEmail) {
+    public void boardFreeInsertData(BoardDto.Write boardDto, String userEmail) {
 
 
         Board board = boardDto.toEntity(memberDao.findNoByUsername(userEmail), boardDto.getTitle(), boardDto.getContent());
@@ -39,7 +39,28 @@ public class BoardService {
         boardDao.boardFreeInsertData(board);
     }
 
+    public BoardDto.PaginationPreview preview(Integer townNo, String searchName, String sorting, Integer pageNo) {
 
+        Integer start = (pageNo-1)*PAGESIZE + 1;
+        Integer end = start + PAGESIZE - 1;
+        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, start, end);
+        Integer countOfPreview = boardDao.countPreview(townNo, searchName);
+        Integer countOfPage = (countOfPreview-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer startPage = prev+1;
+        Integer endPage = prev + BLOCKSIZE;
+        Integer next = endPage+1;
+        if(end>=countOfPage) {
+            endPage = countOfPage;
+            next = 0;
+        }
+        return new BoardDto.PaginationPreview(pageNo, prev, startPage, endPage, next, preview);
+    }
+
+
+    public BoardDto.Read readByBoardNo(Integer boardNo){
+        return boardDao.readByBoardNo(boardNo);
+    }
 
     public BoardList boardFreeReadData(Integer boardNo) {
 
