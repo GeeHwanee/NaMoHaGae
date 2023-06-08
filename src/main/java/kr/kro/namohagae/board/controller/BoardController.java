@@ -29,12 +29,13 @@ public class BoardController {
     private final BoardInsightService boardInsightService;
     private final CommentService commentService;
 
-    @GetMapping(value = {"/free/list"/*, "/town/list"*/})
-    public String list(HttpServletRequest req) {
+    @GetMapping(value = {"/free/list", "/town/list"})
+    public String list(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req) {
         String path = req.getRequestURI();
         if (path.contains("/free")) {
             return "board/free/list";
         } else if (path.contains("/town")) {
+            model.addAttribute("townNo",myUserDetails.getTownNo());
             return "board/town/list";
         }
         return "redirect:/board/main";

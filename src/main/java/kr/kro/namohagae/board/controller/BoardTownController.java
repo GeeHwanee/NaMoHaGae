@@ -1,12 +1,12 @@
 package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.dto.BoardTownDto;
-import kr.kro.namohagae.board.service.*;
-import kr.kro.namohagae.global.security.MyUserDetails;
+import kr.kro.namohagae.board.service.BoardService;
+import kr.kro.namohagae.board.service.BoardTownService;
+import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,13 +44,5 @@ public class BoardTownController {
         return "redirect:/board/town/list";
     }
 
-    @GetMapping("/board/town/list")
-    public String townList(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails, Principal principal){
-
-        model.addAttribute("town",townService.findFuck(memberDao.findNoByUsername(principal.getName())));
-        model.addAttribute("logintownNo",myUserDetails.getTownNo());
-
-        return "board/town/list";
-    }
 
 }
