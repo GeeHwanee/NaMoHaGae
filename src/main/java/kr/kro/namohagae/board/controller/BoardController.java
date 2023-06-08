@@ -1,6 +1,7 @@
 package kr.kro.namohagae.board.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.kro.namohagae.board.dto.BoardDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.service.BoardInsightService;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
-
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/board")
@@ -30,9 +29,15 @@ public class BoardController {
     private final BoardInsightService boardInsightService;
     private final CommentService commentService;
 
-    @GetMapping("/free/list")
-    public String list() {
-        return "board/free/list";
+    @GetMapping(value = {"/free/list"/*, "/town/list"*/})
+    public String list(HttpServletRequest req) {
+        String path = req.getRequestURI();
+        if (path.contains("/free")) {
+            return "board/free/list";
+        } else if (path.contains("/town")) {
+            return "board/town/list";
+        }
+        return "redirect:/board/main";
     }
 
     @GetMapping("/free/write")
@@ -46,26 +51,23 @@ public class BoardController {
         return "redirect:/board/free/list";
     }
 
-    @GetMapping("/free/read")
-    public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
-                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page ,
-                                    @RequestParam(value ="searchName", defaultValue = "") String searchName,
-                                    @RequestParam(value ="change", defaultValue = "1") int change,Model model,Principal principal, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+    @GetMapping(value = {"/free/read", "/town/read"})
+    public String boardFreeReadData(Integer boardNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req) {
+        String path = req.getRequestURI();
 
         Boolean isRead = boardInsightService.existsByBoardNoAndMemberNo(boardNo, myUserDetails.getMemberNo());
         if(!isRead){
             boardInsightService.save(boardNo, myUserDetails.getMemberNo());
         }
-
-        model.addAttribute("change", change);
-        model.addAttribute("searchName", searchName);
-        model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
-        model.addAttribute("comment", commentService.commentList(boardNo));
         model.addAttribute("board", boardService.readByBoardNo(boardNo));
-        model.addAttribute("page", page);
+        model.addAttribute("comment", commentService.commentList(boardNo));
 
-        return "board/free/read";
-
+        if (path.contains("/free")) {
+            return "board/free/read";
+        } else if (path.contains("/town")) {
+            return "board/free/read";
+        }
+        return "redirect:/board/main";
     }
 
     @GetMapping("/free/delete")
