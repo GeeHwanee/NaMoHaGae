@@ -42,6 +42,7 @@ public class BoardDto {
         private String townDong;
         private Integer memberNo;
         private String memberNickname;
+        private String memberProfileImage;
         private String boardTitle;
         private String boardContent;
         private LocalDateTime boardWriteDate;
