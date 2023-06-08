@@ -279,8 +279,6 @@
         if (!townNo) {
             return;
         }
-
-
         // 페이지를 1로 초기화하고 API 요청
         onChangePage(1);
     }
@@ -299,13 +297,11 @@
                     selectElement.appendChild(option);
                 }
             }
-            printTownDong();
         }catch (err){
             console.log(err);
         }
         $('#townGu').change(async function (){
                 printTownDong();
-
         });
         // select 요소 값 변경 이벤트 등록
         $('select[name="townDong"]').on('change', onChangeTownNo);
@@ -334,10 +330,9 @@
         <div th:text="${town.townGu}" id="loginTownGu" style="display:none"></div>
         <select class="form-select" aria-label="Default select example" id="townGu" name="townGu">
             <option selected disabled>구 선택</option>
-            <option th:value="${town.townGu}" th:text="${town.townGu}" selected>미추홀구</option>
         </select>
         <select class="form-select" id="townDong" name="townDong">
-            <option selected disabled>구 부터 선택해주세요</option>
+            <option selected disabled th:value="${town.townNo}" th:text="${town.townDong}"></option>
         </select>
         <article>
 
