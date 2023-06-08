@@ -5,11 +5,12 @@ import kr.kro.namohagae.board.dto.BoardDto;
 import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
+import kr.kro.namohagae.board.service.BoardInsightService;
 import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.member.dao.MemberDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,19 +23,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/board/free")
 public class BoardController {
-    @Autowired
-    MemberDao memberDao;
-    @Autowired
-    BoardService boardService;
-    @Autowired
-    CommentService commentService;
 
+    private final MemberDao memberDao;
+    private final BoardService boardService;
+    private final BoardInsightService boardInsightService;
+    private final CommentService commentService;
 
     @GetMapping("/list")
+    public String list() {
+        return "board/free/list";
+    }
+
+
+    @GetMapping("/list/ss")
     public String paging(Model model,
                          @RequestParam(value ="page", required = false, defaultValue = "1") int page,
                          @RequestParam(value ="searchName", defaultValue = "") String searchName,
@@ -74,7 +79,7 @@ public class BoardController {
     }
 
     @PostMapping("/writepro")
-    public String boardFreeWritePro(BoardDto.write boardDto, Principal principal)  {
+    public String boardFreeWritePro(BoardDto.Write boardDto, Principal principal)  {
 
         boardService.boardFreeInsertData(boardDto,principal.getName());
         return "redirect:/board/free/list";
@@ -84,32 +89,18 @@ public class BoardController {
     public String boardFreeReadData(@RequestParam("boardNo") Integer boardNo,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page ,
                                     @RequestParam(value ="searchName", defaultValue = "") String searchName,
-                                    @RequestParam(value ="change", defaultValue = "1") int change,Model model,Principal principal) {
+                                    @RequestParam(value ="change", defaultValue = "1") int change,Model model,Principal principal, @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
-
-
-
-        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
-        if(isLiked){
-
-
-        }
-        else {
-            boardService.insertLike(boardNo, memberDao.findNoByUsername(principal.getName()));
-            boardService.readCnt(boardNo);
-
-        }
-        if(boardService.findLike(boardNo,memberDao.findNoByUsername(principal.getName())) == 1) {
-            model.addAttribute("good","좋아요취소");
-        } else {
-            model.addAttribute("good","좋아요");
+        Boolean isRead = boardInsightService.existsByBoardNoAndMemberNo(boardNo, myUserDetails.getMemberNo());
+        if(!isRead){
+            boardInsightService.save(boardNo, myUserDetails.getMemberNo());
         }
 
         model.addAttribute("change", change);
         model.addAttribute("searchName", searchName);
         model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
         model.addAttribute("comment", commentService.commentList(boardNo));
-        model.addAttribute("board", boardService.boardFreeReadData(boardNo));
+        model.addAttribute("board", boardService.readByBoardNo(boardNo));
         model.addAttribute("page", page);
 
         return "board/free/read";
