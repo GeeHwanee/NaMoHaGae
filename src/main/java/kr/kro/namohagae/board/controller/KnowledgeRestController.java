@@ -36,6 +36,10 @@ public class KnowledgeRestController {
            return ResponseEntity.status(HttpStatus.CONFLICT).body("실패");
         }
     }
+    @GetMapping(value = "/board/knoledge/list",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> questionList(@RequestParam(defaultValue="1")Integer pageno){
+        return ResponseEntity.ok(knowledgeService.questionFindAll(pageno));
+    }
     @GetMapping("/knowledge/main")
     public ResponseEntity<?> boardTownList(
                                            @RequestParam(value ="searchName",  defaultValue = "") String searchName,
