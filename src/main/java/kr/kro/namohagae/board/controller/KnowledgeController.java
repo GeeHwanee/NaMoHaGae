@@ -29,8 +29,7 @@ public class KnowledgeController {
     }
 
     @GetMapping("/board/knowledge/list")
-    public String knowledgeList(@RequestParam(defaultValue="1")Integer pageNo, Model model){
-        model.addAttribute("list",knowledgeService.questionFindAll(pageNo));
+    public String knowledgeList(){
         return "board/knowledge/list";
     }
 
