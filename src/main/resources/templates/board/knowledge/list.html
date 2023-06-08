@@ -7,6 +7,75 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
+    <script>
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+        function printQusetion(questions) {
+            $('#tbody').empty();
+            const $tbody = $('#tbody');
+            questions.forEach(q => {
+                    const writeDate=formatDateAnswer(q.knowledgeQuestionWriteDate)
+                    const tpl = `
+                    <tr>
+                        <td>${q. knowledgeQuestionNo}</td>
+                        <td><a href="/board/knowledge/read?knowledgeQuestionNo=${q.knowledgeQuestionNo}">${q.knowledgeQuestionTitle}</a></td>
+                        <td>${q.memberNickname}</td>
+                        <td>${writeDate}</td>
+                        <td>${q.knowledgeQuestionReadCount}</td>
+                        <td>${q.knowledgeQuestionPoint}</td>
+                    </tr>
+                    `;
+                    $tbody.append(tpl);
+                }
+            )
+        }
+        function printPagination({prev, start, end, next, pageno}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+        $(document).ready(async function (){
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            console.log("asd");
+            try {
+                const result = await $.ajax("/api/v1/board/knoledge/list?pageno=" + pageno);
+                console.log(result);
+                printQusetion(result.questions);
+                printPagination(result)
+
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/board/knoledge/list?pageno=" + pageNum);
+                    console.log(result);
+                    printQusetion(result.questions);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
     <title>지식인 게시판 목록 페이지</title>
 </head>
 <body>
@@ -23,27 +92,19 @@
             <thead>
             <tr>
                 <th>글번호</th>
-                <th>뼈다귀 포인트</th>
                 <th>제목</th>
                 <th>글쓴이</th>
                 <th>글쓴시간</th>
                 <th>조회수</th>
+                <th>뼈다귀 포인트</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
 
-            <tr th:each="question : ${list.questions}">
-                    <td th:text="${question.knowledgeQuestionNo}">1</td>
-                    <td th:text="${question.knowledgeQuestionPoint}"></td>
-                    <td>
-                        <a th:href="@{/board/knowledge/read(knowledgeQuestionNo=${question.knowledgeQuestionNo})}" th:text="${question.knowledgeQuestionTitle}"></a>
-                    </td>
-                    <td th:text="${question.memberNickname}"></td>
-                    <td th:text="${#temporals.format(question.knowledgeQuestionWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${question.knowledgeQuestionReadCount}"></td>
-            </tr>
             </tbody>
         </table>
+        <ul class="pagination" id="page_ul">
+        </ul>
         <h2></h2>
 
 
