@@ -14,7 +14,7 @@ public interface BoardDao {
 
     public void save(Board board);
     public List<BoardDto.Preview> preview(Integer townNo, String searchName, String sorting, Integer start, Integer end);
-    public BoardDto.Read readByBoardNo(Integer boardNo);
+    public BoardDto.Read readByBoardNo(String url, Integer boardNo);
 
 
 
