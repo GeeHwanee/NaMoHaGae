@@ -12,11 +12,11 @@ import java.util.List;
 @Mapper
 public interface BoardDao {
 
+    public void save(Board board);
     public List<BoardDto.Preview> preview(Integer townNo, String searchName, String sorting, Integer start, Integer end);
     public BoardDto.Read readByBoardNo(Integer boardNo);
 
 
-    public void boardFreeInsertData(Board board);
 
 
     public BoardList boardFreeReadData(Integer boardNo);
