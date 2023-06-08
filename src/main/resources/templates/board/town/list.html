@@ -4,368 +4,125 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-    <link rel="stylesheet" href="/css/boardlist.css">
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
-
+    <link rel="stylesheet" href="/css/boardlist.css">
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>동네게시판 리스트</title>
+    <title>동네게시판</title>
 </head>
 <style>
-
     button {
         margin:0 -1px;
     }
-
 </style>
-<script th:inline="javascript">
-    function printBoard(boardTownListDto) {
-        const $tbody = $('#tbody');
-        $tbody.empty(); // tbody 비우기
-
-        const maxRows = 10; // 최대 행 개수
-
-        const numRows = Math.min(boardTownListDto.length, maxRows); // 행 개수 결정
-
-        for (let i = 0; i < numRows; i++) {
-            const b = boardTownListDto[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
-
-            // 객체의 데이터를 기반으로 행 생성
-            const tpl = `<tr>
-       <td>${b.boardNo}</td>
-       <td>${b.townNo}</td>
-       <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
-       <td>${b.memberNickname}</td>
-       <td>${b.boardWriteDate.replace('T', ' ')}</td>
-       <td>${b.boardReadCount}</td>
-       <td>${b.boardRecommendCount}</td>
-      </tr>`;
-
-            $tbody.append(tpl); // tbody에 행 추가
-        }
-
-        // 남은 행 추가 (빈 행)
-        for (let i = numRows; i < maxRows; i++) {
-            const tpl = `<tr>
-       <td style="height:41px"></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-      </tr>`;
-
-            $tbody.append(tpl); // tbody에 빈 행 추가
-        }
+<script>
+    let sorting = "";
+    let search = "";
+    let townNo = 0;
+    function formatDateAnswer(dateStr) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        const hours = ('0' + date.getHours()).slice(-2);
+        const minutes = ('0' + date.getMinutes()).slice(-2);
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
     }
-    function printBoard2(boardTownReadCountDto) {
-        const $tbody = $('#tbody2');
-        $tbody.empty(); // tbody 비우기
-
-        const maxRows = 10; // 최대 행 개수
-
-        const numRows = Math.min(boardTownReadCountDto.length, maxRows); // 행 개수 결정
-
-        for (let i = 0; i < numRows; i++) {
-            const b = boardTownReadCountDto[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
-
-            // 객체의 데이터를 기반으로 행 생성
-            const tpl = `<tr>
-       <td>${b.boardNo}</td>
-       <td>${b.townNo}</td>
-       <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
-       <td>${b.memberNickname}</td>
-       <td>${b.boardWriteDate.replace('T', ' ')}</td>
-       <td>${b.boardReadCount}</td>
-       <td>${b.boardRecommendCount}</td>
-      </tr>`;
-
-            $tbody.append(tpl); // tbody에 행 추가
-        }
-
-        // 남은 행 추가 (빈 행)
-        for (let i = numRows; i < maxRows; i++) {
-            const tpl = `<tr>
-       <td style="height:41px"></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-      </tr>`;
-
-            $tbody.append(tpl); // tbody에 빈 행 추가
-        }
-    }
-    function printBoard3(boardTownRecommendCountDto) {
-        const $tbody = $('#tbody3');
-        $tbody.empty(); // tbody 비우기
-
-        const maxRows = 10; // 최대 행 개수
-
-        const numRows = Math.min(boardTownRecommendCountDto.length, maxRows); // 행 개수 결정
-
-        for (let i = 0; i < numRows; i++) {
-            const b = boardTownRecommendCountDto[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
-
-            // 객체의 데이터를 기반으로 행 생성
-            const tpl = `<tr>
-       <td>${b.boardNo}</td>
-       <td>${b.townNo}</td>
-       <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
-       <td>${b.memberNickname}</td>
-       <td>${b.boardWriteDate.replace('T', ' ')}</td>
-       <td>${b.boardReadCount}</td>
-       <td>${b.boardRecommendCount}</td>
-      </tr>`;
-
-            $tbody.append(tpl); // tbody에 행 추가
-        }
-
-        // 남은 행 추가 (빈 행)
-        for (let i = numRows; i < maxRows; i++) {
-            const tpl = `<tr>
-       <td style="height:41px"></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-       <td></td>
-      </tr>`;
-
-            $tbody.append(tpl); // tbody에 빈 행 추가
-        }
-    }
-    function printReadCount(){
-        const $readCount = $('#readCount');
-        $readCount.empty();
-
-        const tql = `
-                    <button onclick="fuck2()" class="btn btn-primary">전체글</button>
-                    <button onclick="fuck()" class="btn btn-primary">조회순</button>
-                    <button onclick="fuck3()" class="btn btn-primary">추천순</button>
-                    <a class="btn btn-primary" href="/board/town/write" id="town_write2">글쓰기</a>
-                     `
-
-        $readCount.append(tql);
-    }
-
-    function fuck(){
-        $('#tbody3').hide();
-        $('#tbody2').show();
-        $('#tbody').hide();
-    }
-    function fuck2(){
-        $('#tbody3').hide();
-        $('#tbody2').hide();
-        $('#tbody').show();
-    }
-    function fuck3(){
-        $('#tbody2').hide();
-        $('#tbody').hide();
-        $('#tbody3').show();
-    }
-
-
-    function onSearch() {
-        const searchName = $('#searchName').val();
-        onChangePage(1, searchName);
-    }
-
-    function printSearch(searchName){
-        const $layout3 = $('.layout3');
-        $layout3.empty();
-
-        let tpl = `<input type="text" name="searchName" id="searchName">
-            <button type="submit" onclick="onSearch()" class="btn btn-primary">검색</button>`
-
-        $layout3.append(tpl);
-    }
-
-    function printPaging(paging) {
-        const $layout2 = $('.layout2');
-        $layout2.empty();
-
-        const startPage = paging.startPage;
-        const endPage = paging.endPage;
-        const currentPage = paging.page;
-        const maxPage = paging.maxPage;
-
-        let tpl = '<ul class="pagination">';
-        if (currentPage <= 1) {
-            tpl += '<li class="page-item disabled"><span class="page-link">이전</span></li>';
-        } else {
-            tpl += `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage - 1}">이전</a></li>`;
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-            if (i === currentPage) {
-                tpl += `<li class="page-item"><div><span class="page-link active">${i}</span></div></li>`;
-            } else {
-                tpl += `<li><div><a href="#" class="page-link" data-page="${i}">${i}</a></div></li>`;
+    function printTown(preview) {
+        const $tbody = $('#tbody').empty();
+        preview.forEach(n => {
+                const writeDate=formatDateAnswer(n.boardWriteDate)
+                const tpl = `
+                    <tr>
+                        <td>${n.boardNo}</td>
+                        <td>${n.townDong}</td>
+                        <td><a href="/board/town/read?boardNo=${n.boardNo}">${n.boardTitle}</a></td>
+                        <td><a href="/member/profile?memberNo=${n.memberNo}">${n.memberNickname}</a></td>
+                        <td>${writeDate}</td>
+                        <td>${n.boardReadCount}</td>
+                        <td>${n.boardRecommendCount}</td>
+                    </tr>
+                    `;
+                $tbody.append(tpl);
             }
+        )
+    }
+    function printPagination({prev, start, end, next, pageNo}) {
+        $('#page_ul').empty();
+        const $ul = $('#page_ul');
+        if(prev>0)
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+        for(let i=start; i<=end; i++) {
+            const tpl = `
+			<li class='page-item ${pageNo==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+            $ul.append(tpl);
         }
-
-        if (currentPage >= maxPage) {
-            tpl += '<li class="page-item"><span class="page-link">다음</span></li>';
-        } else {
-            tpl += `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage + 1}">다음</a></li>`;
-        }
-
-        tpl += '</ul>';
-
-        $layout2.append(tpl);
-
-        // 페이지 링크 클릭 이벤트 등록
-        $layout2.find('a[data-page]').on('click', function (e) {
-            e.preventDefault();
-            const page = $(this).data('page');
-            onChangePage(page);
-        });
-
+        if(next>0)
+            $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
     }
-
-    function onSuccess(board) {
-        const boardTownListDto = board.boardTownListDto;
-        console.log('안녕하세요', board);
-        printBoard(boardTownListDto);
-        const boardTownReadCountListDto = board.boardTownReadCountDto
-        printBoard2(boardTownReadCountListDto);
-        const boardTownRecommendCountListDto = board.boardTownRecommendCountDto
-        printBoard3(boardTownRecommendCountListDto);
-        const searchName = "";
-        printSearch(searchName);
-        const paging = board.pageDto;
-        printPaging(paging);
-        printReadCount();
-        limitTitleLength();
-
-    }
-
-    function onError(xhr, status, error) {
-        console.log(xhr, status, error);
-    }
-
-
-    // 페이지 변경시 호출되는 함수
-    function onChangePage(page,searchName) {
-        const townNo = $('select[name="townDong"]').val();
-
-        // townNo 값이 선택되지 않은 경우, 요청하지 않음
-        if (!townNo) {
-            return;
-        }
-        let url = `/api/v1/board/town/list?townNo=${townNo}&page=${page}`;
-        if (searchName) {
-            url += `&searchName=${encodeURIComponent(searchName)}`;
-        }
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: onSuccess,
-            error: onError
-        });
-    }
-    function printTownDong() {
-        const $townGu = $('#townGu').val();
-        console.log($townGu);
-        $.ajax({
-            url: `/api/v1/town/find?townGu=${$townGu}`,
-            method: 'GET',
-            success: function (list) {
-                const $townDong = $('#townDong').empty();
-                let tpl = ` <option selected disabled>동 선택</option>`;
-                $townDong.append(tpl);
-                for (const town of list) {
-                    tpl = `
-                    <option value="${town.townNo}">${town.townDong}</option>
-                `;
-                    $townDong.append(tpl);
-                }
-                 const logintownNo = [[${logintownNo}]];
-                console.log('이거값뭐야'+logintownNo);
-                    $('select[name="townDong"]').val(logintownNo);
-                    console.log($('select[name="townDong"]').val());
-                    if($('select[name="townDong"]').val()==null){
-                        console.log("rtrth")
-                        $('select[name="townDong"]').prop('selectedIndex', 0);
-                        console.log("dsfgdfg")
-                    }else{
-
-                    }
-
-                // 페이지를 1로 초기화하고 API 요청
-                onChangePage(1, '');
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr, status, error);
-            }
-        });
-    }
-    // select 요소에서 값이 변경될 때마다 호출되는 함수
-    function onChangeTownNo() {
-        const townNo = $('select[name="townDong"]').val();
-
-        // townNo 값이 선택되지 않은 경우, 요청하지 않음
-        if (!townNo) {
-            return;
-        }
-        // 페이지를 1로 초기화하고 API 요청
-        onChangePage(1);
-    }
-
-    $(document).ready(async function () {
-        const selectElement = document.getElementById('townGu');
-        try{
-        const result = await $.ajax("/api/v1/town/guList")
+    $(document).ready(async function (){
+        const param = new URLSearchParams(location.search);
+        const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
+        townNo=1;
+        try {
+            const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageno+"&townNo="+townNo);
             console.log(result);
-            for (let i = 0; i < result.length; i++) {
-                    const option = document.createElement('option');
-                    option.text =result[i].townGu;
-                    option.value = result[i].townGu;
-                const existingOption = selectElement.querySelector(`option[value="${option.value}"]`);
-                if (!existingOption) {
-                    selectElement.appendChild(option);
-                }
-            }
-        }catch (err){
+            printTown(result.preview);
+            printPagination(result);
+
+            $('.sorting').click( async function(e) {
+                e.preventDefault();
+                sorting = $(this).val();
+                const param = new URLSearchParams(location.search);
+                const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
+                const result = await $.ajax("/api/v1/board/town/list?pageNo=" + pageno+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
+                console.log(result);
+                printTown(result.preview);
+                printPagination(result);
+            })
+
+            $('.search').click( async function(e) {
+                e.preventDefault();
+                search = $('#searchName').val();
+                const param = new URLSearchParams(location.search);
+                const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
+                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageno+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
+                console.log(result);
+                printTown(result.preview);
+                printPagination(result);
+            })
+
+            $('#page_ul').on('click', '.page-link', async function (e) {
+                e.preventDefault();
+                const pageno = $(this).data('page-no');
+                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageno+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
+                console.log(result);
+                printTown(result.preview);
+                printPagination(result);
+            });
+        } catch (err) {
             console.log(err);
         }
-        $('#townGu').change(async function (){
-                printTownDong();
-        });
-        // select 요소 값 변경 이벤트 등록
-        $('select[name="townDong"]').on('change', onChangeTownNo);
     });
-    function limitTitleLength() {
-        var titleElements = document.getElementsByClassName("boardTitle");
-        for (var i = 0; i < titleElements.length; i++) {
-            var title = titleElements[i].textContent;
-            var maxLength = 5; // 최대 길이 설정
-            if (title.length > maxLength) {
-                titleElements[i].textContent = title.substring(0, maxLength) + "...";
-            }
-        }
-    }
-
 
 </script>
 <body>
+<script th:inline="javascript">
+    const $townNo=[[${townNo}]];
+</script>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
         <h1>동네 게시판</h1>
-        <div th:text="${logintownNo}" id="logintownNo" style="display:none"></div>
-        <div th:text="${town.townGu}" id="loginTownGu" style="display:none"></div>
         <select class="form-select" aria-label="Default select example" id="townGu" name="townGu">
             <option selected disabled>구 선택</option>
         </select>
         <select class="form-select" id="townDong" name="townDong">
-            <option selected disabled th:value="${town.townNo}" th:text="${town.townDong}"></option>
+            <option selected disabled >gd</option>
         </select>
         <article>
 
@@ -384,20 +141,21 @@
                 </thead>
                 <tbody id="tbody">
                 </tbody>
-                <tbody id="tbody2" style="display:none">
-                </tbody>
-                <tbody id="tbody3" style="display:none">
-                </tbody>
             </table>
-            <div id="readCount">
-
+            <div id="button_form">
+                <button type="button" value="" class="sorting btn btn-primary">최신순</button>
+                <button type="button" value="boardReadCount" class="sorting btn btn-primary">조회순</button>
+                <button type="button" value="boardRecommendCount" class="sorting btn btn-primary">추천순</button>
+                <a class="btn btn-primary" th:href="@{/board/free/write}" id="town_write">글쓰기</a>
             </div>
-            <nav class="layout2" aria-label="...">
+            <nav aria-label="..." id="page">
+                <ul class="pagination" id="page_ul">
+                </ul>
             </nav>
-            <div class="layout3">
-
+            <div id="search_form">
+                <input type="text" name="searchName" id="searchName">
+                <button type="button" class="search btn btn-primary">검색</button>
             </div>
-
         </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
