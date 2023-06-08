@@ -1,8 +1,6 @@
 package kr.kro.namohagae.board.dto;
 
 import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.member.dto.FollowDto;
-import kr.kro.namohagae.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -12,23 +10,46 @@ import java.util.List;
 
 public class BoardDto {
     @Data
-    public static class write {
+    public static class Write {
+        private Integer townNo;
         private Integer memberNo;
         private String title;
         private String content;
 
-        public Board toEntity(Integer memberNo, String title, String content) {
-
-            return Board.builder().memberNo(memberNo).boardTitle(title).boardContent(content).build();
-
+        public Board toEntity(Integer townNo, Integer memberNo, String title, String content) {
+            return Board.builder().townNo(townNo).memberNo(memberNo).boardTitle(title).boardContent(content).boardWriteDate(LocalDateTime.now()).build();
         }
     }
 
     @Data
-    public static class readCnt {
+    public static class Preview{
         private Integer boardNo;
+        private Integer townNo;
+        private String townDong;
         private Integer memberNo;
+        private String memberNickname;
+        private String boardTitle;
+        private Integer commentCount;
+        private LocalDateTime boardWriteDate;
+        private Integer boardReadCount;
+        private Integer boardRecommendCount;
     }
+
+    @Data
+    public static class Read{
+        private Integer boardNo;
+        private Integer townNo;
+        private String townDong;
+        private Integer memberNo;
+        private String memberNickname;
+        private String memberProfileImage;
+        private String boardTitle;
+        private String boardContent;
+        private LocalDateTime boardWriteDate;
+        private Integer boardReadCount;
+        private Integer boardRecommendCount;
+    }
+
 
     @Data
     public static class FindAllByMemberNo {
@@ -44,8 +65,19 @@ public class BoardDto {
     @Data
     @ToString
     @AllArgsConstructor
+    public static class PaginationPreview {
+        private Integer pageNo;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private List<BoardDto.Preview> preview;
+    }
+    @Data
+    @ToString
+    @AllArgsConstructor
     public static class Pagination {
-        private Integer pageno;
+        private Integer pageNo;
         private Integer prev;
         private Integer start;
         private Integer end;

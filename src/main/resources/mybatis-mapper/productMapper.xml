@@ -197,7 +197,7 @@
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
-        order by p.product_grade desc, review_count desc
+        order by case when product_grade is null then 1 else 0 end, product_grade desc, review_count desc nulls last
         ) p
         where rownum&lt;=#{endRowNum}
         )
@@ -283,6 +283,6 @@
         FROM product p
                  JOIN product_image pi ON p.product_no = pi.product_no
             AND pi.product_image_no = 1
-        ORDER BY p.product_grade DESC
+        ORDER BY CASE WHEN product_grade IS NULL THEN 1 ELSE 0 END, product_grade DESC, review_count DESC NULLS LAST
     </select>
 </mapper>

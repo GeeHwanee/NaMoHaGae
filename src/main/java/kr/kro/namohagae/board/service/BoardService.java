@@ -9,9 +9,8 @@ import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.global.service.NotificationService;
-import kr.kro.namohagae.global.util.constants.NotificationConstants;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
-import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +29,33 @@ public class BoardService {
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
-    public void boardFreeInsertData(BoardDto.write boardDto, String userEmail) {
+    public void save(BoardDto.Write boardDto, Integer memberNo) {
+        Board board = boardDto.toEntity(boardDto.getTownNo(), memberNo, boardDto.getTitle(), boardDto.getContent());
+        boardDao.save(board);
+    }
 
+    public BoardDto.PaginationPreview preview(Integer townNo, String searchName, String sorting, Integer pageNo) {
 
-        Board board = boardDto.toEntity(memberDao.findNoByUsername(userEmail), boardDto.getTitle(), boardDto.getContent());
-
-
-        boardDao.boardFreeInsertData(board);
+        Integer start = (pageNo-1)*PAGESIZE + 1;
+        Integer end = start + PAGESIZE - 1;
+        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, start, end);
+        Integer countOfPreview = boardDao.countPreview(townNo, searchName);
+        Integer countOfPage = (countOfPreview-1)/PAGESIZE + 1;
+        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer startPage = prev+1;
+        Integer endPage = prev + BLOCKSIZE;
+        Integer next = endPage+1;
+        if(end>=countOfPage) {
+            endPage = countOfPage;
+            next = 0;
+        }
+        return new BoardDto.PaginationPreview(pageNo, prev, startPage, endPage, next, preview);
     }
 
 
+    public BoardDto.Read readByBoardNo(Integer boardNo){
+        return boardDao.readByBoardNo(ImageConstants.IMAGE_PROFILE_URL,boardNo);
+    }
 
     public BoardList boardFreeReadData(Integer boardNo) {
 
@@ -60,34 +76,6 @@ public class BoardService {
     int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
     int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
 
-    public List<BoardList> pagingList(String searchName,int page) {
-
-        /*
-        1페이지당 보여지는 글 갯수 5
-            1page => 0
-            2page => 5
-            3page => 10
-         */
-
-        int pagingStart = (page - 1) * pageLimit;
-
-        return boardDao.pagingList(searchName,pagingStart, pageLimit);
-    }
-
-    public List<BoardList> readCountList(String searchName,int page) {
-
-
-        int pagingStart = (page - 1) * pageLimit;
-
-        return boardDao.readCountList(searchName,pagingStart, pageLimit);
-    }
-
-    public List<BoardList> recommendCountList(String searchName,int page) {
-
-        int pagingStart = (page - 1) * pageLimit;
-
-        return boardDao.recommendCountList(searchName,pagingStart,pageLimit);
-    }
 
     public PageDto pagingParam(int page,Integer townNo) {
         // 전체 글 갯수 조회
@@ -126,58 +114,6 @@ public class BoardService {
         return boardDao.mainRecommendList();
     }
 
-
-
-    public Boolean isLikeExists(Integer boardNo, Integer memberNo) {
-
-        Integer count = boardDao.isLikeExists(boardNo,memberNo);
-        System.out.println("갯수 : " + count);
-        return count != null && count.intValue() > 0;
-
-    }
-
-    public void insertLike(Integer boardNo, Integer memberNo) {
-        System.out.println("갯수 : " + memberNo+boardNo);
-        Board board = boardDao.findByBoardNo(boardNo);
-        Member member = memberDao.findByMemberNo(board.getMemberNo()).get();
-        notificationService.save(member, NotificationConstants.RECOMMEND_CONTENT, NotificationConstants.BOARD_FREE_LINK+boardNo);
-        boardDao.insertLike(boardNo,  memberNo);
-    }
-    public void readCnt(Integer boardNo) {
-
-        boardDao.readCnt(boardNo);
-    }
-
-    public void updateLike(Integer boardNo, Integer memberNo) {
-
-        boardDao.updateLike(boardNo,memberNo);
-    }
-
-    public Integer findLike(Integer boardNo, Integer memberNo) {
-
-        return boardDao.findLike(boardNo, memberNo);
-    }
-    public void removeLike(Integer memberNo, Integer boardNo) {
-        System.out.println("갯수 : " + memberNo+boardNo);
-        boardDao.removeLike(memberNo, boardNo);
-    }
-    public void goodLike(Integer boardNo) {
-
-        boardDao.goodLike(boardNo);
-        Board board = boardDao.findByBoardNo(boardNo);
-        Member member = memberDao.findByMemberNo(board.getMemberNo()).get();
-        String link;
-        if(board.getTownNo()!=0){
-            link = NotificationConstants.BOARD_TOWN_LINK;
-        }else{
-            link = NotificationConstants.BOARD_FREE_LINK;
-        }
-        notificationService.save(member, NotificationConstants.RECOMMEND_CONTENT,link+board.getBoardNo());
-    }
-    public void badLike(Integer boardNo) {
-
-        boardDao.badLike(boardNo);
-    }
     public BoardDto.Pagination memberList(Integer pageno, Integer memberNo) {
         Integer startRowNum = (pageno-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
