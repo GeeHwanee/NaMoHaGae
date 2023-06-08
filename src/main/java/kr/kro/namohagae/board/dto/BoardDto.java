@@ -11,12 +11,13 @@ import java.util.List;
 public class BoardDto {
     @Data
     public static class Write {
+        private Integer townNo;
         private Integer memberNo;
         private String title;
         private String content;
 
-        public Board toEntity(Integer memberNo, String title, String content) {
-            return Board.builder().memberNo(memberNo).boardTitle(title).boardContent(content).build();
+        public Board toEntity(Integer townNo, Integer memberNo, String title, String content) {
+            return Board.builder().townNo(townNo).memberNo(memberNo).boardTitle(title).boardContent(content).boardWriteDate(LocalDateTime.now()).build();
         }
     }
 
