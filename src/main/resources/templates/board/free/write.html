@@ -34,8 +34,9 @@
         <h1>메인 페이지</h1>
         <article>
             <div class="layout">
-                <form action="/board/free/writepro" method="post">
+                <form action="/board/free/write" method="post">
                     <input type="hidden" id="_csrf" name="_csrf">
+                    <input type="hidden" name="townNo" value="0">
                     <span>제목</span>
                     <input name="Title" type="text">
                     <span>내용</span>

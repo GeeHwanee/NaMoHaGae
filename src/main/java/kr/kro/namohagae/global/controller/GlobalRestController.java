@@ -2,11 +2,9 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.kro.namohagae.global.dto.NotificationDto;
-import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.dto.TownDto;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.NotificationService;
-import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +84,6 @@ public class GlobalRestController {
     }
     @GetMapping(value = "/town/guList",produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?>guList(){
-
         return ResponseEntity.ok(townService.findGu());}
 
     @GetMapping("/town/find")

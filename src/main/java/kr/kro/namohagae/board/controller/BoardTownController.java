@@ -36,33 +36,7 @@ public class BoardTownController {
 
         return "redirect:/board/town/list";
     }
-    @GetMapping("/board/town/read")
-    public String boardTownRead(Model model, Integer boardNo,Principal principal) {
 
-
-
-        boolean isLiked = boardService.isLikeExists(boardNo,memberDao.findNoByUsername(principal.getName()));
-        if(isLiked){
-
-
-        }
-        else {
-            boardService.insertLike(boardNo, memberDao.findNoByUsername(principal.getName()));
-            boardService.readCnt(boardNo);
-
-        }
-        if(boardService.findLike(boardNo,memberDao.findNoByUsername(principal.getName())) == 1) {
-            model.addAttribute("good","좋아요취소");
-        } else {
-            model.addAttribute("good","좋아요");
-        }
-        model.addAttribute("modify",memberDao.findNoByUsername(principal.getName()));
-        model.addAttribute("comment", commentService.commentList(boardNo));
-        model.addAttribute("board",boardTownService.boardTownRead(boardNo));
-
-
-        return "board/town/read";
-    }
     @GetMapping("/board/town/delete")
     public String boardTownDelete(Integer boardNo) {
         boardTownService.townDeleteData(boardNo);

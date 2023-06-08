@@ -8,6 +8,15 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>메인</title>
+    <script th:inline="javascript">
+        let boardNo = [[${board.boardNo}]];
+        let memberNo = [[${board.memberNo}]];
+        const page = [[${page}]];
+        const searchName = "[[${searchName}]]";
+        const change = [[${change}]];
+       boardNo = [[${board.boardNo}]];
+         memberNo = [[${modify}]];
+    </script>
 </head>
 <style>
     .card {
@@ -143,6 +152,7 @@
         <article>
             <div class="card">
                 <div class="card-body">
+                    <img th:src="${board.memberProfileImage}" width="100px">
                     <div class="board_header">
                 <h4 th:text="${board.boardTitle}" class="card-title">제목입니다.</h4>
                     <span th:text="${board.memberNickname}" id="nickname"></span>
@@ -271,8 +281,7 @@
 
         console.log("댓글 내용:", commentContent);
 
-        const boardNo = [[${board.boardNo}]];
-        const memberNo = [[${board.memberNo}]];
+
 
         $.ajax({
             type: "POST",
@@ -299,9 +308,7 @@
     // 댓글 작성 함수
 
     const listFn = () => {
-        const page = [[${page}]];
-        const searchName = "[[${searchName}]]";
-        const change = [[${change}]];
+
         console.log(change);
         location.href = "/board/free/list?page=" + page + "&searchName=" + searchName + "&change" + change;
     }
@@ -319,14 +326,13 @@
         }
     }
     function updateLike() {
-        const boardNo = [[${board.boardNo}]];
-        const memberNo = [[${modify}]];
+
 
         console.log(boardNo);
         console.log(memberNo);
         $.ajax({
             type: "POST",
-            url: "/board/free/like",
+            url: "/api/v1/board/free/recommend",
             data: {
                 "boardNo": boardNo,
                 "memberNo": memberNo,
