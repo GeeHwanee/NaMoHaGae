@@ -12,6 +12,8 @@ import java.util.List;
 @Mapper
 public interface BoardDao {
 
+    public List<BoardDto.Preview> preview(Integer townNo, String searchName, String sorting, Integer start, Integer end);
+    public BoardDto.Read readByBoardNo(Integer boardNo);
 
 
     public void boardFreeInsertData(Board board);
@@ -55,4 +57,8 @@ public interface BoardDao {
     public Board findByBoardNo(Integer boardNo);
 
     public Integer findMemberNoByBoardNo(Integer boardNo);
+
+    Integer count();
+
+    Integer countPreview(Integer townNo, String searchName);
 }
