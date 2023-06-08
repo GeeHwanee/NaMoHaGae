@@ -47,7 +47,7 @@
     </select>
 
     <select id="readByBoardNo" resultType="kr.kro.namohagae.board.dto.BoardDto$Read">
-        select BOARD_NO, BOARD.TOWN_NO, BOARD.MEMBER_NO, M.MEMBER_NICKNAME, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITE_DATE,
+        select BOARD_NO, BOARD.TOWN_NO, BOARD.MEMBER_NO, M.MEMBER_NICKNAME, #{url} || M.MEMBER_PROFILE_IMAGE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITE_DATE,
             (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD.BOARD_NO) as board_read_count,
             (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD.BOARD_NO and BOARD_RECOMMEND_ENABLED=1) as board_recommend_count
         from BOARD join MEMBER M on BOARD.MEMBER_NO = M.MEMBER_NO
