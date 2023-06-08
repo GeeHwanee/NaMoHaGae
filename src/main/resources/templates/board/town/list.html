@@ -4,6 +4,7 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" href="/css/boardlist.css">
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
@@ -11,100 +12,132 @@
 </head>
 <style>
 
-    .layout2 {
-        border:none;
-    }
-    .layout3 {
-        text-align:center;
-    }
     button {
         margin:0 -1px;
     }
 
-    #town_write {
-        float:right;
-    }
-    th {
-        border-top: 3px solid #dfaa8b;
-    }
-    .btn-primary {
-        background: #dfaa8b;
-        font-weight:bold;
-        border: none;
-    }
-    .pagination {
-        --bs-pagination-border-color:#c9dc92;
-        --bs-pagination-disabled-color:#000000;
-        --bs-pagination-border-radius: 0.375rem;
-
-    }
-    .page-link {
-        color:#000000;
-        font-weight:bold;
-    }
-    .page-link.active {
-        background: #dfaa8b;
-        border:none;
-        font-weight:bold;
-
-    }
-    #searchName {
-        border:3px solid #dfaa8b;
-
-    }
 </style>
 <script th:inline="javascript">
     function printBoard(boardTownListDto) {
         const $tbody = $('#tbody');
         $tbody.empty(); // tbody 비우기
 
-        for (const b of boardTownListDto) {
+        const maxRows = 10; // 최대 행 개수
+
+        const numRows = Math.min(boardTownListDto.length, maxRows); // 행 개수 결정
+
+        for (let i = 0; i < numRows; i++) {
+            const b = boardTownListDto[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
+
+            // 객체의 데이터를 기반으로 행 생성
             const tpl = `<tr>
-                 <td>${b.boardNo}</td>
-                 <td>${b.townNo}</td>
-                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
-                 <td>${b.memberNickname}</td>
-                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
-                 <td>${b.boardReadCount}</td>
-                 <td>${b.boardRecommendCount}</td>
-                </tr>`;
-            $tbody.append(tpl);
+       <td>${b.boardNo}</td>
+       <td>${b.townNo}</td>
+       <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
+       <td>${b.memberNickname}</td>
+       <td>${b.boardWriteDate.replace('T', ' ')}</td>
+       <td>${b.boardReadCount}</td>
+       <td>${b.boardRecommendCount}</td>
+      </tr>`;
+
+            $tbody.append(tpl); // tbody에 행 추가
         }
-    };
+
+        // 남은 행 추가 (빈 행)
+        for (let i = numRows; i < maxRows; i++) {
+            const tpl = `<tr>
+       <td style="height:41px"></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+      </tr>`;
+
+            $tbody.append(tpl); // tbody에 빈 행 추가
+        }
+    }
     function printBoard2(boardTownReadCountDto) {
         const $tbody = $('#tbody2');
         $tbody.empty(); // tbody 비우기
 
-        for (const b of boardTownReadCountDto) {
+        const maxRows = 10; // 최대 행 개수
+
+        const numRows = Math.min(boardTownReadCountDto.length, maxRows); // 행 개수 결정
+
+        for (let i = 0; i < numRows; i++) {
+            const b = boardTownReadCountDto[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
+
+            // 객체의 데이터를 기반으로 행 생성
             const tpl = `<tr>
-                 <td>${b.boardNo}</td>
-                 <td>${b.townNo}</td>
-                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
-                 <td>${b.memberNickname}</td>
-                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
-                 <td>${b.boardReadCount}</td>
-                 <td>${b.boardRecommendCount}</td>
-                </tr>`;
-            $tbody.append(tpl);
+       <td>${b.boardNo}</td>
+       <td>${b.townNo}</td>
+       <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
+       <td>${b.memberNickname}</td>
+       <td>${b.boardWriteDate.replace('T', ' ')}</td>
+       <td>${b.boardReadCount}</td>
+       <td>${b.boardRecommendCount}</td>
+      </tr>`;
+
+            $tbody.append(tpl); // tbody에 행 추가
         }
-    };
+
+        // 남은 행 추가 (빈 행)
+        for (let i = numRows; i < maxRows; i++) {
+            const tpl = `<tr>
+       <td style="height:41px"></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+      </tr>`;
+
+            $tbody.append(tpl); // tbody에 빈 행 추가
+        }
+    }
     function printBoard3(boardTownRecommendCountDto) {
         const $tbody = $('#tbody3');
         $tbody.empty(); // tbody 비우기
 
-        for (const b of boardTownRecommendCountDto) {
+        const maxRows = 10; // 최대 행 개수
+
+        const numRows = Math.min(boardTownRecommendCountDto.length, maxRows); // 행 개수 결정
+
+        for (let i = 0; i < numRows; i++) {
+            const b = boardTownRecommendCountDto[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
+
+            // 객체의 데이터를 기반으로 행 생성
             const tpl = `<tr>
-                 <td>${b.boardNo}</td>
-                 <td>${b.townNo}</td>
-                 <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
-                 <td>${b.memberNickname}</td>
-                 <td>${b.boardWriteDate.replace('T', ' ')}</td>
-                 <td>${b.boardReadCount}</td>
-                 <td>${b.boardRecommendCount}</td>
-                </tr>`;
-            $tbody.append(tpl);
+       <td>${b.boardNo}</td>
+       <td>${b.townNo}</td>
+       <td><a href="/board/town/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
+       <td>${b.memberNickname}</td>
+       <td>${b.boardWriteDate.replace('T', ' ')}</td>
+       <td>${b.boardReadCount}</td>
+       <td>${b.boardRecommendCount}</td>
+      </tr>`;
+
+            $tbody.append(tpl); // tbody에 행 추가
         }
-    };
+
+        // 남은 행 추가 (빈 행)
+        for (let i = numRows; i < maxRows; i++) {
+            const tpl = `<tr>
+       <td style="height:41px"></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+      </tr>`;
+
+            $tbody.append(tpl); // tbody에 빈 행 추가
+        }
+    }
     function printReadCount(){
         const $readCount = $('#readCount');
         $readCount.empty();
@@ -113,7 +146,7 @@
                     <button onclick="fuck2()" class="btn btn-primary">전체글</button>
                     <button onclick="fuck()" class="btn btn-primary">조회순</button>
                     <button onclick="fuck3()" class="btn btn-primary">추천순</button>
-                    <a class="btn btn-primary" href="/board/town/write" id="town_write">글쓰기</a>
+                    <a class="btn btn-primary" href="/board/town/write" id="town_write2">글쓰기</a>
                      `
 
         $readCount.append(tql);
