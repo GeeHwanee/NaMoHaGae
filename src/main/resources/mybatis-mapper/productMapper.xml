@@ -283,6 +283,6 @@
         FROM product p
                  JOIN product_image pi ON p.product_no = pi.product_no
             AND pi.product_image_no = 1
-        ORDER BY CASE WHEN product_grade IS NULL THEN 1 ELSE 0 END, product_grade DESC NULLS LAST
+        ORDER BY CASE WHEN product_grade IS NULL THEN 1 ELSE 0 END, product_grade DESC, review_count DESC NULLS LAST
     </select>
 </mapper>
