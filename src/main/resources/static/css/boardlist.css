@@ -1,0 +1,73 @@
+#page {
+    border: none;
+}
+
+#search_form {
+    text-align: center;
+}
+
+#button_form {
+    display: flex;
+    position: relative;
+}
+
+#town_write1 {
+    position: absolute;
+    right: 0;
+}
+
+#town_write2 {
+    float: right;
+}
+
+th {
+    border-top: 3px solid #dfaa8b;
+}
+
+.btn-primary {
+    background: #dfaa8b;
+    font-weight: bold;
+    border: none;
+}
+
+.page-link {
+    color: #000000;
+    font-weight: bold;
+}
+
+.page-link.active {
+    background: #dfaa8b;
+    border: none;
+    font-weight: bold;
+
+}
+
+#search_box {
+    border: 3px solid #dfaa8b;
+
+}
+
+.layout2 {
+    border: none;
+}
+
+.layout3 {
+    text-align: center;
+}
+
+button {
+    margin: 0 -1px;
+}
+
+
+.pagination {
+    --bs-pagination-border-color: #c9dc92;
+    --bs-pagination-disabled-color: #000000;
+    --bs-pagination-border-radius: 0.375rem;
+
+}
+
+#searchName {
+    border: 3px solid #dfaa8b;
+
+}

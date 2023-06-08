@@ -8,6 +8,19 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>공지사항 게시판 목록 페이지</title>
+    <style>
+        .page-link {
+            color: #000000;
+            font-weight: bold;
+        }
+
+
+        #page {
+            border: none;
+        }
+
+
+    </style>
     <script>
         function formatDateAnswer(dateStr) {
             const date = new Date(dateStr);
@@ -19,22 +32,30 @@
             return `${year}-${month}-${day} ${hours}:${minutes}`;
         }
         function printNotice(notice) {
-            $('#tbody').empty();
             const $tbody = $('#tbody');
-            notice.forEach(n => {
-                    const writeDate=formatDateAnswer(n.boardNoticeWriteDate)
-                    const tpl = `
-                    <tr>
-                        <td>${n.boardNoticeNo}</td>
-                        <td><a href="/board/notice/read?boardNoticeNo=${n.boardNoticeNo}">${n.boardNoticeTitle}</a></td>
-                        <td>${n.boardNoticeWriter}</td>
-                        <td>${writeDate}</td>
-                        <td>${n.boardNoticeReadCount}</td>
-                    </tr>
-                    `;
-                    $tbody.append(tpl);
-                }
-            )
+            $tbody.empty(); // tbody 비우기
+
+            const maxRows = 10; // 최대 행 개수
+
+            const numRows = notice.length < maxRows ? maxRows : notice.length; // 행 개수 결정
+
+            for (let i = 0; i < numRows; i++) {
+                const n = notice[i] || {}; // 빈 객체로 초기화
+
+                const writeDate = formatDateAnswer(n.boardNoticeWriteDate);
+
+                const tpl = `
+      <tr>
+        <td>${n.boardNoticeNo || ''}</td>
+        <td><a href="/board/notice/read?boardNoticeNo=${n.boardNoticeNo || ''}">${n.boardNoticeTitle || ''}</a></td>
+        <td style="height:41px">${n.boardNoticeWriter || ''}</td>
+        <td>${(n.boardNoticeWriteDate ? n.boardNoticeWriteDate.replace('T', ' ').slice(0, 16) : '')}</td>
+        <td>${n.boardNoticeReadCount || ''}</td>
+      </tr>
+    `;
+
+                $tbody.append(tpl); // tbody에 행 추가
+            }
         }
         function printPagination({prev, start, end, next, pageno}) {
             $('#page_ul').empty();
@@ -100,8 +121,10 @@
             <tbody id="tbody">
             </tbody>
         </table>
+        <nav aria-label="..." id="page">
         <ul class="pagination" id="page_ul">
         </ul>
+        </nav>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
