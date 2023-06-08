@@ -1,11 +1,10 @@
 package kr.kro.namohagae.board.dto;
 
 import kr.kro.namohagae.board.entity.BoardNotice;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class BoardNoticeDto {
@@ -36,6 +35,17 @@ public class BoardNoticeDto {
         private String boardNoticeTitle;
         private LocalDateTime boardNoticeWriteDate;
         private Integer boardNoticeReadCount;
+    }
+    @Data
+    @ToString
+    @AllArgsConstructor
+    public static class Pagination {
+        private Integer pageno;
+        private Integer prev;
+        private Integer start;
+        private Integer end;
+        private Integer next;
+        private List<BoardNoticeDto.Preview> notice;
     }
 
     @Data

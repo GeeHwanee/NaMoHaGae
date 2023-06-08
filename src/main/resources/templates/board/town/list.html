@@ -243,7 +243,7 @@
             method: 'GET',
             success: function (list) {
                 const $townDong = $('#townDong').empty();
-                let tpl = ` <option selected disabled>구 선택</option>`;
+                let tpl = ` <option selected disabled>동 선택</option>`;
                 $townDong.append(tpl);
                 for (const town of list) {
                     tpl = `
@@ -257,7 +257,7 @@
                     console.log($('select[name="townDong"]').val());
                     if($('select[name="townDong"]').val()==null){
                         console.log("rtrth")
-                        $('select[name="townDong"]').prop('selectedIndex', 1);
+                        $('select[name="townDong"]').prop('selectedIndex', 0);
                         console.log("dsfgdfg")
                     }else{
 

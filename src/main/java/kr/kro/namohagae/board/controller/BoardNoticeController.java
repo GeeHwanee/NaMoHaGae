@@ -28,10 +28,7 @@ public class BoardNoticeController {
     }
 
     @GetMapping("/board/notice/list")
-    public String noticeList(Model model) {
-
-        model.addAttribute("preview", boardNoticeService.preview());
-
+    public String noticeList() {
         return "board/notice/list";
     }
 }
