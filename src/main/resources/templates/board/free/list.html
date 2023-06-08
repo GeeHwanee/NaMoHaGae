@@ -4,6 +4,7 @@
     <!------------------------------------------------------------------------------------------------------------------------------>
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" href="/css/boardlist.css">
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
@@ -104,53 +105,12 @@
     </script>
 </head>
 <style>
- #page {
-     border:none;
- }
- #search_form {
-     text-align: center;
- }
 
- #button_form {
-     display:flex;
-     position:relative;
- }
- #town_write {
-    position:absolute;
-     right:0;
- }
  button {
      margin-right:2px;
 
  }
- th {
-     border-top: 3px solid #dfaa8b;
- }
- .btn-primary {
-     background: #dfaa8b;
-     font-weight:bold;
-     border: none;
- }
- .pagination {
-     --bs-pagination-border-color:#c9dc92;
-     --bs-pagination-disabled-color:#000000;
-     --bs-pagination-border-radius: 0.375rem;
 
- }
- .page-link {
-     color:#000000;
-     font-weight:bold;
- }
-  .page-link.active {
-      background: #dfaa8b;
-      border:none;
-      font-weight:bold;
-
-}
- #search_box {
-     border:3px solid #dfaa8b;
-
- }
 </style>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>

@@ -146,6 +146,7 @@
             )
         where rnum&gt;=#{startRownum}
     </select>
+
     <select id="countByMemberNo" resultType="Integer">
         select count(*) from board where member_no=#{memberNo}
     </select>
