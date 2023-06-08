@@ -14,5 +14,4 @@ public class KnowledgeAnswer {
     private String knowledgeAnswerContent;
     private LocalDateTime knowledgeAnswerWriteDate;
     private Boolean knowledgeAnswerSelectionEnabled;
-    private Integer knowledgeAnswerRecommend;
 }

@@ -32,4 +32,6 @@ public interface KnowledgeQuestionDao {
     public List<KnowledgeMainDto> waitList(@Param("searchName") String searchName, @Param("start") int start, @Param("limit") int limit);
 
     public Integer delete(Integer knowledgeQuestionNo);
+
+    public Integer findMemberNoByBoardNo(Integer boardNo);
 }

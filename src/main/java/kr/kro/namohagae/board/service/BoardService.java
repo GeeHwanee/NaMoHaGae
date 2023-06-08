@@ -140,7 +140,7 @@ public class BoardService {
         System.out.println("갯수 : " + memberNo+boardNo);
         Board board = boardDao.findByBoardNo(boardNo);
         Member member = memberDao.findByMemberNo(board.getMemberNo()).get();
-        notificationService.save(member, NotificationConstants.LIKE_CONTENT, NotificationConstants.BOARD_FREE_LINK+boardNo);
+        notificationService.save(member, NotificationConstants.RECOMMEND_CONTENT, NotificationConstants.BOARD_FREE_LINK+boardNo);
         boardDao.insertLike(boardNo,  memberNo);
     }
     public void readCnt(Integer boardNo) {
@@ -172,7 +172,7 @@ public class BoardService {
         }else{
             link = NotificationConstants.BOARD_FREE_LINK;
         }
-        notificationService.save(member, NotificationConstants.LIKE_CONTENT,link+board.getBoardNo());
+        notificationService.save(member, NotificationConstants.RECOMMEND_CONTENT,link+board.getBoardNo());
     }
     public void badLike(Integer boardNo) {
 

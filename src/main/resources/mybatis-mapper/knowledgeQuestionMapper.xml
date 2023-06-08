@@ -97,6 +97,11 @@
         ORDER BY COALESCE(A.answerCount, 0)
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
+
+    <select id="findMemberNoByBoardNo" resultType="int">
+        select MEMBER_NO from KNOWLEDGE_QUESTION where KNOWLEDGE_QUESTION_NO = #{boardNo}
+    </select>
+
     <delete id="delete">
         delete from KNOWLEDGE_QUESTION where KNOWLEDGE_QUESTION_NO = #{knowledgeQuestionNo} and ROWNUM = 1
     </delete>

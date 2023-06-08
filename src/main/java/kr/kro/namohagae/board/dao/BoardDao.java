@@ -53,4 +53,6 @@ public interface BoardDao {
     public Integer countByMemberNo(Integer memberNo);
 
     public Board findByBoardNo(Integer boardNo);
+
+    public Integer findMemberNoByBoardNo(Integer boardNo);
 }
