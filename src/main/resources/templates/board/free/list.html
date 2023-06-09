@@ -22,23 +22,44 @@
             return `${year}-${month}-${day} ${hours}:${minutes}`;
         }
         function printFree(preview) {
-            $('#tbody').empty();
             const $tbody = $('#tbody');
-            preview.forEach(n => {
-                    const writeDate=formatDateAnswer(n.boardWriteDate)
-                    const tpl = `
-                    <tr>
-                        <td>${n.boardNo}</td>
-                        <td><a href="/board/free/read?boardNo=${n.boardNo}">${n.boardTitle}</a></td>
-                        <td><a href="/member/profile?memberNo=${n.memberNo}">${n.memberNickname}</a></td>
-                        <td>${writeDate}</td>
-                        <td>${n.boardReadCount}</td>
-                        <td>${n.boardRecommendCount}</td>
-                    </tr>
-                    `;
-                    $tbody.append(tpl);
-                }
-            )
+            $tbody.empty(); // tbody 비우기
+
+            const maxRows = 10; // 최대 행 개수
+
+            const numRows = Math.min(preview.length, maxRows); // 행 개수 결정
+
+            for (let i = 0; i < numRows; i++) {
+                const b = preview[i]; // 데이터 배열에서 해당 인덱스의 객체 가져오기
+
+                // 객체의 데이터를 기반으로 행 생성
+                const tpl = ` <tr>
+                        <td>${b.boardNo}</td>
+                        <td><a href="/board/free/read?boardNo=${b.boardNo}" class="boardTitle">${b.boardTitle}</a></td>
+                        <td><a href="/member/profile?memberNo=${b.memberNo}">${b.memberNickname}</a></td>
+                        <td>${b.boardWriteDate.replace('T', ' ').slice(0, 16)}</td>
+                        <td>${b.boardReadCount}</td>
+                        <td>${b.boardRecommendCount}</td>
+                    </tr>`;
+
+                $tbody.append(tpl); // tbody에 행 추가
+            }
+
+            // 남은 행 추가 (빈 행)
+            for (let i = numRows; i < maxRows; i++) {
+                const tpl = `<tr>
+       <td style="height:41px"></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+
+      </tr>`;
+
+                $tbody.append(tpl); // tbody에 빈 행 추가
+            }
+            limitTitleLength();
         }
         function printPagination({prev, start, end, next, pageNo}) {
             $('#page_ul').empty();
@@ -159,16 +180,15 @@
         var titleElements = document.getElementsByClassName("boardTitle");
         for (var i = 0; i < titleElements.length; i++) {
             var title = titleElements[i].textContent;
-            var maxLength = 5; // 최대 길이 설정
+            var maxLength = 15; // 최대 길이 설정
             if (title.length > maxLength) {
                 titleElements[i].textContent = title.substring(0, maxLength) + "...";
             }
         }
     }
 
-    // 페이지 로드 시 호출
-    window.onload = function() {
-        limitTitleLength();
-    };
+
+
+
 </script>
 </html>
