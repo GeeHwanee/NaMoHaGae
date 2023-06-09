@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper
 public interface TownDao {
 
+    public Town findByMemberNo(Integer memberNo);
     public Integer findNoByDong(String townDong);
     public String findTownDongByTownNo(Integer townNo);
     public List<TownDto.Dong> findDong();
@@ -23,4 +24,5 @@ public interface TownDao {
     public Integer countAllByGu(String gu);
 
     public List<TownDto.Gu> findGu();
+
 }
