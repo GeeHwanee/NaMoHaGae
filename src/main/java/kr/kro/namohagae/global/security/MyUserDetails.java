@@ -17,6 +17,7 @@ public class MyUserDetails implements UserDetails {
     private Integer memberNo;
     private String memberNickname;
     private Integer townNo;
+    private String townDong;
     private String username;
     private String password;
     private Boolean enabled;
