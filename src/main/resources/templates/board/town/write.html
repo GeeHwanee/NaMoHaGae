@@ -31,19 +31,15 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>메인 페이지</h1>
         <article>
             <div class="layout">
-                <form action="/board/town/writepro" method="post">
+                <form action="/board/town/write" method="post">
                     <input type="hidden" id="_csrf" name="_csrf">
+                    <input type="hidden" name="townNo" th:value="${townNo}">
                     <span>제목</span>
-                    <input name="Title" type="text">
+                    <input name="boardTitle" type="text">
                     <span>내용</span>
-                    <select class="form-select" aria-label="Default select example" name="townNo">
-                        <option selected>동네를 선택해주세요</option>
-                        <option th:each="town : ${town}" th:value="${town.townNo}" th:text="${town.townDong}"></option>
-                    </select>
-                    <textarea name="Content"></textarea>
+                    <textarea name="boardContent"></textarea>
                     <button type="submit">작성</button>
                 </form>
             </div>
