@@ -30,7 +30,7 @@ public class BoardService {
     private final Integer BLOCKSIZE = 5;
 
     public void save(BoardDto.Write boardDto, Integer memberNo) {
-        Board board = boardDto.toEntity(boardDto.getTownNo(), memberNo, boardDto.getTitle(), boardDto.getContent());
+        Board board = boardDto.toEntity(boardDto.getTownNo(), memberNo, boardDto.getBoardTitle(), boardDto.getBoardContent());
         boardDao.save(board);
     }
 
