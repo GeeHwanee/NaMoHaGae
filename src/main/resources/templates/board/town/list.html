@@ -18,6 +18,17 @@
     let sorting = "";
     let search = "";
     let townNo = 0;
+    let pageNo = 1;
+    async function printGu() {
+        const result = await $.ajax("/api/v1/town/guList");
+        const $townGu = $('#townGu');
+        result.forEach(r=>{
+            const tpl = `
+                <option value="${r.townGu}">${r.townGu}</option>
+            `;
+            $townGu.append(tpl);
+        })
+    }
     function formatDateAnswer(dateStr) {
         const date = new Date(dateStr);
         const year = date.getFullYear();
@@ -64,11 +75,11 @@
     }
     $(document).ready(async function (){
         const param = new URLSearchParams(location.search);
-        const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
-        townNo=1;
+        pageNo = param.get('pageNo') == null ? 1 : param.get('pageNo');
+        await printGu();
+        townNo=$townNo;
         try {
-            const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageno+"&townNo="+townNo);
-            console.log(result);
+            const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageNo+"&townNo="+townNo);
             printTown(result.preview);
             printPagination(result);
 
@@ -76,9 +87,8 @@
                 e.preventDefault();
                 sorting = $(this).val();
                 const param = new URLSearchParams(location.search);
-                const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
-                const result = await $.ajax("/api/v1/board/town/list?pageNo=" + pageno+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
-                console.log(result);
+                pageNo = param.get('pageNo') == null ? 1 : param.get('pageNo');
+                const result = await $.ajax("/api/v1/board/town/list?pageNo=" +pageNo+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
                 printTown(result.preview);
                 printPagination(result);
             })
@@ -87,21 +97,38 @@
                 e.preventDefault();
                 search = $('#searchName').val();
                 const param = new URLSearchParams(location.search);
-                const pageno = param.get('pageNo') == null ? 1 : param.get('pageNo');
-                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageno+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
-                console.log(result);
+                pageNo = param.get('pageNo') == null ? 1 : param.get('pageNo');
+                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageNo+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
                 printTown(result.preview);
                 printPagination(result);
             })
 
             $('#page_ul').on('click', '.page-link', async function (e) {
                 e.preventDefault();
-                const pageno = $(this).data('page-no');
-                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageno+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
-                console.log(result);
+                pageNo = $(this).data('page-no');
+                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageNo+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
                 printTown(result.preview);
                 printPagination(result);
             });
+
+            $('#townGu').change(async function (){
+                const result = await $.ajax("/api/v1/town/find?townGu="+$(this).val());
+                const $townDong = $('#townDong').empty().append(`<option selected disabled>동 선택</option>`);
+                result.forEach(r=>{
+                    console.log(r.townDong);
+                    const tpl = `
+                            <option value="${r.townNo}">${r.townDong}</option>
+                            `;
+                    $townDong.append(tpl);
+                })
+            })
+            $('#townDong').change(async function (){
+                townNo = $(this).val();
+                const result = await $.ajax("/api/v1/board/town/list?pageNo="+pageNo+"&townNo="+townNo+"&sorting="+sorting+"&searchName="+search);
+                printTown(result.preview);
+                printPagination(result);
+            })
+
         } catch (err) {
             console.log(err);
         }
@@ -111,6 +138,7 @@
 <body>
 <script th:inline="javascript">
     const $townNo=[[${townNo}]];
+    const $townDong=[[${townDong}]];
 </script>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
@@ -122,7 +150,7 @@
             <option selected disabled>구 선택</option>
         </select>
         <select class="form-select" id="townDong" name="townDong">
-            <option selected disabled >gd</option>
+            <option selected disabled th:text="${'[나의 동네] '+townDong}" th:value="${townNo}"></option>
         </select>
         <article>
 
@@ -131,7 +159,7 @@
                 <thead>
                 <tr>
                     <th>글번호</th>
-                    <th>동네번호</th>
+                    <th>동네</th>
                     <th>제목</th>
                     <th>글쓴이</th>
                     <th>글쓴시간</th>
@@ -146,7 +174,7 @@
                 <button type="button" value="" class="sorting btn btn-primary">최신순</button>
                 <button type="button" value="boardReadCount" class="sorting btn btn-primary">조회순</button>
                 <button type="button" value="boardRecommendCount" class="sorting btn btn-primary">추천순</button>
-                <a class="btn btn-primary" th:href="@{/board/free/write}" id="town_write">글쓰기</a>
+                <a class="btn btn-primary" th:href="@{/board/town/write}" id="town_write">글쓰기</a>
             </div>
             <nav aria-label="..." id="page">
                 <ul class="pagination" id="page_ul">
