@@ -36,6 +36,7 @@ public class BoardController {
             return "board/free/list";
         } else if (path.contains("/town")) {
             model.addAttribute("townNo",myUserDetails.getTownNo());
+            model.addAttribute("townDong",myUserDetails.getTownDong());
             return "board/town/list";
         }
         return "redirect:/board/main";
