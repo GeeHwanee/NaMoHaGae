@@ -13,8 +13,8 @@ public class BoardDto {
     public static class Write {
         private Integer townNo;
         private Integer memberNo;
-        private String title;
-        private String content;
+        private String boardTitle;
+        private String boardContent;
 
         public Board toEntity(Integer townNo, Integer memberNo, String title, String content) {
             return Board.builder().townNo(townNo).memberNo(memberNo).boardTitle(title).boardContent(content).boardWriteDate(LocalDateTime.now()).build();
