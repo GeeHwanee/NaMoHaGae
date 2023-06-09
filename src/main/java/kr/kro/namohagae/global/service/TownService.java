@@ -1,7 +1,6 @@
 package kr.kro.namohagae.global.service;
 
 import kr.kro.namohagae.global.dao.TownDao;
-import kr.kro.namohagae.global.dto.ReportDto;
 import kr.kro.namohagae.global.dto.TownDto;
 import kr.kro.namohagae.global.entity.Town;
 import lombok.RequiredArgsConstructor;
@@ -88,7 +87,6 @@ public class TownService {
     }
 
     public List<TownDto.Gu> findGu() {
-        System.out.println("toititit");
         return townDao.findGu();
     }
 }
