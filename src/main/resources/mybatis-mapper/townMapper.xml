@@ -7,11 +7,14 @@
     <select id="findNoByDong" resultType="Integer">
         select town_no from town where town_dong=#{townDong}
     </select>
+    <select id="findTownDongByTownNo" resultType="String">
+        select TOWN_DONG from  TOWN where TOWN_NO=#{townNo} and TOWN_NO!=0
+    </select>
     <select id="findDong" resultType="kr.kro.namohagae.global.dto.TownDto$Dong">
         select town_dong from town
     </select>
     <select id="findTownDongByGu" resultType="kr.kro.namohagae.global.dto.TownDto$Read">
-        select town_no, town_dong from town where town_gu=#{townGu}
+        select town_no, town_dong from town where town_gu=#{townGu} order by 2
     </select>
     <select id="findFuck" resultType="kr.kro.namohagae.global.dto.TownDto$userGuAndDong">
         select m.town_no,t.town_dong,t.town_gu from member m,town t where m.town_no=t.town_no and m.member_no = #{memberNo}
@@ -56,6 +59,6 @@
         delete from town where townNo=#{townNo}
     </delete>
     <select id="findGu" resultType="kr.kro.namohagae.global.dto.TownDto$Gu">
-        select town_gu from town
+        select distinct town_gu from town where TOWN_NO!=0 order by 1
     </select>
 </mapper>
