@@ -18,13 +18,9 @@ public class TownService {
     public List<TownDto.Read> findTownDongByGu(String townGu){
         return townDao.findTownDongByGu(townGu);
     }
-
+    public Town findByMemberNo(Integer memberNo){return townDao.findByMemberNo(memberNo);}
     public List<TownDto.Dong> findDong(){return  townDao.findDong();}
 
-    public TownDto.userGuAndDong findFuck(Integer memberNo){
-
-        return townDao.findFuck(memberNo);
-    }
     public Boolean checkDong(String townDong){
         return townDao.checkDong(townDong);
     }
