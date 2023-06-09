@@ -8,6 +8,7 @@ import kr.kro.namohagae.board.dto.KnowledgeQuestionDto;
 import kr.kro.namohagae.board.entity.KnowledgeAnswer;
 import kr.kro.namohagae.board.entity.KnowledgeQuestion;
 import kr.kro.namohagae.global.service.NotificationService;
+import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.entity.Member;
@@ -94,7 +95,8 @@ public class KnowledgeService {
 
 
     public List<KnowledgeAnswerDto.Read> answerFindAll(Integer questionNo) {
-        return knowledgeAnswerDao.findAll(questionNo);
+        return knowledgeAnswerDao.findAll(questionNo, ImageConstants.IMAGE_PROFILE_URL);
+
     }
 
     @Transactional
