@@ -115,7 +115,6 @@
                 const result = await $.ajax("/api/v1/town/find?townGu="+$(this).val());
                 const $townDong = $('#townDong').empty().append(`<option selected disabled>동 선택</option>`);
                 result.forEach(r=>{
-                    console.log(r.townDong);
                     const tpl = `
                             <option value="${r.townNo}">${r.townDong}</option>
                             `;
