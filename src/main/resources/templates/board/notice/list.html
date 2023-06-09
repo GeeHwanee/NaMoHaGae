@@ -50,7 +50,7 @@
         <td><a href="/board/notice/read?boardNoticeNo=${n.boardNoticeNo || ''}">${n.boardNoticeTitle || ''}</a></td>
         <td style="height:41px">${n.boardNoticeWriter || ''}</td>
         <td>${(n.boardNoticeWriteDate ? n.boardNoticeWriteDate.replace('T', ' ').slice(0, 16) : '')}</td>
-        <td>${n.boardNoticeReadCount}</td>
+        <td>${n.boardNoticeReadCount !== undefined && n.boardNoticeReadCount !== null ? n.boardNoticeReadCount : ''}</td>
       </tr>
     `;
 
