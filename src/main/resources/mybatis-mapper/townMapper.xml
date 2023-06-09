@@ -4,6 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.kro.namohagae.global.dao.TownDao">
+
+    <select id="findByMemberNo" resultType="Town">
+        select * from TOWN join MEMBER M on TOWN.TOWN_NO = M.TOWN_NO where MEMBER_NO=#{memberNo} and ROWNUM=1
+    </select>
     <select id="findNoByDong" resultType="Integer">
         select town_no from town where town_dong=#{townDong}
     </select>
@@ -28,7 +32,7 @@
                 select rownum as rnum, t.* from
                     (
                         select
-                           town_no,town_gu,town_dong from town
+                           town_no,town_gu,town_dong from town where TOWN_NO!=0
                     ) t
                 where rownum&lt;=#{endRownum}
             )
@@ -40,17 +44,17 @@
                 select rownum as rnum, t.* from
                     (
                         select
-                            town_no,town_gu,town_dong from town where town_gu = #{gu}
+                            town_no,town_gu,town_dong from town where town_gu = #{gu} and TOWN_NO!=0
                     ) t
                 where rownum&lt;=#{endRownum}
             )
         where rnum&gt;=#{startRownum}
     </select>
     <select id="countAll" resultType="Integer">
-        select count(*) from town
+        select count(*) from town where TOWN_NO!=0
     </select>
     <select id="countAllByGu" resultType="Integer">
-        select count(*) from town where town_gu=#{gu}
+        select count(*) from town where town_gu=#{gu} and TOWN_NO!=0
     </select>
     <insert id="save">
         insert into town(town_no,town_gu,town_dong,town_latitude,town_longitude) values(TOWN_SEQ_PUCHING_TOWN_NO.nextval,#{townGu},#{townDong},#{townLatitude},#{townLongitude})

@@ -40,7 +40,7 @@
 
     <select id="countPreview" resultType="Integer">
         select count(*) from BOARD
-        where BOARD.TOWN_NO = #{townNo}
+        where BOARD.TOWN_NO = #{townNo} and BOARD_ENABLED=1
         <if test="searchName!=null">
             and BOARD_TITLE LIKE '%' || #{searchName} || '%'
         </if>
@@ -54,12 +54,7 @@
         where BOARD.BOARD_NO= #{boardNo} and BOARD_ENABLED=1
     </select>
 
-    <select id="boardFreeReadData" resultType="kr.kro.namohagae.board.entity.BoardList" parameterType="int">
-        SELECT b.*, m.member_nickname AS memberNickname
-        FROM board b
-                 JOIN member m ON b.member_No = m.member_No
-        WHERE board_no = #{boardNo}
-    </select>
+
     <delete id="boardDeleteData" parameterType="int">
         delete board where board_no = #{boardNo}
     </delete>
