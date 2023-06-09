@@ -28,6 +28,7 @@ public class KnowledgeAnswerDto {
         private Integer knowledgeAnswerNo;
         private Integer memberNo;
         private String memberNickname;
+        private String memberProfileImage;
         private String knowledgeAnswerContent;
         private LocalDateTime knowledgeAnswerWriteDate;
         private Boolean knowledgeAnswerSelectionEnabled;
