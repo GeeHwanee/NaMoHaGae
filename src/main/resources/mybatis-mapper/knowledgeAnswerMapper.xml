@@ -11,9 +11,9 @@
         insert into KNOWLEDGE_ANSWER(KNOWLEDGE_QUESTION_NO, KNOWLEDGE_ANSWER_NO, MEMBER_NO, KNOWLEDGE_ANSWER_CONTENT, KNOWLEDGE_ANSWER_WRITE_DATE, KNOWLEDGE_ANSWER_SELECTION_ENABLED)
         VALUES(#{knowledgeQuestionNo},#{knowledgeAnswerNo}, #{memberNo},#{knowledgeAnswerContent}, #{knowledgeAnswerWriteDate}, 0)
     </insert>
-
+    
     <select id="findAll" resultType="kr.kro.namohagae.board.dto.KnowledgeAnswerDto$Read">
-        select knowledge_answer_no, knowledge_answer.member_no, m.member_nickname, knowledge_answer_content,
+        select knowledge_answer_no, knowledge_answer.member_no, m.member_nickname,#{url} || M.MEMBER_PROFILE_IMAGE as member_profile_image, knowledge_answer_content,
                knowledge_answer_Write_date, knowledge_answer_selection_enabled,
                (select count(BOARD_RECOMMEND_ENABLED) from BOARD_INSIGHT where BOARD_NO=KNOWLEDGE_ANSWER.KNOWLEDGE_ANSWER_NO and BOARD_RECOMMEND_ENABLED=1)AS knowledge_answer_recommend
         from knowledge_answer join member m on knowledge_answer.member_no = m.member_no

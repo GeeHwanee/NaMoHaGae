@@ -3,6 +3,7 @@ package kr.kro.namohagae.board.dao;
 import kr.kro.namohagae.board.dto.KnowledgeAnswerDto;
 import kr.kro.namohagae.board.entity.KnowledgeAnswer;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface KnowledgeAnswerDao {
     public Integer save(KnowledgeAnswer knowledgeAnswer);
 
-    public List<KnowledgeAnswerDto.Read> findAll(Integer questionNo);
+    public List<KnowledgeAnswerDto.Read> findAll(Integer questionNo,String url);
 
     public Integer update(Integer answerNo);
 
