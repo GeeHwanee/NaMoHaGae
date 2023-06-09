@@ -83,8 +83,7 @@ public class GlobalRestController {
         return  ResponseEntity.ok(townService.findDong());
     }
     @GetMapping(value = "/town/guList",produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>guList(){
-        return ResponseEntity.ok(townService.findGu());}
+    public ResponseEntity<?>guList(){ return ResponseEntity.ok(townService.findGu()); }
 
     @GetMapping("/town/find")
     public ResponseEntity<List<TownDto.Read>> viewTownDong(String townGu){
