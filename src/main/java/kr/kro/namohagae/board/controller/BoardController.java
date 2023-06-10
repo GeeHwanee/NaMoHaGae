@@ -74,30 +74,37 @@ public class BoardController {
     }
 
     @GetMapping(value = {"/free/read", "/town/read"})
-    public String boardFreeReadData(Integer boardNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req) {
+    public String boardRead(Integer boardNo, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req) {
         String path = req.getRequestURI();
 
         Boolean isRead = boardInsightService.existsByBoardNoAndMemberNo(boardNo, myUserDetails.getMemberNo());
+        Boolean isEnabled = boardService.findBoardEnabledByBoardNo(boardNo);
         if(!isRead){
             boardInsightService.save(boardNo, myUserDetails.getMemberNo());
         }
-        model.addAttribute("board", boardService.readByBoardNo(boardNo));
-        model.addAttribute("comment", commentService.commentList(boardNo));
+        if(isEnabled){
+            model.addAttribute("board", boardService.readByBoardNo(boardNo));
+            model.addAttribute("comment", commentService.commentList(boardNo));
 
-        if (path.contains("/free")) {
-            return "board/free/read";
-        } else if (path.contains("/town")) {
-            return "board/free/read";
+            if (path.contains("/free")) {
+                return "board/free/read";
+            } else if (path.contains("/town")) {
+                return "board/free/read";
+            }
         }
         return "redirect:/board/main";
     }
 
-    @GetMapping("/free/delete")
-    public String boardDeleteData(Integer boardNo) {
-
-        boardService.boardDeleteData(boardNo);
-
-        return "redirect:/board/free/list";
+    @PostMapping(value = {"/free/delete","/town/delete"})
+    public String boardDelete(Integer boardNo, HttpServletRequest req) {
+        String path = req.getRequestURI();
+        boardService.boardDelete(boardNo);
+        if (path.contains("/free")) {
+            return "redirect:/board/free/list";
+        } else if (path.contains("/town")) {
+            return "redirect:/board/town/list";
+        }
+        return "redirect:/board/main";
     }
 
     @GetMapping("/free/modify")
