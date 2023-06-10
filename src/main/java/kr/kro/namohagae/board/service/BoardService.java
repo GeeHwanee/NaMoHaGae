@@ -38,17 +38,18 @@ public class BoardService {
 
         Integer start = (pageNo-1)*PAGESIZE + 1;
         Integer end = start + PAGESIZE - 1;
-        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, start, end);
+        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, start);
         Integer countOfPreview = boardDao.countPreview(townNo, searchName);
         Integer countOfPage = (countOfPreview-1)/PAGESIZE + 1;
-        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer prev = ((pageNo-1)/BLOCKSIZE) * BLOCKSIZE;
         Integer startPage = prev+1;
         Integer endPage = prev + BLOCKSIZE;
         Integer next = endPage+1;
-        if(end>=countOfPage) {
+        if(endPage>=countOfPage) {
             endPage = countOfPage;
             next = 0;
         }
+
         return new BoardDto.PaginationPreview(pageNo, prev, startPage, endPage, next, preview);
     }
 
@@ -56,17 +57,14 @@ public class BoardService {
     public BoardDto.Read readByBoardNo(Integer boardNo){
         return boardDao.readByBoardNo(ImageConstants.IMAGE_PROFILE_URL,boardNo);
     }
-
+    public Boolean findBoardEnabledByBoardNo(Integer boardNo) {
+        return boardDao.findBoardEnabledByBoardNo(boardNo);
+    }
     public BoardList boardFreeReadData(Integer boardNo) {
 
         return boardDao.boardFreeReadData(boardNo);
     }
 
-    public Integer boardDeleteData(Integer boardNo) {
-
-
-        return boardDao.boardDeleteData(boardNo);
-    }
 
     public void boardUpdateData(Board board) {
 
@@ -129,6 +127,10 @@ public class BoardService {
             next = 0;
         }
         return new BoardDto.Pagination(pageno, prev, start, end, next, board);
+    }
+
+    public void boardDelete(Integer boardNo) {
+        boardDao.delete(boardNo);
     }
 }
 
