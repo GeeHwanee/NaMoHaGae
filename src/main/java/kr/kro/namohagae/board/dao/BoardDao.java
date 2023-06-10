@@ -13,10 +13,11 @@ import java.util.List;
 public interface BoardDao {
 
     public void save(Board board);
-    public List<BoardDto.Preview> preview(Integer townNo, String searchName, String sorting, Integer start, Integer end);
+    public List<BoardDto.Preview> preview(Integer townNo, String searchName, String sorting, Integer start);
     public BoardDto.Read readByBoardNo(String url, Integer boardNo);
 
-
+    public Boolean findBoardEnabledByBoardNo(Integer boardNo);
+    public void delete(Integer boardNo);
 
 
     public BoardList boardFreeReadData(Integer boardNo);
@@ -61,4 +62,5 @@ public interface BoardDao {
     Integer count();
 
     Integer countPreview(Integer townNo, String searchName);
+
 }
