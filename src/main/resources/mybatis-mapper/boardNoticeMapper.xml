@@ -20,7 +20,7 @@
                (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=BOARD_NOTICE_NO) as BOARD_NOTICE_READ_COUNT
         from BOARD_NOTICE
         order by board_notice_no desc
-        offset #{start}-1 rows fetch next #{end} rows only
+        offset #{start}-1 rows fetch next 10 rows only
     </select>
 
     <select id="findAll" resultType="BoardNotice" >

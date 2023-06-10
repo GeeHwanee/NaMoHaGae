@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kro.namohagae.board.dao.BoardDao">
 
     <insert id="save" parameterType="kr.kro.namohagae.board.entity.Board">
-        INSERT INTO board (
-            board_no,
-            town_no,
-            member_no,
-            board_title,
-            board_content,
-            board_write_date,
-            board_enabled
-        )
+        INSERT INTO board (board_no,town_no, member_no, board_title, board_content, board_write_date, board_enabled)
         values (BOARD_SEQ_BOARD_NO.NEXTVAL, #{townNo}, #{memberNo}, #{boardTitle}, #{boardContent}, #{boardWriteDate}, 1)
-
     </insert>
+
     <select id="preview" resultType="kr.kro.namohagae.board.dto.BoardDto$Preview">
         select BOARD_NO, BOARD.TOWN_NO, T.TOWN_DONG, BOARD.MEMBER_NO, M.MEMBER_NICKNAME, BOARD_TITLE, BOARD_WRITE_DATE,
                (select count(*) from board_comment c where c.board_no=board_no ) as commentCount,
@@ -35,7 +24,7 @@
                 <otherwise>board_write_date</otherwise>
                 </choose>
                 desc
-        offset #{start}-1 rows fetch next #{end} rows only
+        offset #{start}-1 rows fetch next 10 rows only
     </select>
 
     <select id="countPreview" resultType="Integer">
@@ -54,10 +43,21 @@
         where BOARD.BOARD_NO= #{boardNo} and BOARD_ENABLED=1
     </select>
 
+    <select id="findBoardEnabledByBoardNo" resultType="Boolean">
+        select BOARD_ENABLED from BOARD where BOARD_NO=#{boardNo} and ROWNUM=1
+    </select>
 
-    <delete id="boardDeleteData" parameterType="int">
-        delete board where board_no = #{boardNo}
-    </delete>
+    <select id="findByBoardNo" resultType="Board" parameterType="int">
+        select * from BOARD where BOARD_NO = #{boardNo} and ROWNUM=1
+    </select>
+
+    <select id="findMemberNoByBoardNo" resultType="int">
+        select MEMBER_NO from BOARD where BOARD_NO = #{boardNo} and ROWNUM=1
+    </select>
+
+    <update id="delete">
+        update BOARD set BOARD_ENABLED=0 where BOARD_NO = #{boardNo} and ROWNUM=1
+    </update>
 
     <update id="boardUpdateData">
         update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
@@ -121,9 +121,6 @@
         OFFSET #{start} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-    <select id="findByBoardNo" resultType="Board" parameterType="int">
-        select * from BOARD where BOARD_NO = #{boardNo}
-    </select>
 
     <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.BoardDto$FindAllByMemberNo">
         select * from
@@ -146,9 +143,6 @@
         select count(*) from board where member_no=#{memberNo}
     </select>
 
-    <select id="findMemberNoByBoardNo" resultType="int">
-        select MEMBER_NO from BOARD where BOARD_NO = #{boardNo}
-    </select>
 
 
 </mapper>
