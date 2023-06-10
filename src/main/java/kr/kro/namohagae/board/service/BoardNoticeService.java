@@ -3,8 +3,6 @@ package kr.kro.namohagae.board.service;
 import kr.kro.namohagae.board.dao.BoardNoticeDao;
 import kr.kro.namohagae.board.dto.BoardNoticeDto;
 import kr.kro.namohagae.board.entity.BoardNotice;
-import kr.kro.namohagae.global.util.constants.ImageConstants;
-import kr.kro.namohagae.member.dto.FollowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +26,14 @@ public class BoardNoticeService {
     public BoardNoticeDto.Pagination list(Integer pageNo) {
         Integer start = (pageNo-1)*PAGESIZE + 1;
         Integer end = start + PAGESIZE - 1;
-        List<BoardNoticeDto.Preview> notice =  boardNoticeDao.noticeList(start,end);
+        List<BoardNoticeDto.Preview> notice =  boardNoticeDao.noticeList(start);
         Integer countOfFavorite = boardNoticeDao.count();
         Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
-        Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
+        Integer prev = ((pageNo-1)/BLOCKSIZE) * BLOCKSIZE;
         Integer startPage = prev+1;
         Integer endPage = prev + BLOCKSIZE;
         Integer next = endPage+1;
-        if(end>=countOfPage) {
+        if(endPage>=countOfPage) {
 
             endPage = countOfPage;
             next = 0;
