@@ -10,6 +10,7 @@ import kr.kro.namohagae.board.entity.Board;
 import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
+import kr.kro.namohagae.global.util.pagination.Pagination;
 import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,22 +36,10 @@ public class BoardService {
     }
 
     public BoardDto.PaginationPreview preview(Integer townNo, String searchName, String sorting, Integer pageNo) {
-
-        Integer start = (pageNo-1)*PAGESIZE + 1;
-        Integer end = start + PAGESIZE - 1;
-        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, start);
         Integer countOfPreview = boardDao.countPreview(townNo, searchName);
-        Integer countOfPage = (countOfPreview-1)/PAGESIZE + 1;
-        Integer prev = ((pageNo-1)/BLOCKSIZE) * BLOCKSIZE;
-        Integer startPage = prev+1;
-        Integer endPage = prev + BLOCKSIZE;
-        Integer next = endPage+1;
-        if(endPage>=countOfPage) {
-            endPage = countOfPage;
-            next = 0;
-        }
-
-        return new BoardDto.PaginationPreview(pageNo, prev, startPage, endPage, next, preview);
+        Pagination page = new Pagination(BLOCKSIZE,PAGESIZE,pageNo,countOfPreview);
+        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, page.startRowNum);
+        return new BoardDto.PaginationPreview(pageNo, page.prevPage, page.startPage, page.endPage, page.nextPage, preview);
     }
 
 
@@ -60,8 +49,8 @@ public class BoardService {
     public Boolean findBoardEnabledByBoardNo(Integer boardNo) {
         return boardDao.findBoardEnabledByBoardNo(boardNo);
     }
-    public BoardList boardFreeReadData(Integer boardNo) {
 
+    public BoardList boardFreeReadData(Integer boardNo) {
         return boardDao.boardFreeReadData(boardNo);
     }
 
