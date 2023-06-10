@@ -38,8 +38,8 @@ public class BoardService {
     public BoardDto.PaginationPreview preview(Integer townNo, String searchName, String sorting, Integer pageNo) {
         Integer countOfPreview = boardDao.countPreview(townNo, searchName);
         Pagination page = new Pagination(BLOCKSIZE,PAGESIZE,pageNo,countOfPreview);
-        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, page.startRowNum);
-        return new BoardDto.PaginationPreview(pageNo, page.prevPage, page.startPage, page.endPage, page.nextPage, preview);
+        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, page.getStartRowNum());
+        return new BoardDto.PaginationPreview(pageNo, page.getPrevPage(), page.getStartPage(), page.getEndPage(), page.getNextPage(), preview);
     }
 
 
