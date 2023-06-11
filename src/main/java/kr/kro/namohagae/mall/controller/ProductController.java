@@ -1,6 +1,5 @@
 package kr.kro.namohagae.mall.controller;
 
-import jakarta.servlet.http.HttpSession;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.service.ProductService;
@@ -19,14 +18,8 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping("/mall/product/list")
-    public String list(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model, HttpSession session,
-                       @RequestParam(defaultValue="NewProduct") String sortBy, @RequestParam(value="searchProduct", defaultValue = "") String searchProduct,
-                       @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        if(session.getAttribute("msg") != null) {
-            model.addAttribute("msg", session.getAttribute("msg"));
-            session.removeAttribute("msg");
-        }
-
+    public String list(@RequestParam(defaultValue="1") Integer pageNo, Integer categoryNo, Model model, @RequestParam(defaultValue="NewProduct") String sortBy,
+                       @RequestParam(value="searchProduct", defaultValue = "") String searchProduct, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         ProductDto.Pagination pagination;
         if (!searchProduct.isEmpty()) {
             pagination = service.searchProductName(pageNo, categoryNo, myUserDetails.getMemberNo(), searchProduct);
@@ -57,7 +50,6 @@ public class ProductController {
 
         redirectAttributes.addAttribute("categoryNo", categoryNo);
         redirectAttributes.addAttribute("sortBy", sortBy);
-//        redirectAttributes.addAttribute("searchProduct", "");
         return "redirect:/mall/product/list";
     }
 }
