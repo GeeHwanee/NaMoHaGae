@@ -83,19 +83,17 @@ public class ProductService {
     public ProductDto.Pagination findAll(Integer pageNo, Integer categoryNo, String sortBy, Integer memberNo) {
         Integer startRowNum = (pageNo-1)*PAGESIZE + 1;
         Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<ProductDto.ReadAll> products=null;
-        Integer countOfProduct=0;
+        List<ProductDto.ReadAll> products = null;
 
         if (sortBy.equals("NewProduct")) {
             products =  productDao.findAllByNewProduct(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
-            countOfProduct = productDao.count(categoryNo);
         } else if (sortBy.equals("ProductName")) {
             products = productDao.findAllByProductName(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
-            countOfProduct = productDao.count(categoryNo);
         } else if (sortBy.equals("BestProduct")) {
             products = productDao.findAllByBestProduct(ImageConstants.IMAGE_PRODUCT_URL,startRowNum, endRowNum, categoryNo, memberNo);
-            countOfProduct = productDao.count(categoryNo);
         }
+
+        Integer countOfProduct = productDao.count(categoryNo);
         Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
         Integer prev = (pageNo-1)/BLOCKSIZE * BLOCKSIZE;
         Integer start = prev+1;
