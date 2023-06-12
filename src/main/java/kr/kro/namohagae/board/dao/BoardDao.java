@@ -18,13 +18,7 @@ public interface BoardDao {
     public Integer findMemberNoByBoardNo(Integer boardNo);
     public Integer countByMemberNo(Integer memberNo);
     public void delete(Integer boardNo);
-
-    public void boardUpdateData(Board board);
-
-    public List<BoardDto.FindAllByMemberNo> findAllByMemberNo(Integer startRownum,Integer endRownum,Integer memberNo);
-
-
-    Integer count();
+    public void update(Board board);
 
 
 }
