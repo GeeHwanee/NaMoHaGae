@@ -37,4 +37,9 @@ public class DogRestController {
         }
         return ResponseEntity.ok(dogService.dogList(memberNo));
     }
+    @GetMapping("/dog/check/master")
+    public ResponseEntity<Boolean> checkMaster(Integer dogNo,@AuthenticationPrincipal MyUserDetails myUserDetails){
+        Integer memberNo= myUserDetails.getMemberNo();
+        return ResponseEntity.ok(dogService.checkMaster(memberNo,dogNo));
+    }
 }
