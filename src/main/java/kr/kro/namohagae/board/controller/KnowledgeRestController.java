@@ -81,7 +81,7 @@ public class KnowledgeRestController {
     }
 
     @PostMapping("/knowledge/answer/recommend")
-    public ResponseEntity<?> answerRecommend(Integer answerNo, Integer boardMemberNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
+    public ResponseEntity<?> answerRecommend(Integer answerNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
         Boolean isRead = boardInsightService.existsByBoardNoAndMemberNo(answerNo, myUserDetails.getMemberNo());
         if(!isRead){
             boardInsightService.save(answerNo, myUserDetails.getMemberNo());
