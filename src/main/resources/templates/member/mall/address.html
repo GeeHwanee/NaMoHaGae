@@ -19,6 +19,10 @@
             vertical-align: middle;
             border: 1px solid black;
         }
+        .addressPrint{
+            border-right: white;
+            border-left: white;
+        }
         .hide {
             display: none;
         }
@@ -30,7 +34,10 @@
             address.forEach(a => {
                 const buttonClass = a.defaultAddressEnabled ? 'hide' : '';
                 const tpl = `<tr>
-				<td><pre>주소이름       주소          상세주소<br>    ${a.addressName}   ${a.addressAddress}  ${a.addressAddressDetail}</pre></td>
+
+				<td class="addressPrint">주소이름<br>${a.addressName}</td>
+				<td class="addressPrint">주소<br>${a.addressAddress}</td>
+				<td class="addressPrint">상세주소<br>${a.addressAddressDetail}</td>
 				<td>
 				<button type="button" value="${a.addressNo}" id="delete" class="btn btn-primary btn-block">삭제</button>
 				<button type="button" value="${a.addressNo}" id="setDefault" class="btn btn-primary btn-block ${buttonClass}">기본 배송지 설정</button>
