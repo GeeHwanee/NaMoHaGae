@@ -207,7 +207,7 @@
     transition: all 2s ease-out;
     background: #006064;
   }
-  .right-container, .right-box { height: 100%; }
+  .right-container, .right-box { height: 100%;position: relative; z-index: 12;}
   .right-box { display: flex; justify-content: center; align-items: center; margin:20px 0; text-align:center;  overflow:hidden; }
 
   .right-box h1 {
@@ -247,6 +247,47 @@
   .right-box  h1 span:nth-child(12){ animation-delay:.55s; }
   .right-box  h1 span:nth-child(13){ animation-delay:.6s; }
   .right-box  h1 span:nth-child(14){ animation-delay:.65s; }
+
+
+  @keyframes left-move {
+    from {
+      left: 0;
+    }
+    to {
+      left: -105%;
+    }
+  }
+
+  @keyframes right-move {
+    from {
+      left: -105%;
+    }
+    to {
+      left: 0;
+    }
+  }
+
+  .grid {
+    position: relative;
+    left: 0; /* 초기 위치 설정 */
+  }
+
+  .left-move {
+    animation: left-move 1s forwards;
+  }
+
+  .right-move {
+    animation: right-move 1s forwards;
+  }
+.find-box{
+  position: absolute;
+  height: 100%;
+  width: 49%;
+  left: 50%;
+  overflow-y: auto;
+}
+
+
 </style>
 <body id="bg">
 <!-- Nav -->
@@ -287,6 +328,7 @@
         <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
         <button id="kakao-btn"><img id="logo_kakao" src="/image/embeded/kakao_login_medium_wide.png" class="kakao"></button>
         <button id="form_button" type="button" class="contrast">Login</button>
+        <button id="toggleBtn" type="button" class="contrast" style="position: absolute;left: 45%;top: 50%;z-index: 23;width: 100px;">회원가입</button>
         <form id="kakaoJoin">
           <input type="hidden" id="_csrf" name="_csrf">
           <input type="hidden" id="kakaoEmail" name="kakaoEmail">
@@ -303,23 +345,64 @@
         <h1><span>N</span><span>A</span><span>M</span><span>O</span><span>H</span><span> </span><span>A</span><span>G</span><span>A</span><span>E</span><span> </span><span>?</span><span>!</span><span>?</span></h1>
         </div>
     </div>
+    <!--여기영역만 만지면댐-->
+  <div class="find-box">
+    <label for="nickname">NICKNAME: </label>
+    <input
+            id="nickname"
+            type="text"
+            name="nickname"
+            placeholder="Nickname"
+    />
+    <label for="phone">PHONE: </label>
+    <input
+            id="phone"
+            type="text"
+            name="phone"
+            placeholder="Phone"
+    />
+    <button type="button" id="findEmail" class="contrast">아이디 찾기</button>
+    <label for="memberEmail"></label>
+    <input type="text" name="memberEmail" id="memberEmail" placeholder="Email">
+    <button type="button" id="sendEmail" class="contrast">비밀번호 찾기</button>
+  </div>
+    <!--여기영역만 만지면댐-->
   </article>
+
 </main>
 <!-- ./ Main -->
 
 <!-- Footer -->
 <footer class="container-fluid" th:replace="~{fragments/footer :: footer}"></footer>
 <script>
-  var bg = document.getElementById("bg");
+  let bg = document.getElementById("bg");
 
   setInterval(function(){
-    var color = Math.random()*0xffffff;
+    let color = Math.random()*0xffffff;
     color = parseInt(color);
     color = color.toString(16);
 
     bg.style.background = "#" + color;
 
   },3000);
+
+  const toggleBtn = document.getElementById('toggleBtn');
+  const toggleElement = document.querySelector('.right-container'); // 클래스 선택자에 변경
+  let isLeft = true; // 현재 위치 변수 추가
+
+  toggleBtn.addEventListener('click', function() {
+    if (isLeft) {
+      toggleElement.classList.add('left-move');
+      toggleElement.classList.remove('right-move');
+    } else {
+      toggleElement.classList.add('right-move');
+      toggleElement.classList.remove('left-move');
+    }
+
+    isLeft = !isLeft;
+  });
+
+
 </script>
 </body>
 </html>
