@@ -43,14 +43,16 @@ public class KnowledgeRestController {
     @GetMapping("/knowledge/main")
     public ResponseEntity<?> boardTownList(
                                            @RequestParam(value ="searchName",  defaultValue = "") String searchName,
-                                           @RequestParam(value ="page", required = false, defaultValue = "1") int page,Integer townNo) {
-        PageDto pageDTO = boardService.pagingParam(page,0);
+                                           @RequestParam(value ="page", required = false, defaultValue = "1") int pageNo,Integer townNo) {
+        // = knowledgeService.questionFindAll(pageNo);
 
-        List<KnowledgeMainDto> knowledgeMainDto = knowledgeService.waitList(searchName,page);
+        List<KnowledgeMainDto> knowledgeMainDto = knowledgeService.waitList(searchName,pageNo);
 
-        ResponseDto.waitList responseDto = new ResponseDto.waitList(pageDTO,knowledgeMainDto);
-        return ResponseEntity.ok(responseDto);
+        //ResponseDto.waitList responseDto = new ResponseDto.waitList(pageDTO,knowledgeMainDto);
+        return ResponseEntity.ok(null);
     }
+
+
 
 
     @GetMapping("/knowledge/answer/list")

@@ -22,8 +22,8 @@ public class BoardRestController {
     private final CommentService commentService;
 
     @GetMapping(value = {"/free/list", "/town/list"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>preview(@RequestParam(defaultValue = "0") Integer townNo, String searchName, @RequestParam(defaultValue = "") String sorting, @RequestParam(defaultValue = "1") Integer pageNo){
-        return ResponseEntity.ok().body(boardService.preview(townNo, searchName, sorting, pageNo));
+    public ResponseEntity<?>preview(@RequestParam(defaultValue = "0") Integer townNo,String searchName, @RequestParam(defaultValue = "") String sorting, @RequestParam(defaultValue = "1") Integer pageNo){
+        return ResponseEntity.ok().body(boardService.preview(townNo, null, searchName, sorting, pageNo));
     }
 
     @PostMapping(value = {"/free/recommend", "/town/recommend"})
@@ -38,6 +38,9 @@ public class BoardRestController {
         Boolean result = boardInsightService.updateBoardRecommendEnabled(boardType, boardNo, myUserDetails.getMemberNo());
         return ResponseEntity.ok().body(result);
     }
-
+    @GetMapping("/member/list")
+    public ResponseEntity<?> memberList(@RequestParam(defaultValue = "0") Integer townNo,String searchName, @RequestParam(defaultValue = "") String sorting, @RequestParam(defaultValue = "1") Integer pageNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
+        return  ResponseEntity.ok().body(boardService.preview(townNo, myUserDetails.getMemberNo(),searchName,sorting,pageNo));
+    }
 
 }
