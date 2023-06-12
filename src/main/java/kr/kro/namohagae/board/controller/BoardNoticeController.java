@@ -2,7 +2,6 @@ package kr.kro.namohagae.board.controller;
 
 import kr.kro.namohagae.board.service.BoardInsightService;
 import kr.kro.namohagae.board.service.BoardNoticeService;
-import kr.kro.namohagae.board.service.BoardService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 @RequiredArgsConstructor
 public class BoardNoticeController {
-    private final BoardService boardService;
     private final BoardNoticeService boardNoticeService;
     private final BoardInsightService boardInsightService;
 

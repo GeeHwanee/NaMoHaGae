@@ -17,7 +17,7 @@ public class BoardNoticeService {
     private final Integer PAGESIZE = 10;
     private final Integer BLOCKSIZE = 5;
 
-    public void addNotice(BoardNoticeDto.Add dto){
+    public void addNotice(BoardNoticeDto.Write dto){
         BoardNotice boardNotice = dto.toEntity();
         boardNoticeDao.save(boardNotice);
     }
