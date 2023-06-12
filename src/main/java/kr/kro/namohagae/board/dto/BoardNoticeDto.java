@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class BoardNoticeDto {
     @Data
-    public static class Add{
+    public static class Write {
         private String boardNoticeTitle;
         private String boardNoticeContent;
 

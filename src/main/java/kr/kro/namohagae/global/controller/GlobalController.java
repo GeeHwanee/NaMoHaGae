@@ -3,7 +3,6 @@ package kr.kro.namohagae.global.controller;
 
 import jakarta.servlet.http.HttpSession;
 import kr.kro.namohagae.board.service.BoardService;
-import kr.kro.namohagae.board.service.BoardTownService;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.mall.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class GlobalController {
     private final BoardService boardService;
-    private final BoardTownService boardTownService;
     private final ProductService productService;
 
     // [Global 파트]--------------------------------------------------------------------
@@ -58,8 +56,6 @@ public class GlobalController {
 
     @GetMapping("/board/main")
     public String boardMain(Model model){
-
-
        model.addAttribute("ReadList",boardService.mainPreview(0,"boardReadCount"));
         model.addAttribute("RecommendList",boardService.mainPreview(0,"boardRecommendCount"));
         model.addAttribute("TownReadList",boardService.mainPreview(null,"boardReadCount"));
