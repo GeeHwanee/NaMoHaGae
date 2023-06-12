@@ -131,4 +131,7 @@ public class DogService {
     public List<DogDto.DogList> dogList(Integer memberNo) {
         return dogDao.findDogList(ImageConstants.IMAGE_DOG_URL,memberNo);
     }
+    public Boolean checkMaster(Integer memberNo,Integer dogNo){
+        return dogDao.checkMaster(memberNo,dogNo);
+    }
 }
