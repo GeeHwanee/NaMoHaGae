@@ -28,4 +28,7 @@
 <select id="checkDogCountByMemberNo" resultType="Integer">
     select count(*) from dog where member_no=#{memberNo}
 </select>
+    <select id="checkMaster" resultType="Boolean">
+        select count(*) from dog where #{memberNo}=member_no and #{dogNo}=dog_no
+    </select>
 </mapper>
