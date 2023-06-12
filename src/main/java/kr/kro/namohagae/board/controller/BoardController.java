@@ -60,9 +60,9 @@ public class BoardController {
     }
 
     @PostMapping(value = {"/free/write","/town/write"})
-    public String boardFreeWrite(BoardDto.Write boardDto, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req)  {
+    public String boardWrite(BoardDto.Write dto, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req)  {
         String path = req.getRequestURI();
-        boardService.save(boardDto, myUserDetails.getMemberNo());
+        boardService.save(dto, myUserDetails.getMemberNo());
         if (path.contains("/free")) {
             return "redirect:/board/free/list";
         } else if (path.contains("/town")) {
@@ -116,7 +116,7 @@ public class BoardController {
     @PostMapping("/free/update")
     public String boardUpdateData(Board board) {
 
-        boardService.boardUpdateData(board);
+        boardService.update(board);
 
         return "redirect:/board/free/list";
     }

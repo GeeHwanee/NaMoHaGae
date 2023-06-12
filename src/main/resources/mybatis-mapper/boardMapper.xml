@@ -76,26 +76,9 @@
         update BOARD set BOARD_ENABLED=0 where BOARD_NO = #{boardNo} and ROWNUM=1
     </update>
 
-    <update id="boardUpdateData">
+    <update id="update">
         update board set board_title = #{boardTitle} , board_content = #{boardContent} where board_no = #{boardNo}
     </update>
-
-    <select id="findAllByMemberNo" resultType="kr.kro.namohagae.board.dto.BoardDto$FindAllByMemberNo">
-        select * from
-            (
-                select rownum as rnum, a.* from
-                    (
-                        select
-                           b.board_no,b.town_no,b.board_title,
-                           (select count(*) from BOARD_INSIGHT where b.BOARD_NO=BOARD_INSIGHT.BOARD_NO) as board_read_count,
-                           (select count(*) from BOARD_INSIGHT where b.BOARD_NO=BOARD_INSIGHT.BOARD_NO and BOARD_INSIGHT.BOARD_RECOMMEND_ENABLED=1) AS board_recommend_count,
-                           (select count(*) from board_comment c where c.board_no=b.board_no ) as commentCount, board_write_date
-                        from board b where b.member_no =#{memberNo} and board_enabled = 1
-                    ) a
-                where rownum&lt;=#{endRownum}
-            )
-        where rnum&gt;=#{startRownum}
-    </select>
 
 </mapper>
 

@@ -52,17 +52,6 @@ public class BoardDto {
 
 
     @Data
-    public static class FindAllByMemberNo {
-        private Integer boardNo;
-        private Integer townNo;
-        private String boardTitle;
-        private Integer boardReadCount;
-        private Integer boardRecommendCount;
-        private Integer commentCount;
-        private LocalDateTime boardWriteDate;
-    }
-
-    @Data
     @ToString
     @AllArgsConstructor
     public static class Pagination {

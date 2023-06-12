@@ -48,7 +48,7 @@ public class AdminController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/admin/notice/write")
-    public String adminNoticeWrite(BoardNoticeDto.Add dto){
+    public String adminNoticeWrite(BoardNoticeDto.Write dto){
         boardNoticeService.addNotice(dto);
 
         return "redirect:/admin/notice/list";
