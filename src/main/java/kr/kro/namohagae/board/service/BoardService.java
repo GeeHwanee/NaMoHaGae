@@ -4,10 +4,7 @@ import kr.kro.namohagae.board.dao.BoardDao;
 import kr.kro.namohagae.board.dao.BoardNoticeDao;
 import kr.kro.namohagae.board.dao.BoardTownDao;
 import kr.kro.namohagae.board.dto.BoardDto;
-import kr.kro.namohagae.board.dto.BoardMainList;
-import kr.kro.namohagae.board.dto.PageDto;
 import kr.kro.namohagae.board.entity.Board;
-import kr.kro.namohagae.board.entity.BoardList;
 import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.pagination.Pagination;
@@ -35,11 +32,15 @@ public class BoardService {
         boardDao.save(board);
     }
 
-    public BoardDto.PaginationPreview preview(Integer townNo, String searchName, String sorting, Integer pageNo) {
-        Integer countOfPreview = boardDao.countPreview(townNo, searchName);
+    public List<BoardDto.Preview> mainPreview(Integer townNo, String sorting) {
+       return boardDao.preview(townNo,null,null, sorting,1,5 );
+    }
+    public BoardDto.Pagination preview(Integer townNo, Integer memberNo, String searchName, String sorting, Integer pageNo) {
+        System.out.println(memberNo);
+        Integer countOfPreview = boardDao.countPreview(townNo, memberNo, searchName);
         Pagination page = new Pagination(BLOCKSIZE,PAGESIZE,pageNo,countOfPreview);
-        List<BoardDto.Preview> preview =  boardDao.preview(townNo, searchName, sorting, page.getStartRowNum());
-        return new BoardDto.PaginationPreview(pageNo, page.getPrevPage(), page.getStartPage(), page.getEndPage(), page.getNextPage(), preview);
+        List<BoardDto.Preview> preview =  boardDao.preview(townNo, memberNo, searchName, sorting, page.getStartRowNum(),10);
+        return new BoardDto.Pagination(pageNo, page.getPrevPage(), page.getStartPage(), page.getEndPage(), page.getNextPage(), preview);
     }
 
 
@@ -50,76 +51,15 @@ public class BoardService {
         return boardDao.findBoardEnabledByBoardNo(boardNo);
     }
 
-    public BoardList boardFreeReadData(Integer boardNo) {
-        return boardDao.boardFreeReadData(boardNo);
-    }
-
-
     public void boardUpdateData(Board board) {
 
         boardDao.boardUpdateData(board);
     }
 
-    int pageLimit = 10; // 한 페이지당 보여줄 글 갯수
-    int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
-
-
-    public PageDto pagingParam(int page,Integer townNo) {
-        // 전체 글 갯수 조회
-        int boardCount = 0;
-        if(townNo != 0) {
-            boardCount = boardTownDao.boardTownCount(townNo);
-
-        } else {
-            boardCount = boardDao.boardCount();
-        }
-
-        // 전체 페이지 갯수 계산(10/3=3.33333 => 4)
-        int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
-        // 시작 페이지 값 계산(1, 4, 7, 10, ~~~~)
-        int startPage = (((int) (Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
-        // 끝 페이지 값 계산(3, 6, 9, 12, ~~~~)
-        int endPage = startPage + blockLimit - 1;
-        if (endPage > maxPage) {
-            endPage = maxPage;
-        }
-        PageDto pageDTO = new PageDto();
-        pageDTO.setPage(page);
-        pageDTO.setMaxPage(maxPage);
-        pageDTO.setStartPage(startPage);
-        pageDTO.setEndPage(endPage);
-        return pageDTO;
-    }
-
-    public List<BoardMainList> mainReadList(){
-
-        return boardDao.mainReadList();
-    }
-
-    public List<BoardMainList> mainRecommendList(){
-
-        return boardDao.mainRecommendList();
-    }
-
-    public BoardDto.Pagination memberList(Integer pageno, Integer memberNo) {
-        Integer startRowNum = (pageno-1)*PAGESIZE + 1;
-        Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<BoardDto.FindAllByMemberNo> board =  boardDao.findAllByMemberNo(startRowNum,endRowNum, memberNo);
-        Integer countOfFavorite = boardDao.countByMemberNo(memberNo);
-        Integer countOfPage = (countOfFavorite-1)/PAGESIZE + 1;
-        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
-        Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
-            end = countOfPage;
-            next = 0;
-        }
-        return new BoardDto.Pagination(pageno, prev, start, end, next, board);
-    }
 
     public void boardDelete(Integer boardNo) {
         boardDao.delete(boardNo);
     }
+
 }
 
