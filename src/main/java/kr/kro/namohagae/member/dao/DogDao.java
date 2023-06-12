@@ -22,4 +22,5 @@ public interface DogDao {
     public Optional<Dog> findByDog(Integer dogNo);
 
     public Integer checkDogCountByMemberNo(Integer memeberNo);
+    public Boolean checkMaster(Integer memberNo,Integer dogNo);
 }
