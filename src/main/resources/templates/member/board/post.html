@@ -6,15 +6,16 @@
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
     <script>
-        function printMyQna(board) {
+        let pageNo=1;
+        function printMyQna(preview) {
             $('#tbody').empty();
             const $reft = $('#tbody');
-            board.forEach(b => {
+            preview.forEach(b => {
                 let link;
                     if(b.townNo==0){
-                        link="http://localhost:8081/board/free/read?boardNo="
+                        link="/board/free/read?boardNo="
                     }else {
-                        link = "http://localhost:8081/board/town/read?boardNo="
+                        link = "/board/town/read?boardNo="
                     }
                     const tpl = `<tr>
                         <td><a href='${link}${b.boardNo}'>${b.boardTitle}</a></td>
@@ -54,21 +55,19 @@
                 $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
         }
         $(document).ready(async function() {
-            const param = new URLSearchParams(location.search);
-            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
             try {
-                const result = await $.ajax("/board/free/member/List?pageno=" + pageno);
+                const result = await $.ajax("/api/v1/board/member/list?pageNo=" + pageNo);
                 console.log(result);
-                printMyQna(result.board);
+                printMyQna(result.preview);
                 printPagination(result)
 
 
                 $('#page_ul').on('click', '.page-link', async function (e) {
                     e.preventDefault();
-                    const pageNum = $(this).data('page-no');
-                    const result = await $.ajax("/board/free/member/List?pageno=" + pageNum);
+                    pageNo = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/board/member/list?pageNo=" + pageNo);
                     console.log(result);
-                    printMyQna(result.board);
+                    printMyQna(result.preview);
                     printPagination(result);
                 });
             } catch (err) {
