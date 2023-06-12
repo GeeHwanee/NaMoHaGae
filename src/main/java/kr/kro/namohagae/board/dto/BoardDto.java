@@ -65,23 +65,12 @@ public class BoardDto {
     @Data
     @ToString
     @AllArgsConstructor
-    public static class PaginationPreview {
-        private Integer pageNo;
-        private Integer prev;
-        private Integer start;
-        private Integer end;
-        private Integer next;
-        private List<BoardDto.Preview> preview;
-    }
-    @Data
-    @ToString
-    @AllArgsConstructor
     public static class Pagination {
         private Integer pageNo;
         private Integer prev;
         private Integer start;
         private Integer end;
         private Integer next;
-        private List<BoardDto.FindAllByMemberNo> board;
+        private List<BoardDto.Preview> preview;
     }
 }

@@ -12,7 +12,6 @@ import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @RequiredArgsConstructor
@@ -110,7 +108,7 @@ public class BoardController {
     @GetMapping("/free/modify")
     public String boardModify(Integer boardNo,Model model) {
 
-        model.addAttribute("board", boardService.boardFreeReadData(boardNo));
+        model.addAttribute("board", boardService.readByBoardNo(boardNo));
 
         return "board/free/modify";
     }
@@ -123,9 +121,4 @@ public class BoardController {
         return "redirect:/board/free/list";
     }
 
-    @GetMapping("/free/member/List")
-    public ResponseEntity<?> memberList(@RequestParam(defaultValue="1")Integer pageno,@AuthenticationPrincipal MyUserDetails myUserDetails){
-        Integer memberNo = myUserDetails.getMemberNo();
-        return  ResponseEntity.ok(boardService.memberList(pageno,memberNo));
-    }
 }
