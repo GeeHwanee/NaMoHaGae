@@ -300,6 +300,15 @@
     background: inherit;  /*스크롤바 뒷 배경 색상*/
   }
 
+  .join-box{
+    position: absolute;
+    height: 100%;
+    width: 52%;
+    left: -50%;
+    overflow-y: auto;
+    background-color: #f4984e;
+  }
+
 
 </style>
 <body id="bg">
@@ -381,11 +390,20 @@
     <button type="button" id="sendEmail" class="contrast">비밀번호 찾기</button>
     </form>
   </div>
+
+    <div class="join-box">
+      <h1>Join</h1>
+    </div>
+
     <!--여기영역만 만지면댐-->
+
   </article>
 
 </main>
+
+
 <!-- ./ Main -->
+
 
 <!-- Footer -->
 <footer class="container-fluid" th:replace="~{fragments/footer :: footer}"></footer>
