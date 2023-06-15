@@ -96,4 +96,9 @@
     <select id="findMemberNoByNickname" resultType="Integer">
         select member_no from member where member_nickname=#{nickname}
     </select>
+    <select id="preview" resultType="kr.kro.namohagae.member.dto.MemberDto$Preview">
+        select MEMBER_NO, TOWN_GU, TOWN_DONG, MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_PHONE, MEMBER_ENABLED
+        from MEMBER join TOWN T on MEMBER.TOWN_NO = T.TOWN_NO
+        where MEMBER_NICKNAME LIKE '%' || #{searchName} || '%'
+    </select>
 </mapper>

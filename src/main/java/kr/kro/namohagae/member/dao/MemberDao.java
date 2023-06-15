@@ -1,9 +1,11 @@
 package kr.kro.namohagae.member.dao;
 
+import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -50,4 +52,6 @@ public interface MemberDao {
 
     public Integer updateMemberPointByMemberNo(Integer memberPoint, Integer memberNo);
     public Integer findMemberNoByNickname(String nickname);
+
+    public List<MemberDto.Preview> preview(String url, String searchName);
 }

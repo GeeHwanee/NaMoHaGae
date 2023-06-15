@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -203,6 +204,10 @@ public class MemberService {
 
     public Integer findMemberPointByMemberNo(Integer memberNo) {
         return memberDao.findMemberPointByMemberNo(memberNo);
+    }
+
+    public List<MemberDto.Preview> preview(String searchName) {
+        return memberDao.preview(ImageConstants.IMAGE_PROFILE_URL, searchName);
     }
 }
 
