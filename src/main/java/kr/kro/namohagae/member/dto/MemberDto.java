@@ -75,5 +75,18 @@ public class MemberDto {
         private Integer memberGrade;
         private String memberIntroduce;
     }
+
+    @Data
+    @ToString
+    @AllArgsConstructor
+    public static class Preview{
+        private Integer memberNo;
+        private String townGu;
+        private String townDong;
+        private String memberNickname;
+        private String memberEmail;
+        private String memberPhone;
+        private Boolean memberEnabled;
+    }
 }
 

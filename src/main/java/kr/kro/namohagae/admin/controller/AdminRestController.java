@@ -7,6 +7,8 @@ import kr.kro.namohagae.global.service.ReportService;
 import kr.kro.namohagae.global.service.TownService;
 import kr.kro.namohagae.mall.dto.ProductDto;
 import kr.kro.namohagae.mall.service.ProductService;
+import kr.kro.namohagae.member.dto.MemberDto;
+import kr.kro.namohagae.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin")
 public class AdminRestController {
 
+    private final MemberService memberService;
     private final ProductService productService;
     private final TownService townService;
     private final BlockService blockService;
     private final ReportService reportService;
+
+    // [회원 조회]--------------------------------------------------------------------
+    @GetMapping("/member/find")
+    public ResponseEntity<?> memberList(@RequestParam(defaultValue = "") String searchName){
+        return ResponseEntity.ok().body(memberService.preview(searchName));
+    }
+    @GetMapping("/member/information")
+    public ResponseEntity<MemberDto.Read> memberRead(Integer memberNo){
+        return ResponseEntity.ok().body(memberService.read(memberNo));
+    }
 
     // [상품 수정]--------------------------------------------------------------------
     @PostMapping("/product/put")

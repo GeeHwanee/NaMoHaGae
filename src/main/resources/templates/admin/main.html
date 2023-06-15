@@ -8,20 +8,87 @@
 
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>어드민 메인</title>
+    <script>
+        let searchName="";
+        async function printList(){
+            await $.ajax({
+                url:'/api/v1/admin/member/find?searchName='+searchName,
+                success : function(data) {
+                   const $tbody = $('#tbody').empty();
+                    data.forEach(member=>{
+                        const tpl = `
+                            <tr class="find" data-no="${member.memberNo}">
+                                <td> ${member.memberNo} </td>
+                                <td>  ${member.townGu} </td>
+                                <td>  ${member.townDong} </td>
+                                <td>  ${member.memberNickname} </td>
+                                <td>  ${member.memberPhone} </td>
+                                <td><button class="enabled" type="button">${member.memberEnabled?"비활성화":"활성화"}</button></td>
+                            </tr>
+                        `;
+                        $tbody.append(tpl);
+                        }
+                    )
+                },
+                error : function(data) {
+                    console.log(data.error);
+                }
+            })
+        }
+        $(document).ready(function (){
+            printList();
+
+            $('#search_button').click(function() {
+               searchName = $('#searchName').val();
+                printList();
+            })
+            $('#tbody').on('click','.find', async function() {
+                const memberNo = $(this).data('no');
+                console.log(memberNo);
+                await $.ajax({
+                    url:'/api/v1/admin/member/information?memberNo='+memberNo,
+                    success : function(data) {
+                        const $profile = $('#profile').empty();
+                        const tpl =`
+                            <img src="${data.memberProfile}" width="200px">
+                            <p>${data.memberNickname}</p>
+                        `;
+                        $profile.append(tpl);
+                    },
+                    error : function(data) {
+                        console.log(data.error);
+                    }
+                })
+            })
+
+        });
+    </script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
-    </aside>
-    <section>
-        <h1>어드민 메인 페이지</h1>
-        <article></article>
+    <section style="display: flex; align-content:center; flex-direction: column">
+        <article style="justify-content: center; width: 100%; min-height: 300px; border: 2px solid black">
+            <div id="profile" style="display: inline-block margin: 0 auto"></div>
+            <div id="information" style="display: inline-block"></div>
+        </article>
+        <article style="width: 100%; min-height: 300px; border: 2px solid black">
+            <table class="table table-hover">
+                <thead></thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </article>
+        <article style="display: flex; justify-content: center">
+            <div id="search_form" >
+                <input type="text" name="searchName" id="searchName">
+                <button type="button" class="search btn btn-primary" id="search_button">검색</button>
+            </div>
+        </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
-</footer>
 </body>
 </html>
