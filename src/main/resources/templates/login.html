@@ -208,7 +208,7 @@
     background: #006064;
   }
   .right-container, .right-box { height: 100%;position: relative; z-index: 12;}
-  .right-box { display: flex; justify-content: center; align-items: center; margin:20px 0; text-align:center;  overflow:hidden; }
+  .right-box { display: flex;  margin:20px 0; text-align:center;  overflow:hidden; }
 
   .right-box h1 {
     font-size:5em;
@@ -267,9 +267,27 @@
     }
   }
 
+  @keyframes left-move2 {
+    from {
+      left: 0;
+    }
+    to {
+      left: -60%;
+    }
+  }
+
+  @keyframes right-move2 {
+    from {
+      left: -60%;
+    }
+    to {
+      left: 0;
+    }
+  }
+
   .grid {
     position: relative;
-    left: 0; /* 초기 위치 설정 */
+    left: 0;
   }
 
   .left-move {
@@ -277,6 +295,13 @@
   }
 
   .right-move {
+    animation: right-move 1s forwards;
+  }
+  .left-move2 {
+    animation: left-move 1s forwards;
+  }
+
+  .right-move2 {
     animation: right-move 1s forwards;
   }
 .find-box{
@@ -303,10 +328,10 @@
   .join-box{
     position: absolute;
     height: 100%;
-    width: 52%;
-    left: -50%;
+    width: 51%;
+    left: -60%;
     overflow-y: auto;
-    background-color: #f4984e;
+    background-color: #11191f;
   }
 
 
@@ -365,8 +390,9 @@
         <h1><span>N</span><span>A</span><span>M</span><span>O</span><span>H</span><span> </span><span>A</span><span>G</span><span>A</span><span>E</span><span> </span><span>?</span><span>!</span><span>?</span></h1>
         </div>
       <button id="toggleBtn" type="button" class="contrast" style="position: absolute;left: 35%;top: 75%;z-index: 23;width: 162px;background-color: inherit;color: white;">Lost Id/PW ?</button>
+      <button id="toggleBtn2" type="button" class="contrast" style="position: absolute;left: 35%;top: 60%;z-index: 23;width: 162px;background-color: inherit;color: white;">Join?</button>
     </div>
-    <!--여기영역만 만지면댐-->
+    <!--여기영역부터 만지면댐---------------------------------------------------------->
   <div class="find-box">
     <h1>ID/PW</h1>
     <form>
@@ -391,11 +417,13 @@
     </form>
   </div>
 
+    <!--회원가입 시키는 div-->
     <div class="join-box">
       <h1>Join</h1>
     </div>
+    <!--회원가입 div-->
 
-    <!--여기영역만 만지면댐-->
+    <!--여기영역까지만 만지면댐-------------------------------------------------------------------------->
 
   </article>
 
@@ -424,6 +452,10 @@
   let isLeft = true; // 현재 위치 변수 추가
 
   toggleBtn.addEventListener('click', function() {
+    if(isLeft2){
+      return;
+    }
+
     if (isLeft) {
       toggleElement.classList.add('left-move');
       toggleElement.classList.remove('right-move');
@@ -438,6 +470,29 @@
     isLeft = !isLeft;
   });
 
+  const toggleBtn2=document.getElementById('toggleBtn2');
+  const toggleElement2=document.querySelector('.join-box');
+  let isLeft2=false;
+
+  toggleBtn2.addEventListener('click',function(){
+    if(!isLeft){
+      return;
+    }
+
+    if (isLeft2) {
+      toggleElement2.classList.add('left-move2');
+      toggleElement2.classList.remove('right-move2');
+      toggleBtn2.innerHTML="Join?";
+
+    } else {
+      toggleElement2.classList.add('right-move2');
+      toggleElement2.classList.remove('left-move2');
+      toggleBtn2.innerHTML="Login";
+    }
+
+    isLeft2 = !isLeft2;
+
+  });
 
 </script>
 </body>
