@@ -2,6 +2,7 @@ package kr.kro.namohagae.member.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import kr.kro.namohagae.global.dao.BlockDao;
 import kr.kro.namohagae.global.dao.TownDao;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.member.dao.DogDao;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -34,6 +36,8 @@ public class MemberService {
     private DogDao dogDao;
     @Autowired
     private TownDao townDao;
+    private final BlockDao blockDao;
+
     private final JavaMailSender javaMailSender;
     String authenticationCode = "";
     public void join(MemberDto.Join dto){
@@ -199,7 +203,17 @@ public class MemberService {
     }
 
     public Boolean changePassword(String memberPassword,String memberEmail) {
-        return memberDao.changePassword(memberPassword,memberEmail);
+        Integer memberNo=memberDao.findNoByUsername(memberEmail);
+        if (blockDao.checkByMemberNo(memberNo)==false){
+        memberDao.resetMemberLoginCount(memberNo);
+        memberDao.memberEnabled(memberNo,true);
+        System.out.println("fdge");
+        }else {
+            System.out.println("fdfbdb");
+            return false;
+        }
+        String password=passwordEncoder.encode(memberPassword);
+        return memberDao.changePassword(password,memberEmail);
     }
 
     public Integer findMemberPointByMemberNo(Integer memberNo) {

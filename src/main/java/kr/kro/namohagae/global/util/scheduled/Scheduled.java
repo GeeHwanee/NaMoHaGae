@@ -13,10 +13,10 @@ public class Scheduled {
     @Autowired
     private BlockService blockService;
 
-    @PostConstruct
-    public void runDeleteImmediately() {
-        executeDelete();
-    }
+//    @PostConstruct
+//    public void runDeleteImmediately() {
+//        executeDelete();
+//    }
     @org.springframework.scheduling.annotation.Scheduled(cron = "0 0 0 * * *") // Runs at midnight every day
     public void executeDelete() {
         LocalDate today = LocalDate.now();
