@@ -60,7 +60,7 @@
         insert into town(town_no,town_gu,town_dong,town_latitude,town_longitude) values(TOWN_SEQ_PUCHING_TOWN_NO.nextval,#{townGu},#{townDong},#{townLatitude},#{townLongitude})
     </insert>
     <delete id="delete">
-        delete from town where townNo=#{townNo}
+        delete from town where town_No=#{townNo}
     </delete>
     <select id="findGu" resultType="kr.kro.namohagae.global.dto.TownDto$Gu">
         select distinct town_gu from town where TOWN_NO!=0 order by 1
