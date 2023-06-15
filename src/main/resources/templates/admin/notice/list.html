@@ -5,9 +5,84 @@
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
-
+    <link rel="stylesheet" href="/css/boardlist.css">
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>공지사항 게시판 목록 페이지</title>
+    <script>
+        function formatDateAnswer(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+        function printNotice(notice) {
+            const $tbody = $('#tbody');
+            $tbody.empty(); // tbody 비우기
+
+            const maxRows = 10; // 최대 행 개수
+
+            const numRows = notice.length < maxRows ? maxRows : notice.length; // 행 개수 결정
+
+            for (let i = 0; i < numRows; i++) {
+                const n = notice[i] || {}; // 빈 객체로 초기화
+
+                const writeDate = formatDateAnswer(n.boardNoticeWriteDate);
+
+                const tpl = `
+      <tr>
+        <td>${n.boardNoticeNo || ''}</td>
+        <td><a href="/admin/notice/read?boardNoticeNo=${n.boardNoticeNo || ''}">${n.boardNoticeTitle || ''}</a></td>
+        <td style="height:41px">${n.boardNoticeWriter || ''}</td>
+        <td>${(n.boardNoticeWriteDate ? n.boardNoticeWriteDate.replace('T', ' ').slice(0, 16) : '')}</td>
+        <td>${n.boardNoticeReadCount !== undefined && n.boardNoticeReadCount !== null ? n.boardNoticeReadCount : ''}</td>
+      </tr>
+    `;
+                $tbody.append(tpl); // tbody에 행 추가
+            }
+        }
+        function printPagination({prev, start, end, next, pageno}) {
+            $('#page_ul').empty();
+            const $ul = $('#page_ul');
+            if(prev>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${prev}'>이전</a></li>`);
+            for(let i=start; i<=end; i++) {
+                const tpl = `
+			<li class='page-item ${pageno==i? "active":""}'>
+				<a class='page-link' href='#' data-page-no='${i}'>${i}</a>
+			</li>
+		`;
+                $ul.append(tpl);
+            }
+            if(next>0)
+                $ul.append(`<li class='page-item'><a class='page-link' href='#' data-page-no='${next}'>다음</a></li>`)
+        }
+        $(document).ready(async function (){
+            const param = new URLSearchParams(location.search);
+            const pageno = param.get('pageno') == null ? 1 : param.get('pageno');
+            console.log("asd");
+            try {
+                const result = await $.ajax("/api/v1/notice/list?pageno=" + pageno);
+                console.log(result);
+                printNotice(result.notice);
+                printPagination(result)
+
+
+                $('#page_ul').on('click', '.page-link', async function (e) {
+                    e.preventDefault();
+                    const pageNum = $(this).data('page-no');
+                    const result = await $.ajax("/api/v1/notice/list?pageno=" + pageNum);
+                    console.log(result);
+                    printNotice(result.notice);
+                    printPagination(result);
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    </script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -15,9 +90,6 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>공지사항 게시판 목록 페이지</h1>
-        <a href="/admin/notice/write">게시물 쓰기</a>
-
         <table class="table table-hover table-striped text-center">
             <colgroup>
                 <col width="20%">
@@ -36,19 +108,15 @@
                     <th>조회수</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="board : ${list}">
-                    <td th:text="${board.boardNoticeNo}"></td>
-                    <td>
-                        <a th:href="@{/admin/notice/read(boardNoticeNo=${board.boardNoticeNo})}" th:text="${board.boardNoticeTitle}">게시물 제목</a>
-                    </td>
-                    <td th:text="${board.boardNoticeWriter}"></td>
-                    <td th:text="${#temporals.format(board.boardNoticeWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${board.boardNoticeReadCount}"></td>
-
-                </tr>
-            </tbody>
+            <tbody id="tbody"></tbody>
         </table>
+        <div id="button_form">
+            <a class="btn btn-primary" th:href="@{/admin/notice/write}" id="town_write">글쓰기</a>
+        </div>
+        <nav aria-label="..." id="page">
+            <ul class="pagination" id="page_ul">
+            </ul>
+        </nav>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>

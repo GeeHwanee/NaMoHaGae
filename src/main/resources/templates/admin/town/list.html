@@ -9,7 +9,7 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>qna</title>
+    <title>동네 등록</title>
     <style>
 
 
@@ -109,10 +109,7 @@
     <nav th:replace="~{fragments/nav :: nav}"></nav>
     <main>
         <aside th:replace="~{fragments/aside :: aside}"></aside>
-        </aside>
         <section>
-            <input type="text" id="serchGu">
-            <button type="button" class="btn btn-primary btn-block" id="serch_btn">구 검색</button>
             <table class="table table-hover vertical-table">
                 <thead>
                 <tr>
@@ -123,9 +120,15 @@
 
                 </tbody>
             </table>
-            <ul class="pagination" id="page_ul">
-            </ul>
-            <a type="button" class="btn btn-primary" href="/admin/town/write">동네 등록</a>
+            <div style="text-align: center">
+                <ul style="justify-content: center" class="pagination" id="page_ul">
+                </ul>
+                <div id="search_gu">
+                    <input type="text" id="serchGu">
+                    <button type="button" class="btn btn-primary btn-block" id="serch_btn">구 검색</button>
+                    <a type="button" class="btn btn-primary" href="/admin/town/write">동네 등록</a>
+                </div>
+            </div>
         </section>
         <aside th:replace="~{fragments/bside :: bside}"></aside>
     </main>

@@ -20,7 +20,7 @@
         <if test="introduce != ''">member_introduce = #{introduce},</if>
         <if test="profile != null">member_profile_image = #{profile},</if>
         </trim>
-        where member_no = #{no} and rownum=1
+        where member_no = #{no}
     </update>
 
     <select id="findByMemberNo" resultType="Member">
@@ -77,7 +77,7 @@
     </update>
 
     <update id="disabled">
-        update member set member_enabled where member_no=#{memberNo} and rownum=1
+        update member set member_enabled=0 where member_no=#{memberNo} and rownum=1
     </update>
     <select id="findEmailByNicknameAndPhone" resultType="String">
         select member_email from member where member_nickname=#{nickname} and member_phone=#{phone}
@@ -95,5 +95,10 @@
     </update>
     <select id="findMemberNoByNickname" resultType="Integer">
         select member_no from member where member_nickname=#{nickname}
+    </select>
+    <select id="preview" resultType="kr.kro.namohagae.member.dto.MemberDto$Preview">
+        select MEMBER_NO, TOWN_GU, TOWN_DONG, MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_PHONE, MEMBER_ENABLED
+        from MEMBER join TOWN T on MEMBER.TOWN_NO = T.TOWN_NO
+        where MEMBER_NICKNAME LIKE '%' || #{searchName} || '%'
     </select>
 </mapper>
