@@ -75,9 +75,11 @@
     <update id="updateProfile">
         update member set member_profile_image = #{profile} where member_no = #{no} and rownum=1
     </update>
-
-    <update id="disabled">
-        update member set member_enabled=0 where member_no=#{memberNo} and rownum=1
+    <select id="findMemberEnabledByMemberNo" resultType="Boolean">
+        select MEMBER_ENABLED from MEMBER where MEMBER_NO =#{memberNo} and ROWNUM=1
+    </select>
+    <update id="updateMemberEnabled">
+        update member set member_enabled=decode(MEMBER_ENABLED,0,1,1,0) where member_no=#{memberNo}
     </update>
     <select id="findEmailByNicknameAndPhone" resultType="String">
         select member_email from member where member_nickname=#{nickname} and member_phone=#{phone}
