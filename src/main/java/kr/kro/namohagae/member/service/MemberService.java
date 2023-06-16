@@ -11,16 +11,15 @@ import kr.kro.namohagae.member.dto.MemberDto;
 import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,16 +27,11 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class MemberService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private MemberDao memberDao;
-    @Autowired
-    private DogDao dogDao;
-    @Autowired
-    private TownDao townDao;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberDao memberDao;
+    private final DogDao dogDao;
+    private final TownDao townDao;
     private final BlockDao blockDao;
-
     private final JavaMailSender javaMailSender;
     String authenticationCode = "";
     public void join(MemberDto.Join dto){
@@ -222,6 +216,12 @@ public class MemberService {
 
     public List<MemberDto.Preview> preview(String searchName) {
         return memberDao.preview(ImageConstants.IMAGE_PROFILE_URL, searchName);
+    }
+
+    @Transactional
+    public Boolean updateMemberEnabled(Integer memberNo) {
+        memberDao.updateMemberEnabled(memberNo);
+       return memberDao.findMemberEnabledByMemberNo(memberNo);
     }
 }
 
