@@ -23,7 +23,7 @@
                                 <td>  ${member.townDong} </td>
                                 <td>  ${member.memberNickname} </td>
                                 <td>  ${member.memberPhone} </td>
-                                <td><button value="${member.memberEnabled}" data-no="${member.memberNo}" class="btn btn-primary enabled" type="button">${member.memberEnabled?"비활성화":"활성화"}</button></td>
+                                <td><button value="${member.memberEnabled}" data-no="${member.memberNo}" class="btn ${member.memberEnabled?"btn-warning":"btn-primary"} enabled" type="button">${member.memberEnabled?"비활성화":"활성화"}</button></td>
                             </tr>
                         `;
                         $tbody.append(tpl);
@@ -70,7 +70,15 @@
                     await $.ajax({
                             url:'/api/v1/admin/member/disabled?memberNo='+memberNo+"&_csrf="+$_csrf,method:'post',
                             success(result){
-                                $enabledButton.text(result?"비활성화":"활성화");
+                                if (result){
+                                    $enabledButton.text("비활성화");
+                                    $enabledButton.addClass("btn-warning");
+                                    $enabledButton.removeClass("btn-primary");
+                                }else{
+                                    $enabledButton.text("활성화");
+                                    $enabledButton.addClass("btn-primary");
+                                    $enabledButton.removeClass("btn-warning");
+                                }
                                 $enabledButton.val(result);
                             },
                             error(error){
