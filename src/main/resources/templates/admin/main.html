@@ -23,7 +23,7 @@
                                 <td>  ${member.townDong} </td>
                                 <td>  ${member.memberNickname} </td>
                                 <td>  ${member.memberPhone} </td>
-                                <td><button class="btn btn-primary enabled" type="button">${member.memberEnabled?"비활성화":"활성화"}</button></td>
+                                <td><button value="${member.memberEnabled}" data-no="${member.memberNo}" class="btn btn-primary enabled" type="button">${member.memberEnabled?"비활성화":"활성화"}</button></td>
                             </tr>
                         `;
                         $tbody.append(tpl);
@@ -59,6 +59,26 @@
                         console.log(data.error);
                     }
                 })
+            })
+            $('#tbody').on('click','.enabled', async function(data) {
+                data.preventDefault();
+                const $enabledButton = $(this);
+                const isEnabled = $enabledButton.val()==="true";
+                const enabled = confirm("현재 회원 상태는 "+(isEnabled?"[활성화]":"[비활성화]")+" 상태 입니다.\n해당 회원을 "+(isEnabled?"[비활성화]":"[활성화]")+" 처리 하시겠습니까?");
+                if (enabled){
+                    const memberNo=$(this).data('no');
+                    await $.ajax({
+                            url:'/api/v1/admin/member/disabled?memberNo='+memberNo+"&_csrf="+$_csrf,method:'post',
+                            success(result){
+                                $enabledButton.text(result?"비활성화":"활성화");
+                                $enabledButton.val(result);
+                            },
+                            error(error){
+                                console.log(error.message());
+                            }
+                    })
+
+                }
             })
 
         });
