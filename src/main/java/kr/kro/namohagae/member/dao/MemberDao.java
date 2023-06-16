@@ -42,7 +42,8 @@ public interface MemberDao {
 
     //public Integer updateEnable
 
-    public Integer disabled(Integer memberNo);
+    public Boolean findMemberEnabledByMemberNo(Integer memberNo);
+    public void updateMemberEnabled(Integer memberNo);
 
     public String findEmailByNicknameAndPhone(String nickname, String phone);
 
@@ -54,4 +55,5 @@ public interface MemberDao {
     public Integer findMemberNoByNickname(String nickname);
 
     public List<MemberDto.Preview> preview(String url, String searchName);
+
 }
