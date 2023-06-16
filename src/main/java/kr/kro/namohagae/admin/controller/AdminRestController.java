@@ -25,7 +25,7 @@ public class AdminRestController {
     private final BlockService blockService;
     private final ReportService reportService;
 
-    // [회원 조회]--------------------------------------------------------------------
+    // [Main 회원 조회]--------------------------------------------------------------------
     @GetMapping("/member/find")
     public ResponseEntity<?> memberList(@RequestParam(defaultValue = "") String searchName){
         return ResponseEntity.ok().body(memberService.preview(searchName));
@@ -33,6 +33,10 @@ public class AdminRestController {
     @GetMapping("/member/information")
     public ResponseEntity<MemberDto.Read> memberRead(Integer memberNo){
         return ResponseEntity.ok().body(memberService.read(memberNo));
+    }
+    @PostMapping("/member/disabled")
+    public ResponseEntity<Boolean> memberDisabled(Integer memberNo){
+        return ResponseEntity.ok().body(memberService.updateMemberEnabled(memberNo));
     }
 
     // [상품 수정]--------------------------------------------------------------------
