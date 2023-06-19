@@ -17,7 +17,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
             throws IOException, ServletException {
 
         String requestUri = request.getRequestURI();
-
+       System.out.println(requestUri);
         if (isRestApiRequest(requestUri)) {
             // RESTful API 요청 처리
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied for RESTful API");
