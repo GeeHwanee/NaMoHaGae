@@ -113,12 +113,43 @@
         $('#login').append($_csrf_input).attr('action','/api/v1/login').attr('method','post').submit();
       })
 
-      $('#findEmail').click(async function (){
+      $('#findEmail').click(async function (number){
+        const nickname =$('#nickname').val();
+        const phone=$('#phone').val();
+
+        if(!nickname){
+          Swal.fire({
+            title:'닉네임을 입력해주세요.',
+            icon:'warning'
+          })
+          return;
+        };
+        if(!phone){
+          Swal.fire({
+            title:'전화번호를 입력해주세요.',
+            icon:'warning'
+          })
+          return;
+        };
+        if(isNaN(phone)){
+          Swal.fire({
+            title:'전화번호는 숫자만 입력해주세요.',
+            icon:'warning'
+          })
+          return;
+        }
+
         try {
           const url = "/api/v1/member/findEmail?nickname=" + $("#nickname").val()+"&phone="+$('#phone').val();
           // await를 빼먹으면 나중에 결과가 들어갈 것이라는 약속(Promise)로 리턴
           // Promise에는 done()을 이용해 성공 핸들러를 지정할 수 있다
           const result = await $.ajax({url:url, method:"get"});
+          if(!result){
+            Swal.fire({
+              title:'입력하신 정보를 찾을 수 없습니다.'
+            });
+            return;
+          };
           alert("회원님의 이메일은 "+result+"입니다")
         }catch (err){
           alert("입력하신 정보를 찾을 수 없습니다");
@@ -405,7 +436,7 @@
     animation: right-move 1s forwards;
   }
   .left-move2 {
-    animation: left-move 1s forwards;
+    animation: left-move 1.7s forwards;
   }
 
   .right-move2 {
@@ -429,6 +460,20 @@
   }
 
   .find-box::-webkit-scrollbar-track {
+    background: inherit;  /*스크롤바 뒷 배경 색상*/
+  }
+
+  .join-box::-webkit-scrollbar {
+    width: 10px;  /* 스크롤바의 너비 */
+  }
+
+  .join-box::-webkit-scrollbar-thumb {
+    height: 14%; /* 스크롤바의 길이 */
+    background: #374956; /* 스크롤바의 색상 */
+    border-radius: 10px;
+  }
+
+  .join-box::-webkit-scrollbar-track {
     background: inherit;  /*스크롤바 뒷 배경 색상*/
   }
 
@@ -500,6 +545,8 @@
       <button id="toggleBtn2" type="button" class="contrast" style="position: absolute;left: 35%;top: 60%;z-index: 23;width: 162px;background-color: inherit;color: white;">Join?</button>
     </div>
     <!--여기영역부터 만지면댐---------------------------------------------------------->
+
+    <!--아디비번 찾는 div------------------------>
   <div class="find-box">
     <h1>ID/PW</h1>
     <form>
@@ -525,12 +572,13 @@
     <button type="button" id="newPassword" class="contrast sendEmail">인증번호 보내기</button>
     </form>
   </div>
-
-    <!--회원가입 시키는 div-->
+    <!--아디비번 찾는 div------------------------>
+    <!--회원가입 시키는 div----------------------->
     <div class="join-box">
       <h1>Join</h1>
+
     </div>
-    <!--회원가입 div-->
+    <!--회원가입 div---------------------------->
 
     <!--여기영역까지만 만지면댐-------------------------------------------------------------------------->
 
@@ -543,9 +591,9 @@
 
 
 <!-- Footer -->
-<footer class="container-fluid" th:replace="~{fragments/footer :: footer}"></footer>
 <script>
   let bg = document.getElementById("bg");
+
 
   setInterval(function(){
     let color = Math.random()*0xffffff;
@@ -562,6 +610,17 @@
 
   toggleBtn.addEventListener('click', function() {
     if(isLeft2){
+      toggleElement2.classList.add('left-move2');
+      toggleElement2.classList.remove('right-move2');
+      toggleBtn2.innerHTML="Join?";
+      setTimeout(()=>{
+        toggleElement.classList.add('left-move');
+        toggleElement.classList.remove('right-move');
+        toggleBtn.innerHTML="Login"
+      },100);
+
+      isLeft2=!isLeft2;
+      isLeft=!isLeft;
       return;
     }
 
@@ -585,6 +644,17 @@
 
   toggleBtn2.addEventListener('click',function(){
     if(!isLeft){
+      toggleElement.classList.add('right-move');
+      toggleElement.classList.remove('left-move');
+      toggleBtn.innerHTML="Lost Id/PW ?";
+      setTimeout(()=>{
+        toggleElement2.classList.add('right-move2');
+        toggleElement2.classList.remove('left-move2');
+        toggleBtn2.innerHTML="Login"
+      },100);
+
+      isLeft2=!isLeft2;
+      isLeft=!isLeft;
       return;
     }
 
