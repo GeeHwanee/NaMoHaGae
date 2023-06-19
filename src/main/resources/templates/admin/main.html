@@ -49,11 +49,22 @@
                     url:'/api/v1/admin/member/information?memberNo='+memberNo,
                     success : function(data) {
                         const $profile = $('#profile').empty();
-                        const tpl =`
-                            <img src="${data.memberProfile}" width="200px">
-                            <p>${data.memberNickname}</p>
+                        let tpl =`
+                            <img src="${data.memberProfile}" height="200px">
                         `;
                         $profile.append(tpl);
+                        const $information = $('#information').empty();
+                        tpl = `
+                                <ul>
+                                번호:      <span>${data.memberNo}번</span><br>
+                                닉네임:    <span>${data.memberNickname}</span><br>
+                                이메일:    <span>${data.memberEmail}</span><br>
+                                온도:      <span>${data.memberGrade/10}</span><br>
+                                포인트:    <span>${data.memberPoint}</span><br>
+                                </ul>
+
+                                `;
+                        $information.append(tpl);
                     },
                     error : function(data) {
                         console.log(data.error);
@@ -97,12 +108,12 @@
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
-    <section style="display: flex; align-content:center; flex-direction: column">
-        <article style="justify-content: center; width: 100%; min-height: 300px; padding: 20px">
-            <div id="profile" style="display: inline-block margin: 0 auto"></div>
-            <div id="information" style="display: inline-block"></div>
+    <section style="display: flex; align-content:space-evenly; flex-direction: column">
+        <article id="memberInformation" class="hide" style="display: flex; justify-content: space-evenly; width: 100%; height: 200px; margin: 20px auto;">
+            <div id="profile" style="display: inline-block; width: 50%"></div>
+            <div id="information" style="display: inline-block; width: 50%"></div>
         </article>
-        <article style="width: 100%; overflow-y: auto; height: 350px; padding: 20px">
+        <article style="width: 100%; overflow-y: auto; height: 350px; margin: 20px auto;">
             <table class="table table-hover">
                 <thead></thead>
                 <tbody id="tbody"></tbody>
