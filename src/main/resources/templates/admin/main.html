@@ -43,6 +43,7 @@
                 printList();
             })
             $('#tbody').on('click','.find', async function() {
+                $('#memberInformation').css('display','flex').removeClass('hide');
                 const memberNo = $(this).data('no');
                 console.log(memberNo);
                 await $.ajax({
@@ -109,7 +110,7 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section style="display: flex; align-content:space-evenly; flex-direction: column">
-        <article id="memberInformation" class="hide" style="display: flex; justify-content: space-evenly; width: 100%; height: 200px; margin: 20px auto;">
+        <article id="memberInformation" class="hide" style=" justify-content: space-evenly; width: 100%; height: 200px; margin: 20px auto;">
             <div id="profile" style="display: inline-block; width: 50%"></div>
             <div id="information" style="display: inline-block; width: 50%"></div>
         </article>
