@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                .requestMatchers("/login","/puching","/chatroom","/api/v1/**", "/image/**",
+                .requestMatchers("/puching","/chatroom","/api/v1/**", "/image/**",
                         "/member/join","/member/addJoin","/member/kakaoJoin","/member/find",
                         "/css/**","/script/**",
                         "/notification").permitAll()
