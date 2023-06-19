@@ -53,33 +53,6 @@
             font-size: 14px;
         }
     </style>
-    <script>
-
-        // 최신순으로 정렬
-        function list() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('orderByProductName', 'false');
-            if (categoryNo) {
-                urlParams.set('categoryNo', categoryNo);
-            }
-            console.log(window.location.search);
-            window.location.href = '/admin/product/list?' + urlParams.toString();
-        }
-
-        // 상품명으로 정렬
-        function findAllName() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryNo = urlParams.get('categoryNo');
-            urlParams.set('orderByProductName', 'true');
-            if (categoryNo) {
-                urlParams.set('categoryNo', categoryNo);
-            }
-            console.log(window.location.search);
-            window.location.href = '/admin/product/list?' + urlParams.toString();
-        }
-
-    </script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -87,15 +60,6 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>제품 목록</h1>
-        <h2><a href="/admin/product/write">상품 등록</a></h2>
-
-        <!-- 필터만드는중 -->
-        <div class="product-filter">
-            <button class="btn btn-danger mt-3" id="list" onclick="list()">최신순</button>
-            <button class="btn btn-danger mt-3" id="findAllByProductName" onclick="findAllName()">상품명</button>
-        </div>
-
         <div class="product-list">
             <div class="product-card" th:each="p:${list.products}">
                 <div class="product-img">
@@ -120,6 +84,7 @@
             </div>
             <div id="product"></div>
         </div>
+        <a type="button" class="btn btn-primary" href="/admin/product/write">상품 등록</a>
 
         <!-- 페이징 -->
         <ul class="pagination">
