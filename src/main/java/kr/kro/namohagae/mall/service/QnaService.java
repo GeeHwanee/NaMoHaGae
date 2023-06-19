@@ -55,7 +55,7 @@ public class QnaService {
     }
 
     public List<QnaDto.Read> readAll(){
-        return qnaDao.findAll();
+        return qnaDao.findAll(ImageConstants.IMAGE_PRODUCT_URL);
     }
     public Integer update(QnaDto.Put dto){
         Qna qna = dto.toEntity();
@@ -66,7 +66,7 @@ public class QnaService {
     }
 
     public QnaDto.Read print(Integer qnaNo) {
-        return qnaDao.findByQnaNo(qnaNo);
+        return qnaDao.findByQnaNo(ImageConstants.IMAGE_PRODUCT_URL, ImageConstants.IMAGE_PROFILE_URL, qnaNo);
     }
     public QnaDto.PaginationMyQna listMyQna(Integer pageNo, Integer memberNo) {
         PAGESIZE = 5;

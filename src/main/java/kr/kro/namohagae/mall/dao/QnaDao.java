@@ -21,11 +21,11 @@ public interface QnaDao {
 
     public List<QnaDto.QnaList> findAllByProductNo(Integer startRowNum, Integer endRowNum, Integer productNo);
 
-    public List<QnaDto.Read> findAll();
+    public List<QnaDto.Read> findAll(String url);
 
     public Integer update(Qna qna);
 
-    public QnaDto.Read findByQnaNo(Integer qnaNo);
+    public QnaDto.Read findByQnaNo( String productUrl,String profileUrl,Integer qnaNo);
 
     public List<QnaDto.FindByMemberNo> findByMemberNo(String url, Integer startRowNum, Integer endRowNum,Integer memberNo);
 
