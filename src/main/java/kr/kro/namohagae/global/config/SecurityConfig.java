@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
-        http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
+       // http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
 
         return http.build();
     }
