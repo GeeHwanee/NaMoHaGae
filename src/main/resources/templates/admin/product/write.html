@@ -23,7 +23,6 @@
 <main>
   <aside th:replace="~{fragments/aside :: aside}"></aside>
   <section>
-    <h1>상품 등록</h1>
     <form id="add_form" action="/admin/product/write" method="post" enctype="multipart/form-data">
       <input type="hidden" id="_csrf" name="_csrf">
       <div class="mb-3 bt-3">
@@ -53,7 +52,7 @@
         <label for="productContent">상품 설명: </label>
         <textarea id="productContent" name="productContent"></textarea>
       </div>
-        <button type="button" id="add">등록</button>
+        <button type="button" class="btn btn-primary" id="add">등록</button>
     </form>
   </section>
   <aside th:replace="~{fragments/bside :: bside}"></aside>
