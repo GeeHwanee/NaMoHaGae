@@ -181,3 +181,15 @@ footer > div > span {
 .highlight{
     color: blue;
 }
+
+#tbody a{
+    text-decoration: none;
+    color: black;
+}
+.card-body a{
+    text-decoration: none;
+}
+.pagination{
+    justify-content: center;
+    align-content: center;
+}
