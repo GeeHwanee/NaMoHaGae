@@ -51,17 +51,17 @@
                     success : function(data) {
                         const $profile = $('#profile').empty();
                         let tpl =`
-                            <img src="${data.memberProfile}" height="200px">
+                            <img src="${data.memberProfile}" height="200px" style="border: 1px solid #dfaa8b">
                         `;
                         $profile.append(tpl);
                         const $information = $('#information').empty();
                         tpl = `
                                 <ul>
-                                번호:      <span>${data.memberNo}번</span><br>
+                                번호:      <span>${data.memberNo}번</span><br><br>
                                 닉네임:    <span>${data.memberNickname}</span><br>
-                                이메일:    <span>${data.memberEmail}</span><br>
-                                온도:      <span>${data.memberGrade/10}</span><br>
-                                포인트:    <span>${data.memberPoint}</span><br>
+                                이메일:    <span>${data.memberEmail}</span><br><br>
+                                온도:      <span>${data.memberGrade/10}도</span><br>
+                                포인트:    <span>${data.memberPoint}점</span><br>
                                 </ul>
 
                                 `;
@@ -111,7 +111,7 @@
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section style="display: flex; align-content:space-evenly; flex-direction: column">
         <article id="memberInformation" class="hide" style=" justify-content: space-evenly; width: 100%; height: 200px; margin: 20px auto;">
-            <div id="profile" style="display: inline-block; width: 50%"></div>
+            <div id="profile" style="display: inline-block; width: 50%; text-align: center"></div>
             <div id="information" style="display: inline-block; width: 50%"></div>
         </article>
         <article style="width: 100%; overflow-y: auto; height: 350px; margin: 20px auto;">
