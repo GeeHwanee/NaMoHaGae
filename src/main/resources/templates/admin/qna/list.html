@@ -15,27 +15,28 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>QnA 리스트</h1>
-        <table>
+        <table class="table table-hover">
             <colgroup>
-                <col width="25%">
-                <col width="30%">
+                <col width="20%">
+                <col width="20%">
+                <col width="15%">
                 <col width="25%">
                 <col width="20%">
-
             </colgroup>
-            <tbody>
+            <tbody id="tbody">
                 <tr>
+                    <th></th>
                     <th>상품 명</th>
                     <th>작성자</th>
                     <th>작성 시간</th>
-                    <th> </th>
+                    <th></th>
                 </tr>
                 <tr th:each="q:${list}">
+                    <td ><img th:src="${q.productImage}" width="100%"></td>
                     <td th:text="${q.productName}"></td>
-                    <td th:text="${q.qnaWriter}"></td>
-                    <td th:text="${q.qnaWriteDate}"></td>
-                    <td> <a th:href="@{/admin/qna/write(qnaNo=${q.qnaNo})}">답변 달기</a></td>
+                    <td th:text="${q.memberNickname}"></td>
+                    <td th:text="${#temporals.format(q.qnaWriteDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td> <a type="button" class="btn btn-primary"  th:href="@{/admin/qna/write(qnaNo=${q.qnaNo})}">답변 달기</a></td>
                 </tr>
             </tbody>
         </table>

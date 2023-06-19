@@ -24,14 +24,17 @@
     <select id="findByQnaNo" resultType="kr.kro.namohagae.mall.dto.QnaDto$Read">
         select
             QNA_NO,
+            #{productUrl}||PI.PRODUCT_IMAGE_FILENAME as productImage,
             p.PRODUCT_NAME,
             qna_writer,
             MEMBER_NICKNAME,
+            #{profileUrl}||MEMBER_PROFILE_IMAGE as memberProfile,
             QNA_CONTENT, QNA_WRITE_DATE
         from QNA
                  join PRODUCT P on P.PRODUCT_NO = QNA.PRODUCT_NO
+                 join PRODUCT_IMAGE PI on P.PRODUCT_NO = pi.PRODUCT_NO
                  join member m on qna.QNA_WRITER = m.MEMBER_NO
-        where QNA_NO = #{qnaNo} and QNA_ANSWER_CONTENT is null
+        where QNA_NO = #{qnaNo} and QNA_ANSWER_CONTENT is null and PRODUCT_IMAGE_NO=1
         order by QNA_WRITE_DATE
     </select>
 
@@ -57,14 +60,16 @@
     <select id="findAll" resultType="kr.kro.namohagae.mall.dto.QnaDto$Read">
         select
             QNA_NO,
+            #{url}||PI.PRODUCT_IMAGE_FILENAME as productImage,
             p.PRODUCT_NAME,
             qna_writer,
             MEMBER_NICKNAME,
            QNA_CONTENT, QNA_WRITE_DATE
         from QNA
             join PRODUCT P on P.PRODUCT_NO = QNA.PRODUCT_NO
+            join PRODUCT_IMAGE PI on P.PRODUCT_NO = pi.PRODUCT_NO
             join member m on qna.QNA_WRITER = m.MEMBER_NO
-        where QNA_ANSWER_CONTENT is null
+        where QNA_ANSWER_CONTENT is null and PRODUCT_IMAGE_NO=1
         order by QNA_WRITE_DATE
     </select>
 

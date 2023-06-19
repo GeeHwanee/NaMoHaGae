@@ -51,10 +51,12 @@ public class QnaDto {
 
     @Data
     public static class Read{
-       private Integer qnaNo;
+        private Integer qnaNo;
+        private String productImage;
         private String productName;
         private Integer qnaWriter;
         private String memberNickname;
+        private String memberProfile;
         private String qnaContent;
         private LocalDateTime qnaWriteDate;
     }
