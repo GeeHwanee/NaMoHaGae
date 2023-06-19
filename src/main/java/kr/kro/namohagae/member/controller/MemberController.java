@@ -105,7 +105,7 @@ public class MemberController {
     public ModelAndView profile(Integer memberNo, @AuthenticationPrincipal MyUserDetails myUserDetails, Model model){
         if(memberNo.equals(myUserDetails.getMemberNo())){
             MemberDto.Read dto = memberService.read(myUserDetails.getMemberNo());
-            return new ModelAndView("/member/information").addObject("member",dto);
+            return new ModelAndView("redirect:/member/information").addObject("member",dto);
         }
         MemberDto.Read dto = memberService.read(memberNo);
         return new ModelAndView("member/profile").addObject("member",dto);

@@ -221,6 +221,7 @@ public class MemberService {
     @Transactional
     public Boolean updateMemberEnabled(Integer memberNo) {
         memberDao.updateMemberEnabled(memberNo);
+        memberDao.resetMemberLoginCount(memberNo);
        return memberDao.findMemberEnabledByMemberNo(memberNo);
     }
 }
