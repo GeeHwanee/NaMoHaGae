@@ -36,7 +36,7 @@
                     <td th:text="${q.productName}"></td>
                     <td th:text="${q.memberNickname}"></td>
                     <td th:text="${#temporals.format(q.qnaWriteDate, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td> <a type="button" class="btn btn-primary"  th:href="@{/admin/qna/write(qnaNo=${q.qnaNo})}">답변 달기</a></td>
+                    <td> <a type="button" style="color: white" class="btn btn-primary"  th:href="@{/admin/qna/write(qnaNo=${q.qnaNo})}">답변 달기</a></td>
                 </tr>
             </tbody>
         </table>

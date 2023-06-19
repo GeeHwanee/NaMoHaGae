@@ -60,7 +60,7 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <div class="product-list">
+        <div class="product-list" style="justify-content: center">
             <div class="product-card" th:each="p:${list.products}">
                 <div class="product-img">
                     <a th:href="@{/admin/product/read(productNo=${p.productNo})}">
