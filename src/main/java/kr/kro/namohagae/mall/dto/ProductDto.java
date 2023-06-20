@@ -63,6 +63,7 @@ public class ProductDto {
         private Integer reviewCount;
         private String productImage;
         private Boolean favoriteEnabled;
+        private Boolean recommendEnabled;
     }
 
     // 상품 상세보기

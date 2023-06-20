@@ -51,6 +51,7 @@
         <result column="review_count" property="reviewCount" />
         <result column="product_image" property="productImage" />
         <result column="favorite_enabled" property="favoriteEnabled" />
+        <result column="recommend_enabled" property="recommendEnabled" />
     </resultMap>
 
     <select id="findAll" resultMap="readAllMap">
@@ -66,7 +67,8 @@
         FROM PRODUCT_REVIEW pr
         WHERE p.product_no = pr.product_no) AS review_count,
         #{url} || pi.product_image_filename as product_image,
-        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled
+        (select count(*) from FAVORITE where FAVORITE.PRODUCT_NO = p.product_no and FAVORITE.MEMBER_NO = #{memberNo} and ROWNUM =1) as favorite_enabled,
+        PRODUCT_RECOMMEND_ENABLED as recommend_enabled
         from PRODUCT p
         join PRODUCT_IMAGE pi on p.product_no=pi.product_no and pi.PRODUCT_IMAGE_NO=1
         <if test="categoryNo!=null"> where p.product_category_no=#{categoryNo}</if>
@@ -291,4 +293,12 @@
         from PRODUCT join PRODUCT_IMAGE PI on PRODUCT.PRODUCT_NO = PI.PRODUCT_NO
         where  PRODUCT_RECOMMEND_ENABLED=1 and PRODUCT_IMAGE_NO=1
     </select>
+
+    <update id="updateProductRecommendEnabled">
+        update PRODUCT set PRODUCT_RECOMMEND_ENABLED=decode(PRODUCT_RECOMMEND_ENABLED,0,1,1,0) where PRODUCT_NO = #{productNo} and ROWNUM=1
+    </update>
+    <select id="findProductRecommendEnabledByProductNo" resultType="Boolean">
+        select PRODUCT_RECOMMEND_ENABLED from PRODUCT where PRODUCT_NO = #{productNo} and ROWNUM=1
+    </select>
+
 </mapper>

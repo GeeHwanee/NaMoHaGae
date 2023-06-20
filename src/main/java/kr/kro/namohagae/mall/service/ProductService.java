@@ -176,4 +176,9 @@ public class ProductService {
     public List<ProductDto.MdRecommend> mdRecommend() {
         return productDao.findByRecommendEnabled(ImageConstants.IMAGE_PRODUCT_URL);
     }
+
+    public Boolean productRecommend(Integer productNo) {
+        productDao.updateProductRecommendEnabled(productNo);
+        return productDao.findProductRecommendEnabledByProductNo(productNo);
+    }
 }

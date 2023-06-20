@@ -53,6 +53,26 @@
             font-size: 14px;
         }
     </style>
+    <script>
+        $(document).ready(function() {
+            $('.product-recommend').click(async function(){
+                let $productNo = $(this).data('productno');
+                try{
+                    const result = await $.ajax({url:'/api/v1/admin/product/recommend?productNo='+$productNo+"&_csrf="+$_csrf, method:"post"});
+                    if(result){
+                        $(this).parent().children().first().removeClass('hide');
+                        $(this).parent().children().first().next().addClass('hide');
+
+                    } else {
+                        $(this).parent().children().first().addClass('hide');
+                        $(this).parent().children().first().next().removeClass('hide');
+                    }
+                }catch (err){
+                    console.log(err)
+                }
+            })
+        })
+    </script>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -68,18 +88,19 @@
                     </a>
                 </div>
                 <div class="product-contents">
-                    <span class="product-name" th:text="${p.productName}"></span>
-                    <span class="product-price">
-                      <div th:if="${p.productStock == 0}">
-                        <span style="color: red">품절댐</span>
-                      </div>
-                      <div th:unless="${p.productStock == 0}">
+                    <span style="font-size: 1.2em" class="product-name" th:text="${p.productName}"></span>
+                    (<span th:text="${p.productStock}"></span>개)
                         <div>
-                          <span th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span><br>
-                            <span th:text="${p.productStock}"></span>개
+                          <span th:text="${#numbers.formatInteger(p.productPrice,0,'COMMA')}+'원'"></span>
                         </div>
-                      </div>
-                    </span>
+                    <div>
+                        <span th:classappend="${p.recommendEnabled ? '' : 'hide'}" th:data-productNo="${p.productNo}" class="product-recommend">
+                           <i class="fa-solid fa-star fa-xl"></i> 추천상품 취소
+                        </span>
+                        <span th:classappend="${p.recommendEnabled ? 'hide' : ''}" th:data-productNo="${p.productNo}" class="product-recommend">
+                            <i class="fa-regular fa-star fa-xl"></i> 추천상품 등록
+                        </span>
+                    </div>
                 </div>
             </div>
             <div id="product"></div>
