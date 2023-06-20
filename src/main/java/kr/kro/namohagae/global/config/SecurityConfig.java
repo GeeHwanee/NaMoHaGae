@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.config;
 import jakarta.servlet.DispatcherType;
 import kr.kro.namohagae.global.security.LoginFailHandler;
 import kr.kro.namohagae.global.security.LoginSuccessHandler;
+import kr.kro.namohagae.global.security.MyAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    //private final MyAccessDeniedHandler myAccessDeniedHandler;
+    private final MyAccessDeniedHandler myAccessDeniedHandler;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailHandler loginFailHandler;
     @Bean
@@ -35,7 +36,7 @@ public class SecurityConfig {
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
-       // http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
+       http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
 
         return http.build();
     }
