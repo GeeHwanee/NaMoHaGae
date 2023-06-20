@@ -138,39 +138,29 @@
 </style>
 <script>
     function slidesPlugin(activeSlide = 0) {
-        const slides = document.querySelectorAll(".slide");
-
-        slides[activeSlide].classList.add("active");
-
-        for (const slide of slides) {
-            slide.addEventListener("click", () => {
-                clearActiveClasses();
-
-                slide.classList.add("active");
-            });
-        }
-
-        function clearActiveClasses() {
-            slides.forEach((slide) => {
-                slide.classList.remove("active");
-            });
-        }
+        const slides = $('.slide');
+        slides.each(function(index) {
+            $(this).removeClass("active");
+            if (index === activeSlide) {
+                $(this).addClass("active");
+            }
+        });
     }
     async function mdRecommend() {
        const $mdRecommend= $('#mdRecommend');
+       let index = 0;
      await $.ajax({
            url:'/api/v1/mall/product/list/recommend',
            method: 'get',
            success : function(data) {
                 data.forEach(data=> {
                     const tpl =`
-                        <div data-no="${data.productNo}" class="slide" style="background-image: url('${data.productImage}');">
+                        <div  class="slide" data-no="${data.productNo}" data-index="${index++}" style="background-image: url('${data.productImage}');">
                         <h3>${data.productName}</h3>
                         </div>
                     `;
                     $mdRecommend.append(tpl);
                     })
-                console.log(data.length);
                 slidesPlugin(Math.ceil(data.length/2)-1);
            },
            error : function(data) {
@@ -180,7 +170,15 @@
     }
     $(document).ready(function(){
         mdRecommend();
-
+        $('.mall-container').on('click','.slide',function(e) {
+            e.preventDefault();
+            const $slideNo = $(this).data('index');
+            slidesPlugin($slideNo);
+        })
+        $('.mall-container').on('click','.active',function() {
+                const $productNo = $(this).data('no');
+                location.href = '/mall/product/read?productNo='+$productNo;
+        })
         $('.product-favorite').click(async function(){
             let $productNo = $(this).data('productno');
             console.log(typeof $productNo);
