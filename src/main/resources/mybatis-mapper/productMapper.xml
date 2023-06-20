@@ -285,4 +285,10 @@
             AND pi.product_image_no = 1
         ORDER BY CASE WHEN product_grade IS NULL THEN 1 ELSE 0 END, product_grade DESC, review_count DESC NULLS LAST
     </select>
+    <!--메인 md 추천 리스트-->
+    <select id="findByRecommendEnabled" resultType="kr.kro.namohagae.mall.dto.ProductDto$MdRecommend">
+        select PRODUCT.PRODUCT_NO, PRODUCT_NAME, #{url}||PRODUCT_IMAGE_FILENAME as productImage
+        from PRODUCT join PRODUCT_IMAGE PI on PRODUCT.PRODUCT_NO = PI.PRODUCT_NO
+        where  PRODUCT_RECOMMEND_ENABLED=1 and PRODUCT_IMAGE_NO=1
+    </select>
 </mapper>
