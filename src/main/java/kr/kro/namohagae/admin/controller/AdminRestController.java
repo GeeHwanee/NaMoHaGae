@@ -46,6 +46,11 @@ public class AdminRestController {
         ProductDto.Read resultDto = productService.read(result);
         return ResponseEntity.ok().body(resultDto);
     }
+    @PostMapping("/product/recommend")
+    public ResponseEntity<Boolean> productRecommend(Integer productNo){
+        return ResponseEntity.ok().body(productService.productRecommend(productNo));
+    }
+
 
     // [Town 수정]--------------------------------------------------------------------
 

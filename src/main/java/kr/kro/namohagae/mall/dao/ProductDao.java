@@ -58,4 +58,8 @@ public interface ProductDao {
     public List<ProductDto.ReadAll> findAllByBestProductForMain(String url, Integer memberNo);
 
     public List<ProductDto.MdRecommend> findByRecommendEnabled(String url);
+
+    public void updateProductRecommendEnabled(Integer productNo);
+
+    public Boolean findProductRecommendEnabledByProductNo(Integer productNo);
 }
