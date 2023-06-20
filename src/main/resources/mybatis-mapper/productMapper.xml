@@ -292,6 +292,7 @@
         select PRODUCT.PRODUCT_NO, PRODUCT_NAME, #{url}||PRODUCT_IMAGE_FILENAME as productImage
         from PRODUCT join PRODUCT_IMAGE PI on PRODUCT.PRODUCT_NO = PI.PRODUCT_NO
         where  PRODUCT_RECOMMEND_ENABLED=1 and PRODUCT_IMAGE_NO=1
+        order by PRODUCT_NAME
     </select>
 
     <update id="updateProductRecommendEnabled">
