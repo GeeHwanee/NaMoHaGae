@@ -29,6 +29,13 @@ public class ProductDto {
             return Product.builder().productCategoryNo(productCategoryNo).productName(productName).productPrice(productPrice).productStock(productStock).productGrade(0).productContent(productContent).productWriteDate(LocalDateTime.now()).build();
         }
     }
+    @Data
+    public static class MdRecommend{
+        private Integer productNo;
+        private String productName;
+        private String productImage;
+    }
+
 
     @Data
     public static class Put{
