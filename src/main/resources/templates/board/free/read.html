@@ -7,15 +7,33 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>메인</title>
-    <script th:inline="javascript">
-        let boardNo = [[${board.boardNo}]];
-        let memberNo = [[${board.memberNo}]];
-        const page = [[${page}]];
-        const searchName = "[[${searchName}]]";
-        const change = [[${change}]];
-       boardNo = [[${board.boardNo}]];
-         memberNo = [[${modify}]];
+    <title th:text="${board.boardTitle}"></title>
+    <script>
+        async function updateRecommend(){
+           await $.ajax({
+                url:'/api/v1/board/free/recommend?boardNo='+boardNo+'&_csrf='+$_csrf,
+                method:'post',
+                success(result){
+                   const $recommendButton = $('#recommendButton');
+                   if (result.recommendEnabled){
+                       $recommendButton.addClass('fa-solid');
+                       $recommendButton.removeClass('fa-regular');
+                   }else{
+                       $recommendButton.addClass('fa-regular');
+                       $recommendButton.removeClass('fa-solid');
+                   }
+                   $('#recommendCountSpan').text(result.boardRecommendCount);
+                },
+                error(data){
+                   console.log(data.error);
+                }
+            })
+        }
+        $(document).ready(function (){
+            $('.recommend').click(function () {
+                updateRecommend();
+            })
+        })
     </script>
 </head>
 <style>
@@ -143,6 +161,12 @@
 
 </style>
 <body>
+<script th:inline="javascript">
+    const boardNo = [[${board.boardNo}]];
+    const boardMemberNo = [[${board.memberNo}]];
+    const memberNo = [[${memberNo}]];
+    const isWriter = boardMemberNo===memberNo;
+</script>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
@@ -152,24 +176,21 @@
         <article>
             <div class="card">
                 <div class="card-body">
-                    <img th:src="${board.memberProfileImage}" width="100px">
                     <div class="board_header">
-                <h4 th:text="${board.boardTitle}" class="card-title">제목입니다.</h4>
-                    <span th:text="${board.memberNickname}" id="nickname"></span>
-                    <span th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}" class="card-subtitle mb=2 text-muted" id="write_date"></span>
+                        <h4 th:text="${board.boardTitle}" class="card-title">제목입니다.</h4>
+                        <img th:src="${board.memberProfileImage}" width="40px" alt="">
+                        <a style="color: black; font-size: 1.1em" th:href="@{/member/profile(memberNo=${board.memberNo})}" th:text="${board.memberNickname}"></a>
+
                         <div class="board_count">
-                            <span>조회</span>
-                        <span th:text="${board.boardReadCount}"></span>
-                            <span>추천</span>
-                        <span id="recommendCountSpan" th:text="${board.boardRecommendCount}"></span>
+                            <i class="fa-solid fa-eye fa-lg"></i>
+                            <span th:text="${board.boardReadCount}"></span> |
+                            <i id="recommendButton" th:classappend="${boardRecommendEnabled?'fa-solid':'fa-regular'}" class="fa-thumbs-up fa-lg recommend" th:data-no="${board.boardNo}"></i>
+                            <span  id="recommendCountSpan" th:text="${board.boardRecommendCount}"></span> |
+                            <i class="fa-regular fa-calendar fa-lg"></i>
+                            <span th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
                         </div>
                     </div>
                     <p th:text="${board.boardContent}" class="card-text">내용이 들어갈 부분입니다.</p>
-
-
-
-
-
                 </div>
             </div>
             <div id="comment-list" th:each="comment: ${comment}">
@@ -196,13 +217,9 @@
             </div>
             <div class="button_layout">
             <div class="board_button">
-                <a class="btn btn-primary" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}" role="button">수정</a>
-                <a class="btn btn-primary" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}" role="button">삭제</a>
-                <button onclick="listFn()" class="btn btn-primary">목록</button>
-                <a class="btn btn-primary" th:href="@{/board/free/write}" role="button">글쓰기</a>
-            </div>
-                <a href="javascript:void(0);" class="btn btn-primary" id="likeButton" onclick="updateLike(); change()" type="button" th:text="${good}"></a>
-            </div>
+                <a class="btn btn-warning" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">수정</a>
+                <a class="btn btn-danger" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">삭제</a>
+                <a type="button" href="/board/free/list" class="btn btn-primary">목록</a>
 
         </article>
     </section>
@@ -278,10 +295,7 @@
     }
     function commentWrite() {
         const commentContent = document.getElementById("commentContent").value; // 입력된 댓글 내용 가져오기
-
         console.log("댓글 내용:", commentContent);
-
-
 
         $.ajax({
             type: "POST",
@@ -304,53 +318,5 @@
         });
     }
 
-
-    // 댓글 작성 함수
-
-    const listFn = () => {
-
-        console.log(change);
-        location.href = "/board/free/list?page=" + page + "&searchName=" + searchName + "&change" + change;
-    }
-
-
-
-    function change() {
-        const likeButton = document.getElementById("likeButton");
-        const likeStatus = likeButton.innerText;
-
-        if (likeStatus === '좋아요') {
-            likeButton.innerText = '좋아요취소';
-        } else {
-            likeButton.innerText = '좋아요';
-        }
-    }
-    function updateLike() {
-
-
-        console.log(boardNo);
-        console.log(memberNo);
-        $.ajax({
-            type: "POST",
-            url: "/api/v1/board/free/recommend",
-            data: {
-                "boardNo": boardNo,
-                "memberNo": memberNo,
-                "_csrf": $_csrf
-            },
-            success: function(res) {
-                console.log("요청 성공", res.boardRecommendCount);
-
-                // 좋아요 수 업데이트
-
-                const updatedCount = res.boardRecommendCount; // 새로운 좋아요 수 값
-                $("#recommendCountSpan").text(updatedCount);
-
-            },
-            error: function(err) {
-                console.log("요청 실패", err);
-            }
-        });
-    }
 </script>
 </html>
