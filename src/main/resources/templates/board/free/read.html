@@ -200,9 +200,9 @@
                 </div>
                 <div class="content_layout">
                     <span class="commentContent" th:text="${comment.commentContent}"></span>
-                    <span th:if="${comment.memberNo eq modify}" style="cursor:pointer" onclick="commentEdit(event)" class="modify">수정</span>
-                    <span th:if="${comment.memberNo eq modify}" style="cursor:pointer" onclick="commentDelete(event)" class="delete">삭제</span>
-                    <textarea class="editCommentContent"  style="display: none;"></textarea>
+                    <span th:if="${comment.memberNo==memberNo}" style="cursor:pointer" onclick="commentEdit(event)" class="modify">수정</span>
+                    <span th:if="${comment.memberNo==memberNo}" style="cursor:pointer" onclick="commentDelete(event)" class="delete">삭제</span>
+                    <textarea class="editCommentContent"  style="display: none; resize: none"></textarea>
                 </div>
                 <div class="day_layout">
                     <span th:text="${#temporals.format(comment.commentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
@@ -211,7 +211,7 @@
             </div>
             <div class="comment_group">
             <div class="input-group">
-                <textarea type="text" id="commentContent" placeholder="내용" class="form-control" aria-label="With textarea"></textarea>
+                <textarea type="text" style="resize: none" id="commentContent" placeholder="내용" class="form-control" aria-label="With textarea"></textarea>
             </div>
                 <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-primary">댓글작성</button>
             </div>
