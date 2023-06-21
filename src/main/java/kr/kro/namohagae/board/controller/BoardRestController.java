@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/board")
@@ -27,7 +30,7 @@ public class BoardRestController {
     }
 
     @PostMapping(value = {"/free/recommend", "/town/recommend"})
-    public ResponseEntity<?> recommend(Integer boardNo, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req){
+    public ResponseEntity<Map<String,Object>> recommend(Integer boardNo, @AuthenticationPrincipal MyUserDetails myUserDetails, HttpServletRequest req){
         String path = req.getRequestURI();
         BoardType boardType = null;
         if (path.contains("/free")) {
@@ -35,9 +38,12 @@ public class BoardRestController {
         } else if (path.contains("/town")) {
             boardType = BoardType.TOWN;
         }
-        Boolean result = boardInsightService.updateBoardRecommendEnabled(boardType, boardNo, myUserDetails.getMemberNo());
-        return ResponseEntity.ok().body(result);
+        Map<String,Object> map = new HashMap<>();
+        map.put("recommendEnabled", boardInsightService.updateBoardRecommendEnabled(boardType, boardNo, myUserDetails.getMemberNo()));
+        map.put("boardRecommendCount",boardInsightService.countByBoardNo(boardNo));
+        return ResponseEntity.ok().body(map);
     }
+
     @GetMapping("/member/list")
     public ResponseEntity<?> memberList(@RequestParam(defaultValue = "0") Integer townNo,String searchName, @RequestParam(defaultValue = "") String sorting, @RequestParam(defaultValue = "1") Integer pageNo, @AuthenticationPrincipal MyUserDetails myUserDetails){
         return  ResponseEntity.ok().body(boardService.preview(townNo, myUserDetails.getMemberNo(),searchName,sorting,pageNo));

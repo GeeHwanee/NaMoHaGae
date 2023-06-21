@@ -14,4 +14,5 @@ public interface BoardInsightDao {
 
     public void updateBoardRecommendEnabled(Integer boardNo, Integer memberNo);
 
+    public Integer countByBoardNo(Integer boardNo);
 }

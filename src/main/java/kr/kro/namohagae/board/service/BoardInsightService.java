@@ -65,4 +65,8 @@ public class BoardInsightService {
         }
         return result;
     }
+
+    public Integer countByBoardNo(Integer boardNo) {
+       return boardInsightDao.countByBoardNo(boardNo);
+    }
 }

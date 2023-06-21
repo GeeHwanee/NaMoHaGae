@@ -10,7 +10,6 @@ import kr.kro.namohagae.board.service.CommentService;
 import kr.kro.namohagae.global.entity.Town;
 import kr.kro.namohagae.global.security.MyUserDetails;
 import kr.kro.namohagae.global.service.TownService;
-import kr.kro.namohagae.member.dao.MemberDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/board")
 public class BoardController {
 
-    private final MemberDao memberDao;
     private final BoardService boardService;
     private final BoardInsightService boardInsightService;
     private final CommentService commentService;
@@ -82,6 +80,8 @@ public class BoardController {
         }
         if(isEnabled){
             model.addAttribute("board", boardService.readByBoardNo(boardNo));
+            model.addAttribute("memberNo",myUserDetails.getMemberNo());
+            model.addAttribute("boardRecommendEnabled",boardInsightService.findBoardRecommendEnabled(boardNo, myUserDetails.getMemberNo()));
             model.addAttribute("comment", commentService.commentList(boardNo));
 
             if (path.contains("/free")) {
