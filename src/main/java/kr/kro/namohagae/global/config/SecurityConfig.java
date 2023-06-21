@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
 
         http.formLogin().loginPage("/login")
-                .loginProcessingUrl("/api/v1/login").defaultSuccessUrl("/",true)
+                .loginProcessingUrl("/security/login").defaultSuccessUrl("/",true)
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler);
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/login");
