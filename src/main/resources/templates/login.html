@@ -110,7 +110,7 @@
 
 
       $('#form_button').click(function (){
-        $('#login').append($_csrf_input).attr('action','/api/v1/login').attr('method','post').submit();
+        $('#login').append($_csrf_input).attr('action','/security/login').attr('method','post').submit();
       })
 
       $('#findEmail').click(async function (number){
