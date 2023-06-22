@@ -89,6 +89,8 @@
       });
     }
     $(document).ready(function () {
+      const csrf = $('#_csrf').val();
+      console.log(csrf);
       Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
       $('#kakao-btn').click(async function (){
         loginWithKakao();
