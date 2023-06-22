@@ -7,7 +7,34 @@
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
 
     <!------------------------------------------------------------------------------------------------------------------------------>
-    <title>메인</title>
+    <title th:text="${board.boardTitle}"></title>
+    <script>
+        async function updateRecommend(){
+            await $.ajax({
+                url:'/api/v1/board/free/recommend?boardNo='+boardNo+'&_csrf='+$_csrf,
+                method:'post',
+                success(result){
+                    const $recommendButton = $('#recommendButton');
+                    if (result.recommendEnabled){
+                        $recommendButton.addClass('fa-solid');
+                        $recommendButton.removeClass('fa-regular');
+                    }else{
+                        $recommendButton.addClass('fa-regular');
+                        $recommendButton.removeClass('fa-solid');
+                    }
+                    $('#recommendCountSpan').text(result.boardRecommendCount);
+                },
+                error(data){
+                    console.log(data.error);
+                }
+            })
+        }
+        $(document).ready(function (){
+            $('.recommend').click(function () {
+                updateRecommend();
+            })
+        })
+    </script>
 </head>
 <style>
     .card {
@@ -129,54 +156,43 @@
         margin-top:30px;
     }
     .card-text {
-        padding-top: 15px;
-    }
-    .layout{
-        width : 500px;
-        margin : 0 auto;
-        margin-top: 40px;
-        display:none;
-    } /*layout 하위에 있는 input태그 스타일 설정*/
-    .layout input{
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .layout textarea{
-        width: 100%;
-        margin-top: 10px;
-        min-height: 300px;
+        padding-top:15px;
     }
 
 </style>
 <body>
+<script th:inline="javascript">
+    const boardNo = [[${board.boardNo}]];
+    const boardMemberNo = [[${board.memberNo}]];
+    const memberNo = [[${memberNo}]];
+    const isWriter = boardMemberNo===memberNo;
+</script>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>메인 페이지</h1>
+
         <article>
-            <div class="card" id="board-list">
+            <div class="card">
                 <div class="card-body">
                     <div class="board_header">
                         <h4 th:text="${board.boardTitle}" class="card-title">제목입니다.</h4>
-                        <span th:text="${board.memberNickname}" id="nickname"></span>
-                        <span th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}" class="card-subtitle mb=2 text-muted" id="write_date"></span>
+                        <img th:src="${board.memberProfileImage}" width="40px" alt="">
+                        <a style="color: black; font-size: 1.1em" th:href="@{/member/profile(memberNo=${board.memberNo})}" th:text="${board.memberNickname}"></a>
+                         [<span th:text="${board.townDong}"></span>]
+
                         <div class="board_count">
-                            <span>조회</span>
-                            <span th:text="${board.boardReadCount}"></span>
-                            <span>추천</span>
-                            <span id="recommendCountSpan" th:text="${board.boardRecommendCount}"></span>
+                            <i class="fa-solid fa-eye fa-lg"></i>
+                            <span th:text="${board.boardReadCount}"></span> |
+                            <i id="recommendButton" th:classappend="${boardRecommendEnabled?'fa-solid':'fa-regular'}" class="fa-thumbs-up fa-lg recommend" th:data-no="${board.boardNo}"></i>
+                            <span  id="recommendCountSpan" th:text="${board.boardRecommendCount}"></span> |
+                            <i class="fa-regular fa-calendar fa-lg"></i>
+                            <span th:text="${#temporals.format(board.boardWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
                         </div>
                     </div>
                     <p th:text="${board.boardContent}" class="card-text">내용이 들어갈 부분입니다.</p>
                 </div>
-            </div>
-            <div class="layout">
-                <span th:text="${board.boardNo}" style="display:none" id="boardNo"></span>
-                <input id="boardTitle" type="text">
-                <textarea id="boardContent"></textarea>
-                <button onclick="update()" class="btn btn-primary">수정완료</button>
             </div>
             <div id="comment-list" th:each="comment: ${comment}">
                 <span th:text="${comment.commentNo}" class="commentNo" style="display:none;"></span>
@@ -185,9 +201,9 @@
                 </div>
                 <div class="content_layout">
                     <span class="commentContent" th:text="${comment.commentContent}"></span>
-                    <span th:if="${comment.memberNo eq modify}" style="cursor:pointer" onclick="commentEdit(event)" class="modify">수정</span>
-                    <span th:if="${comment.memberNo eq modify}" style="cursor:pointer" onclick="commentDelete(event)" class="delete">삭제</span>
-                    <textarea class="editCommentContent"  style="display: none;"></textarea>
+                    <span th:if="${comment.memberNo==memberNo}" style="cursor:pointer" onclick="commentEdit(event)" class="modify">수정</span>
+                    <span th:if="${comment.memberNo==memberNo}" style="cursor:pointer" onclick="commentDelete(event)" class="delete">삭제</span>
+                    <textarea class="editCommentContent"  style="display: none; resize: none"></textarea>
                 </div>
                 <div class="day_layout">
                     <span th:text="${#temporals.format(comment.commentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
@@ -196,19 +212,16 @@
             </div>
             <div class="comment_group">
                 <div class="input-group">
-                    <textarea type="text" id="commentContent" placeholder="내용" class="form-control" aria-label="With textarea"></textarea>
+                    <textarea type="text" style="resize: none" id="commentContent" placeholder="내용" class="form-control" aria-label="With textarea"></textarea>
                 </div>
                 <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-primary">댓글작성</button>
             </div>
             <div class="button_layout">
                 <div class="board_button">
-                    <button onclick="showUpdateForm()" class="btn btn-primary" th:if="${board.memberNo eq modify}">수정</button>
-                    <a class="btn btn-primary" th:href="@{/board/town/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo eq modify}">삭제</a>
-                    <button onclick="listFn()" class="btn btn-primary">목록</button>
-                    <a class="btn btn-primary" th:href="@{/board/town/write}" role="button">글쓰기</a>
-                </div>
-                <a href="javascript:void(0);" class="btn btn-primary" id="likeButton" onclick="updateLike(); change()" type="button" th:text="${good}"></a>
-            </div>
+                    <a class="btn btn-warning" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">수정</a>
+                    <a class="btn btn-danger" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">삭제</a>
+                    <a type="button" href="/board/free/list" class="btn btn-primary">목록</a>
+
         </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
@@ -283,16 +296,11 @@
     }
     function commentWrite() {
         const commentContent = document.getElementById("commentContent").value; // 입력된 댓글 내용 가져오기
-
         console.log("댓글 내용:", commentContent);
-
-        const boardNo = [[${board.boardNo}]];
-        const memberNo = [[${board.memberNo}]];
 
         $.ajax({
             type: "POST",
             url: "/api/v1/comment/free/write",
-
 
             data: {
                 "commentContent": commentContent,
@@ -310,83 +318,6 @@
             }
         });
     }
-    function showUpdateForm() {
-        $('.layout').show();
-        $('#board-list').hide();
 
-    }
-
-    function update() {
-        const boardNo = $('#boardNo').text(); // 게시물 번호 가져오기
-        const boardTitle = $('#boardTitle').val();
-        const boardContent = $('#boardContent').val();
-
-        $('.layout').hide();
-        $('#board-list').show();
-        console.log(boardNo);
-        console.log(boardTitle);
-        console.log(boardContent);
-        const board = {
-            boardNo: boardNo, // 게시물 번호 프로퍼티 추가
-            boardTitle: boardTitle,
-            boardContent: boardContent
-        };
-
-        $.ajax({
-            type: "GET",
-            url: "/api/v1/board/town/update",
-            data: board,
-
-
-            success: function (res) {
-                console.log(res);
-                $('.layout').empty(); // 해당 요소의 내용 삭제
-                location.reload(); // 페이지 새로고침
-            },
-            error: function () {
-                console.log("실패");
-                console.log('board ' + board.boardContent);
-            }
-        });
-    }
-    const listFn = () => {
-
-        location.href = "/board/town/list"
-    }
-    function change() {
-        const likeButton = document.getElementById("likeButton");
-        const likeStatus = likeButton.innerText;
-
-        if (likeStatus === '좋아요') {
-            likeButton.innerText = '좋아요취소';
-        } else {
-            likeButton.innerText = '좋아요';
-        }
-    }
-    function updateLike() {
-        const boardNo = [[${board.boardNo}]];
-        const memberNo = [[${modify}]]
-        console.log(boardNo);
-        console.log(memberNo);
-        $.ajax({
-            type: "POST",
-            url: "/board/free/like",
-            data: {
-                "boardNo": boardNo,
-                "memberNo": memberNo,
-                "_csrf": $_csrf
-            },
-            success: function(res) {
-                console.log("요청 성공", res.boardRecommendCount);
-
-                // 좋아요 수 업데이트
-                const updatedCount = res.boardRecommendCount; // 새로운 좋아요 수 값
-                $("#recommendCountSpan").text(updatedCount);
-            },
-            error: function(err) {
-                console.log("요청 실패", err);
-            }
-        });
-    }
 </script>
 </html>
