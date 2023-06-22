@@ -85,7 +85,7 @@
     border-radius: 5%;
 }
 #itemList::-webkit-scrollbar {
-    width: 10px;  /* 스크롤바의 너비 */
+    width: 5px;  /* 스크롤바의 너비 */
 }
 
 #itemList::-webkit-scrollbar-thumb {
@@ -95,7 +95,7 @@
 }
 
 #itemList::-webkit-scrollbar-track {
-    background: rgb(255, 255, 255);  /*스크롤바 뒷 배경 색상*/
+    background: inherit;  /*스크롤바 뒷 배경 색상*/
 }
 .item {
     margin-bottom: 10px;
@@ -111,8 +111,10 @@
 }
 
 .itemImage{
-    border-radius: 70%;
-    width: 70px;
+    border-radius: 10px;
+    width: 80px;
+    box-shadow: 0px 0px 5px #e1bca7;
+
 
 }
 .itemNickname{

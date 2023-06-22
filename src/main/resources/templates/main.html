@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
@@ -20,10 +16,6 @@
             width: 100%;
             position: relative;
         }
-
-
-
-
 
         .main-container:nth-child(2) {
             background: #3c564f;
@@ -114,8 +106,7 @@
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/nav :: nav}"></nav>
 <main>
-    <aside th:replace="~{fragments/aside :: aside}"></aside>
-    <section>
+    <section style="width: 100%;border: none;">
         <div class="section-page">
         <div class='main-container'>
             <h2 class="fadeup">퍼칭!</h2>
@@ -210,7 +201,6 @@
         <article></article>
     </section>
 
-    <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>

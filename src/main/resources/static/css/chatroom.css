@@ -218,7 +218,7 @@ img{ max-width:100%;}
 
 }
 .chat_img img{
-    border-radius: 60%;
+    border-radius: 10px;
 }
 .chat_ib {
     float: left;
