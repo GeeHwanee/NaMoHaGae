@@ -5,13 +5,18 @@
   <!--기본 CND, Script, CSS 내장 삽입-->
   <th:block th:replace="~{fragments/head :: head}"></th:block>
   <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+    <!-- 캐시 제어 메타 태그, 뒤로가기 막는 기능-->
+      <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+      <meta http-equiv="pragma" content="no-cache">
+      <meta http-equiv="expires" content="0">
+    <!---->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>
   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
   <!------------------------------------------------------------------------------------------------------------------------------>
   <title>Login</title>
   <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
   <script th:inline="javascript">
-    const msg = /*[[${msg}]]*/ null;
+    const msg = [[${msg}]];
     if (msg !== null) {
       alert(msg);
     }
