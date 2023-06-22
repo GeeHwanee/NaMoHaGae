@@ -94,6 +94,9 @@
       });
     }
     $(document).ready(function () {
+      if (isLogin){
+        location.href='/';
+      }
       Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
       $('#kakao-btn').click(async function (){
         loginWithKakao();
