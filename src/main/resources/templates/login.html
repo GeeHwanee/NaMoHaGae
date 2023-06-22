@@ -112,7 +112,7 @@
 
 
       $('#form_button').click(function (){
-        $('#login').append($_csrf_input).attr('action','/security/login').attr('method','post').submit();
+        $('#login').attr('action','/security/login').attr('method','post').submit();
       })
 
       $('#findEmail').click(async function (number){
@@ -513,6 +513,7 @@
       <!--            <form id="form" action="/api/v1/login" method="post">-->
 
       <form id="login">
+        <input type="hidden" id="_csrf" name="_csrf">
         <label for="username">ID: </label>
         <input
                 id="username"
@@ -537,7 +538,7 @@
         <button style="padding: 0; background-color: yellow " id="kakao-btn"><img id="logo_kakao" src="/image/embeded/kakao_login_large_wide.png" class="kakao"></button>
         <button id="form_button" type="button" class="contrast">Login</button>
         <form id="kakaoJoin">
-          <input type="hidden" id="_csrf" name="_csrf">
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}">
           <input type="hidden" id="kakaoEmail" name="kakaoEmail">
           <input type="hidden" id="kakaoName" name="kakaoName">
         </form>
