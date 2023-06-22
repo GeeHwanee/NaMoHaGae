@@ -221,7 +221,8 @@
                     <a class="btn btn-warning" th:href="@{/board/town/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">수정</a>
                     <a class="btn btn-danger" th:href="@{/board/town/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">삭제</a>
                     <a type="button" href="/board/town/list" class="btn btn-primary">목록</a>
-
+                </div>
+            </div>
         </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
