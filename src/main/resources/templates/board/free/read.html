@@ -216,11 +216,12 @@
                 <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-primary">댓글작성</button>
             </div>
             <div class="button_layout">
-            <div class="board_button">
-                <a class="btn btn-warning" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">수정</a>
-                <a class="btn btn-danger" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">삭제</a>
-                <a type="button" href="/board/free/list" class="btn btn-primary">목록</a>
-
+                <div class="board_button">
+                    <a class="btn btn-warning" th:href="@{/board/free/modify(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">수정</a>
+                    <a class="btn btn-danger" th:href="@{/board/free/delete(boardNo=${board.boardNo})}" th:if="${board.memberNo==memberNo}" role="button">삭제</a>
+                    <a type="button" href="/board/free/list" class="btn btn-primary">목록</a>
+                </div>
+            </div>
         </article>
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
