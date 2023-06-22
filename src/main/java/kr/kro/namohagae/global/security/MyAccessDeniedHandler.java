@@ -16,6 +16,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
 
+        String str = accessDeniedException.getMessage();
         String requestUri = request.getRequestURI();
        System.out.println(requestUri);
         if (isRestApiRequest(requestUri)) {
@@ -23,7 +24,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied for RESTful API");
         } else {
             // MVC 이동 처리
-            String errorMessage = "접근 권한이 없는 사용자 입니다.";
+            String errorMessage = "접근 권한이 없는 사용자 입니다."+str;
             request.getSession().setAttribute("errorMessage", errorMessage);
 
 
