@@ -37,6 +37,7 @@ public class KnowledgeQuestionDto {
     @Data
     public static class Preview{
         private Integer knowledgeQuestionNo;
+        private Integer memberNo;
         private String memberNickname;
         private String knowledgeQuestionTitle;
         private Integer knowledgeQuestionReadCount;
