@@ -196,3 +196,12 @@ footer > div > span {
     justify-content: center;
     align-content: center;
 }
+
+section h1{
+    font-family: "Nanum Gothic",sans-serif;
+    font-size: 35px;
+    font-weight: 1000;
+
+    border-bottom: 2px solid black;
+    padding: 10px;
+}
