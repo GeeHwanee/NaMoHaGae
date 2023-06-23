@@ -15,16 +15,13 @@
         const isWriter = memberNo===question.memberNo;
     </script>
     <style>
-        .answer {
+        /*.answer {
             width:90%;
-
             box-shadow: 0px 15px 5px -2px #CCCCCC;
             border-radius: 0.5rem;
             margin:0 auto;
             margin-top:30px;
         }
-        /*
-
         css 미완성 아직하는중
          */
     </style>
@@ -48,12 +45,11 @@
                         // 내 추천 여부 확인 안했고
                         const tpl = `
                             <div class="answer" style="text-align: left">
-                                <img src="${answer.memberProfileImage}" width="50px" height="50px">
-
-                                <i class="fa-solid fa-user fa-lg"></i>  <span class="username">${answer.memberNickname}</span> |
+                                <img src="${answer.memberProfileImage}" width="40px" height="40px">
+                                <span class="username">${answer.memberNickname}</span> |
                                 <i class="fa-regular fa-thumbs-up fa-lg recommend" data-no="${answer.knowledgeAnswerNo}"></i> <span >${answer.knowledgeAnswerRecommend}</span> |
-                                <i class="fa-regular fa-calendar fa-lg"></i>  <span>${answer.knowledgeAnswerWriteDate}</span> |
-                                <span class="select_area">${(isWriter&&!isSelected&&!answer.knowledgeAnswerSelectionEnabled) ? $button[0].outerHTML : ''}</span>
+                                <i class="fa-regular fa-calendar fa-lg"></i>  <span>${answer.knowledgeAnswerWriteDate}</span>
+                                <span class="select_area">${(isWriter&&!isSelected&&!answer.knowledgeAnswerSelectionEnabled) ? "|"+$button[0].outerHTML : ''}</span>
                             </div>
                             <div >
                                 <div>${answer.knowledgeAnswerContent}</div>
@@ -164,7 +160,7 @@
                 <div class="card-body">
                     <div class="board_header">
                         <h4 th:text="${question.knowledgeQuestionTitle}" class="card-title">제목입니다.</h4>
-                        <!--<img th:src="${question.memberProfileImage}" width="40px" alt="">-->
+                        <img th:src="${question.memberProfileImage}" width="40px" alt="">
                         <a style="color: black; font-size: 1.1em" th:href="@{/member/profile(memberNo=${question.memberNo})}" th:text="${question.memberNickname}"></a>
 
                         <div class="board_count">
@@ -180,6 +176,10 @@
                 </div>
             </div>
         </article>
+        <div style="text-align: end">
+            <button type="button" id="deleteQuestion" class="btn btn-warning hide" th:if="${memberNo==question.memberNo}">삭제</button>
+            <a type="button" href="/board/knowledge/list" class="btn btn-primary">목록</a>
+        </div>
         <div id="answer_layout">
         <hr>
             <div id="textbox_layout">
@@ -188,7 +188,7 @@
                 <input type="hidden" id="question_no" name="knowledgeQuestionNo" th:value="${question.knowledgeQuestionNo}">
                 <input type="hidden" name="questionMemberNo" th:value="${question.memberNo}">
                 <input type="hidden" name="answerMemberNo" th:value="${memberNo}">
-                <textarea name="knowledgeAnswerContent" id="answer_content"></textarea>
+                <textarea name="knowledgeAnswerContent" id="answer_content" style="resize: none"></textarea>
                 <button type="button" id="answer_write" class="btn btn-primary">답변 작성</button>
             </form>
             </div>
@@ -205,10 +205,7 @@
             </div>
         </article>
         </div>
-        <div style="text-align: end">
-            <button type="button" id="deleteQuestion" class="btn btn-warning hide">삭제</button>
-            <a type="button" href="/board/knowledge/list" class="btn btn-primary">목록</a>
-        </div>
+
     </section>
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
@@ -216,7 +213,7 @@
 </body>
 <style>
     #answer_layout {
-        min-height : 800px;
+        min-height : 300px;
         background: #f4f5f6;
 
     }
@@ -240,7 +237,7 @@
 
     }
     .answer_list {
-        min-height:400px;
+        min-height:200px;
         margin-top:50px;
         background: white;
         border-top: 2px solid #dfaa8b;
