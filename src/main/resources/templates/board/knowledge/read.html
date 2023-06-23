@@ -5,6 +5,7 @@
     <!--기본 CND, Script, CSS 내장 삽입-->
     <th:block th:replace="~{fragments/head :: head}"></th:block>
     <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+    <link href="/css/board.css" rel="stylesheet">
     <!------------------------------------------------------------------------------------------------------------------------------>
     <title>지식인 게시판 읽기 페이지</title>
     <script th:inline="javascript">
@@ -14,7 +15,6 @@
         const isWriter = memberNo===question.memberNo;
     </script>
     <style>
-        .hide{display: none;}
         .answer {
             width:90%;
 
@@ -158,21 +158,26 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>지식인 게시판 읽기 페이지</h1>
-        <a type="button" href="/board/knowledge/list" class="btn btn-primary">목록으로</a>
-        <button type="button" id="deleteQuestion" class="btn btn-warning hide">삭제</button>
 
-<hr>
         <article id="question">
-            <h2 th:text="${question.knowledgeQuestionTitle}"></h2>
-            <div id="question_header" style="text-align: right">
-                <i class="fa-solid fa-bone fa-lg"></i>  <span th:text="${question.knowledgeQuestionPoint}"></span> |
-                <i class="fa-solid fa-user fa-lg"></i>  <span th:text="${question.memberNickname}"></span> |
-                <i class="fa-solid fa-eye fa-lg"></i>   <span th:text="${question.knowledgeQuestionReadCount}"></span> |
-                <i class="fa-regular fa-calendar fa-lg"></i>  <span th:text="${#temporals.format(question.knowledgeQuestionWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
-            </div>
-            <div id="question_body">
-                <div th:text="${question.knowledgeQuestionContent}"></div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="board_header">
+                        <h4 th:text="${question.knowledgeQuestionTitle}" class="card-title">제목입니다.</h4>
+                        <!--<img th:src="${question.memberProfileImage}" width="40px" alt="">-->
+                        <a style="color: black; font-size: 1.1em" th:href="@{/member/profile(memberNo=${question.memberNo})}" th:text="${question.memberNickname}"></a>
+
+                        <div class="board_count">
+                            <i class="fa-solid fa-eye fa-lg"></i>
+                            <span th:text="${question.knowledgeQuestionReadCount}"></span> |
+                            <i class="fa-regular fa-calendar fa-lg"></i>
+                            <span th:text="${#temporals.format(question.knowledgeQuestionWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                        </div>
+                    </div>
+                    <div id="question_body">
+                        <div th:text="${question.knowledgeQuestionContent}"></div>
+                    </div>
+                </div>
             </div>
         </article>
         <div id="answer_layout">
@@ -200,9 +205,11 @@
             </div>
         </article>
         </div>
-
+        <div style="text-align: end">
+            <button type="button" id="deleteQuestion" class="btn btn-warning hide">삭제</button>
+            <a type="button" href="/board/knowledge/list" class="btn btn-primary">목록</a>
+        </div>
     </section>
-
     <aside th:replace="~{fragments/bside :: bside}"></aside>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
