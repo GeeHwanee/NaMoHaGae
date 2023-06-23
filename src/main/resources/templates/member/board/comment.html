@@ -12,9 +12,9 @@
             commentList.forEach(c => {
                     let link;
                     if(c.townNo==0){
-                        link="http://localhost:8081/board/free/read?boardNo="
+                        link="/board/free/read?boardNo="
                     }else {
-                        link = "http://localhost:8081/board/town/read?boardNo="
+                        link = "/board/town/read?boardNo="
                     }
                     const tpl = `<tr>
                         <td><a href='${link}${c.boardNo}'>${c.boardTitle}</a></td>
