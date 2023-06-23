@@ -164,7 +164,7 @@
                 <div class="card-body">
                     <div class="board_header">
                         <h4 th:text="${question.knowledgeQuestionTitle}" class="card-title">제목입니다.</h4>
-                        <!--<img th:src="${question.memberProfileImage}" width="40px" alt="">-->
+                        <img th:src="${question.memberProfileImage}" width="40px" alt="">
                         <a style="color: black; font-size: 1.1em" th:href="@{/member/profile(memberNo=${question.memberNo})}" th:text="${question.memberNickname}"></a>
 
                         <div class="board_count">

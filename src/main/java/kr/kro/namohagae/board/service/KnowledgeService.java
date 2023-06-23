@@ -10,6 +10,7 @@ import kr.kro.namohagae.board.entity.KnowledgeQuestion;
 import kr.kro.namohagae.global.service.NotificationService;
 import kr.kro.namohagae.global.util.constants.ImageConstants;
 import kr.kro.namohagae.global.util.constants.NotificationConstants;
+import kr.kro.namohagae.global.util.pagination.Pagination;
 import kr.kro.namohagae.member.dao.MemberDao;
 import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class KnowledgeService {
     }
     public KnowledgeQuestionDto.Read questionRead(Integer knowledgeQuestionNo) {
 
-        return knowledgeQuestionDao.findByKnowledgeQuestionNo(knowledgeQuestionNo);
+        return knowledgeQuestionDao.findByKnowledgeQuestionNo( ImageConstants.IMAGE_PROFILE_URL,knowledgeQuestionNo);
     }
     public int update() {
 
@@ -58,20 +59,10 @@ public class KnowledgeService {
     }
 
     public KnowledgeQuestionDto.Pagination questionFindAll(Integer pageNo) {
-        Integer startRowNum = (pageNo - 1) * PAGESIZE + 1;
-        Integer endRowNum = startRowNum + PAGESIZE - 1;
-        List<KnowledgeQuestionDto.Preview> questions = knowledgeQuestionDao.findAll(startRowNum, endRowNum);
         Integer countOfQuestion = knowledgeQuestionDao.count();
-        Integer countOfPage = (countOfQuestion - 1) / PAGESIZE + 1;
-        Integer prev = (pageNo - 1) / BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev + 1;
-        Integer end = prev + BLOCKSIZE;
-        Integer next = end + 1;
-        if (end >= countOfPage) {
-            end = countOfPage;
-            next = 0;
-        }
-        return new KnowledgeQuestionDto.Pagination(pageNo, prev, start, end, next, questions);
+        Pagination page = new Pagination(BLOCKSIZE, BLOCKSIZE, pageNo, countOfQuestion);
+        List<KnowledgeQuestionDto.Preview> questions = knowledgeQuestionDao.findAll(page.getStartRowNum(), page.getEndRowNum());
+        return new KnowledgeQuestionDto.Pagination(pageNo, page.getPrevPage(), page.getStartPage(), page.getEndPage(), page.getNextPage(), questions);
     }
     @Transactional
     public Boolean answerSave(KnowledgeAnswerDto.Write dto, Integer memberNo) {

@@ -16,7 +16,7 @@ public interface KnowledgeQuestionDao {
 
     public void insertLike(Integer boardNo, Integer memberNo);
 
-    public KnowledgeQuestionDto.Read findByKnowledgeQuestionNo(Integer knowledgeQuestionNo);
+    public KnowledgeQuestionDto.Read findByKnowledgeQuestionNo(String url, Integer knowledgeQuestionNo);
 
     public List<KnowledgeQuestionDto.Preview> findAll(Integer startRowNum, Integer endRowNum);
 
