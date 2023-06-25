@@ -45,7 +45,7 @@
         <tr>
             <td>${q.knowledgeQuestionNo || ''}</td>
             <td><a href="/board/knowledge/read?knowledgeQuestionNo=${q.knowledgeQuestionNo || ''}">${q.knowledgeQuestionTitle || ''}</a></td>
-            <td height="41px">${q.memberNickname || ''}</td>
+            <td height="41px"><a href="/member/profile?memberNo=${q.memberNo}">${q.memberNickname || ''}</a></td>
             <td>${(q.knowledgeQuestionWriteDate ? q.knowledgeQuestionWriteDate.replace('T', ' ').slice(0, 16) : '')}</td>
             <td>${q.knowledgeQuestionReadCount || ''}</td>
             <td>${q.knowledgeQuestionPoint || ''}</td>
@@ -96,7 +96,9 @@
             }
         });
     </script>
-    <title>지식인 게시판 목록 페이지</title>
+    <title>지식인</title>
+
+
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -104,10 +106,8 @@
 <main>
     <aside th:replace="~{fragments/aside :: aside}"></aside>
     <section>
-        <h1>지식인 게시판 목록 페이지</h1>
-        <a href="/board/knowledge/write">새 질문</a>
+        <h1>지식인</h1>
         <article></article>
-        <h2>답변을 기다리는 질문</h2>
         <table class="table table-hover table-striped text-center">
             <thead>
             <tr>
@@ -120,14 +120,15 @@
             </tr>
             </thead>
             <tbody id="tbody">
-
             </tbody>
         </table>
-        <nav aria-label="..." id="page">
+        <div style="text-align: end">
+            <a type="button" class="btn btn-primary" href="/board/knowledge/write">새 질문</a>
+
+        </div>
         <ul class="pagination" id="page_ul">
         </ul>
-        </nav>
-        <h2></h2>
+
 
 
     </section>

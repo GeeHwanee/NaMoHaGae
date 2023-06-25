@@ -87,7 +87,7 @@ public class BoardController {
             if (path.contains("/free")) {
                 return "board/free/read";
             } else if (path.contains("/town")) {
-                return "board/free/read";
+                return "board/town/read";
             }
         }
         return "redirect:/board/main";

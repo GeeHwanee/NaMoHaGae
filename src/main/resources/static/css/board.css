@@ -1,0 +1,121 @@
+.card {
+    min-height:300px;
+}
+.board_header {
+    border-bottom: 1px solid #cccccc;
+    height:80px;
+    position:relative;
+}
+.board_count {
+    position:absolute;
+    right:0;
+    bottom:17px;
+}
+.board_count > span {
+    color : #6c757d;
+    font-size:14px;
+}
+#nickname {
+
+    display:inline-block;
+    padding-right:8px;
+    font-size:16px;
+
+}
+
+#comment-list {
+    display:flex;
+    padding:10px;
+    border-top :1px solid #eee;
+
+}
+.editCommentContent {
+    width:90%;
+    height:auto;
+}
+.name_layout {
+    flex:1;
+
+}
+.name_layout > span {
+    font-size:13px;
+}
+.content_layout {
+    flex:5;
+    position:relative;
+
+}
+.commentContent {
+    font-size:13px;
+}
+.modify {
+    position:absolute;
+    right:30px;
+    bottom:0;
+    font-size:11px;
+    color : #6c757d;
+}
+.delete {
+    position:absolute;
+    right:0;
+    bottom:0;
+    font-size:11px;
+    color : #6c757d;
+}
+
+
+.day_layout {
+    flex:2;
+    color:#6c757d;
+    text-align:center;
+}
+.day_layout > span {
+    font-size:11px;
+}
+
+#write_date {
+    font-size:14px;
+    display:inline-block;
+    padding-left:8px;
+    border-left:1px solid #cccccc;
+
+}
+.comment_group {
+    background: #fafafa;
+    border-top : 2px solid #dfaa8b;
+    border-bottom : 2px solid #dfaa8b;
+    position:relative;
+    height:180px;
+}
+#commentContent {
+    display:inline-block;
+    margin:15px 15px;
+    height:100px;
+    max-width:800px;
+
+}
+
+#comment-write-btn {
+    position:absolute;
+    right:0;
+    bottom:0;
+    margin:15px;
+    background: #dfaa8b;
+    border:none;
+}
+.button_layout {
+    position:relative;
+    height:100px;
+
+}
+.board_button {
+    position:absolute;
+    right:0;
+    top:32px;
+}
+#likeButton {
+    margin-top:30px;
+}
+.card-text {
+    padding-top:15px;
+}

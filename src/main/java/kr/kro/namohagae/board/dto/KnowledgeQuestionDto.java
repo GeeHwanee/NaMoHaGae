@@ -26,6 +26,7 @@ public class KnowledgeQuestionDto {
         private Integer knowledgeQuestionNo;
         private Integer memberNo;
         private String memberNickname;
+        private String memberProfileImage;
         private String knowledgeQuestionTitle;
         private String knowledgeQuestionContent;
         private Integer knowledgeQuestionReadCount;
@@ -36,6 +37,7 @@ public class KnowledgeQuestionDto {
     @Data
     public static class Preview{
         private Integer knowledgeQuestionNo;
+        private Integer memberNo;
         private String memberNickname;
         private String knowledgeQuestionTitle;
         private Integer knowledgeQuestionReadCount;

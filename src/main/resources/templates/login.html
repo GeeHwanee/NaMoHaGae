@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" class="background">
 <head>
   <!------------------------------------------------------------------------------------------------------------------------------>
   <!--기본 CND, Script, CSS 내장 삽입-->
   <th:block th:replace="~{fragments/head :: head}"></th:block>
   <!--기타 삽입(해당 페이지 별로 아래에 추가할 것)-->
+    <!-- 캐시 제어 메타 태그, 뒤로가기 막는 기능-->
+      <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+      <meta http-equiv="pragma" content="no-cache">
+      <meta http-equiv="expires" content="0">
+  <!---->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>
   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
   <!------------------------------------------------------------------------------------------------------------------------------>
   <title>Login</title>
   <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS." />
   <script th:inline="javascript">
-    const msg = /*[[${msg}]]*/ null;
+    const msg = [[${msg}]];
     if (msg !== null) {
       alert(msg);
     }
@@ -89,6 +94,9 @@
       });
     }
     $(document).ready(function () {
+      if (isLogin){
+        location.href='/';
+      }
       Kakao.init('06433b9c88fbeb5b8da71ebd01fd13ed');
       $('#kakao-btn').click(async function (){
         loginWithKakao();
@@ -241,6 +249,7 @@
   }
   article {
     padding: 0;
+    margin-top: 45px;
     overflow: hidden;
   }
 
@@ -327,6 +336,15 @@
     }
 
   }
+@media (max-width: 998px){
+  .find-box{
+    display: none;
+  }
+  .join-box{
+    display: none;
+  }
+}
+
 
   /* Footer */
   body>footer {
@@ -337,9 +355,11 @@
 <style>
   @import url(https://fonts.googleapis.com/css?family=Signika:700,300,600);
 
-  #bg {
-    transition: all 2s ease-out;
+  .background {
+    transition: background-color 2s ease-out;
     background: #006064;
+    height: 100%;
+    width: 100%;
   }
   .right-container, .right-box { height: 100%;position: relative; z-index: 12;}
   .right-box { display: flex;  margin:20px 0; text-align:center;  overflow:hidden; }
@@ -484,7 +504,7 @@
 
 
 </style>
-<body id="bg">
+<body class="background">
 <!-- Nav -->
 
 
@@ -499,6 +519,7 @@
       <!--            <form id="form" action="/api/v1/login" method="post">-->
 
       <form id="login">
+        <input type="hidden" id="_csrf" name="_csrf">
         <label for="username">ID: </label>
         <input
                 id="username"
@@ -520,10 +541,10 @@
 
         <span class="no" id="no1"><a href="/member/join">회원가입</a></span>
         <span class="no"><a href="/member/find">아이디/비밀번호 찾기</a></span>
-        <button style="padding: 0; background-color: yellow " id="kakao-btn"><img id="logo_kakao" src="/image/embeded/kakao_login_large_wide.png" class="kakao"></button>
+        <button style="padding: 0; background-color: inherit;border:none; " id="kakao-btn"><img id="logo_kakao" src="/image/embeded/kakao_login_large_wide.jpeg" class="kakao" style="border-radius:5px;"></button>
         <button id="form_button" type="button" class="contrast">Login</button>
         <form id="kakaoJoin">
-          <input type="hidden" id="_csrf" name="_csrf">
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}">
           <input type="hidden" id="kakaoEmail" name="kakaoEmail">
           <input type="hidden" id="kakaoName" name="kakaoName">
         </form>
@@ -588,15 +609,15 @@
 
 <!-- Footer -->
 <script>
-  let bg = document.getElementById("bg");
-
+  let bg = $('.background');
 
   setInterval(function(){
     let color = Math.random()*0xffffff;
     color = parseInt(color);
     color = color.toString(16);
 
-    bg.style.background = "#" + color;
+    bg.css('background-color','#'+color);
+    //style.background = "#" + color;
 
   },3000);
 
