@@ -20,7 +20,7 @@
             review.forEach(r => {
                     const tpl = `<tr>
                     <td>
-                        <a href="http://localhost:8081/member/profile?memberNo=${r.receiverNo}">${r.reviewReceiver}</a>
+                        <a href="/member/profile?memberNo=${r.receiverNo}">${r.reviewReceiver}</a>
                     </td>
                     <td>${r.reviewContent}</td>
                     <td>${r.puchingPromiseDate}</td>
