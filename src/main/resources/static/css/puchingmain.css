@@ -71,7 +71,7 @@
 }
 .puching-container{
     display: flex;
-    margin-top:8vh ;
+    margin-top:4vh ;
     margin-left: 2vw;
     margin-right: 2vw;
 }
@@ -85,7 +85,7 @@
     border-radius: 5%;
 }
 #itemList::-webkit-scrollbar {
-    width: 10px;  /* 스크롤바의 너비 */
+    width: 5px;  /* 스크롤바의 너비 */
 }
 
 #itemList::-webkit-scrollbar-thumb {
@@ -95,7 +95,7 @@
 }
 
 #itemList::-webkit-scrollbar-track {
-    background: rgb(255, 255, 255);  /*스크롤바 뒷 배경 색상*/
+    background: inherit;  /*스크롤바 뒷 배경 색상*/
 }
 .item {
     margin-bottom: 10px;
@@ -105,21 +105,24 @@
     height:100px;
     font-weight: 900;
     font-family: "Nanum Gothic" ;
-    font-size: 20px;
+    font-size: 13px;
     color: #ea986b;
     animation: fadein 1s;
 }
 
 .itemImage{
-    border-radius: 70%;
-    width: 70px;
+    border-radius: 10px;
+    width: 80px;
+    height: 74px;
+    box-shadow: 0px 0px 5px #e1bca7;
+
 
 }
 .itemNickname{
     padding: 10px;
     margin:0 auto;
     font-family:"Nanum Gothic";
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #ea986b;
 }

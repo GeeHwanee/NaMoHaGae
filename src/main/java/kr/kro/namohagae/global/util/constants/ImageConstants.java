@@ -16,7 +16,7 @@ public final class ImageConstants {
         String os =  System.getProperty("os.name").toLowerCase();
         // 시스템이 linux일 때 이미지 저장 폴더 설정, 그 외는  프로젝트 파일 폴더 설정
         if(os.contains("linux")){
-            ROOT_DIRECTORY = "/home/jhp/NaMoHaGae/src/main/resources/static/image/";
+            ROOT_DIRECTORY = "/home/jhp/image/";
             System.out.println(ConsoleColor.CYAN +"Application Run with ["+System.getProperty("os.name")+"] on Server"+ConsoleColor.RESET);
         }else{
             ROOT_DIRECTORY =System.getProperty("user.dir")+"/./src/main/resources/static/image/";

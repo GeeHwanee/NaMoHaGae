@@ -22,13 +22,24 @@ public class PuchingController {
     private final MemberDao memberDao;
     private final ChatService chatService;
     private final ReviewService puchingReviewService;
+
     @Secured("ROLE_DOG")
     @GetMapping("/puching/chatroom")
     public String chatroom(Principal principal, Model model, @RequestParam(defaultValue = "")String receiverEmail) {
+        if(!receiverEmail.equals("")){
+            Boolean existByEmail=memberDao.existsByEmail(receiverEmail);
+            if(principal.getName().equals(receiverEmail) || !existByEmail) {
+                model.addAttribute("msg","채팅상대를 못찾았습니다.");
+            }
+            if(existByEmail && !principal.getName().equals(receiverEmail)) {
+                model.addAttribute("startuser", receiverEmail);
+            }
+        }
+
         Integer myMemberNo=memberDao.findNoByUsername(principal.getName());
         model.addAttribute("list",chatService.findAllChatRoom(myMemberNo));
         model.addAttribute("mymemberNo",myMemberNo);
-        model.addAttribute("startuser",receiverEmail);
+
         return "puching/chatRoom";
     }
     @Secured("ROLE_DOG")

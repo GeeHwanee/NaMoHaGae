@@ -3,20 +3,20 @@
 <body>
 <header th:fragment="header">
 	<div class="header_team">
-		<a href='https://www.notion.so/dogtype/DOGTYPE-8f42f515d4b64ce7b329e33df661dbdf?pvs=4' target='_blank'><img id="logo_notion" src="/image/embeded/Logo_Notion.png" width="32px" onclick="return confirm('Team Notion으로 이동하시겠습니까?');"></a>
-		<a href='https://github.com/GeeHwanee/NaMoHaGae' target='_blank'><img id="logo_github" src="/image/embeded/Logo_Github.png" width="32px" onclick="return confirm('GitHub Repository로 이동하시겠습니까?');"></a>
-		<a href='/api-docs' target='_blank'><img id="logo_swagger" src="/image/embeded/Logo_Swagger.png" width="32px" onclick="return confirm('Open Api 문서로 이동하시겠습니까?');"></a>
-		<a href="http://reacthms.kro.kr/hotel/main" target="_blank"><img id="logo_react" src="/image/embeded/Logo_ReactHotel.png" width="32px" onclick="return confirm('ICIA Fammily Site로 이동하시겠습니까?');"></a>
+		<a href='https://www.notion.so/dogtype/DOGTYPE-8f42f515d4b64ce7b329e33df661dbdf?pvs=4' target='_blank'><img id="logo_notion" src="/image/embeded/Logo_Notion.jpeg" width="32px" onclick="return confirm('Team Notion으로 이동하시겠습니까?');"></a>
+		<a href='https://github.com/GeeHwanee/NaMoHaGae' target='_blank'><img id="logo_github" src="/image/embeded/Logo_Github.jpeg" width="32px" onclick="return confirm('GitHub Repository로 이동하시겠습니까?');"></a>
+		<a href='/api-docs' target='_blank'><img id="logo_swagger" src="/image/embeded/Logo_Swagger.jpeg" width="32px" onclick="return confirm('Open Api 문서로 이동하시겠습니까?');"></a>
+		<a href="http://reacthms.kro.kr/hotel/main" target="_blank"><img id="logo_react" src="/image/embeded/Logo_ReactHotel.jpeg" width="32px" onclick="return confirm('ICIA Fammily Site로 이동하시겠습니까?');"></a>
 	</div>
 	<div class="header_logo">
 		<div>
 			<h1 style="font-family: 'Dongle', sans-serif; display: inline-block; margin: 0">나 뭐하개?</h1>
-			<img id="logo_main" src="/image/embeded/Logo_Main.png" alt="logo">
+			<img id="logo_main" src="/image/embeded/Logo_Main.jpeg" alt="logo">
 		</div>
 	</div>
 	<div class="header_icon">
 		<a sec:authorize="hasRole('ROLE_USER')" href="/member/notification"><i class="fa-solid fa-bell fa-2xl"></i></a>
-		<a sec:authorize="hasRole('ROLE_USER')" href="/member/main"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
+		<a sec:authorize="hasRole('ROLE_USER')" href="/member/information"><i class="fa-solid fa-circle-user fa-2xl"></i></a>
 		<a sec:authorize="hasRole('ROLE_USER')" href="/mall/cart/list"><i class="fa-solid fa-cart-shopping fa-2xl"></i></a>
 		<a sec:authorize="hasRole('ROLE_USER')" href="/puching/chatroom"><i class="fa-solid fa-comment fa-2xl"></i></a>
 		<a href="/login" sec:authorize="isAnonymous()"><i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i></a>

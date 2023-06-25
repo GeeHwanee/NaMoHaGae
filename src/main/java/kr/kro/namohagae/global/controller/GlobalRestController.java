@@ -43,7 +43,7 @@ public class GlobalRestController {
         else {folder = ImageConstants.IMAGE_EMBEDED_DIRECTORY;}
         File file = new File(folder, name);
         if (!file.exists()) {
-            file = new File(ImageConstants.IMAGE_EMBEDED_DIRECTORY, "error.png");
+            file = new File(ImageConstants.IMAGE_EMBEDED_DIRECTORY, "error.jpeg");
         }
         try {
             byte[] bytes = Files.readAllBytes(file.toPath());

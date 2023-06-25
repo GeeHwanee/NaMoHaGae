@@ -214,11 +214,14 @@ img{ max-width:100%;}
 .chat_ib p{ font-size:14px; color:#989898; margin:auto}
 .chat_img {
 
-    width: 21%;
+    width: 68px;
+    height: 68px;
 
 }
 .chat_img img{
-    border-radius: 60%;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
 }
 .chat_ib {
     float: left;
