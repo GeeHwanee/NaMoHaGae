@@ -48,7 +48,9 @@
         select rownum as rnum, a.* from
         (
         select
-        q.KNOWLEDGE_QUESTION_NO,(select count(*) from knowledge_answer) as answerCount, q.KNOWLEDGE_QUESTION_TITLE, q.KNOWLEDGE_QUESTION_POINT,(select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=q.KNOWLEDGE_QUESTION_NO) as BOARD_NOTICE_READ_COUNT ,COALESCE(
+        q.KNOWLEDGE_QUESTION_NO,(select count(*) from knowledge_answer) as answerCount, q.KNOWLEDGE_QUESTION_TITLE, q.KNOWLEDGE_QUESTION_POINT,
+        (select count(MEMBER_NO) from BOARD_INSIGHT where BOARD_NO=q.KNOWLEDGE_QUESTION_NO) as Knowledge_Question_READ_COUNT,
+        COALESCE(
                 (SELECT COUNT(*) FROM KNOWLEDGE_ANSWER WHERE a.KNOWLEDGE_ANSWER_SELECTION_ENABLED = 1),
                 0
             ) as knowledgeAnswerSelectionEnabled,q.KNOWLEDGE_QUESTION_WRITE_DATE
