@@ -3,6 +3,7 @@ package kr.kro.namohagae.global.service;
 import kr.kro.namohagae.global.dao.NotificationDao;
 import kr.kro.namohagae.global.dto.NotificationDto;
 import kr.kro.namohagae.global.entity.Notification;
+import kr.kro.namohagae.global.util.pagination.Pagination;
 import kr.kro.namohagae.global.websocket.WebSocketService;
 import kr.kro.namohagae.member.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,8 @@ import java.util.List;
 public class NotificationService {
     private final NotificationDao notificationDao;
     private final WebSocketService webSocketService;
-    private final static Integer PAGESIZE=5;
-    private final static Integer BLOCKSIZE=3;
+    private final static Integer PAGESIZE=10;
+    private final static Integer BLOCKSIZE=5;
 
     public void save(Member member, String notificationContent, String notificationLink){
         Notification notification = Notification.builder().memberNo(member.getMemberNo()).notificationContent(notificationContent).notificationLink(notificationLink).build();
@@ -26,27 +27,10 @@ public class NotificationService {
 
 
     public NotificationDto.Pagination findAll(Integer pageno, Integer memberNo) {
-        Integer countOfProduct = notificationDao.count(memberNo);
-        Integer countOfPage = (countOfProduct-1)/PAGESIZE + 1;
-
-        pageno = Math.abs(pageno);
-        if(pageno>countOfPage)
-            pageno = countOfPage;
-
-        Integer startRownum = (pageno-1)*PAGESIZE + 1;
-        Integer endRownum = startRownum + PAGESIZE - 1;
-        List<NotificationDto.FindAll> notifications = notificationDao.findAll(startRownum, endRownum,memberNo);
-        // 리스트 log로 찍어
-        Integer prev = (pageno-1)/BLOCKSIZE * BLOCKSIZE;
-        Integer start = prev+1;
-        Integer end = prev + BLOCKSIZE;
-        Integer next = end+1;
-        if(end>=countOfPage) {
-            end = countOfPage;
-            next = 0;
-        }
-        return new NotificationDto.Pagination(pageno, prev, start, end, next, notifications);
-
+        Integer countOfNotification = notificationDao.count(memberNo);
+        Pagination page = new Pagination(BLOCKSIZE, PAGESIZE, pageno, countOfNotification);
+        List<NotificationDto.FindAll> notifications = notificationDao.findAll(page.getStartRowNum(), page.getEndRowNum(),memberNo);
+        return new NotificationDto.Pagination(pageno, page.getPrevPage(), page.getStartPage(), page.getEndPage(), page.getNextPage(), notifications);
     }
 
     public void read (Integer notificationNo){
