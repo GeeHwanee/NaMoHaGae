@@ -3,8 +3,7 @@
 인천일보 아카데미의 IoT 3기 과정(2022.12.08~2023.05.24)  
 프로젝트 팀 <!DOGTYPE>의 파이널 프로젝트
 ------------------------------------------------
-Project Site  
-https://www.namohagae.kro.kr  
+[Project Site] https://www.namohagae.kro.kr  
 Test 계정: spring/1234  
   
 ![나뭐하개 소개_3](https://github.com/GeeHwanee/NaMoHaGae/assets/120438094/01e65a0a-8be4-4805-80c0-f2debf751edb)
