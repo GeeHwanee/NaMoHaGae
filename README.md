@@ -6,6 +6,8 @@
 [Project Site] https://www.namohagae.kro.kr  
 Test 계정: spring/1234  
   
+[Team Notion] https://dogtype.notion.site/DOGTYPE-8f42f515d4b64ce7b329e33df661dbdf  
+  
 ![나뭐하개 소개_3](https://github.com/GeeHwanee/NaMoHaGae/assets/120438094/01e65a0a-8be4-4805-80c0-f2debf751edb)
 ![나뭐하개 소개_4](https://github.com/GeeHwanee/NaMoHaGae/assets/120438094/22d33f1c-6aee-4ccb-93de-b227ff5f15d0)
 ![나뭐하개 소개_5](https://github.com/GeeHwanee/NaMoHaGae/assets/120438094/72988c95-1cae-4610-9b37-a5ba721d1ef6)
